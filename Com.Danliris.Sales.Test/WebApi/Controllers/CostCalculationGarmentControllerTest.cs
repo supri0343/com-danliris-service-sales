@@ -140,8 +140,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new CostCalculationGarmentViewModel()
                 {
-                    FabricAllowance = 0,
-                    AccessoriesAllowance = 0,
+                    FabricAllowance = -1,
+                    AccessoriesAllowance = -1,
                     ApprovalMD = new Approval(),
                     ApprovalPurchasing = new Approval(),
                     ApprovalIE = new Approval(),
