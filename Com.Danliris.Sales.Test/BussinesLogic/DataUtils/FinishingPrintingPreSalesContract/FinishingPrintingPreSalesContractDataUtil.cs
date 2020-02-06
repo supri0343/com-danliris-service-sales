@@ -31,7 +31,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinishingPrintingPreSa
                 UnitCode = "cpe",
                 ProcessTypeCode = "code",
                 Remark = "remark",
-                Type = "type"
+                Type = "type",
+                OrderTypeName = "name",
+                OrderTypeCode = "cpde",
+                OrderTypeId = 1
             });
         }
     }

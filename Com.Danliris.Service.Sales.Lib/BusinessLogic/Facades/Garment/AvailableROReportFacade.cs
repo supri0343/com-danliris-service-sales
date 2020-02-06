@@ -34,13 +34,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
 
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(int) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Penerimaan RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan RO", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "+/-\nTerima - Siap", DataType = typeof(int) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Buyer", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "+/-\nTerima - Siap", DataType = typeof(int) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Kode Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Nama Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Quantity", DataType = typeof(double) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "User", DataType = typeof(string) });
@@ -52,7 +53,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 int i = 0;
                 foreach (var d in data)
                 {
-                    dataTable.Rows.Add(++i, d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.AvailableDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.RONo, d.Article, d.DateDiff, d.Buyer, d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.Quantity, d.Uom, d.AvailableBy);
+                    dataTable.Rows.Add(++i, d.RONo, d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.AvailableDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DateDiff, d.BuyerCode, d.Buyer, d.Article, d.Quantity, d.Uom, d.AvailableBy);
                 }
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null);
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null);
@@ -84,7 +85,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
 
             var excel = Excel.CreateExcel(new List<(DataTable, string, List<(string, Enum, Enum)>)>() { (dataTable, "AvailableRO", mergeCells) }, false);
 
-            return Tuple.Create(excel, string.Concat("Laporan Kesiapan RO", GetSuffixNameFromFilter(filter)));
+            return Tuple.Create(excel, string.Concat("Laporan Kecepatan Cek RO", GetSuffixNameFromFilter(filter)));
         }
 
         private string GetSuffixNameFromFilter(string filterString)
@@ -111,6 +112,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 RONo = cc.RO_Number,
                 Article = cc.Article,
                 DateDiff = (cc.ROAvailableDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date - cc.ROAcceptedDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date).Days,
+                BuyerCode = cc.BuyerBrandCode, 
                 Buyer = cc.BuyerBrandName,
                 DeliveryDate = cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 Quantity = cc.Quantity,

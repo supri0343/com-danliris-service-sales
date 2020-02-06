@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -527,6 +528,38 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = await controller.PutIsCalculated(0, true);
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+        [Fact]
+        public void Validate_ViewModel()
+        {
+            List<ProductionOrderViewModel> viewModels = new List<ProductionOrderViewModel>
+            {
+                new ProductionOrderViewModel{
+                    Code = "ABC",
+                    OrderQuantity = 5.48,
+                    LampStandards = new List<ProductionOrder_LampStandardViewModel>{
+                        new ProductionOrder_LampStandardViewModel{
+                            Name = "Lampu",
+                            Description = "Lampu Luar"
+                        }
+                    },
+                    Details = new List<ProductionOrder_DetailViewModel>{
+                        new ProductionOrder_DetailViewModel{
+                            ColorRequest = "A",
+                            Quantity = 5.4,
+                            Uom = new UomViewModel{
+                                Id = 1,
+                                Unit = "MTR"
+                            }
+                        }
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
         }
 
     }

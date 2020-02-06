@@ -39,17 +39,31 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 throw new Exception(string.Concat("[RONo]", e.Message));
             }
 
-            var result = Query.SelectMany(s => s.CostCalculationGarment_Materials.Select(m => new BudgetJobOrderDisplayViewModel
-            {
-                ProductCode = m.ProductCode,
-                Description = m.Description,
-                BudgetQuantity = m.BudgetQuantity, 
-                UomPriceName = m.UOMPriceName,
-                Price = m.Price,
-                POSerialNumber = m.PO_SerialNumber
-            }));
+            Query = Query.OrderBy(o => o.BuyerBrandName).ThenBy(o => o.RO_Number);
 
-            return result;
+            var newQ = (from a in Query
+                        join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId
+
+                        select new BudgetJobOrderDisplayViewModel
+                        {
+                            RO_Number = a.RO_Number,
+                            DeliveryDate = a.DeliveryDate,
+                            Article = a.Article,
+                            BuyerCode = a.BuyerCode,
+                            BuyerName = a.BuyerName,
+                            BrandCode = a.BuyerBrandCode,
+                            BrandName = a.BuyerBrandName,
+                            Quantity = a.Quantity,
+                            UOMUnit = a.UOMUnit,
+                            ComodityCode = a.ComodityCode,
+                            ProductCode = b.ProductCode,
+                            Description = b.Description,
+                            BudgetQuantity = b.BudgetQuantity,
+                            UomPriceName = b.UOMPriceName,
+                            Price = b.Price,
+                            POSerialNumber = b.PO_SerialNumber,
+                        });
+            return newQ;
         }
     }
 }

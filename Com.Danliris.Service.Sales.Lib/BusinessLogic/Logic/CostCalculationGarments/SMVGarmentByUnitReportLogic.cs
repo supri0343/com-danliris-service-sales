@@ -71,7 +71,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         SMV_Sewing = a.SMV_Sewing,
                         SMV_Finishing = a.SMV_Finishing,
                         SMV_Total = a.SMV_Total,
-                        StatusValid = a.IsApprovedMD.Equals(true) ? "SUDAH" : "BELUM",
+                        StatusValid = a.IsApprovedKadivMD.Equals(true) ? "SUDAH" : "BELUM",
                     });
 
             return newQ;

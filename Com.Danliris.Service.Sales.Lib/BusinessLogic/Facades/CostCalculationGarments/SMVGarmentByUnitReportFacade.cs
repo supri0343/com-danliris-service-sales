@@ -107,12 +107,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             var Query = SMVGarmentByUnitReportLogic.GetQuery(filter);
             var data = Query.ToList();
 
-            Pageable<SMVGarmentByUnitReportViewModel> pageable = new Pageable<SMVGarmentByUnitReportViewModel>(data, page - 1, size);
-            List<SMVGarmentByUnitReportViewModel> Data_ = pageable.Data.ToList<SMVGarmentByUnitReportViewModel>();
-
-            int TotalData = pageable.TotalCount;
-
-            return Tuple.Create(Data_, TotalData);
+            int TotalData = data.Count();
+            return Tuple.Create(data, TotalData);
         }     
     }
 }

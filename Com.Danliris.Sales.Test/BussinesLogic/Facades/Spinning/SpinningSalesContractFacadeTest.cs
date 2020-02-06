@@ -1,10 +1,12 @@
-﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SpinningSalesContractDataUtil;
+﻿using AutoMapper;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SpinningSalesContractDataUtil;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Spinning;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning;
 using Com.Danliris.Service.Sales.Lib.Models.Spinning;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.ViewModels.Spinning;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -54,6 +56,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SpinningSalesContract
             var response = await facade.CreateAsync(data);
 
             Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<Service.Sales.Lib.AutoMapperProfiles.SpinningProfiles.SpinningSalesContract>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            SpinningSalesContractViewModel vm = new SpinningSalesContractViewModel { Id = 1 };
+            SpinningSalesContractModel model = mapper.Map<SpinningSalesContractModel>(vm);
+
+            Assert.Equal(vm.Id, model.Id);
+
         }
     }
 }

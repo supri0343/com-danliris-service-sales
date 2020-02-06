@@ -54,7 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         ConfirmDate = a.ConfirmDate,
                         DeliveryDate = a.DeliveryDate,
                         UnitName = a.UnitName,
-                        Description = a.Description,
+                        Description = a.CommodityDescription,
                         Section = a.Section,
                         Article = a.Article,
                         BuyerCode = a.BuyerCode,

@@ -14,8 +14,10 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -61,6 +63,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
             serviceProviderMock
+                .Setup(x => x.GetService(typeof(CostCalculationGarmentMaterialLogic)))
+                .Returns(costCalculationGarmentMaterialLogic);
+            serviceProviderMock
                 .Setup(x => x.GetService(typeof(CostCalculationGarmentLogic)))
                 .Returns(costCalculationGarmentLogic);
             serviceProviderMock
@@ -71,21 +76,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 .Returns(azureImageFacadeMock.Object);
 
             return serviceProviderMock;
-        }
-
-        [Fact]
-        public async Task Get_All_User_Success()
-        {
-            var dbContext = DbContext(GetCurrentMethod());
-            var serviceProvider = GetServiceProviderMock(dbContext).Object;
-
-            CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
-
-            var data = await DataUtil(facade, dbContext).GetTestData();
-
-            var Response = facade.Read(1, 25, "{}", new List<string>(), "", "{\"AllUser\" : true}");
-
-            Assert.NotEqual(Response.Data.Count, 0);
         }
 
         [Fact]
@@ -277,10 +267,56 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
 			var data = await DataUtil(facade, dbContext).GetTestData();
 
-			var Response = facade.GetComodityQtyOrderHoursBuyerByRo("1910001");
+			var Response = facade.GetComodityQtyOrderHoursBuyerByRo(data.RO_Number);
 
 			Assert.NotNull(Response);
 		}
 
-	}
+        [Fact]
+        public virtual async void Get_Dynamic_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            var Response = facade.ReadDynamic(1, 25, "{}", "new(Id)", null, "{}", "[]");
+
+            Assert.NotEqual(Response.Data.Count, 0);
+        }
+
+        [Fact]
+        public virtual async void Get_Material_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            var Response = facade.ReadMaterials(1, 25, "{}", "new(Id)", null, "{}", "[]");
+
+            Assert.NotEqual(Response.Data.Count, 0);
+        }
+
+        [Fact]
+        public virtual async void Get_Materials_By_PRMasterItemIds_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            var prMasterItemIds = JsonConvert.SerializeObject(data.CostCalculationGarment_Materials.Select(s => s.PRMasterItemId));
+
+            var Response = facade.ReadMaterialsByPRMasterItemIds(1, 25, "{}", "new(Id)", null, "{}", "[]", prMasterItemIds);
+
+            Assert.NotEqual(Response.Data.Count, 0);
+        }
+    }
 }

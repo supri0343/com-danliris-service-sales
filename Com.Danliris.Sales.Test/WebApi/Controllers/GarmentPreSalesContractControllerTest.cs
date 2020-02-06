@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Com.Danliris.Sales.Test.WebApi.Utils;
+using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.GarmentPreSalesContractProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.GarmentPreSalesContractInterface;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentPreSalesContractModel;
 using Com.Danliris.Service.Sales.Lib.Services;
@@ -166,6 +167,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 var response = await controller.PreSalesUnpost(id);
                 Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
             }
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new AutoMapper.MapperConfiguration(cfg => {
+                cfg.AddProfile<GarmentPreSalesContractMapper>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            GarmentPreSalesContract model = new GarmentPreSalesContract { Id = 1 };
+            GarmentPreSalesContractViewModel viewModel = mapper.Map<GarmentPreSalesContractViewModel>(model);
+
+            Assert.Equal(model.Id, viewModel.Id);
         }
     }
 }

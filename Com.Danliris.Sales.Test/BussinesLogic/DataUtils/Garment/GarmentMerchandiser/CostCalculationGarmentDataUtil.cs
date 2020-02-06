@@ -33,6 +33,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.Article = "test";
             data.ConfirmDate = DateTimeOffset.Now;
             data.DeliveryDate = DateTimeOffset.Now;
+            data.CreatedUtc = DateTime.Now;
+            data.LeadTime = 25;
             data.BuyerId = "1";
             data.BuyerCode = "Test";
             data.BuyerName = "Text";
@@ -42,6 +44,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.RO_Number = "Test";
             data.Description = "Test";
             data.ComodityCode = "Test";
+            data.CommodityDescription = "Test";
+            data.RateValue = 1;
+            data.NETFOBP = 10;
             data.Quantity = 1;
             data.ConfirmPrice = 1;
             data.UOMUnit = "Test";
@@ -64,12 +69,27 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.SMV_Finishing = 3.32;
             data.SMV_Total = 12.11;
             data.IsApprovedMD = false;
+            data.CreatedBy = "test";
+            data.IsApprovedMD = false;
+            data.IsApprovedIE = false;
+            data.IsApprovedPurchasing = false;
+            data.IsApprovedKadivMD = true;
+            data.ApprovedKadivMDDate = DateTimeOffset.Now;
+            data.ValidationSampleDate = DateTimeOffset.Now;
             data.CostCalculationGarment_Materials = new List<CostCalculationGarment_Material>()
             {
                 new CostCalculationGarment_Material
                 {
                     ProductId = "1",
-                    CategoryName = "FABRIC"
+                    CategoryName = "FABRIC",
+                    Total = 109375,
+                    CM_Price = 172450,
+                    ProductCode = "Test001",
+                    Description = "Test Description",
+                    BudgetQuantity = 1000,
+                    UOMPriceName = "Test Sat",
+                    Price = 10000,
+                    PO_SerialNumber = "Test PO",
                 }
             };
 

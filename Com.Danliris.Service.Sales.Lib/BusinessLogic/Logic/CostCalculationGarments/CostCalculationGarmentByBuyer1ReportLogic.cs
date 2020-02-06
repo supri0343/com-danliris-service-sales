@@ -58,7 +58,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                     {
                         RO_Number = a.RO_Number,
                         DeliveryDate = a.DeliveryDate,
-                        Description = a.Description,
+                        Description = a.CommodityDescription,
                         Article = a.Article,
                         BuyerCode = a.BuyerCode,
                         BuyerName = a.BuyerName,

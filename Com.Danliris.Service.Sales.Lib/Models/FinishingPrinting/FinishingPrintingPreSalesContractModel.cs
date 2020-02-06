@@ -24,6 +24,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         [MaxLength(512)]
         public string BuyerName { get; set; }
 
+        [MaxLength(512)]
+        public string BuyerType { get; set; }
+
         public int UnitId { get; set; }
         
         [MaxLength(128)]
@@ -39,6 +42,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
 
         [MaxLength(512)]
         public string ProcessTypeName { get; set; }
+
+        public int OrderTypeId { get; set; }
+
+        [MaxLength(128)]
+        public string OrderTypeCode { get; set; }
+
+        [MaxLength(512)]
+        public string OrderTypeName { get; set; }
 
         public double OrderQuantity { get; set; }
 

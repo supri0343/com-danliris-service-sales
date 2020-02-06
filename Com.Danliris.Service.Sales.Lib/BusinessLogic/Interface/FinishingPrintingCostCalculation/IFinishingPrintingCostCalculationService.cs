@@ -10,5 +10,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrinti
     public interface IFinishingPrintingCostCalculationService : IBaseFacade<FinishingPrintingCostCalculationModel>
     {
         Task<int> CCPost(List<long> listId);
+        Task<FinishingPrintingCostCalculationModel> ReadParent(long id);
+        Task<int> CCApproveMD(long id);
+        Task<int> CCApprovePPIC(long id);
+        Task<bool> ValidatePreSalesContractId(long id);
     }
 }

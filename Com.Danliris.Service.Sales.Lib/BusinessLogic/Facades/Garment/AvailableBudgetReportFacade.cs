@@ -34,13 +34,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
 
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(int) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Cost Calculation", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan Budget\n(Validasi PPIC)", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Cost Calculation", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan Budget\n(Validasi Kadiv MD)", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "+/-\nSiap - Shipment", DataType = typeof(int) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Lead Time", DataType = typeof(double) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Kode Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Nama Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Quantity", DataType = typeof(double) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(string) });
 
@@ -51,22 +53,53 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 int i = 0;
                 foreach (var d in data)
                 {
-                    dataTable.Rows.Add(++i, d.CostCalculationDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.ApprovedPPICDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.RONo, d.Article, d.DateDiff, d.Buyer, d.Quantity, d.Uom);
+                    dataTable.Rows.Add(++i, d.RONo, d.CostCalculationDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.ApprovedKadivMDDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DateDiff, d.LeadTime, d.BuyerCode, d.Buyer, d.Article, d.Quantity, d.Uom);
                 }
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
 
-                var count = data.Count;
-                var countOk = data.Count(d => d.DateDiff >= 35);
-                var percentOk = ((decimal)countOk / count).ToString("P", new CultureInfo("id-ID"));
-                var countNotOk = data.Count(d => d.DateDiff < 35);
-                var percentNotOk = ((decimal)countNotOk / count).ToString("P", new CultureInfo("id-ID"));
+                var Count35 = data.Count(d => d.LeadTime == 35);
+                var Count35Ok = data.Count(d => d.DateDiff >= 35 && d.LeadTime == 35);
+                var Percent35Ok = ((decimal)Count35Ok / Count35).ToString("P", new CultureInfo("id-ID"));
+                var Count35NotOk = data.Count(d => d.DateDiff < 35 && d.LeadTime == 35);
+                var Percent35NotOk = ((decimal)Count35NotOk / Count35).ToString("P", new CultureInfo("id-ID"));
 
-                dataTable.Rows.Add(null, "KESIAPAN BUDGET", null, null, null, null, null, null, null, null);
+                var Count25 = data.Count(d => d.LeadTime == 25);
+                var Count25Ok = data.Count(d => d.DateDiff >= 25 && d.LeadTime == 25);
+                var Percent25Ok = ((decimal)Count25Ok / Count25).ToString("P", new CultureInfo("id-ID"));
+                var Count25NotOk = data.Count(d => d.DateDiff < 25 && d.LeadTime == 25);
+                var Percent25NotOk = ((decimal)Count25NotOk / Count25).ToString("P", new CultureInfo("id-ID"));
+
+                var Count = Count25 + Count35;
+                var CountOk = Count35Ok + Count25Ok;
+                var PercentOk = ((decimal)CountOk / Count).ToString("P", new CultureInfo("id-ID"));
+                var CountNotOk = Count35NotOk + Count25NotOk;
+                var PercentNotOk = ((decimal)CountNotOk / Count).ToString("P", new CultureInfo("id-ID"));
+
+
+                dataTable.Rows.Add(null, "KESIAPAN BUDGET DENGAN LEAD TIME 35 HARI", null, null, null, null, null, null, null, null);
                 dataTable.Rows.Add(null, "Status OK", null, "Selisih Tgl Kesiapan Budget dengan Tgl Shipment >= 35 hari", null, null, null, null, null, null);
-                dataTable.Rows.Add(null, "Persentase Status OK", null, $"{countOk}/{count} X 100% = {percentOk}", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status OK", null, $"{Count35Ok}/{Count35} X 100% = {Percent35Ok}", null, null, null, null, null, null);
                 dataTable.Rows.Add(null, "Status NOT OK", null, "Selisih Tgl Kesiapan Budget dengan Tgl Shipment < 35 hari", null, null, null, null, null, null);
-                dataTable.Rows.Add(null, "Persentase Status NOT OK", null, $"{countNotOk}/{count} X 100% = {percentNotOk}", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status NOT OK", null, $"{Count35NotOk}/{Count35} X 100% = {Percent35NotOk}", null, null, null, null, null, null);
+
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
+
+                dataTable.Rows.Add(null, "KESIAPAN BUDGET DENGAN LEAD TIME 25 HARI", null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Status OK", null, "Selisih Tgl Kesiapan Budget dengan Tgl Shipment >= 25 hari", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status OK", null, $"{Count25Ok}/{Count25} X 100% = {Percent25Ok}", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Status NOT OK", null, "Selisih Tgl Kesiapan Budget dengan Tgl Shipment < 25 hari", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status NOT OK", null, $"{Count25NotOk}/{Count25} X 100% = {Percent25NotOk}", null, null, null, null, null, null);
+
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
+
+                dataTable.Rows.Add(null, "AKUMULASI KESIAPAN BUDGET", null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Status OK", null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status OK", null, $"{CountOk}/{Count} X 100% = {PercentOk}", null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Status NOT OK", null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, "Persentase Status NOT OK", null, $"{CountNotOk}/{Count} X 100% = {PercentNotOk}", null, null, null, null, null, null);
 
                 i += 3;
                 mergeCells.Add(($"B{++i}:J{i}", ExcelHorizontalAlignment.Left, ExcelVerticalAlignment.Bottom));
@@ -106,14 +139,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             var data = CostCalculationGarments.Select(cc => new AvailableBudgetReportViewModel
             {
                 CostCalculationDate = cc.CreatedUtc.AddHours(identityService.TimezoneOffset).Date,
-                ApprovedPPICDate = cc.ApprovedPPICDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
+                ApprovedKadivMDDate = cc.ApprovedKadivMDDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 DeliveryDate = cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 RONo = cc.RO_Number,
                 Article = cc.Article,
-                DateDiff = (cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date - cc.ApprovedPPICDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date).Days,
+                DateDiff = (cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date - cc.ApprovedKadivMDDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date).Days,
+                BuyerCode = cc.BuyerBrandCode,
                 Buyer = cc.BuyerBrandName,
                 Quantity = cc.Quantity,
-                Uom = cc.UOMUnit
+                Uom = cc.UOMUnit,
+                LeadTime = cc.LeadTime
             }).ToList();
 
             return data;

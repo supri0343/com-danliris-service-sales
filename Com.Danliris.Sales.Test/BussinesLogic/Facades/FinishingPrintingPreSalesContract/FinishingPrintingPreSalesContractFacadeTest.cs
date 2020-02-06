@@ -63,7 +63,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingPreSale
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             FinishingPrintingPreSalesContractFacade facade = new FinishingPrintingPreSalesContractFacade(serviceProvider, dbContext);
 
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
             List<long> listData = new List<long> { data.Id };
             var Response = await facade.PreSalesPost(listData);
             Assert.NotEqual(Response, 0);
@@ -76,7 +76,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingPreSale
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             FinishingPrintingPreSalesContractFacade facade = new FinishingPrintingPreSalesContractFacade(serviceProvider, dbContext);
 
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
             var Response = await facade.PreSalesUnpost(data.Id);
             Assert.NotEqual(Response, 0);
         }

@@ -3,6 +3,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
@@ -64,6 +65,36 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+        public override IActionResult Get(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")]List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<FinishingPrintingCostCalculationModel> read = Facade.Read(page, size, order, select, keyword, filter);
+
+                List<FinishingPrintingCostCalculationViewModel> DataVM = Mapper.Map<List<FinishingPrintingCostCalculationViewModel>>(read.Data);
+
+                foreach(var vm in DataVM)
+                {
+                    var preSalesContractModel = fpPreSalesContractFacade.ReadByIdAsync((int)vm.PreSalesContract.Id).Result;
+                    vm.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                }
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<FinishingPrintingCostCalculationViewModel>(Mapper, DataVM, page, size, read.Count, DataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
         [HttpPut("post")]
         public async Task<IActionResult> CCPost([FromBody]List<long> listId)
         {
@@ -73,6 +104,46 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 int result = await Facade.CCPost(listId);
 
                 return Ok(result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPost("approve/md/{id}")]
+        public async Task<IActionResult> CCApproveByMD([FromRoute] long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                var result = await Facade.CCApproveMD(id);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPost("approve/ppic/{id}")]
+        public async Task<IActionResult> CCApproveByPPIC([FromRoute] long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                var result = await Facade.CCApprovePPIC(id);
+
+                return NoContent();
             }
             catch (Exception e)
             {

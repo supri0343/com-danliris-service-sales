@@ -64,7 +64,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
         public async Task<int> DeleteAsync(int id)
         {
             GarmentSalesContract sc = await ReadByIdAsync(id);
-            CostCalculationGarment costCal = await DbContext.CostCalculationGarments.FirstOrDefaultAsync(a => a.Id.Equals(sc.CostCalculationId));
+            CostCalculationGarment costCal = await DbContext.CostCalculationGarments.Include(cc => cc.CostCalculationGarment_Materials).FirstOrDefaultAsync(a => a.Id.Equals(sc.CostCalculationId));
             costCal.SCGarmentId = null;
             await costCalGarmentLogic.UpdateAsync((int)sc.CostCalculationId, costCal);
             await garmentSalesContractLogic.DeleteAsync(id);

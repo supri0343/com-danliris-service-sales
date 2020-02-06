@@ -33,6 +33,53 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 		{
 			Service = identityService;
 		}
+
+        [HttpGet("dynamic")]
+        public IActionResult GetDynamic(int page = 1, int size = 25, string order = "{}", string select = null, string keyword = null, string filter = "{}", string search = "[]")
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<dynamic> read = Facade.ReadDynamic(page, size, order, select, keyword, filter, search);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, read.Data, page, size, read.Count, read.Data.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("materials/dynamic")]
+        public IActionResult GetMaterials(int page = 1, int size = 25, string order = "{}", string select = null, string keyword = null, string filter = "{}", string search = "[]")
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<dynamic> read = Facade.ReadMaterials(page, size, order, select, keyword, filter, search);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, read.Data, page, size, read.Count, read.Data.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
 		[HttpGet("pdf/{id}")]
 		public async Task<IActionResult> GetPDF([FromRoute]int Id)
 		{
@@ -462,5 +509,28 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 				return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
 			}
 		}
-	}
+
+        [HttpGet("materials/by-prmasteritemids")]
+        public IActionResult GetMaterialsByPRMasterItemIds(int page = 1, int size = 25, string order = "{}", string select = null, string keyword = null, string filter = "{}", string search = "[]", string prmasteritemids = "[]")
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<dynamic> read = Facade.ReadMaterialsByPRMasterItemIds(page, size, order, select, keyword, filter, search, prmasteritemids);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, read.Data, page, size, read.Count, read.Data.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+    }
 }
