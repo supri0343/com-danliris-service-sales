@@ -336,10 +336,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             document.Add(table_acc_top);
 
             //Main Accessories Table
-            PdfPTable table_accessories = new PdfPTable(4);
+            PdfPTable table_accessories = new PdfPTable(5);
             table_accessories.TotalWidth = 570f;
 
-            float[] accessories_widths = new float[] { 3f, 5f, 2.5f, 7.5f };
+            float[] accessories_widths = new float[] { 2f, 3f, 5f, 2.5f, 7.5f };
             table_accessories.SetWidths(accessories_widths);
 
             PdfPCell cell_acc_center = new PdfPCell()
@@ -364,6 +364,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_fabric_center.Phrase = new Phrase("PRODUCT CODE", bold_font);
             table_accessories.AddCell(cell_fabric_center);
 
+            cell_fabric_center.Phrase = new Phrase("PRODUCT NAME", bold_font);
+            table_accessories.AddCell(cell_fabric_center);
+
             cell_acc_center.Phrase = new Phrase("DESCRIPTION", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
@@ -379,6 +382,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 {
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Product.Code, normal_font);
+                    table_accessories.AddCell(cell_acc_left);
+
+                    cell_acc_left.Phrase = new Phrase(materialModel.Product.Name, normal_font);
                     table_accessories.AddCell(cell_acc_left);
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
