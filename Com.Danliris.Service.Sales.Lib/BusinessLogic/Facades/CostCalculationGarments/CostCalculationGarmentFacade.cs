@@ -353,7 +353,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             }
             return Updated;
         }
-		public CostCalculationGarmentDataProductionReport GetComodityQtyOrderHoursBuyerByRo(string ro)
+		public List<CostCalculationGarmentDataProductionReport> GetComodityQtyOrderHoursBuyerByRo(string ro)
 		{
 			return costCalculationGarmentLogic.GetComodityQtyOrderHoursBuyerByRo(ro);
 

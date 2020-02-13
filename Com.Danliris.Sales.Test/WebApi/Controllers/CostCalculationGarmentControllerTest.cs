@@ -760,7 +760,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 		{
 			var mocks = GetMocks();
 			mocks.Facade.Setup(f => f.GetComodityQtyOrderHoursBuyerByRo(It.IsAny<string>()))
-				.Returns(new CostCalculationGarmentDataProductionReport());
+				.Returns(new List<CostCalculationGarmentDataProductionReport>());
 
 			var controller = GetController(mocks);
 			var response = controller.GetComodityQtyOrderHoursBuyerByRo(It.IsAny<string>());
