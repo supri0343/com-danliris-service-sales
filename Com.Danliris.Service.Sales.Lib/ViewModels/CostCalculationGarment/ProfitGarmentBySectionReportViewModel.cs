@@ -25,5 +25,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double CurrencyRate { get; set; }
         public double CMPrice { get; set; }
         public double FOBPrice { get; set; }
+        public double FabAllow { get; set; }
+        public double AccAllow { get; set; }
+
     }
 }

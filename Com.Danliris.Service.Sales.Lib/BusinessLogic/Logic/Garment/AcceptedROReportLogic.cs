@@ -25,41 +25,41 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
         {
             Filter filter = JsonConvert.DeserializeObject<Filter>(filterString);
 
-            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsROAccepted);
+            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsValidatedROSample);
 
             if (!string.IsNullOrWhiteSpace(filter.section))
             {
                 Query = Query.Where(cc => cc.Section == filter.section);
             }
-            if (!string.IsNullOrWhiteSpace(filter.roNo))
-            {
-                Query = Query.Where(cc => cc.RO_Number == filter.roNo);
-            }
-            if (!string.IsNullOrWhiteSpace(filter.buyer))
-            {
-                Query = Query.Where(cc => cc.BuyerBrandCode == filter.buyer);
-            }
+            //if (!string.IsNullOrWhiteSpace(filter.roNo))
+            //{
+            //    Query = Query.Where(cc => cc.RO_Number == filter.roNo);
+            //}
+            //if (!string.IsNullOrWhiteSpace(filter.buyer))
+            //{
+            //    Query = Query.Where(cc => cc.BuyerBrandCode == filter.buyer);
+            //}
             if (filter.acceptedDateStart != null)
             {
                 var filterDate = filter.acceptedDateStart.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date;
-                Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date >= filterDate);
+                Query = Query.Where(cc => cc.ValidationSampleDate.AddHours(identityService.TimezoneOffset).Date >= filterDate);
             }
             if (filter.acceptedDateEnd != null)
             {
                 var filterDate = filter.acceptedDateEnd.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).AddDays(1).Date;
-                Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
+                Query = Query.Where(cc => cc.ValidationSampleDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
             }
 
             var result = Query.Select(cc => new CostCalculationGarment
             {
-                ROAcceptedDate = cc.ROAcceptedDate,
+                ValidationSampleDate = cc.ValidationSampleDate,
                 RO_Number = cc.RO_Number,
                 Article = cc.Article,
                 BuyerBrandName = cc.BuyerBrandName,
                 DeliveryDate = cc.DeliveryDate,
                 Quantity = cc.Quantity,
                 UOMUnit = cc.UOMUnit,
-                ROAcceptedBy = cc.ROAcceptedBy
+                ValidationSampleBy = cc.ValidationSampleBy
             });
 
             return result;
@@ -68,8 +68,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
         private class Filter
         {
             public string section { get; set; }
-            public string roNo { get; set; }
-            public string buyer { get; set; }
+            //public string roNo { get; set; }
+            //public string buyer { get; set; }
             public DateTimeOffset? acceptedDateStart { get; set; }
             public DateTimeOffset? acceptedDateEnd { get; set; }
         }

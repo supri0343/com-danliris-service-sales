@@ -56,6 +56,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Fabric Allowance", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Acc Allowance", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Deskripsi Garment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Profit %", DataType = typeof(String) });
@@ -70,8 +72,56 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                      result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
+                Dictionary<string, List<ProfitGarmentBySectionReportViewModel>> dataBySection = new Dictionary<string, List<ProfitGarmentBySectionReportViewModel>>();
+
+                Dictionary<string, double> subTotalAmount = new Dictionary<string, double>();
+
+                foreach (ProfitGarmentBySectionReportViewModel item in Query.ToList())
+                {
+                    string Section = item.Section;
+
+                    if (!dataBySection.ContainsKey(Section)) dataBySection.Add(Section, new List<ProfitGarmentBySectionReportViewModel> { });
+                    dataBySection[Section].Add(new ProfitGarmentBySectionReportViewModel
+                    {
+                        UnitName = item.UnitName,
+                        Section = item.Section,
+                        BuyerCode = item.BuyerCode,
+                        BuyerName = item.BuyerName,
+                        BrandCode = item.BrandCode,
+                        BrandName = item.BrandName,
+                        RO_Number = item.RO_Number,
+                        Comodity = item.Comodity,
+                        ComodityDescription = item.ComodityDescription,
+                        Profit = item.Profit,
+                        Article = item.Article,
+                        Quantity = item.Quantity,
+                        UOMUnit = item.UOMUnit,
+                        DeliveryDate = item.DeliveryDate,
+                        ConfirmPrice = item.ConfirmPrice,
+                        CMPrice = item.CMPrice,
+                        FOBPrice = item.FOBPrice,
+                        FabAllow = item.FabAllow,
+                        AccAllow = item.AccAllow,
+                    });
+
+                    if (!subTotalAmount.ContainsKey(Section))
+                    {
+                        subTotalAmount.Add(Section, 0);
+                    };
+
+                    subTotalAmount[Section] += item.FOBPrice;
+                }
+
+                double totalAmount = 0;
+
+                int rowPosition = 1;
+
+                foreach (KeyValuePair<string, List<ProfitGarmentBySectionReportViewModel>> Seksi in dataBySection)
+                {
+                    string SECTION = "";
+
                     int index = 0;
-                    foreach (ProfitGarmentBySectionReportViewModel item in data)
+                    foreach (ProfitGarmentBySectionReportViewModel item in Seksi.Value)
                     {
                         index++;
 
@@ -80,11 +130,21 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         string CfrmPrc = string.Format("{0:N4}", item.ConfirmPrice);
                         string PrftGmt = string.Format("{0:N2}", item.Profit);
                         string CMPrc1 = string.Format("{0:N4}", item.CMPrice);
-                        string FOBPrc = string.Format("{0:N4}", item.ConfirmPrice + item.CMPrice);
+                        string FOBPrc = string.Format("{0:N4}", item.FOBPrice);
 
                         result.Rows.Add(index, item.RO_Number, item.Section, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Article,
-                                        item.Comodity, item.ComodityDescription, ShipDate, PrftGmt, QtyOrder, item.UOMUnit, CfrmPrc, CMPrc1, FOBPrc);
+                                        item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, PrftGmt, QtyOrder, item.UOMUnit, CfrmPrc, CMPrc1, FOBPrc);
+
+                        rowPosition += 1;
+                        SECTION = item.Section;
+                    }
+                    result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "SUB TOTAL", "", "", "", "", "SEKSI :", SECTION, Math.Round(subTotalAmount[Seksi.Key], 2));
+
+                    rowPosition += 1;
+                    totalAmount += subTotalAmount[Seksi.Key];
                 }
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "T O T A L", "", "", "", "", "", "", Math.Round(totalAmount, 2));
+                rowPosition += 1;
             }
             ExcelPackage package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add("Profit Garment By Seksi");
