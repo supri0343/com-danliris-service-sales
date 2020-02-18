@@ -549,16 +549,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             reasonDbSet.Add(costCalculationGarmentUnpostReason);
         }
 
-		internal CostCalculationGarmentDataProductionReport GetComodityQtyOrderHoursBuyerByRo(string ro)
+		internal List<CostCalculationGarmentDataProductionReport> GetComodityQtyOrderHoursBuyerByRo(string ro)
 		{
-			CostCalculationGarmentDataProductionReport costCalculationGarmentDataProductionReport = new CostCalculationGarmentDataProductionReport();
-			var costCalculation = DbSet.Single(m => m.RO_Number == ro);
-			costCalculationGarmentDataProductionReport.ro = costCalculation.RO_Number;
-			costCalculationGarmentDataProductionReport.buyerCode = costCalculation.BuyerCode;
-			costCalculationGarmentDataProductionReport.hours = costCalculation.SMV_Cutting;
-			costCalculationGarmentDataProductionReport.comodityName = costCalculation.Commodity;
-			costCalculationGarmentDataProductionReport.qtyOrder = costCalculation.Quantity;
-			return costCalculationGarmentDataProductionReport;
+            var listRO = ro.Split(",");
+
+            var data = DbSet.Where(w => listRO.Contains(w.RO_Number)).Select(s => new CostCalculationGarmentDataProductionReport
+            {
+			    ro = s.RO_Number,
+			    buyerCode = s.BuyerCode,
+			    hours = s.SMV_Cutting,
+			    comodityName = s.Commodity,
+			    qtyOrder = s.Quantity,
+            }).ToList();
+
+			return data;
 		}
 		internal List<string> ReadUnpostReasonCreators(string keyword, int page, int size)
         {
