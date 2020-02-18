@@ -63,6 +63,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public bool? IsCalculated { get; set; }
         public long? AutoIncreament { get; set; }
 
+        public ApprovalViewModel ApprovalMD { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

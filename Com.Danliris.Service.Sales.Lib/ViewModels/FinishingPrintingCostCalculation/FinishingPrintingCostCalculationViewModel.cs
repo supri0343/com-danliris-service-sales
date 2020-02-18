@@ -78,9 +78,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrintingCostCalcula
 
         public bool IsPosted { get; set; }
 
-        public Approval ApprovalMD { get; set; }
+        public ApprovalViewModel ApprovalMD { get; set; }
 
-        public Approval ApprovalPPIC { get; set; }
+        public ApprovalViewModel ApprovalPPIC { get; set; }
 
         public string ImageFile { get; set; }
 
@@ -219,10 +219,5 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrintingCostCalcula
             }
         }
     }
-    public class Approval
-    {
-        public bool IsApproved { get; set; }
-        public DateTimeOffset ApprovedDate { get; set; }
-        public string ApprovedBy { get; set; }
-    }
+    
 }

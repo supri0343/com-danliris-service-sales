@@ -43,6 +43,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             this.identityService = serviceProvider.GetService<IIdentityService>();
         }
 
+        public async Task<int> ApproveByMD(long id)
+        {
+            await productionOrderLogic.ApproveMD(id);
+            return await DbContext.SaveChangesAsync();
+        }
+
         public async Task<int> CreateAsync(ProductionOrderModel model)
         {
             int result = 0;

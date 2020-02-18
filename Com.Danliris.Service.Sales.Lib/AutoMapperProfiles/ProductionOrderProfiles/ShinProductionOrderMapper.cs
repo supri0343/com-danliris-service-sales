@@ -70,6 +70,11 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.FinishingPrintingSalesContract.MaterialWidth, opt => opt.MapFrom(s => s.MaterialWidth))
             .ForPath(d => d.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.OrderQuantity, opt => opt.MapFrom(s => s.OrderQuantity))
             .ForPath(d => d.FinishingPrintingSalesContract.ShippingQuantityTolerance, opt => opt.MapFrom(s => s.ShippingQuantityTolerance))
+
+            .ForPath(d => d.ApprovalMD.IsApproved, opt => opt.MapFrom(s => s.IsApprovedMD))
+            .ForPath(d => d.ApprovalMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMDBy))
+            .ForPath(d => d.ApprovalMD.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedMDDate))
+
             .ReverseMap();
         }
     }
