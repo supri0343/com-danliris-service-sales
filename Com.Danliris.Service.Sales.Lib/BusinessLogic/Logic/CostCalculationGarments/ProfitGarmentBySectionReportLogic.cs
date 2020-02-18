@@ -51,7 +51,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         where b.CategoryName == "FABRIC" && a.IsApprovedKadivMD == true
                         group new { CMP = b.CM_Price.GetValueOrDefault() } by new { a.UnitName, a.Section, a.BuyerCode, a.BuyerName,
                                     a.BuyerBrandCode, a.BuyerBrandName, a.Commodity, a.CommodityDescription, a.RO_Number, a.Article, a.Quantity, a.UOMUnit,
-                                    a.DeliveryDate, a.NETFOBP, a.ConfirmPrice, a.RateValue} into G
+                                    a.DeliveryDate, a.NETFOBP, a.ConfirmPrice, a.RateValue, a.FabricAllowance, a.AccessoriesAllowance } into G
 
             select new ProfitGarmentBySectionReportViewModel
                        {                
@@ -73,6 +73,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             CurrencyRate = G.Key.RateValue,                          
                             CMPrice = Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue * 1.05,
                             FOBPrice = ((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) + G.Key.ConfirmPrice,
+                            FabAllow = G.Key.FabricAllowance,
+                            AccAllow = G.Key.AccessoriesAllowance, 
             });
             return newQ;
         }

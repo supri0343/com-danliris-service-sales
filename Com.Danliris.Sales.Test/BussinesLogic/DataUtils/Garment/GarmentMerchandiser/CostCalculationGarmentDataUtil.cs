@@ -68,6 +68,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.SMV_Sewing = 7.54;
             data.SMV_Finishing = 3.32;
             data.SMV_Total = 12.11;
+            data.FabricAllowance = 0;
+            data.AccessoriesAllowance = 3;
             data.IsApprovedMD = false;
             data.CreatedBy = "test";
             data.IsApprovedMD = false;
