@@ -44,9 +44,31 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 Id = 1
             },
-            Details = new List<ProductionOrder_DetailViewModel>(),
-            RunWidth = new List<ProductionOrder_RunWidthViewModel>(),
+            Details = new List<ProductionOrder_DetailViewModel>()
+            {
+                new ProductionOrder_DetailViewModel()
+                {
+                    Uom = new UomViewModel(),
+                    ColorType = new ColorTypeViewModel(),
+                    Quantity = 1
+                }
+            },
+            RunWidth = new List<ProductionOrder_RunWidthViewModel>()
+            {
+                new ProductionOrder_RunWidthViewModel()
+                {
+                    Value = 1
+                }
+            },
             LampStandards = new List<ProductionOrder_LampStandardViewModel>()
+            {
+                new ProductionOrder_LampStandardViewModel()
+                {
+                    Name = "a"
+                }
+            },
+            StandardTests = new StandardTestsViewModel(),
+            Account = new AccountViewModel()
         };
 
         protected override List<ShinProductionOrderViewModel> ViewModels => new List<ShinProductionOrderViewModel>() { ViewModel };
@@ -69,9 +91,37 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingCostCalculationService))).Returns(ccFacade.Object);
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingPreSalesContractFacade))).Returns(preSCFacade.Object);
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IShinFinishingPrintingSalesContractFacade))).Returns(scFacade.Object);
-            mocks.Mapper.Setup(x => x.Map<FinishingPrintingCostCalculationViewModel>(It.IsAny<FinishingPrintingCostCalculationModel>())).Returns(new FinishingPrintingCostCalculationViewModel() { PreSalesContract = new FinishingPrintingPreSalesContractViewModel() { Id = 1 } });
-            mocks.Mapper.Setup(x => x.Map<FinishingPrintingPreSalesContractViewModel>(It.IsAny<FinishingPrintingPreSalesContractModel>())).Returns(new FinishingPrintingPreSalesContractViewModel());
-            mocks.Mapper.Setup(s => s.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>())).Returns(new ShinFinishingPrintingSalesContractViewModel() { CostCalculation = new FinishingPrintingCostCalculationViewModel() { Id = 1 } });
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingCostCalculationViewModel>(It.IsAny<FinishingPrintingCostCalculationModel>()))
+                .Returns(new FinishingPrintingCostCalculationViewModel() 
+                { 
+                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel() { Id = 1 },
+                    Material = new MaterialViewModel()
+                    {
+                        Name = "a"
+                    },
+                    UOM = new UomViewModel()
+                });
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingPreSalesContractViewModel>(It.IsAny<FinishingPrintingPreSalesContractModel>()))
+                .Returns(new FinishingPrintingPreSalesContractViewModel()
+                {
+                    Buyer = new BuyerViewModel() { Name = "aa" },
+                    ProcessType = new ProcessTypeViewModel()
+                    {
+                        OrderType = new OrderTypeViewModel()
+                    }
+                    
+                });
+            mocks.Mapper.Setup(s => s.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>()))
+                .Returns(new ShinFinishingPrintingSalesContractViewModel()
+                {
+                    CostCalculation = new FinishingPrintingCostCalculationViewModel()
+                    {
+                        Id = 1
+                        
+                    },
+                    MaterialConstruction = new MaterialConstructionViewModel(),
+                    YarnMaterial = new YarnMaterialViewModel()
+                });
             ShinProductionOrderController controller = (ShinProductionOrderController)Activator.CreateInstance(typeof(ShinProductionOrderController), mocks.IdentityService.Object, mocks.ValidateService.Object, mocks.Facade.Object, mocks.Mapper.Object, mocks.ServiceProvider.Object);
             controller.ControllerContext = new ControllerContext()
             {
@@ -88,53 +138,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         [Fact]
         public void Get_PDF_Success()
         {
-            var vm = new ShinProductionOrderViewModel()
-            {
-                DistributedQuantity = 1,
-                OrderQuantity = 1,
-                FinishingPrintingSalesContract = new ShinFinishingPrintingSalesContractViewModel(),
-                Run = "ru",
-                RunWidth = new List<ProductionOrder_RunWidthViewModel>()
-                {
-                    new ProductionOrder_RunWidthViewModel()
-                    {
-                        Value = 1
-                    },
-                    new ProductionOrder_RunWidthViewModel()
-                    {
-                        Value = 2
-                    },
-                    new ProductionOrder_RunWidthViewModel()
-                    {
-                        Value = 3
-                    }
-                },
-                StandardTests = new StandardTestsViewModel(),
-                DeliveryDate = DateTimeOffset.UtcNow,
-                Account = new AccountViewModel(),
-                LampStandards = new List<ProductionOrder_LampStandardViewModel>()
-                {
-                    new ProductionOrder_LampStandardViewModel()
-                },
-                Details = new List<ProductionOrder_DetailViewModel>()
-                {
-                    new ProductionOrder_DetailViewModel()
-                    {
-                        ColorType = new ColorTypeViewModel(),
-                        Quantity = 1,
-                        Uom = new UomViewModel()
-                    }
-                },
-                ArticleFabricEdge = "e",
-                HandlingStandard = "e",
-                MaterialOrigin = "a",
-                Remark = "ee",
-                ShrinkageStandard = "a"
-            };
+
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
             mocks.Mapper.Setup(s => s.Map<ShinProductionOrderViewModel>(It.IsAny<ProductionOrderModel>()))
-                .Returns(vm);
+                .Returns(ViewModel);
             var controller = GetController(mocks);
             var response = controller.GetPDF(1).Result;
 
@@ -577,6 +585,28 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
         }
-        
+
+        [Fact]
+        public async Task ApproveByMD_Success()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveByMD(It.IsAny<long>())).ReturnsAsync(1);
+            var controller = GetController(mocks);
+            var response = await controller.ApproveByMD(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NoContent, statusCode);
+        }
+
+        [Fact]
+        public async Task ApproveByMD_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveByMD(It.IsAny<long>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = await controller.ApproveByMD(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
     }
 }

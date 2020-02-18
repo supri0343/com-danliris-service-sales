@@ -47,7 +47,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             List<string> SelectedFields = new List<string>()
             {
 
-                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc"
+                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc", "ApprovalMD", "OrderQuantity"
 
             };
 
@@ -212,6 +212,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
         public double GetTotalQuantityBySalesContractId(long id)
         {
             return DbSet.Include(x => x.Details).Where(x => x.SalesContractId == id).SelectMany(x => x.Details).Sum(x => x.Quantity);
+        }
+
+        public async Task ApproveMD(long id)
+        {
+            var model = await DbSet.FirstOrDefaultAsync(d => d.Id == id);
+            model.IsApprovedMD = true;
+            model.ApprovedMDBy = IdentityService.Username;
+            model.ApprovedMDDate = DateTimeOffset.UtcNow;
+
+            EntityExtension.FlagForUpdate(model, IdentityService.Username, Agent);
         }
     }
 }

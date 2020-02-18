@@ -82,7 +82,25 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
         public async void Validate_ViewModel()
         {
             var dbContext = DbContext(GetCurrentMethod());
-            var vm = new ShinProductionOrderViewModel();
+            var vm = new ShinProductionOrderViewModel()
+            {
+                Code = "a",
+                ArticleFabricEdge = "a",
+                DeliveryDate = DateTimeOffset.UtcNow,
+                Remark = "a",
+                ApprovalMD = new ApprovalViewModel()
+                {
+                    ApprovedBy = "a",
+                    ApprovedDate = DateTimeOffset.UtcNow,
+                    IsApproved = true
+                },
+                IsCalculated = true,
+                IsClosed = true,
+                IsCompleted = true,
+                IsRequested = true,
+                IsUsed = true,
+                AutoIncreament = 0
+            };
             var sp = GetServiceProviderMock(DbContext(GetCurrentMethod()));
 
             var facade = new ShinProductionOrderFacade(sp.Object, dbContext);
@@ -190,7 +208,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             vm.Details = new List<ProductionOrder_DetailViewModel>()
             {
                 new ProductionOrder_DetailViewModel()
-            }; 
+            };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
@@ -520,6 +538,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             ProductionOrderModel model = mapper.Map<ProductionOrderModel>(vm);
 
             Assert.Equal(vm.Id, model.Id);
+
+        }
+        [Fact]
+        public async void Should_Success_Approve_MD()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProviderMock = GetServiceProviderMock(dbContext);
+
+            ShinProductionOrderFacade facade = Activator.CreateInstance(typeof(ShinProductionOrderFacade), serviceProviderMock.Object, dbContext) as ShinProductionOrderFacade;
+            await DataUtil(facade, dbContext).GetTestData();
+            var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
+
+
+            var tuple = await facade.ApproveByMD(all.Data.FirstOrDefault().Id);
+            Assert.NotEqual(0, tuple);
+
 
         }
     }
