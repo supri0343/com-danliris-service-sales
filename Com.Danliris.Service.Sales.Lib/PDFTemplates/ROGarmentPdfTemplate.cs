@@ -87,13 +87,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Section}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("DATE", normal_font);
+            cell_top.Phrase = new Phrase("CREATED DATE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.ConfirmDate.AddHours(offset).ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Artikel", normal_font);
+            cell_top.Phrase = new Phrase("ARTIKEL", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Article}", normal_font);
@@ -111,7 +111,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.DeliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("Konveksi", normal_font);
+            cell_top.Phrase = new Phrase("KONVEKSI", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Unit.Code}", normal_font);

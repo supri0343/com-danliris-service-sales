@@ -38,51 +38,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                     int index = 0;
                     foreach (var item in model.SalesReceiptDetails)
                     {
-
-                        SalesReceiptModel salesInvoice = new SalesReceiptModel()
-                        {
-                            Id = model.Id,
-                            Code = model.Code,
-                            AutoIncreament = model.AutoIncreament,
-                            SalesReceiptNo = model.SalesReceiptNo,
-                            SalesReceiptType = model.SalesReceiptType,
-                            SalesReceiptDate = model.SalesReceiptDate,
-                            BankId = model.BankId,
-                            AccountCOA = model.AccountCOA,
-                            AccountName = model.AccountName,
-                            AccountNumber = model.AccountNumber,
-                            BankName = model.BankName,
-                            BankCode = model.BankCode,
-                            BuyerId = model.BuyerId,
-                            BuyerName = model.BuyerName,
-                            BuyerAddress = model.BuyerAddress,
-                            
-                            Active = model.Active,
-                            CreatedAgent = model.CreatedAgent,
-                            CreatedBy = model.CreatedBy,
-                            CreatedUtc = model.CreatedUtc,
-                            DeletedAgent = model.DeletedAgent,
-                            DeletedBy = model.DeletedBy,
-                            DeletedUtc = model.DeletedUtc,
-                            LastModifiedAgent = model.LastModifiedAgent,
-                            LastModifiedBy = model.LastModifiedBy,
-                            LastModifiedUtc = model.LastModifiedUtc,
-                            UId = model.UId,
-
-                            SalesReceiptDetails = new List<SalesReceiptDetailModel>
-                            {item}
-                        };
-
-                        do
-                        {
-                            model.Code = CodeGenerator.Generate();
-                        }
-                        while (DbSet.Any(d => d.Code.Equals(model.Code)));
-
-                        SalesReceiptNumberGenerator(model, index);
-                        salesReceiptLogic.Create(model);
-                        index++;
+                        var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                        updateTotalPaid.TotalPaid = item.Paid;
                     }
+
+                    do
+                    {
+                        model.Code = CodeGenerator.Generate();
+                    }
+                    while (DbSet.Any(d => d.Code.Equals(model.Code)));
+
+                    SalesReceiptNumberGenerator(model, index);
+                    salesReceiptLogic.Create(model);
+                    index++;
+
                     result = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
@@ -106,6 +75,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                     if (model != null)
                     {
                         SalesReceiptModel salesReceiptModel = new SalesReceiptModel();
+
+                        foreach (var item in model.SalesReceiptDetails)
+                        {
+                            var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                            updateTotalPaid.TotalPaid = updateTotalPaid.TotalPaid - item.Nominal;
+                        }
 
                         salesReceiptModel = model;
                         await salesReceiptLogic.DeleteAsync(id);
@@ -137,6 +112,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
             {
                 try
                 {
+                    foreach (var item in model.SalesReceiptDetails)
+                    {
+                        var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                        updateTotalPaid.TotalPaid = item.Paid;
+                    }
+
                     salesReceiptLogic.UpdateAsync(id, model);
                 }
                 catch (Exception e)

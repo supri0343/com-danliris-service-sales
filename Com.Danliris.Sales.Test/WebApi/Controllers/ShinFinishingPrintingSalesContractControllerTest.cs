@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrintingCostCalculation;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,13 +34,68 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
         protected override ShinFinishingPrintingSalesContractViewModel ViewModel => new ShinFinishingPrintingSalesContractViewModel()
         {
+            Amount = 1,
+            ShipmentDescription = "a",
+            DeliverySchedule = DateTimeOffset.UtcNow,
+            CommodityDescription = "a",
+            MaterialWidth= "a",
+            Quality = new QualityViewModel()
+            {
+                Name = "a"
+            },
+            Commodity = new CommodityViewModel()
+            {
+                Name = "a"
+            },
+            MaterialConstruction = new MaterialConstructionViewModel()
+            {
+                Name = "a"
+            },
             CostCalculation = new FinishingPrintingCostCalculationViewModel()
             {
-                Id = 1
+                Id = 1,
+                PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+                {
+                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                    {
+                        Id = 1
+                    }
+                }
             },
             Details = new List<FinishingPrintingSalesContractDetailViewModel>()
             {
+               new FinishingPrintingSalesContractDetailViewModel()
+                {
+                    UseIncomeTax = true,
+                    Currency = new CurrencyViewModel()
+                    {
+                        Code = "c"
+                    }
+                },
                 new FinishingPrintingSalesContractDetailViewModel()
+                {
+                    Currency = new CurrencyViewModel()
+                    {
+                        Code = "usd"
+                    }
+                }
+            },
+            Agent = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AgentViewModel()
+            {
+                Id = 1,
+            },
+            AccountBank = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AccountBankViewModel()
+            {
+                Id = 1
+            },
+            UseIncomeTax = true,
+            YarnMaterial = new YarnMaterialViewModel()
+            {
+                Name = "a"
+            },
+            TermOfPayment = new TermOfPaymentViewModel()
+            {
+                Name = "a"
             }
         };
 
@@ -58,8 +114,66 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             ccFacade.Setup(s => s.ReadParent(It.IsAny<long>())).ReturnsAsync(new FinishingPrintingCostCalculationModel());
             user.Setup(u => u.Claims).Returns(claims);
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IHttpClientService))).Returns(new HttpClientTestService());
-            mocks.Mapper.Setup(x => x.Map<FinishingPrintingCostCalculationViewModel>(It.IsAny<FinishingPrintingCostCalculationModel>())).Returns(new FinishingPrintingCostCalculationViewModel() { PreSalesContract = new FinishingPrintingPreSalesContractViewModel() { Id = 1 } });
-            mocks.Mapper.Setup(x => x.Map<FinishingPrintingPreSalesContractViewModel>(It.IsAny<FinishingPrintingPreSalesContractModel>())).Returns(new FinishingPrintingPreSalesContractViewModel());
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingCostCalculationViewModel>(It.IsAny<FinishingPrintingCostCalculationModel>()))
+                .Returns(new FinishingPrintingCostCalculationViewModel() 
+                { 
+                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel() { Id = 1 },
+                    UOM = new UomViewModel()
+                    {
+                        Unit = "a"
+                    },
+                    Material = new MaterialViewModel()
+                    {
+                        Name = "a"
+                    }
+                });
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingPreSalesContractViewModel>(It.IsAny<FinishingPrintingPreSalesContractModel>())).Returns(new FinishingPrintingPreSalesContractViewModel() { Buyer = new BuyerViewModel() { Id = 1 } });
+            mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingCostCalculationService))).Returns(ccFacade.Object);
+            mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingPreSalesContractFacade))).Returns(preSCFacade.Object);
+            ShinFinishingPrintingSalesContractController controller = (ShinFinishingPrintingSalesContractController)Activator.CreateInstance(typeof(ShinFinishingPrintingSalesContractController), mocks.IdentityService.Object, mocks.ValidateService.Object, mocks.Facade.Object, mocks.Mapper.Object, mocks.ServiceProvider.Object);
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = user.Object
+                }
+            };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorization"] = "Bearer unittesttoken";
+            controller.ControllerContext.HttpContext.Request.Path = new PathString("/v1/unit-test");
+            return controller;
+        }
+
+        private ShinFinishingPrintingSalesContractController GetController2((Mock<IIdentityService> IdentityService, Mock<IValidateService> ValidateService, Mock<IShinFinishingPrintingSalesContractFacade> Facade, Mock<IMapper> Mapper, Mock<IServiceProvider> ServiceProvider) mocks)
+        {
+            var user = new Mock<ClaimsPrincipal>();
+            var claims = new Claim[]
+            {
+                new Claim("username", "unittestusername")
+            };
+            Mock<IFinishingPrintingPreSalesContractFacade> preSCFacade = new Mock<IFinishingPrintingPreSalesContractFacade>();
+            Mock<IFinishingPrintingCostCalculationService> ccFacade = new Mock<IFinishingPrintingCostCalculationService>();
+            preSCFacade.Setup(s => s.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(new FinishingPrintingPreSalesContractModel());
+            ccFacade.Setup(s => s.ReadParent(It.IsAny<long>())).ReturnsAsync(new FinishingPrintingCostCalculationModel());
+            user.Setup(u => u.Claims).Returns(claims);
+            mocks.ServiceProvider.Setup(s => s.GetService(typeof(IHttpClientService))).Returns(new HttpClientTestService());
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingCostCalculationViewModel>(It.IsAny<FinishingPrintingCostCalculationModel>()))
+                .Returns(new FinishingPrintingCostCalculationViewModel()
+                {
+                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel() { Id = 1 },
+                    UOM = new UomViewModel()
+                    {
+                        Unit = "a"
+                    },
+                    Material = new MaterialViewModel()
+                    {
+                        Name = "a"
+                    }
+                });
+            mocks.Mapper.Setup(x => x.Map<FinishingPrintingPreSalesContractViewModel>(It.IsAny<FinishingPrintingPreSalesContractModel>()))
+                .Returns(new FinishingPrintingPreSalesContractViewModel() 
+                { 
+                    Buyer = new BuyerViewModel() { Id = 1, Type = "Ekspor" } 
+                });
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingCostCalculationService))).Returns(ccFacade.Object);
             mocks.ServiceProvider.Setup(s => s.GetService(typeof(IFinishingPrintingPreSalesContractFacade))).Returns(preSCFacade.Object);
             ShinFinishingPrintingSalesContractController controller = (ShinFinishingPrintingSalesContractController)Activator.CreateInstance(typeof(ShinFinishingPrintingSalesContractController), mocks.IdentityService.Object, mocks.ValidateService.Object, mocks.Facade.Object, mocks.Mapper.Object, mocks.ServiceProvider.Object);
@@ -93,65 +207,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = GetMocks();
 
-            var vm = new FinishingPrintingSalesContractViewModel
+            ViewModel.Details = new List<FinishingPrintingSalesContractDetailViewModel>()
             {
-                Agent = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AgentViewModel()
-                {
-                    Id = 1,
-                    Name = "name"
-                },
-                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel
-                {
-                    Id = 1,
-                    Type = "Lokal"
-                },
-                AccountBank = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AccountBankViewModel
-                {
-                    Id = 1
-                },
-                OrderQuantity = 1,
-                UOM = new Service.Sales.Lib.ViewModels.IntegrationViewModel.UomViewModel()
-                {
-                    Unit = "unit"
-                },
-                Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
-                {
-                    Name = "comm"
-                },
-                Quality = new Service.Sales.Lib.ViewModels.IntegrationViewModel.QualityViewModel()
-                {
-                    Name = "name"
-                },
-                DesignMotive = new Service.Sales.Lib.ViewModels.IntegrationViewModel.OrderTypeViewModel()
-                {
-                    Name = "name"
-                },
-                TermOfPayment = new Service.Sales.Lib.ViewModels.IntegrationViewModel.TermOfPaymentViewModel()
-                {
-                    Name = "tp"
-                },
-                DeliverySchedule = DateTimeOffset.UtcNow,
-                UseIncomeTax = false,
-                Details = new List<FinishingPrintingSalesContractDetailViewModel>()
-                {
-                    new FinishingPrintingSalesContractDetailViewModel()
-                    {
-                        UseIncomeTax = false,
-                        Currency = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CurrencyViewModel()
-                        {
-                            Code = "code",
-                            Symbol = "c"
-                        }
-                    }
-                },
-                Amount = 1,
-                Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel(),
-                MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel(),
-                YarnMaterial = new Service.Sales.Lib.ViewModels.IntegrationViewModel.YarnMaterialViewModel()
+                
             };
-
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
-            mocks.Mapper.Setup(f => f.Map<FinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>())).Returns(vm);
+            mocks.Mapper.Setup(f => f.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>())).Returns(ViewModel);
 
             var controller = GetController(mocks);
             var response = controller.GetPDF(1).Result;
@@ -165,67 +226,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = GetMocks();
 
-            var vm = new FinishingPrintingSalesContractViewModel
-            {
-                Agent = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AgentViewModel()
-                {
-                    Id = 1,
-                    Name = "name"
-                },
-                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel
-                {
-                    Id = 1,
-                    Type = "Ekspor"
-                },
-                AccountBank = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AccountBankViewModel
-                {
-                    Id = 1
-                },
-                OrderQuantity = 1,
-                UOM = new Service.Sales.Lib.ViewModels.IntegrationViewModel.UomViewModel()
-                {
-                    Unit = "unit"
-                },
-                Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
-                {
-                    Name = "comm"
-                },
-                Quality = new Service.Sales.Lib.ViewModels.IntegrationViewModel.QualityViewModel()
-                {
-                    Name = "name"
-                },
-                DesignMotive = new Service.Sales.Lib.ViewModels.IntegrationViewModel.OrderTypeViewModel()
-                {
-                    Name = "name"
-                },
-                TermOfPayment = new Service.Sales.Lib.ViewModels.IntegrationViewModel.TermOfPaymentViewModel()
-                {
-                    Name = "tp"
-                },
-                DeliverySchedule = DateTimeOffset.UtcNow,
-                UseIncomeTax = false,
-                Details = new List<FinishingPrintingSalesContractDetailViewModel>()
-                {
-                    new FinishingPrintingSalesContractDetailViewModel()
-                    {
-                        UseIncomeTax = false,
-                        Currency = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CurrencyViewModel()
-                        {
-                            Code = "code",
-                            Symbol = "c"
-                        }
-                    }
-                },
-                Amount = 1,
-                Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel(),
-                MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel(),
-                YarnMaterial = new Service.Sales.Lib.ViewModels.IntegrationViewModel.YarnMaterialViewModel()
-            };
-
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
-            mocks.Mapper.Setup(f => f.Map<FinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>())).Returns(vm);
+            mocks.Mapper.Setup(f => f.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>())).Returns(ViewModel);
 
-            var controller = GetController(mocks);
+            var controller = GetController2(mocks);
             var response = controller.GetPDF(1).Result;
 
             Assert.NotNull(response);

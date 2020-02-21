@@ -124,5 +124,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation
 
         [MaxLength(512)]
         public string ApprovedMDBy { get; set; }
+
+        public string ImageFile { get; set; }
+        [MaxLength(1000)]
+        public string ImagePath { get; set; }
     }
 }

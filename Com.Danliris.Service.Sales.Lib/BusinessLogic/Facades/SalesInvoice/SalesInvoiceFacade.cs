@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,63 +36,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                 try
                 {
                     int index = 0;
-                    foreach (var item in model.SalesInvoiceDetails)
+                    do
                     {
-
-                        SalesInvoiceModel salesInvoice = new SalesInvoiceModel()
-                        {
-                            Id = model.Id,
-                            Code = model.Code,
-                            AutoIncreament = model.AutoIncreament,
-                            SalesInvoiceNo = model.SalesInvoiceNo,
-                            SalesInvoiceType = model.SalesInvoiceType,
-                            SalesInvoiceDate = model.SalesInvoiceDate,
-                            DueDate = model.DueDate,
-                            DeliveryOrderNo = model.DeliveryOrderNo,
-                            DebtorIndexNo = model.DebtorIndexNo,
-                            DOSalesId = model.DOSalesId,
-                            DOSalesNo = model.DOSalesNo,
-                            BuyerId = model.BuyerId,
-                            BuyerName = model.BuyerName,
-                            BuyerAddress = model.BuyerAddress,
-                            BuyerNPWP = model.BuyerNPWP,
-                            IDNo = model.IDNo,
-                            CurrencyId = model.CurrencyId,
-                            CurrencyCode = model.CurrencyCode,
-                            CurrencySymbol = model.CurrencySymbol,
-                            CurrencyRate = model.CurrencyRate,
-                            Disp = model.Disp,
-                            Op = model.Op,
-                            Sc = model.Sc,
-                            UseVat = model.UseVat,
-                            Remark = model.Remark,
-
-                            Active = model.Active,
-                            CreatedAgent = model.CreatedAgent,
-                            CreatedBy = model.CreatedBy,
-                            CreatedUtc = model.CreatedUtc,
-                            DeletedAgent = model.DeletedAgent,
-                            DeletedBy = model.DeletedBy,
-                            DeletedUtc = model.DeletedUtc,
-                            LastModifiedAgent = model.LastModifiedAgent,
-                            LastModifiedBy = model.LastModifiedBy,
-                            LastModifiedUtc = model.LastModifiedUtc,
-                            UId = model.UId,
-
-                            SalesInvoiceDetails = new List<SalesInvoiceDetailModel>
-                            {item}
-                        };
-
-                        do
-                        {
-                            model.Code = CodeGenerator.Generate();
-                        }
-                        while (DbSet.Any(d => d.Code.Equals(model.Code)));
-
-                        SalesInvoiceNumberGenerator(model, index);
-                        salesInvoiceLogic.Create(model);
-                        index++;
+                        model.Code = CodeGenerator.Generate();
                     }
+                    while (DbSet.Any(d => d.Code.Equals(model.Code)));
+
+                    SalesInvoiceNumberGenerator(model, index);
+                    salesInvoiceLogic.Create(model);
+                    index++;
+
                     result = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
@@ -164,22 +117,99 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             int YearNow = DateTime.Now.Year;
+            var YearNowString = DateTime.Now.ToString("yy");
 
             if (lastData == null)
             {
-                if (model.SalesInvoiceType == "BPF")
+                if (model.SalesInvoiceType == "BNG")
                 {
                     index = 28;
                 }
-                else if (model.SalesInvoiceType == "BPS")
+                else if (model.SalesInvoiceType == "BAB")
                 {
                     index = 8;
                 }
-                else if (model.SalesInvoiceType == "BPP")
+                else if (model.SalesInvoiceType == "BNS")
                 {
                     index = 98;
                 }
-                else if(model.SalesInvoiceType == "BRG")
+                else if (model.SalesInvoiceType == "RNG")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "BRG")
+                {
+                    index = 28;
+                }
+                else if (model.SalesInvoiceType == "BAG")
+                {
+                    index = 8;
+                }
+                else if (model.SalesInvoiceType == "BGS")
+                {
+                    index = 98;
+                }
+                else if (model.SalesInvoiceType == "RRG")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "BLL")
+                {
+                    index = 8;
+                }
+                else if (model.SalesInvoiceType == "BPF")
+                {
+                    index = 98;
+                }
+                else if (model.SalesInvoiceType == "BSF")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "RPF")
+                {
+                    index = 28;
+                }
+                else if (model.SalesInvoiceType == "BPR")
+                {
+                    index = 8;
+                }
+                else if (model.SalesInvoiceType == "BSR")
+                {
+                    index = 98;
+                }
+                else if (model.SalesInvoiceType == "RPR")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "BAV")
+                {
+                    index = 8;
+                }
+                else if (model.SalesInvoiceType == "BON")
+                {
+                    index = 98;
+                }
+                else if (model.SalesInvoiceType == "BGM")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "GPF")
+                {
+                    index = 28;
+                }
+                else if (model.SalesInvoiceType == "RGF")
+                {
+                    index = 8;
+                }
+                else if (model.SalesInvoiceType == "GPR")
+                {
+                    index = 98;
+                }
+                else if (model.SalesInvoiceType == "RGR")
+                {
+                    index = 14;
+                }
+                else if (model.SalesInvoiceType == "RON")
                 {
                     index = 14;
                 }
@@ -188,19 +218,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     index = 0;
                 }
                 model.AutoIncreament = 1 + index;
-                model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
             else
             {
                 if (YearNow > lastData.CreatedUtc.Year)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }

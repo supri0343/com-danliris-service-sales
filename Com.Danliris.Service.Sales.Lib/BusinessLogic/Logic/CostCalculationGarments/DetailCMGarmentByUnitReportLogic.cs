@@ -54,7 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             var newQ = (from a in Query
                         join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId
                         where b.CategoryName != "PROCESS"
-                        group new { BgtAmt = b.Total, CMP = b.CM_Price.GetValueOrDefault() } by new { a.UnitName, a.BuyerCode, a.BuyerName, a.BuyerBrandCode, a.BuyerBrandName,
+                        group new { BgtAmt = b.Price * b.BudgetQuantity, CMP = b.CM_Price.GetValueOrDefault() } by new { a.UnitName, a.BuyerCode, a.BuyerName, a.BuyerBrandCode, a.BuyerBrandName,
                                     a.RO_Number, a.Article, a.Quantity, a.UOMUnit, a.DeliveryDate, a.OTL1CalculatedRate, a.OTL2CalculatedRate,
                                     a.SMV_Cutting, a.SMV_Sewing, a.SMV_Finishing, a.SMV_Total, a.CommissionRate, a.Insurance, a.Freight, a.ConfirmPrice, a.RateValue} into G
                         select new DetailCMGarmentByUnitReportViewModel
@@ -78,10 +78,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             Commission = G.Key.CommissionRate,
                             Insurance = G.Key.Insurance,
                             Freight = G.Key.Freight,
-                            FOB_Price = G.Key.ConfirmPrice,
+                            ConfirmPrice = G.Key.ConfirmPrice,
                             CurrencyRate = G.Key.RateValue,
                             BudgetAmount = Math.Round(G.Sum(m => m.BgtAmt), 2),
                             CMPrice = Math.Round(G.Sum(m => m.CMP), 2),
+                            CMIDR = (G.Key.ConfirmPrice * G.Key.RateValue) - G.Key.CommissionRate - (Math.Round(G.Sum(m => m.BgtAmt), 2) / G.Key.Quantity),
+                            CM = ((G.Key.ConfirmPrice * G.Key.RateValue) - G.Key.CommissionRate - (Math.Round(G.Sum(m => m.BgtAmt), 2) / G.Key.Quantity)) / G.Key.RateValue,
+                            FOB_Price = G.Key.ConfirmPrice + ((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) - (G.Key.Insurance + G.Key.Freight),
                         });
             return newQ;
         }

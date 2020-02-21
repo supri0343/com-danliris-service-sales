@@ -53,12 +53,13 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 else
                 {
                     SalesReceiptViewModel viewModel = Mapper.Map<SalesReceiptViewModel>(model);
+                    var detailViewModel = viewModel.SalesReceiptDetails.FirstOrDefault();
 
                     SalesReceiptPdfTemplate PdfTemplate = new SalesReceiptPdfTemplate();
-                    MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
+                    MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, detailViewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Kwitansi - " + viewModel.SalesReceiptNo + ".pdf"
+                        FileDownloadName = "Kuitansi - " + viewModel.SalesReceiptNo + ".pdf"
                     };
                 }
             }

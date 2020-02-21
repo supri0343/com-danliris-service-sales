@@ -2,13 +2,14 @@
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesReceipt
 {
@@ -17,6 +18,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesReceipt
         private const string ENTITY = "SalesReceipt";
         public SalesReceiptFacadeTest() : base(ENTITY)
         {
+        }
+
+        protected override SalesReceiptDataUtil DataUtil(SalesReceiptFacade facade, SalesDbContext dbContext = null)
+        {
+            var SalesInvoiceFacade = new SalesInvoiceFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            var SalesInvoiceDataUtil = new SalesInvoiceDataUtil(SalesInvoiceFacade);
+            var SalesReceiptDataUtil = new SalesReceiptDataUtil(facade, SalesInvoiceDataUtil);
+
+            return SalesReceiptDataUtil;
         }
 
         protected override Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
@@ -40,6 +50,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesReceipt
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(SalesReceiptLogic)))
                 .Returns(salesReceiptLogic);
+
+            var salesInvoiceDetailLogic = new SalesInvoiceDetailLogic(serviceProviderMock.Object, identityService, dbContext);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(SalesInvoiceDetailLogic)))
+                .Returns(salesInvoiceDetailLogic);
+
+            var salesInvoiceLogic = new SalesInvoiceLogic(serviceProviderMock.Object, identityService, dbContext);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(SalesInvoiceLogic)))
+                .Returns(salesInvoiceLogic);
+
 
             return serviceProviderMock;
         }

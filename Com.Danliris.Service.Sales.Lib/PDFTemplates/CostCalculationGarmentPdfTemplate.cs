@@ -64,15 +64,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			PdfPCell cell_colon = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE };
 			cell_colon.Phrase = new Phrase(":", normal_font);
 
-			cell_detail1.Phrase = new Phrase("RO", normal_font);
+			cell_detail1.Phrase = new Phrase("NO. RO", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.RO_Number}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-			cell_detail1.Phrase = new Phrase("SIZE RANGE", normal_font);
+			cell_detail1.Phrase = new Phrase("NO. PRE SC", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_colon);
-			cell_detail1.Phrase = new Phrase($"{viewModel.SizeRange}", normal_font);
+			cell_detail1.Phrase = new Phrase($"{viewModel.PreSCNo}", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			cell_detail1.Phrase = new Phrase("LEAD TIME", normal_font);
 			table_detail1.AddCell(cell_detail1);
@@ -117,7 +117,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.Unit.Code}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-			cell_detail1.Phrase = new Phrase("", normal_font);
+            cell_detail1.Phrase = new Phrase("SIZE RANGE", normal_font);
+            table_detail1.AddCell(cell_detail1);
+            table_detail1.AddCell(cell_colon);
+            cell_detail1.Phrase = new Phrase($"{viewModel.SizeRange}", normal_font);
+            table_detail1.AddCell(cell_detail1);
+            cell_detail1.Phrase = new Phrase("", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_detail1);

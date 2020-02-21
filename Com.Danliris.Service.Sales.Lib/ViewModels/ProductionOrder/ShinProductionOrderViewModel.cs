@@ -1,10 +1,13 @@
-﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 {
@@ -27,7 +30,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 
         [MaxLength(255)]
         public string HandlingStandard { get; set; }
-        
+
         [MaxLength(255)]
         public string Run { get; set; }
 
@@ -60,6 +63,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public bool? IsCalculated { get; set; }
         public long? AutoIncreament { get; set; }
 
+        public ApprovalViewModel ApprovalMD { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -71,7 +76,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
             }
             else
             {
-                if(this.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.Unit.Name.Trim().ToLower() == "printing")
+                if (this.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.Unit.Name.Trim().ToLower() == "printing")
                 {
                     if (string.IsNullOrWhiteSpace(this.Run))
                     {
@@ -112,8 +117,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                 }
             }
 
-            
-            
+
+
             if (this.StandardTests == null || this.StandardTests.Id.Equals(0))
             {
                 yield return new ValidationResult("Standard Tests harus di isi", new List<string> { "StandardTests" });
@@ -124,14 +129,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                 yield return new ValidationResult("Account harus di isi", new List<string> { "Account" });
             }
 
-            
+
 
             if (string.IsNullOrWhiteSpace(this.MaterialOrigin) || this.MaterialOrigin == "")
             {
                 yield return new ValidationResult("Material Origin harus di isi", new List<string> { "MaterialOrigin" });
             }
 
-           
+
 
             if (string.IsNullOrWhiteSpace(this.HandlingStandard) || this.HandlingStandard == "")
             {
@@ -155,22 +160,21 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 
                 if (!this.Details.Count.Equals(0))
                 {
-                    double totalqty = 0;
+                    double totalqty = Details.Sum(s => s.Quantity.GetValueOrDefault());
 
-                    foreach (ProductionOrder_DetailViewModel data in this.Details)
-                    {
-                        totalqty += (double)data.Quantity;
-                    }
+                    var poService = validationContext.GetService<IShinProductionOrder>();
+                    var createdQuantity = poService.GetTotalQuantityBySalesContractId(FinishingPrintingSalesContract.Id);
 
-                    if (!this.OrderQuantity.Equals(Math.Round(totalqty, 3)))
+                    if (Math.Round(totalqty, 3) > Math.Round(OrderQuantity - createdQuantity, 3))
                     {
-                        yield return new ValidationResult("OrderQuantity tidak sama", new List<string> { "OrderQuantity" });
+                        yield return new ValidationResult("Jumlah Quantity di Detail melebihi selish Jumlah Order dengan Quantity yang sudah dibuat", 
+                            new List<string> { "OrderQuantity" });
                     }
 
                 }
             }
 
-           
+
             if (this.LampStandards.Count.Equals(0))
             {
                 yield return new ValidationResult("LampStandards harus di isi", new List<string> { "LampStandards" });

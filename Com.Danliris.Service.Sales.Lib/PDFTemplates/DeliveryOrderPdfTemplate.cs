@@ -122,7 +122,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable bodyTable = new PdfPTable(4);
             PdfPCell bodyCell = new PdfPCell();
 
-            float[] widthsBody = new float[] { 3f, 10f, 10f, 10f };
+            float[] widthsBody = new float[] { 3f, 15f, 7f, 8f };
             bodyTable.SetWidths(widthsBody);
             bodyTable.WidthPercentage = 100;
 
@@ -147,7 +147,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.UnitName, normal_font);
+                bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;

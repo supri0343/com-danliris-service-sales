@@ -8,8 +8,8 @@ using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.WebApi.Controllers
@@ -26,6 +26,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesReceiptDetailViewModel()
                     {
+                        CurrencyCode = "IDR",
+                        CurrencySymbol = "Rp",
                     }
                 }
 
@@ -85,6 +87,139 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             SalesReceiptDetailModel salesReceiptDetailModel = mapper.Map<SalesReceiptDetailModel>(salesReceiptDetailViewModel);
 
             Assert.Equal(salesReceiptDetailViewModel.Id, salesReceiptDetailModel.Id);
+        }
+
+        [Fact]
+        public void Validate_Validation_ViewModel()
+        {
+            List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
+            {
+                new SalesReceiptViewModel{
+                    SalesReceiptType = "",
+                    SalesReceiptDate = DateTimeOffset.UtcNow.AddDays(-1),
+                    BankId = 0,
+                    AccountCOA = "",
+                    AccountName = "",
+                    AccountNumber = "",
+                    BankName = "",
+                    BankCode = "",
+                    BuyerId = 0,
+                    BuyerName = "",
+                    BuyerAddress = "",
+                    TotalPaid = -1,
+                    SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
+                        new SalesReceiptDetailViewModel{
+                            SalesReceiptId = 0,
+                            SalesInvoiceId = 0,
+                            SalesInvoiceNo = "",
+                            DueDate = DateTimeOffset.UtcNow.AddDays(-1),
+                            VatType = "",
+                            CurrencyId = 0,
+                            CurrencyCode = "",
+                            CurrencySymbol = "",
+                            CurrencyRate = 0,
+                            TotalPayment = -1,
+                            TotalPaid = -1,
+                            Paid = -1,
+                            Nominal = -1,
+                            Unpaid = -1,
+                            IsPaidOff = false
+                        }
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Null_Model_and_DetailViewModel()
+        {
+            List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
+            {};
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Duplicate_DetailViewModel()
+        {
+            List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
+            {
+                new SalesReceiptViewModel{
+                    SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
+                        new SalesReceiptDetailViewModel{
+                            SalesReceiptId = 10,
+                            SalesInvoiceId = 10,
+                            SalesInvoiceNo = "SalesInvoiceNo",
+                            DueDate = DateTimeOffset.UtcNow,
+                            VatType = "PPN Kawasan Berikat",
+                            Tempo = 10,
+                            CurrencyId = 10,
+                            CurrencyCode = "USD",
+                            CurrencySymbol = "$",
+                            CurrencyRate = 10,
+                            TotalPayment = 10,
+                            TotalPaid = 10,
+                            Paid = 10,
+                            Nominal = 10,
+                            Unpaid = 10,
+                            OverPaid = 10,
+                            IsPaidOff = true
+                        },
+                        new SalesReceiptDetailViewModel{
+                            SalesReceiptId = 10,
+                            SalesInvoiceId = 10,
+                            SalesInvoiceNo = "SalesInvoiceNo",
+                            DueDate = DateTimeOffset.UtcNow,
+                            VatType = "PPN Kawasan Berikat",
+                            Tempo = 10,
+                            CurrencyId = 10,
+                            CurrencyCode = "USD",
+                            CurrencySymbol = "$",
+                            CurrencyRate = 10,
+                            TotalPayment = 10,
+                            TotalPaid = 10,
+                            Paid = 10,
+                            Nominal = 10,
+                            Unpaid = 10,
+                            OverPaid = 10,
+                            IsPaidOff = true
+                        }
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_VatType_DetailViewModel()
+        {
+            List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
+            {
+                new SalesReceiptViewModel{
+                    SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
+                        new SalesReceiptDetailViewModel{
+                            VatType = "PPN Umum",
+                        }
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
         }
     }
 }

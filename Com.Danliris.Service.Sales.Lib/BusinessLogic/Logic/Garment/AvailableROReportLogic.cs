@@ -30,14 +30,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
             {
                 Query = Query.Where(cc => cc.Section == filter.section);
             }
-            if (!string.IsNullOrWhiteSpace(filter.roNo))
-            {
-                Query = Query.Where(cc => cc.RO_Number == filter.roNo);
-            }
-            if (!string.IsNullOrWhiteSpace(filter.buyer))
-            {
-                Query = Query.Where(cc => cc.BuyerBrandCode == filter.buyer);
-            }
+            //if (!string.IsNullOrWhiteSpace(filter.roNo))
+            //{
+            //    Query = Query.Where(cc => cc.RO_Number == filter.roNo);
+            //}
+            //if (!string.IsNullOrWhiteSpace(filter.buyer))
+            //{
+            //    Query = Query.Where(cc => cc.BuyerBrandCode == filter.buyer);
+            //}
             if (filter.availableDateStart != null)
             {
                 var filterDate = filter.availableDateStart.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date;
@@ -48,24 +48,26 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 var filterDate = filter.availableDateEnd.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).AddDays(1).Date;
                 Query = Query.Where(cc => cc.ROAvailableDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
             }
-            if (filter.status != null)
-            {
-                if (filter.status.Equals("OK", StringComparison.OrdinalIgnoreCase))
-                {
-                    Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date.AddDays(2) >= cc.ROAvailableDate.AddHours(identityService.TimezoneOffset).Date);
-                }
-                else if (filter.status.Equals("NOT OK", StringComparison.OrdinalIgnoreCase))
-                {
-                    Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date.AddDays(2) < cc.ROAvailableDate.AddHours(identityService.TimezoneOffset).Date);
-                }
-            }
+            //if (filter.status != null)
+            //{
+            //    if (filter.status.Equals("OK", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date.AddDays(2) >= cc.ROAvailableDate.AddHours(identityService.TimezoneOffset).Date);
+            //    }
+            //    else if (filter.status.Equals("NOT OK", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        Query = Query.Where(cc => cc.ROAcceptedDate.AddHours(identityService.TimezoneOffset).Date.AddDays(2) < cc.ROAvailableDate.AddHours(identityService.TimezoneOffset).Date);
+            //    }
+            //}
 
             var result = Query.Select(cc => new CostCalculationGarment
             {
                 ROAcceptedDate = cc.ROAcceptedDate,
                 ROAvailableDate = cc.ROAvailableDate,
+                ValidationSampleDate = cc.ValidationSampleDate,
                 RO_Number = cc.RO_Number,
                 Article = cc.Article,
+                BuyerBrandCode = cc.BuyerBrandCode,
                 BuyerBrandName = cc.BuyerBrandName,
                 DeliveryDate = cc.DeliveryDate,
                 Quantity = cc.Quantity,

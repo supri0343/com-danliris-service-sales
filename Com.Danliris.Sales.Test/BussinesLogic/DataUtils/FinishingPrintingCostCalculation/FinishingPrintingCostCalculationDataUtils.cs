@@ -47,6 +47,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinishingPrintingCostC
                 UnitName = "name",
                 UomId = 1,
                 UomUnit = "unit",
+                ImageFile = "file",
+                ImagePath = "earere",
                 Machines = new List<FinishingPrintingCostCalculationMachineModel>()
                 {
                     new FinishingPrintingCostCalculationMachineModel()

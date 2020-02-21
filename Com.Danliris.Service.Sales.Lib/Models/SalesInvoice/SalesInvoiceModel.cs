@@ -22,10 +22,10 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(255)]
         public string DebtorIndexNo { get; set; }
 
-        /*DO Sales*/
-        public int DOSalesId { get; set; }
+        /*Shipment Document*/
+        public int ShipmentDocumentId { get; set; }
         [MaxLength(255)]
-        public string DOSalesNo { get; set; }
+        public string ShipmentDocumentCode { get; set; }
 
         /*Buyer*/
         public int BuyerId { get; set; }
@@ -47,12 +47,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public double CurrencyRate { get; set; }
 
         [MaxLength(255)]
-        public string Disp { get; set; }
-        [MaxLength(255)]
-        public string Op { get; set; }
-        [MaxLength(255)]
-        public string Sc { get; set; }
-        public bool UseVat { get; set; }
+        public string VatType { get; set; }
+        public double TotalPayment { get; set; }
+        public double TotalPaid { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
 

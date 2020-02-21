@@ -33,6 +33,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.Article = "test";
             data.ConfirmDate = DateTimeOffset.Now;
             data.DeliveryDate = DateTimeOffset.Now;
+            data.CreatedUtc = DateTime.Now;
+            data.LeadTime = 25;
             data.BuyerId = "1";
             data.BuyerCode = "Test";
             data.BuyerName = "Text";
@@ -42,6 +44,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.RO_Number = "Test";
             data.Description = "Test";
             data.ComodityCode = "Test";
+            data.CommodityDescription = "Test";
+            data.RateValue = 1;
+            data.NETFOBP = 10;
             data.Quantity = 1;
             data.ConfirmPrice = 1;
             data.UOMUnit = "Test";
@@ -63,13 +68,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.SMV_Sewing = 7.54;
             data.SMV_Finishing = 3.32;
             data.SMV_Total = 12.11;
+            data.FabricAllowance = 0;
+            data.AccessoriesAllowance = 3;
             data.IsApprovedMD = false;
             data.CreatedBy = "test";
             data.IsApprovedMD = false;
             data.IsApprovedIE = false;
             data.IsApprovedPurchasing = false;
-            data.IsApprovedKadivMD = false;
+            data.IsApprovedKadivMD = true;
+            data.IsValidatedROSample = true;
+            data.ApprovedKadivMDBy = "Test";
             data.ApprovedKadivMDDate = DateTimeOffset.Now;
+            data.ValidationSampleDate = DateTimeOffset.Now;
             data.CostCalculationGarment_Materials = new List<CostCalculationGarment_Material>()
             {
                 new CostCalculationGarment_Material

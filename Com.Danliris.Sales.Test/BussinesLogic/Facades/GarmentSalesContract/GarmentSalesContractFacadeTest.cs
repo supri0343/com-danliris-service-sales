@@ -1,8 +1,10 @@
-﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchandiser;
+﻿using AutoMapper;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchandiser;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentPreSalesContractDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentSalesContractDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
+using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.GarmentSalesContractProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesContractFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContractFacades;
@@ -124,13 +126,30 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentSalesContract
                 }
             };
 
-            ValidationContext validationContext = new ValidationContext(viewModels, serviceProvider, null);
+            System.ComponentModel.DataAnnotations.ValidationContext validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(viewModels, serviceProvider, null);
 
             foreach (var viewModel in viewModels)
             {
                 var defaultValidationResult = viewModel.Validate(validationContext);
                 Assert.True(defaultValidationResult.Count() > 0);
             }
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<GarmentSalesContractMapper>();
+                cfg.AddProfile<GarmentSalesContractItemMapper>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            GarmentSalesContractViewModel vm = new GarmentSalesContractViewModel { Id = 1 };
+            Service.Sales.Lib.Models.GarmentSalesContractModel.GarmentSalesContract model = mapper.Map<Service.Sales.Lib.Models.GarmentSalesContractModel.GarmentSalesContract>(vm);
+
+            Assert.Equal(vm.Id, model.Id);
+
         }
     }
 }

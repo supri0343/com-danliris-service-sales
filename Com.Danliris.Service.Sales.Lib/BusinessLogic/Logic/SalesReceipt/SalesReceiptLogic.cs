@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt
 
         public override ReadResponse<SalesReceiptModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
         {
-            IQueryable<SalesReceiptModel> Query = DbSet;
+            IQueryable<SalesReceiptModel> Query = DbSet.Include(x => x.SalesReceiptDetails);
 
             List<string> SearchAttributes = new List<string>()
             {
@@ -39,27 +39,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","SalesReceiptNo","SalesReceiptType","SalesReceiptDate","BankId","AccountCOA","AccountName","AccountNumber","BankName","BankCode","BuyerId","BuyerName","BuyerAddress"
+                "Id","Code","SalesReceiptNo","SalesReceiptType","SalesReceiptDate","BankId","AccountCOA","AccountName","AccountNumber","BankName","BankCode","BuyerId","BuyerName","BuyerAddress","TotalPaid","SalesReceiptDetails"
             };
-
-            Query = Query
-                .Select(field => new SalesReceiptModel
-                {
-                    Id = field.Id,
-                    Code = field.Code,
-                    SalesReceiptNo = field.SalesReceiptNo,
-                    SalesReceiptType = field.SalesReceiptType,
-                    SalesReceiptDate = field.SalesReceiptDate,
-                    BankId = field.BankId,
-                    AccountCOA = field.AccountCOA,
-                    AccountName = field.AccountName,
-                    AccountNumber = field.AccountNumber,
-                    BankName = field.BankName,
-                    BankCode = field.BankCode,
-                    BuyerId = field.BuyerId,
-                    BuyerName = field.BuyerName,
-                    BuyerAddress = field.BuyerAddress,
-                });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
             Query = QueryHelper<SalesReceiptModel>.Order(Query, OrderDictionary);

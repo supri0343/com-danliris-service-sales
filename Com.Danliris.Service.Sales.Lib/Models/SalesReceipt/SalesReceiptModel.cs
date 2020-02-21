@@ -36,6 +36,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         [MaxLength(1000)]
         public string BuyerAddress { get; set; }
 
+        public double TotalPaid { get; set; }
+
         public virtual ICollection<SalesReceiptDetailModel> SalesReceiptDetails { get; set; }
 
     }

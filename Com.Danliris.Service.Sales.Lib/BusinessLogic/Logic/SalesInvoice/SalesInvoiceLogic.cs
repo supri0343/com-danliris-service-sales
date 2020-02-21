@@ -25,11 +25,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
         public override ReadResponse<SalesInvoiceModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
         {
-            IQueryable<SalesInvoiceModel> Query = DbSet;
+            IQueryable<SalesInvoiceModel> Query = DbSet.Include(x => x.SalesInvoiceDetails);
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesInvoiceNo","DeliveryOrderNo","DOSalesNo"
+                "SalesInvoiceNo","DeliveryOrderNo","DeliveryOrderNo","ShipmentDocumentCode"
             };
 
             Query = QueryHelper<SalesInvoiceModel>.Search(Query, SearchAttributes, keyword);
@@ -39,39 +39,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceDate","DeliveryOrderNo","DOSalesId","DOSalesNo","CurrencyId","CurrencyCode","CurrencyRate","CurrencySymbol",
-                "BuyerId","BuyerName","BuyerAddress","BuyerNPWP","IDNo","DebtorIndexNo","DueDate","Disp","Op","Sc","UseVat","Remark"
-
+                "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceDate","DueDate","DeliveryOrderNo","DebtorIndexNo",
+                "ShipmentDocumentId","ShipmentDocumentCode","BuyerId","BuyerName","BuyerAddress","BuyerNPWP","IDNo",
+                "CurrencyId","CurrencyCode","CurrencySymbol","CurrencyRate","VatType","TotalPayment","TotalPaid","Remark", 
+                "SalesInvoiceDetails"
             };
-
-            Query = Query
-                .Select(field => new SalesInvoiceModel
-                {
-                    Id = field.Id,
-                    Code = field.Code,
-                    SalesInvoiceNo = field.SalesInvoiceNo,
-                    SalesInvoiceType = field.SalesInvoiceType,
-                    SalesInvoiceDate = field.SalesInvoiceDate,
-                    DueDate = field.DueDate,
-                    DeliveryOrderNo = field.DeliveryOrderNo,
-                    DebtorIndexNo = field.DebtorIndexNo,
-                    DOSalesId = field.DOSalesId,
-                    DOSalesNo = field.DOSalesNo,
-                    BuyerId = field.BuyerId,
-                    BuyerName = field.BuyerName,
-                    BuyerAddress = field.BuyerAddress,
-                    BuyerNPWP = field.BuyerNPWP,
-                    IDNo = field.IDNo,
-                    CurrencyId = field.CurrencyId,
-                    CurrencyCode = field.CurrencyCode,
-                    CurrencySymbol = field.CurrencySymbol,
-                    CurrencyRate = field.CurrencyRate,
-                    Disp = field.Disp,
-                    Op = field.Op,
-                    Sc = field.Sc,
-                    UseVat = field.UseVat,
-                    Remark = field.Remark,
-                });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
             Query = QueryHelper<SalesInvoiceModel>.Order(Query, OrderDictionary);

@@ -7,9 +7,6 @@ using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
 {

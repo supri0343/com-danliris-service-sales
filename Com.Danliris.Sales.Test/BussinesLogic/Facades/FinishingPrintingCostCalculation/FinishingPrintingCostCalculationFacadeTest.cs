@@ -17,6 +17,9 @@ using Xunit;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingCostCalculationProfiles;
 using System.Linq;
 using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCostCalculation;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCalculation
 {
@@ -24,6 +27,25 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
     {
         private const string ENTITY = "FinishingPrintingCostCalculation";
 
+        protected override Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
+        {
+            var serviceProviderMock = base.GetServiceProviderMock(dbContext);
+
+            var azureImageFacadeMock = new Mock<IAzureImageFacade>();
+            azureImageFacadeMock
+                .Setup(s => s.DownloadImage(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("");
+
+            azureImageFacadeMock
+                .Setup(s => s.UploadImage(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync("");
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IAzureImageFacade)))
+                .Returns(azureImageFacadeMock.Object);
+
+            return serviceProviderMock;
+        }
         public FinishingPrintingCostCalculationFacadeTest() : base(ENTITY)
         {
         }
@@ -62,7 +84,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
             });
 
             var modelCH = mapper.Map<FinishingPrintingCostCalculationModel>(vmch);
-           
+
             var response = await facade.UpdateAsync((int)modelCH.Id, modelCH);
 
             Assert.NotEqual(response, 0);
@@ -129,7 +151,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
                 Depretiation = 1,
             });
             var modelCreated = mapper.Map<FinishingPrintingCostCalculationModel>(vmDataCreated);
-            
+
             var response = await facade.UpdateAsync((int)modelCreated.Id, modelCreated);
 
             Assert.NotEqual(response, 0);
@@ -182,7 +204,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
             FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
 
             var data = await DataUtil(facade).GetTestData();
-            
+
             var Response = await facade.CCApprovePPIC(data.Id);
             Assert.NotEqual(Response, 0);
         }
@@ -201,8 +223,35 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
         }
 
         [Fact]
-        public void ValidateVM()
+        public async void ReadParent_Success()
         {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            var Response = await facade.ReadParent(data.Id);
+            Assert.NotNull(Response);
+        }
+
+        [Fact]
+        public async void ValidatePreSalesContractId_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            var Response = await facade.ValidatePreSalesContractId(data.PreSalesContractId);
+            Assert.True(Response);
+        }
+
+        [Fact]
+        public async void ValidateVM()
+        {
+
             var vm = new FinishingPrintingCostCalculationViewModel()
             {
                 Remark = "1",
@@ -222,35 +271,58 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
                 BankMiscCost = 1
 
             };
-            var response = vm.Validate(null);
+
+            var sp = GetServiceProviderMock(DbContext(GetCurrentMethod()));
+
+            var facade = new FinishingPrintingCostCalculationFacade(sp.Object, DbContext(GetCurrentMethod()));
+            sp.Setup(s => s.GetService(typeof(IFinishingPrintingCostCalculationService)))
+                .Returns(facade);
+
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(vm, sp.Object, null);
+            var response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
             Assert.NotNull(vm.Remark);
             Assert.NotNull(vm.ProductionOrderNo);
             Assert.False(vm.IsPosted);
 
+
+            var data = await DataUtil(facade, DbContext(GetCurrentMethod())).GetTestData();
+
             vm.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
             {
-                Id = 1,
+                Id = data.PreSalesContractId,
+                Unit = new UnitViewModel()
+                {
+                    Name = data.UnitName
+                }
+            };
+            response = vm.Validate(validationContext);
+            Assert.NotEmpty(response);
+
+            vm.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+            {
+                Id = 0,
                 Unit = new UnitViewModel()
                 {
                     Name = "Printing"
                 }
             };
-            response = vm.Validate(null);
+
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Instruction = new InstructionViewModel()
             {
                 Id = 1
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.UOM = new UomViewModel()
             {
                 Id = 1,
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Sales = new AccountViewModel()
@@ -262,72 +334,72 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
                 },
                 UserName = "a"
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Color = "a";
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Greige = new ProductViewModel()
             {
                 Id = 1
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Date = DateTimeOffset.UtcNow;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Material = new MaterialViewModel()
             {
                 Id = 1
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.CurrencyRate = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.ProductionUnitValue = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.ScreenCost = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.ScreenDocumentNo = "as";
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.PreparationFabricWeight = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.RFDFabricWeight = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.ActualPrice = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.ConfirmPrice = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.FreightCost = 1;
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Machines = new List<FinishingPrintingCostCalculationMachineViewModel>()
             {
                 new FinishingPrintingCostCalculationMachineViewModel()
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Machines = new List<FinishingPrintingCostCalculationMachineViewModel>()
@@ -340,7 +412,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
                     }
                 }
             };
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
 
             vm.Machines = new List<FinishingPrintingCostCalculationMachineViewModel>()
@@ -385,7 +457,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
                 }
             };
 
-            response = vm.Validate(null);
+            response = vm.Validate(validationContext);
             Assert.Empty(response);
         }
 

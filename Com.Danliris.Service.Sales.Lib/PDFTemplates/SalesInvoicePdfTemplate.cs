@@ -156,7 +156,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable bodyTable = new PdfPTable(7);
             PdfPCell bodyCell = new PdfPCell();
 
-            float[] widthsBody = new float[] { 5f, 12f, 7f, 7f, 5f, 10f, 10f };
+            float[] widthsBody = new float[] { 5f, 20f, 7f, 7f, 5f, 10f, 10f };
             bodyTable.SetWidths(widthsBody);
             bodyTable.WidthPercentage = 100;
 
@@ -174,10 +174,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("Jumlah", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            bodyCell.Phrase = new Phrase("Sat", bold_font);
+            bodyCell.Phrase = new Phrase("Satuan", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            bodyCell.Phrase = new Phrase("Harga Satuan", bold_font);
+            bodyCell.Phrase = new Phrase("Harga", bold_font);
             bodyTable.AddCell(bodyCell);
 
             bodyCell.Phrase = new Phrase("Total", bold_font);
@@ -186,11 +186,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             foreach (SalesInvoiceDetailViewModel item in viewModel.SalesInvoiceDetails)
             {
                 bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.UnitCode, normal_font);
+                bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.UnitName, normal_font);
+                bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -206,7 +206,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.UnitPrice.GetValueOrDefault().ToString("N2"), normal_font );
+                bodyCell.Phrase = new Phrase(item.Price.GetValueOrDefault().ToString("N2"), normal_font );
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -293,7 +293,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderFooter.Phrase = new Phrase(": " + viewModel.CurrencySymbol + " " + result.ToString("N2"), normal_font);
             footerTable3.AddCell(cellHeaderFooter);
 
-            if(viewModel.UseVat.Equals(true))
+            if(viewModel.VatType.Equals("PPN Umum"))
             {
                 cellHeaderFooter.Phrase = new Phrase("PPN 10%", normal_font);
                 footerTable3.AddCell(cellHeaderFooter);
@@ -303,6 +303,31 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
                 footerTable3.AddCell(cellHeaderFooter);
                 cellHeaderFooter.Phrase = new Phrase(": " + viewModel.CurrencySymbol + " " + totalPay.ToString("N2"), bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+            }
+            else if (viewModel.VatType.Equals("PPN Kawasan Berikat"))
+            {
+
+                cellHeaderFooter.Phrase = new Phrase("PPN", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": Tarif PPN 0% (Berfasilitas)", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+
+                cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.CurrencySymbol + " " + totalPay.ToString("N2"), bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+            }
+            else if (viewModel.VatType.Equals("PPN BUMN"))
+            {
+                cellHeaderFooter.Phrase = new Phrase("PPN 10%", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.CurrencySymbol + " " + totalTax.ToString("N2") + " (Dibayar terpisah)", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+
+                cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.CurrencySymbol + " " + result.ToString("N2"), bold_font);
                 footerTable3.AddCell(cellHeaderFooter);
             }
             else
@@ -326,9 +351,19 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellFooterLeft1.Phrase = new Phrase("", normal_font);
             footerTable1.AddCell(cellFooterLeft1);
 
-            if (viewModel.UseVat.Equals(true))
+            if (viewModel.VatType.Equals("PPN Umum"))
             {
                 cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, bold_font);
+                footerTable1.AddCell(cellFooterLeft1);
+            }
+            else if (viewModel.VatType.Equals("PPN Kawasan Berikat"))
+            {
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, bold_font);
+                footerTable1.AddCell(cellFooterLeft1);
+            }
+            else if (viewModel.VatType.Equals("PPN BUMN"))
+            {
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, bold_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else
