@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrintingCostCalculation
 {
@@ -18,7 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
         private readonly DbSet<FinishingPrintingCostCalculationModel> DbSet;
         private readonly FinishingPrintingCostCalculationLogic finishingPrintingCostCalculationLogic;
         private readonly DbSet<FinishingPrintingCostCalculationChemicalModel> ChemicalDBSet;
-
+        private readonly IAzureImageFacade AzureImageFacade;
 
         public FinishingPrintingCostCalculationFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
         {
@@ -26,27 +27,48 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
             DbSet = DbContext.Set<FinishingPrintingCostCalculationModel>();
             ChemicalDBSet = DbContext.Set<FinishingPrintingCostCalculationChemicalModel>();
             finishingPrintingCostCalculationLogic = serviceProvider.GetService<FinishingPrintingCostCalculationLogic>();
+            AzureImageFacade = serviceProvider.GetService<IAzureImageFacade>();
         }
 
         public async Task<int> CreateAsync(FinishingPrintingCostCalculationModel model)
         {
             int created = 0;
-            finishingPrintingCostCalculationLogic.Create(model);
-            created += await DbContext.SaveChangesAsync();
-
-            var chemicalModels = model.Machines.ToList().SelectMany(entity =>
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var result = entity.Chemicals.ToList().Select(chemical =>
+                try
                 {
-                    chemical.CostCalculationId = model.Id;
-                    return chemical;
-                });
-                return result;
-            });
+                    finishingPrintingCostCalculationLogic.Create(model);
+                    created += await DbContext.SaveChangesAsync();
 
-            ChemicalDBSet.UpdateRange(chemicalModels);
-            created += await DbContext.SaveChangesAsync();
-            return created;
+                    foreach(var machine in model.Machines)
+                    {
+                        foreach(var chemical in machine.Chemicals)
+                        {
+                            chemical.CostCalculationId = model.Id;
+                        }
+                    }
+
+
+                    if (!string.IsNullOrWhiteSpace(model.ImageFile))
+                    {
+                        model.ImagePath = await AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+                    }
+
+                    created += await DbContext.SaveChangesAsync();
+
+
+                    transaction.Commit();
+                    return created;
+
+                }
+                catch(Exception ex)
+                {
+                    transaction.Rollback();
+                    throw ex;
+                }
+                
+            }
+            
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -68,12 +90,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
 
         public async Task<FinishingPrintingCostCalculationModel> ReadByIdAsync(int id)
         {
-            return await finishingPrintingCostCalculationLogic.ReadByIdAsync(id);
+            var model = await finishingPrintingCostCalculationLogic.ReadByIdAsync(id);
+
+            if (model.ImagePath != null)
+            {
+                model.ImageFile = await AzureImageFacade.DownloadImage(model.GetType().Name, model.ImagePath);
+            }
+
+            return model;
         }
 
         public async Task<int> UpdateAsync(int id, FinishingPrintingCostCalculationModel model)
         {
             finishingPrintingCostCalculationLogic.UpdateAsync(id, model);
+            if (!string.IsNullOrWhiteSpace(model.ImageFile))
+            {
+                model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+            }
             return await DbContext.SaveChangesAsync();
         }
 
@@ -92,6 +125,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
         {
             await finishingPrintingCostCalculationLogic.ApprovePPIC(id);
             return await DbContext.SaveChangesAsync();
+        }
+
+        public Task<bool> ValidatePreSalesContractId(long id)
+        {
+            return finishingPrintingCostCalculationLogic.ValidatePreSalesContractId(id);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrintingCo
             List<string> SelectedFields = new List<string>()
             {
                 "Id", "CreatedUtc", "LastModifiedUtc", "ProductionOrderNo", "PreSalesContract", "ConfirmPrice", "IsPosted", "Material", "UOM", "ScreenCost",
-                "ApprovalMD", "ApprovalPPIC"
+                "ApprovalMD", "ApprovalPPIC", "FreightCost"
             };
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
             query = QueryHelper<FinishingPrintingCostCalculationModel>.Filter(query, FilterDictionary);
@@ -257,6 +257,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrintingCo
             model.ApprovedPPICDate = DateTimeOffset.UtcNow;
 
             EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
+        }
+
+        public Task<bool> ValidatePreSalesContractId(long id)
+        {
+            return DbSet.AnyAsync(x => x.PreSalesContractId == id);
         }
 
         private void ProductionOrderNumberGenerator(FinishingPrintingCostCalculationModel model)

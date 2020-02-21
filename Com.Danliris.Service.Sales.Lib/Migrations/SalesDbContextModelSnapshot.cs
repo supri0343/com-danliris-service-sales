@@ -1007,10 +1007,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SalesContractNo")
-                        .IsUnique()
-                        .HasFilter("[IsDeleted]=(0)");
-
                     b.ToTable("FinishingPrintingSalesContracts");
                 });
 
@@ -1235,6 +1231,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<decimal>("GreigePrice");
 
                     b.Property<decimal>("HelperMaterial");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(1000);
 
                     b.Property<int>("InstructionId");
 
@@ -2398,6 +2397,11 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<string>("ApprovedMDBy")
+                        .HasMaxLength(512);
+
+                    b.Property<DateTimeOffset>("ApprovedMDDate");
+
                     b.Property<string>("ArticleFabricEdge");
 
                     b.Property<long>("AutoIncreament");
@@ -2469,6 +2473,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("HandlingStandard")
                         .HasMaxLength(255);
+
+                    b.Property<bool>("IsApprovedMD");
 
                     b.Property<bool>("IsCalculated");
 

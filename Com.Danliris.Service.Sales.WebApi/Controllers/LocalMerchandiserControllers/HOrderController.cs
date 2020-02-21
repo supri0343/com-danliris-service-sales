@@ -1,14 +1,10 @@
-﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
+﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.LocalMerchandiserViewModels;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.WebApi.Controllers.LocalMerchandiserControllers
 {
@@ -32,6 +28,28 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers.LocalMerchandiserControl
             try
             {
                 List<string> data = facade.GetKodeByNo(no);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(data);
+
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("data-production-report-by-no/{ro}")]
+        public IActionResult GetDataForProductionReportByNo(string ro)
+        {
+            try
+            {
+                List<HOrderDataForProductionReportViewModel> data = facade.GetDataForProductionReportByNo(ro);
 
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)

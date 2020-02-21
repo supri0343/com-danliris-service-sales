@@ -116,6 +116,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
+                unitName = data.UnitName,
                 dateFrom = data.RODistributionDate,
                 dateTo = data.RODistributionDate,
             };
@@ -139,6 +140,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
+                unitName = data.UnitName,
                 dateFrom = data.RODistributionDate.AddDays(30),
                 dateTo = data.RODistributionDate.AddDays(30),
             };
@@ -162,6 +164,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
+                unitName = data.UnitName,
                 dateFrom = data.RODistributionDate,
                 dateTo = data.RODistributionDate,
             };
@@ -184,6 +187,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
+                unitName = data.UnitName,
                 dateFrom = data.RODistributionDate.AddDays(30),
                 dateTo = data.RODistributionDate.AddDays(30),
             };

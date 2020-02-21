@@ -5,6 +5,7 @@ using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrintingCostCalculation;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
@@ -18,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesContract
@@ -52,6 +54,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
                 .Setup(s => s.GetService(typeof(FinishingPrintingCostCalculationLogic)))
                 .Returns(ccLogic);
 
+            var azureImageFacadeMock = new Mock<IAzureImageFacade>();
+            azureImageFacadeMock
+                .Setup(s => s.DownloadImage(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("");
+
+            azureImageFacadeMock
+                .Setup(s => s.UploadImage(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync("");
+
+            serviceProviderMock
+               .Setup(x => x.GetService(typeof(IAzureImageFacade)))
+               .Returns(azureImageFacadeMock.Object);
+
             return serviceProviderMock;
         }
 
@@ -76,6 +91,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             var response = await facade.CreateAsync(data);
 
             Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public async void ReadParent_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            ShinFinishingPrintingSalesContractFacade facade = new ShinFinishingPrintingSalesContractFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            var Response = await facade.ReadParent(data.Id);
+            Assert.NotNull(Response);
         }
 
         [Fact]
@@ -203,6 +231,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             Assert.NotEmpty(response);
 
             vm.DeliveredTo = "test";
+            response = vm.Validate(null);
+            Assert.NotEmpty(response);
+
+            vm.DeliverySchedule = DateTimeOffset.UtcNow.AddDays(-1);
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 

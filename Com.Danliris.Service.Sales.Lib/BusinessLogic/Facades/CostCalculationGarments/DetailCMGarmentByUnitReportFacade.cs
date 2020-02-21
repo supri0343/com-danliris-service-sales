@@ -84,14 +84,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         string SMVT = string.Format("{0:N2}", item.SMV_Total);
                         string OTL_1 = string.Format("{0:N2}", item.OTL1);
                         string OTL_2 = string.Format("{0:N2}", item.OTL2);
-                        var FOB = (item.FOB_Price + ((item.CMPrice / item.CurrencyRate) * 1.05)) - (item.Insurance + item.Freight);
-                        string FOBPrc = string.Format("{0:N4}", FOB);
-                        var CM = (item.FOB_Price * item.CurrencyRate) - (item.BudgetAmount / item.Quantity) - item.Commission;
-                        string CM_IDR  = string.Format("{0:N2}", CM);
-                        string CM_USD = string.Format("{0:N4}", CM/item.CurrencyRate);
+                        //var FOB = (item.FOB_Price + ((item.CMPrice / item.CurrencyRate) * 1.05)) - (item.Insurance + item.Freight);
+                        string FOBPrc = string.Format("{0:N4}", item.FOB_Price);
+                        //var CM = (item.FOB_Price * item.CurrencyRate) - (item.BudgetAmount / item.Quantity) - item.Commission;
+                        string CM_IDR = string.Format("{0:N2}", item.CMIDR);
+                        string CM_USD = string.Format("{0:N4}", item.CM);
 
 
-                        result.Rows.Add(index, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.RO_Number, item.Article,
+                    result.Rows.Add(index, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.RO_Number, item.Article,
                                         ShipDate, QtyOrder, item.UOMUnit, FOBPrc, CM_IDR, CM_USD, OTL_1, OTL_2, SMVC, SMVS, SMVF, SMVT);
                 }
             }

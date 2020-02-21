@@ -145,19 +145,29 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     string Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
 
 
-                    FinishingPrintingSalesContractViewModel viewModel = Mapper.Map<FinishingPrintingSalesContractViewModel>(model);
+                    ShinFinishingPrintingSalesContractViewModel viewModel = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(model);
+                    var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(viewModel.CostCalculation.Id);
+
+                    if (fpCCModel != null)
+                    {
+
+                        var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                        var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                        fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                        viewModel.CostCalculation = fpCCVM;
+                    }
 
                     /* Get Buyer */
-                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.Buyer.Id).Result.Content.ReadAsStringAsync();
+                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.CostCalculation.PreSalesContract.Buyer.Id).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
                     object json;
                     if (result.TryGetValue("data", out json))
                     {
                         Dictionary<string, object> buyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(json.ToString());
-                        viewModel.Buyer.City = buyer.TryGetValue("City", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Address = buyer.TryGetValue("Address", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Contact = buyer.TryGetValue("Contact", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.CostCalculation.PreSalesContract.Buyer.City = buyer.TryGetValue("City", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.CostCalculation.PreSalesContract.Buyer.Address = buyer.TryGetValue("Address", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.CostCalculation.PreSalesContract.Buyer.Contact = buyer.TryGetValue("Contact", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.CostCalculation.PreSalesContract.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
                     }
 
                     /* Get Agent */
@@ -197,22 +207,22 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
                     }
 
-                    if (viewModel.Buyer.Type != "Ekspor")
+                    if (viewModel.CostCalculation.PreSalesContract.Buyer.Type != "Ekspor")
                     {
-                        FinishingPrintingSalesContractPDFTemplate PdfTemplate = new FinishingPrintingSalesContractPDFTemplate();
+                        ShinFinishingPrintingSalesContractPDFTemplate PdfTemplate = new ShinFinishingPrintingSalesContractPDFTemplate();
                         MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                         return new FileStreamResult(stream, "application/pdf")
                         {
-                            FileDownloadName = "finishing printing sales contract (id)" + viewModel.SalesContractNo + ".pdf"
+                            FileDownloadName = "finishing printing sales contract (id)" + viewModel.CostCalculation.PreSalesContract.No + ".pdf"
                         };
                     }
                     else
                     {
-                        FinishingPrintingSalesContractExportPDFTemplate PdfTemplate = new FinishingPrintingSalesContractExportPDFTemplate();
+                        ShinFinishingPrintingSalesContractExportPDFTemplate PdfTemplate = new ShinFinishingPrintingSalesContractExportPDFTemplate();
                         MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                         return new FileStreamResult(stream, "application/pdf")
                         {
-                            FileDownloadName = "finishing printing sales contract (en) " + viewModel.SalesContractNo + ".pdf"
+                            FileDownloadName = "finishing printing sales contract (en) " + viewModel.CostCalculation.PreSalesContract.No + ".pdf"
                         };
                     }
                 }

@@ -35,7 +35,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Terima", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Kode Buyer", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Nama Buyer", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Quantity", DataType = typeof(double) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(string) });
@@ -45,12 +46,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             {
                 foreach (var d in data)
                 {
-                    dataTable.Rows.Add(d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.RONo, d.Article, d.Buyer, d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.Quantity, d.Uom, d.AcceptedBy);
+                    dataTable.Rows.Add(d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.RONo, d.Article, d.Buyer, d.BuyerName, d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.Quantity, d.Uom, d.AcceptedBy);
                 }
             }
             else
             {
-                dataTable.Rows.Add(null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null);
             }
 
             var excel = Excel.CreateExcel(new List<KeyValuePair<DataTable, string>> { new KeyValuePair<DataTable, string>(dataTable, "AcceptedRO") }, true);
@@ -77,14 +78,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
         {
             var data = CostCalculationGarments.Select(cc => new AcceptedROReportViewModel
             {
-                AcceptedDate = cc.ROAcceptedDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).DateTime,
+                AcceptedDate = cc.ValidationSampleDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).DateTime,
                 RONo = cc.RO_Number,
                 Article = cc.Article,
-                Buyer = cc.BuyerBrandName,
+                Buyer = cc.BuyerBrandCode,
+                BuyerName = cc.BuyerBrandName,
                 DeliveryDate = cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).DateTime,
                 Quantity = cc.Quantity,
                 Uom = cc.UOMUnit,
-                AcceptedBy = cc.ROAcceptedBy
+                AcceptedBy = cc.ValidationSampleBy
             }).ToList();
 
             return data;

@@ -44,6 +44,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 throw new Exception(e.Message);
             }
 
+            if (FilterDictionary.TryGetValue("unitName", out object unitName))
+            {
+                Query = Query.Where(d => d.UnitName == unitName.ToString());
+            }
+
             Query = Query.OrderBy(o => o.BuyerName).ThenBy(o => o.BuyerBrandName);
 
             var newQ = (from a in Query

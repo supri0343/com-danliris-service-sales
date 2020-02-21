@@ -63,7 +63,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 UOMUnit = s.UOMUnit,
                 ConfirmPrice = s.ConfirmPrice,
                 ConfirmDate = s.ConfirmDate,
-                IsApprovedPPIC = s.IsApprovedPPIC
+                 IsApprovedKadivMD = s.IsApprovedKadivMD 
             }).OrderBy(o => o.DeliveryDate);
 
             var diffFirstDayInYearWithMonday = new DateTime(filter.year, 1, 1).DayOfWeek - DayOfWeek.Monday;
@@ -112,7 +112,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 Amount = cc.Quantity * cc.ConfirmPrice,
                 ConfirmDate = cc.ConfirmDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).DateTime,
                 ShipmentDate = cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).DateTime,
-                ValidationPPIC = cc.IsApprovedPPIC ? "SUDAH" : "BELUM"
+                ValidationPPIC = cc.IsApprovedKadivMD ? "SUDAH" : "BELUM"
             };
         }
 

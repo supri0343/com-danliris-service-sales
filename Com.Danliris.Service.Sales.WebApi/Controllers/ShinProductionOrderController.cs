@@ -278,13 +278,30 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 }
                 else
                 {
-                    ProductionOrderViewModel viewModel = Mapper.Map<ProductionOrderViewModel>(model);
+                    ShinProductionOrderViewModel viewModel = Mapper.Map<ShinProductionOrderViewModel>(model);
+                    var fpSCModel = await finishingPrintingSalesContractFacade.ReadParent(viewModel.FinishingPrintingSalesContract.Id);
+                    if (fpSCModel != null)
+                    {
+                        var fpSCVM = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(fpSCModel);
+                        var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(fpSCVM.CostCalculation.Id);
 
-                    ProductionOrderPDFTemplate PdfTemplate = new ProductionOrderPDFTemplate();
+                        if (fpCCModel != null)
+                        {
+                            var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                            var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                            fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                            fpSCVM.CostCalculation = fpCCVM;
+
+                            viewModel.FinishingPrintingSalesContract = fpSCVM;
+                        }
+
+                    }
+
+                    ShinProductionOrderPdfTemplate PdfTemplate = new ShinProductionOrderPdfTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Production Order" + viewModel.OrderNo + ".pdf"
+                        FileDownloadName = "Production Order" + viewModel.FinishingPrintingSalesContract.CostCalculation.ProductionOrderNo + ".pdf"
                     };
                 }
             }
@@ -377,6 +394,26 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     return BadRequest(Result);
                 }
                 await _facade.UpdateIsCalculated(id, flag);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPost("approve/md/{id}")]
+        public async Task<IActionResult> ApproveByMD([FromRoute] long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                var result = await Facade.ApproveByMD(id);
 
                 return NoContent();
             }

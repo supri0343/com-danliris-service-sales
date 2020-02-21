@@ -18,6 +18,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double Quantity { get; set; }
         public string UOMUnit { get; set; }
         public double FOB_Price { get; set; }
+        public double ConfirmPrice { get; set; }
         public double CM { get; set; }
         public double CurrencyRate { get; set; }
         public double CMIDR { get; set; }

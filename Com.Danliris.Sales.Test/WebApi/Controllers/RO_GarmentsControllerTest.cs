@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Sales.Test.WebApi.Utils;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculationGarmentLogic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ROGarmentInterface;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.ViewModels;
@@ -87,9 +88,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     "D:/name.jpg"
                 }
             };
+
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+
             mocks.Mapper.Setup(s => s.Map<RO_GarmentViewModel>(It.IsAny<RO_Garment>()))
                 .Returns(vm);
+
+            Mock<ICostCalculationGarment> mockCostCalculationGarment = new Mock<ICostCalculationGarment>();
+            mockCostCalculationGarment.Setup(s => s.GetProductNames(It.IsAny<List<long>>()))
+                .ReturnsAsync(new Dictionary<long, string>());
+
+            mocks.ServiceProvider.Setup(s => s.GetService(typeof(ICostCalculationGarment)))
+                .Returns(mockCostCalculationGarment.Object);
+
             var controller = GetController(mocks);
             var response = controller.GetPDF(1).Result;
 

@@ -45,13 +45,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if(CostCalculation == null || CostCalculation.Id == 0)
+            if (CostCalculation == null || CostCalculation.Id == 0)
             {
                 yield return new ValidationResult("Sales Contract harus di isi", new List<string> { "CostCalculation" });
             }
             else
             {
-                if(CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("export"))
+                if (CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("export"))
                 {
                     if (string.IsNullOrWhiteSpace(TermOfShipment))
                     {
@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                     }
                 }
             }
-            
+
 
             if (Commodity == null || Commodity.Id.Equals(0))
             {
@@ -114,9 +114,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                 yield return new ValidationResult("Tujuan Kirim harus diisi", new List<string> { "DeliveredTo" });
             }
 
-            if (DeliverySchedule == null || DeliverySchedule.GetValueOrDefault().Date <= DateTimeOffset.Now.Date)
+            if (DeliverySchedule == null)
             {
                 yield return new ValidationResult("Jadwal Pengiriman harus diisi", new List<string> { "DeliverySchedule" });
+            }
+            else if (DeliverySchedule.GetValueOrDefault().Date < DateTimeOffset.Now.Date)
+            {
+                yield return new ValidationResult("Jadwal Pengiriman harus lebih besar dari hari ini", new List<string> { "DeliverySchedule" });
             }
 
             if (PointSystem != 10 && PointSystem != 4)

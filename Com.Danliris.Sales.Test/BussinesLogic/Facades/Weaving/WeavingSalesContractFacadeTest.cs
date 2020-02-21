@@ -1,14 +1,17 @@
-﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Weaving;
+﻿using AutoMapper;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Weaving;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Weaving;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Weaving;
 using Com.Danliris.Service.Sales.Lib.Models.Weaving;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.ViewModels.Weaving;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Weaving
 {
@@ -37,6 +40,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Weaving
                 .Returns(spinningLogic);
 
             return serviceProviderMock;
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<Service.Sales.Lib.AutoMapperProfiles.WeavingProfiles.WeavingSalesContract>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            WeavingSalesContractViewModel vm = new WeavingSalesContractViewModel { Id = 1 };
+            WeavingSalesContractModel model = mapper.Map<WeavingSalesContractModel>(vm);
+
+            Assert.Equal(vm.Id, model.Id);
+
         }
     }
 }

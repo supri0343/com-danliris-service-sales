@@ -1,5 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.LocalMerchandiserViewModels;
 using Com.Danliris.Service.Sales.WebApi.Controllers.LocalMerchandiserControllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -20,7 +21,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers.LocalMerchandiserController
         }
 
         [Fact]
-        public void Get_Success()
+        public void Get_Kode_By_No_Success()
         {
             var mockFacade = new Mock<IHOrderFacade>();
             mockFacade.Setup(s => s.GetKodeByNo(It.IsAny<string>()))
@@ -34,7 +35,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers.LocalMerchandiserController
         }
 
         [Fact]
-        public void Get_Error()
+        public void Get_Kode_By_No_Error()
         {
             var mockFacade = new Mock<IHOrderFacade>();
             mockFacade.Setup(s => s.GetKodeByNo(It.IsAny<string>()))
@@ -43,6 +44,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers.LocalMerchandiserController
             HOrderController controller = new HOrderController(mockFacade.Object);
 
             var response = controller.ReadKodeByNo();
+
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void Get_Data_For_ProductionReport_Success()
+        {
+            var mockFacade = new Mock<IHOrderFacade>();
+            mockFacade.Setup(s => s.GetDataForProductionReportByNo(It.IsAny<string>()))
+                .Returns(new List<HOrderDataForProductionReportViewModel>());
+
+            HOrderController controller = new HOrderController(mockFacade.Object);
+
+            var response = controller.GetDataForProductionReportByNo("No");
+
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void Get_Data_For_ProductionReport_Error()
+        {
+            var mockFacade = new Mock<IHOrderFacade>();
+            mockFacade.Setup(s => s.GetDataForProductionReportByNo(It.IsAny<string>()))
+                .Throws(new Exception());
+
+            HOrderController controller = new HOrderController(mockFacade.Object);
+
+            var response = controller.GetDataForProductionReportByNo("No");
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
         }

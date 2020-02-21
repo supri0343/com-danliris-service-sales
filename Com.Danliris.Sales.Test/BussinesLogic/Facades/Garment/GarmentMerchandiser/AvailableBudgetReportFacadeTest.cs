@@ -117,11 +117,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             var filter = new
             {
                 section = data.Section,
-                roNo = data.RO_Number,
-                buyer = data.BuyerBrandCode,
-                availableDateStart = data.ROAvailableDate,
-                availableDateEnd = data.ROAvailableDate,
-                status = "NOT OK"
+                //roNo = data.RO_Number,
+                //buyer = data.BuyerBrandCode,
+                availableDateStart = data.DeliveryDate,
+                availableDateEnd = data.DeliveryDate,
+                //status = "NOT OK"
             };
 
             var facade = new AvailableBudgetReportFacade(serviceProvider);
@@ -138,7 +138,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             CostCalculationGarmentFacade costCalculationGarmentFacade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
 
-            var data = await DataUtil(costCalculationGarmentFacade, serviceProvider, dbContext).GetTestData();
+            var data = await DataUtil(costCalculationGarmentFacade, serviceProvider, dbContext).GetNewData();
+            await costCalculationGarmentFacade.CreateAsync(data);
+            var data1 = await DataUtil(costCalculationGarmentFacade, serviceProvider, dbContext).GetNewData();
+            data1.LeadTime = 35;
+            await costCalculationGarmentFacade.CreateAsync(data1);
             var AvailableBy = "AvailableBy";
             await costCalculationGarmentFacade.AcceptanceCC(new List<long> { data.Id }, AvailableBy);
             await costCalculationGarmentFacade.AvailableCC(new List<long> { data.Id }, AvailableBy);
@@ -151,11 +155,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             var filter = new
             {
                 section = data.Section,
-                roNo = data.RO_Number,
-                buyer = data.BuyerBrandCode,
-                availableDateStart = data.ROAvailableDate.AddDays(-30),
-                availableDateEnd = data.ROAvailableDate.AddDays(30),
-                status = "OK"
+                //roNo = data.RO_Number,
+                //buyer = data.BuyerBrandCode,
+                availableDateStart = data.DeliveryDate.AddDays(-30),
+                availableDateEnd = data.DeliveryDate.AddDays(30),
+                //status = "OK"
             };
 
             var facade = new AvailableBudgetReportFacade(serviceProvider);
@@ -164,22 +168,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             Assert.NotNull(Response.Item2);
         }
 
-        [Fact]
-        public void Get_Success_Empty_Excel()
-        {
-            var dbContext = DbContext(GetCurrentMethod());
-            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+        //[Fact]
+        //public void Get_Success_Empty_Excel()
+        //{
+        //    var dbContext = DbContext(GetCurrentMethod());
+        //    var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
-            var filter = new
-            {
-                status = "NOT OK"
-            };
+        //    var filter = new
+        //    {
+        //        status = "NOT OK"
+        //    };
 
-            var facade = new AvailableBudgetReportFacade(serviceProvider);
+        //    var facade = new AvailableBudgetReportFacade(serviceProvider);
 
-            var Response = facade.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
+        //    var Response = facade.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
 
-            Assert.NotNull(Response.Item2);
-        }
+        //    Assert.NotNull(Response.Item2);
+        //}
     }
 }

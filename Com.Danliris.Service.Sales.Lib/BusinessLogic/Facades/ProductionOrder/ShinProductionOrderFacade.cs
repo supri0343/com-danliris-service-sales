@@ -43,6 +43,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             this.identityService = serviceProvider.GetService<IIdentityService>();
         }
 
+        public async Task<int> ApproveByMD(long id)
+        {
+            await productionOrderLogic.ApproveMD(id);
+            return await DbContext.SaveChangesAsync();
+        }
+
         public async Task<int> CreateAsync(ProductionOrderModel model)
         {
             int result = 0;
@@ -460,6 +466,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData);
+        }
+
+        public double GetTotalQuantityBySalesContractId(long id)
+        {
+            return productionOrderLogic.GetTotalQuantityBySalesContractId(id);
         }
 
         public ReadResponse<ProductionOrderModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
