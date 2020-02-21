@@ -94,6 +94,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             return await salesInvoiceLogic.ReadByIdAsync(id);
         }
 
+        public List<SalesInvoiceModel> ReadByBuyerIdAsync(int buyerId)
+        {
+            return salesInvoiceLogic.ReadByBuyerIdAsync(buyerId);
+        }
+
         public async Task<int> UpdateAsync(int id, SalesInvoiceModel model)
         {
             using (var transaction = DbContext.Database.BeginTransaction())

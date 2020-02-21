@@ -13,9 +13,29 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         public long? AutoIncreament { get; set; }
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
-        [MaxLength(255)]
-        public string SalesReceiptType { get; set; }
         public DateTimeOffset? SalesReceiptDate { get; set; }
+        [MaxLength(255)]
+        public string UnitName { get; set; }
+
+        /*Buyer*/
+        public int? BuyerId { get; set; }
+        [MaxLength(255)]
+        public string BuyerName { get; set; }
+        [MaxLength(1000)]
+        public string BuyerAddress { get; set; }
+
+        [MaxLength(255)]
+        public string OriginBankName { get; set; }
+        [MaxLength(255)]
+        public string OriginAccountNumber { get; set; }
+
+        /*Currency*/
+        public int? CurrencyId { get; set; }
+        [MaxLength(255)]
+        public string CurrencyCode { get; set; }
+        [MaxLength(255)]
+        public string CurrencySymbol { get; set; }
+        public double CurrencyRate { get; set; }
 
         /*Bank*/
         public int? BankId { get; set; }
@@ -30,30 +50,36 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         [MaxLength(255)]
         public string BankCode { get; set; }
 
-        /*Buyer*/
-        public int? BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-
+        public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
         public ICollection<SalesReceiptDetailViewModel> SalesReceiptDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrWhiteSpace(SalesReceiptType))
-                yield return new ValidationResult("Tipe Kuitansi harus diisi", new List<string> { "SalesReceiptType" });
-
             if (!SalesReceiptDate.HasValue || SalesReceiptDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Kuitansi harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesReceiptDate" });
 
+            if (string.IsNullOrWhiteSpace(UnitName))
+                yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
+
             if (string.IsNullOrWhiteSpace(AccountName))
-                yield return new ValidationResult("Nama Bank harus diisi", new List<string> { "AccountName" });
+                yield return new ValidationResult("Nama Bank Tujuan harus diisi", new List<string> { "AccountName" });
 
             if (string.IsNullOrWhiteSpace(BuyerName))
                 yield return new ValidationResult("Nama Buyer harus di isi", new List<string> { "BuyerName" });
+
+            if (string.IsNullOrWhiteSpace(OriginBankName))
+                yield return new ValidationResult("Nama Bank Asal harus di isi", new List<string> { "OriginBankName" });
+
+            if (string.IsNullOrWhiteSpace(OriginAccountNumber))
+                yield return new ValidationResult("No Rek. Bank Asal harus di isi", new List<string> { "OriginAccountNumber" });
+
+            if (string.IsNullOrWhiteSpace(CurrencyCode))
+                yield return new ValidationResult("Jenis Mata Uang harus diisi", new List<string> { "CurrencyCode" });
+
+            if (AdministrationFee < 0)
+                yield return new ValidationResult("Total Paid kosong", new List<string> { "AdministrationFee" });
 
             if (TotalPaid <= 0)
                 yield return new ValidationResult("Total Paid kosong", new List<string> { "TotalPaid" });
@@ -111,11 +137,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         rowErrorCount++;
                         DetailErrors += "Paid : 'Kode Faktur harus diisi untuk memperoleh jumlah yang sudah dibayar',";
                     }
-                    if (detail.Nominal <= 0)
+                    if (detail.Nominal < 0)
                     {
                         Count++;
                         rowErrorCount++;
-                        DetailErrors += "Nominal : 'Nominal tidak boleh kosong & harus lebih besar dari 0',";
+                        DetailErrors += "Nominal : 'Nominal tidak boleh kosong & atau lebih kecil dari 0',";
                     }
                     if (detail.Unpaid < 0)
                     {

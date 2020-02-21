@@ -29,6 +29,32 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             _facade = salesInvoiceFacade;
         }
 
+        [HttpGet("{buyerId}")]
+        public virtual async Task<IActionResult> GetByBuyerId([FromRoute] int buyerId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                List<SalesInvoiceModel> model = Facade.ReadByBuyerIdAsync(buyerId);
+                List<SalesInvoiceViewModel> viewModel = Mapper.Map<List<SalesInvoiceViewModel>>(model);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, viewModel, 1, viewModel.Count, viewModel.Count, viewModel.Count, new Dictionary<string, string>(), new List<string>());
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpGet("deliveryOrderPdf/{Id}")]
         public async Task<IActionResult> GetDeliveryOrderPDF([FromRoute] int Id)
         {

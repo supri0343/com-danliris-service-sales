@@ -132,46 +132,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
 
         private void SalesReceiptNumberGenerator(SalesReceiptModel model, int index)
         {
-            SalesReceiptModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesReceiptType.Equals(model.SalesReceiptType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
-
+            int MonthNow = DateTime.Now.Month;
             int YearNow = DateTime.Now.Year;
+            var MonthNowString = DateTime.Now.ToString("MM");
+            var YearNowString = DateTime.Now.ToString("yy");
+            SalesReceiptModel lastData = DbSet.IgnoreQueryFilters().OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             if (lastData == null)
             {
-                if (model.SalesReceiptType == "A")
-                {
-                    index = 28;
-                }
-                else if (model.SalesReceiptType == "B")
-                {
-                    index = 8;
-                }
-                else if (model.SalesReceiptType == "C")
-                {
-                    index = 98;
-                }
-                else if (model.SalesReceiptType == "D")
-                {
-                    index = 14;
-                }
-                else
-                {
-                    index = 0;
-                }
                 model.AutoIncreament = 1 + index;
-                model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
             else
             {
-                if (YearNow > lastData.CreatedUtc.Year)
+                if (YearNow > lastData.CreatedUtc.Year || MonthNow > lastData.CreatedUtc.Month)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }

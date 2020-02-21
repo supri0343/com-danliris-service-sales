@@ -124,5 +124,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             SalesInvoice.SalesInvoiceDetails = SalesInvoice.SalesInvoiceDetails.OrderBy(s => s.Id).ToArray();
             return SalesInvoice;
         }
+
+        public List<SalesInvoiceModel> ReadByBuyerIdAsync(int buyerId)
+        {
+            var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId);
+            return result.ToList();
+        }
     }
 }

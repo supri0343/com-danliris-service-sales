@@ -12,9 +12,29 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public long AutoIncreament { get; set; }
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
-        [MaxLength(255)]
-        public string SalesReceiptType { get; set; }
         public DateTimeOffset SalesReceiptDate { get; set; }
+        [MaxLength(255)]
+        public string UnitName { get; set; }
+
+        /*Buyer*/
+        public int BuyerId { get; set; }
+        [MaxLength(255)]
+        public string BuyerName { get; set; }
+        [MaxLength(1000)]
+        public string BuyerAddress { get; set; }
+
+        [MaxLength(255)]
+        public string OriginBankName { get; set; }
+        [MaxLength(255)]
+        public string OriginAccountNumber { get; set; }
+
+        /*Currency*/
+        public int CurrencyId { get; set; }
+        [MaxLength(255)]
+        public string CurrencyCode { get; set; }
+        [MaxLength(255)]
+        public string CurrencySymbol { get; set; }
+        public double CurrencyRate { get; set; }
 
         /*Bank*/
         public int BankId { get; set; }
@@ -29,13 +49,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         [MaxLength(255)]
         public string BankCode { get; set; }
 
-        /*Buyer*/
-        public int BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-
+        public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
         public virtual ICollection<SalesReceiptDetailModel> SalesReceiptDetails { get; set; }
