@@ -49,6 +49,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return await DbContext.SaveChangesAsync();
         }
 
+        public async Task<int> ApproveBySample(long id)
+        {
+            await productionOrderLogic.ApproveSample(id);
+            return await DbContext.SaveChangesAsync();
+        }
+
         public async Task<int> CreateAsync(ProductionOrderModel model)
         {
             int result = 0;

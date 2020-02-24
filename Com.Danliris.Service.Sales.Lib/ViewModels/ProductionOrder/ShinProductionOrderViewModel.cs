@@ -65,6 +65,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 
         public ApprovalViewModel ApprovalMD { get; set; }
 
+        public ApprovalViewModel ApprovalSample { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
