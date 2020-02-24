@@ -86,7 +86,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Country = "a"
                 },
                 DeliverySchedule = DateTimeOffset.UtcNow,
-
+                ComodityDescription = "a"
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
@@ -144,6 +144,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Country = "a"
                 },
                 DeliverySchedule = DateTimeOffset.UtcNow,
+                ComodityDescription = "a",
+                TransportFee = "1"
 
             };
 
