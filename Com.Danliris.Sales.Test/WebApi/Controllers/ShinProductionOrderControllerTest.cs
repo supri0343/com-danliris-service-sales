@@ -608,5 +608,27 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
 
+        [Fact]
+        public async Task ApproveBySample_Success()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveBySample(It.IsAny<long>())).ReturnsAsync(1);
+            var controller = GetController(mocks);
+            var response = await controller.ApproveBySample(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NoContent, statusCode);
+        }
+
+        [Fact]
+        public async Task ApproveBySample_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveBySample(It.IsAny<long>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = await controller.ApproveBySample(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
     }
 }

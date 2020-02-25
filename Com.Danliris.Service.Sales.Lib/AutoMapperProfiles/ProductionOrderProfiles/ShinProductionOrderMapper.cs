@@ -75,6 +75,10 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.ApprovalMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMDBy))
             .ForPath(d => d.ApprovalMD.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedMDDate))
 
+            .ForPath(d => d.ApprovalSample.IsApproved, opt => opt.MapFrom(s => s.IsApprovedSample))
+            .ForPath(d => d.ApprovalSample.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedSampleBy))
+            .ForPath(d => d.ApprovalSample.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedSampleDate))
+
             .ReverseMap();
         }
     }

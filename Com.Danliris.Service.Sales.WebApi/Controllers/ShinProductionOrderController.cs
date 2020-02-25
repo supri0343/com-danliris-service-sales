@@ -425,5 +425,25 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        [HttpPost("approve/sample/{id}")]
+        public async Task<IActionResult> ApproveBySample([FromRoute] long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                var result = await Facade.ApproveBySample(id);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }
