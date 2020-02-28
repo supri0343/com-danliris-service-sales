@@ -21,5 +21,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.Garment
         public string ProductRemark { get; set; }
 
         public string Status { get; set; }
+        public bool IsUsed { get; set; }
     }
 }
