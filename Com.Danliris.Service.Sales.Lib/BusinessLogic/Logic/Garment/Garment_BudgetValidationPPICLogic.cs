@@ -130,7 +130,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                     Name = i.CategoryName
                 },
                 ProductRemark = $"{i.Description};\n{i.ProductRemark}",
-                IsUsed = true
+                IsUsed = i.ProductCode == "CLR001"
             }).ToList();
 
             return GarmentPurchaseRequestItems;
