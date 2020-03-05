@@ -51,15 +51,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 Name = "a"
             },
-            CostCalculation = new FinishingPrintingCostCalculationViewModel()
+            PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
             {
-                Id = 1,
-                PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
                 {
-                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-                    {
-                        Id = 1
-                    }
+                    Id = 1
                 }
             },
             Details = new List<FinishingPrintingSalesContractDetailViewModel>()

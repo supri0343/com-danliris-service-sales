@@ -10,10 +10,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         #region newSC
         public DateTimeOffset Date { get; set; }
 
-        public long CostCalculationId { get; set; }
+        public long PreSalesContractId { get; set; }
 
+        //[MaxLength(64)]
+        //public string ProductionOrderNo { get; set; }
         [MaxLength(64)]
-        public string ProductionOrderNo { get; set; }
+        public string PreSalesContractNo { get; set; }
 
         [MaxLength(512)]
         public string UnitName { get; set; }
@@ -91,6 +93,10 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         public string MaterialCode { get; set; }
         [MaxLength(255)]
         public string MaterialName { get; set; }
+        public double MaterialPrice { get; set; }
+
+        [MaxLength(255)]
+        public string MaterialTags { get; set; }
         #endregion
         #region Material Construction
         public int MaterialConstructionId { get; set; }

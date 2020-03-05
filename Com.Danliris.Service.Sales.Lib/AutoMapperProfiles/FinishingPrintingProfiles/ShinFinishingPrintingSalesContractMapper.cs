@@ -12,11 +12,13 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingPro
         public ShinFinishingPrintingSalesContractMapper()
         {
             CreateMap<FinishingPrintingSalesContractModel, ShinFinishingPrintingSalesContractViewModel>()
-               .ForPath(d => d.CostCalculation.Id, opt => opt.MapFrom(s => s.CostCalculationId))
-               .ForPath(d => d.CostCalculation.PreSalesContract.No, opt => opt.MapFrom(s => s.SalesContractNo))
-               .ForPath(d => d.CostCalculation.ProductionOrderNo, opt => opt.MapFrom(s => s.ProductionOrderNo))
-               .ForPath(d => d.CostCalculation.PreSalesContract.Buyer.Name, opt => opt.MapFrom(s => s.BuyerName))
-               .ForPath(d => d.CostCalculation.PreSalesContract.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
+               //.ForPath(d => d.CostCalculation.Id, opt => opt.MapFrom(s => s.CostCalculationId))
+               .ForPath(d => d.PreSalesContract.No, opt => opt.MapFrom(s => s.PreSalesContractNo))
+               //.ForPath(d => d.CostCalculation.ProductionOrderNo, opt => opt.MapFrom(s => s.ProductionOrderNo))
+               .ForPath(d => d.PreSalesContract.Buyer.Name, opt => opt.MapFrom(s => s.BuyerName))
+               .ForPath(d => d.PreSalesContract.Buyer.Type, opt => opt.MapFrom(s => s.BuyerType))
+               .ForPath(d => d.PreSalesContract.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
+               .ForPath(d => d.PreSalesContract.Id, opt => opt.MapFrom(s => s.PreSalesContractId))
 
                .ForPath(d => d.AccountBank.Id, opt => opt.MapFrom(s => s.AccountBankID))
                .ForPath(d => d.AccountBank.Code, opt => opt.MapFrom(s => s.AccountBankCode))
@@ -56,6 +58,13 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingPro
                .ForPath(d => d.YarnMaterial.Id, opt => opt.MapFrom(s => s.YarnMaterialID))
                .ForPath(d => d.YarnMaterial.Code, opt => opt.MapFrom(s => s.YarnMaterialCode))
                .ForPath(d => d.YarnMaterial.Name, opt => opt.MapFrom(s => s.YarnMaterialName))
+
+               .ForPath(d => d.Material.Id, opt => opt.MapFrom(s => s.MaterialID))
+               .ForPath(d => d.Material.Code, opt => opt.MapFrom(s => s.MaterialCode))
+               .ForPath(d => d.Material.Name, opt => opt.MapFrom(s => s.MaterialName))
+
+               .ForPath(d => d.UOM.Id, opt => opt.MapFrom(s => s.UOMID))
+               .ForPath(d => d.UOM.Unit, opt => opt.MapFrom(s => s.UOMUnit))
 
                .ReverseMap();
         }

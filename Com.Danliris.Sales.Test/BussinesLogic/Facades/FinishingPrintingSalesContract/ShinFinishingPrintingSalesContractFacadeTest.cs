@@ -144,22 +144,26 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             var response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation = new FinishingPrintingCostCalculationViewModel();
+            vm.PreSalesContract = new FinishingPrintingPreSalesContractViewModel();
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation.Id = 1;
-            vm.CostCalculation.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+            vm.PreSalesContract.Id = 1;
+            vm.PreSalesContract.Buyer = new BuyerViewModel()
             {
-                Buyer = new BuyerViewModel()
-                {
-                    Type = "ekspor"
-                }
+                Type = "ekspor"
             };
+            //vm.CostCalculation.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+            //{
+            //    Buyer = new BuyerViewModel()
+            //    {
+            //        Type = "ekspor"
+            //    }
+            //};
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation.PreSalesContract.Buyer.Type = "export";
+            vm.PreSalesContract.Buyer.Type = "export";
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 

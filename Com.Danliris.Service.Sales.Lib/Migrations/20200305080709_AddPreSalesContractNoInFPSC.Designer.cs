@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200305080709_AddPreSalesContractNoInFPSC")]
+    partial class AddPreSalesContractNoInFPSC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -853,6 +855,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Condition")
                         .HasMaxLength(1000);
 
+                    b.Property<long>("CostCalculationId");
+
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -921,11 +925,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("MaterialName")
                         .HasMaxLength(255);
 
-                    b.Property<double>("MaterialPrice");
-
-                    b.Property<string>("MaterialTags")
-                        .HasMaxLength(255);
-
                     b.Property<string>("MaterialWidth")
                         .HasMaxLength(255);
 
@@ -949,9 +948,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<int>("PointSystem");
 
-                    b.Property<long>("PreSalesContractId");
-
                     b.Property<string>("PreSalesContractNo")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProductionOrderNo")
                         .HasMaxLength(64);
 
                     b.Property<string>("QualityCode")
@@ -1271,18 +1271,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<decimal>("ManufacturingServiceCost");
 
-                    b.Property<string>("MaterialCode")
-                        .HasMaxLength(25);
-
                     b.Property<long>("MaterialId");
 
                     b.Property<string>("MaterialName")
                         .HasMaxLength(1024);
-
-                    b.Property<double>("MaterialPrice");
-
-                    b.Property<string>("MaterialTags")
-                        .HasMaxLength(255);
 
                     b.Property<decimal>("MiscMaterial");
 

@@ -114,10 +114,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>()))
                 .Returns(new ShinFinishingPrintingSalesContractViewModel()
                 {
-                    CostCalculation = new FinishingPrintingCostCalculationViewModel()
+                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
                     {
                         Id = 1
-                        
                     },
                     MaterialConstruction = new MaterialConstructionViewModel(),
                     YarnMaterial = new YarnMaterialViewModel()

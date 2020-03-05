@@ -10,9 +10,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 {
     public class ShinFinishingPrintingSalesContractViewModel : BaseViewModel, IValidatableObject
     {
+        public string SalesContractNo { get; set; }
         public DateTimeOffset Date { get; set; }
 
-        public FinishingPrintingCostCalculationViewModel CostCalculation { get; set; }
+        //public FinishingPrintingCostCalculationViewModel CostCalculation { get; set; }
+
+        public FinishingPrintingPreSalesContractViewModel PreSalesContract { get; set; }
+
+        public UomViewModel UOM { get; set; }
+
+        public MaterialViewModel Material { get; set; }
 
         public AccountBankViewModel AccountBank { get; set; }
         public double? Amount { get; set; }
@@ -45,13 +52,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (CostCalculation == null || CostCalculation.Id == 0)
+            if (PreSalesContract == null || PreSalesContract.Id == 0)
             {
-                yield return new ValidationResult("Sales Contract harus di isi", new List<string> { "CostCalculation" });
+                yield return new ValidationResult("Sales Contract harus di isi", new List<string> { "PreSalesContract" });
             }
             else
             {
-                if (CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("export"))
+                if (PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || PreSalesContract.Buyer.Type.ToLower().Equals("export"))
                 {
                     if (string.IsNullOrWhiteSpace(TermOfShipment))
                     {

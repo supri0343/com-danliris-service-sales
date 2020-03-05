@@ -18,6 +18,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
             RunWidth = new HashSet<ProductionOrder_RunWidthViewModel>();
         }
 
+        public string ProductionOrderNo { get; set; }
         [MaxLength(255)]
         public string Code { get; set; }
 
@@ -47,6 +48,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public DateTimeOffset DeliveryDate { get; set; }
 
         public AccountViewModel Account { get; set; }
+
+        public MaterialConstructionViewModel MaterialConstruction { get; set; }
+
+        public string MaterialWidth { get; set; }
+
 
         [MaxLength(1000)]
         public string Remark { get; set; }
@@ -78,7 +84,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
             }
             else
             {
-                if (this.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.Unit.Name.Trim().ToLower() == "printing")
+                if (this.FinishingPrintingSalesContract.PreSalesContract.Unit.Name.Trim().ToLower() == "printing")
                 {
                     if (string.IsNullOrWhiteSpace(this.Run))
                     {

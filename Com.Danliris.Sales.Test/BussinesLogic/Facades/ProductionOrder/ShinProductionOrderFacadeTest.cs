@@ -114,14 +114,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             vm.FinishingPrintingSalesContract = new ShinFinishingPrintingSalesContractViewModel()
             {
                 Id = 1,
-                CostCalculation = new FinishingPrintingCostCalculationViewModel()
+                PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
                 {
-                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+                    Unit = new UnitViewModel()
                     {
-                        Unit = new UnitViewModel()
-                        {
-                            Name = "printing"
-                        }
+                        Name = "printing"
                     }
                 }
             };
@@ -245,7 +242,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
         {
             FinishingPrintingCostCalculationFacade ccFacade = new FinishingPrintingCostCalculationFacade(GetServiceProviderMock(dbContext).Object, dbContext);
             ShinFinishingPrintingSalesContractFacade scFacade = new ShinFinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
-            ShinProductionOrderDataUtil dataUtil = new ShinProductionOrderDataUtil(facade, scFacade, ccFacade);
+            FinishingPrintingPreSalesContractFacade prescFacade = new FinishingPrintingPreSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            ShinProductionOrderDataUtil dataUtil = new ShinProductionOrderDataUtil(facade, scFacade, ccFacade, prescFacade);
             return dataUtil;
         }
 
