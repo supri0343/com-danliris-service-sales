@@ -38,7 +38,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             ShipmentDescription = "a",
             DeliverySchedule = DateTimeOffset.UtcNow,
             CommodityDescription = "a",
-            MaterialWidth= "a",
+            
             Quality = new QualityViewModel()
             {
                 Name = "a"
@@ -47,10 +47,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 Name = "a"
             },
-            MaterialConstruction = new MaterialConstructionViewModel()
-            {
-                Name = "a"
-            },
+            
             PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
             {
                 Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()

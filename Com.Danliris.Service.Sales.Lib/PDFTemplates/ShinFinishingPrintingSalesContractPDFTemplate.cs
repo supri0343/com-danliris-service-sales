@@ -179,14 +179,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             bodyContentLeft.Phrase = new Phrase("Material", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": " + viewModel.Material.Name + " " + viewModel.MaterialConstruction.Name, normal_font);
+            bodyContentLeft.Phrase = new Phrase(": " + viewModel.Material.Name, normal_font);
             tableBody.AddCell(bodyContentLeft);
 
-            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name) && !string.IsNullOrEmpty(viewModel.MaterialWidth) && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name) && !string.IsNullOrWhiteSpace(viewModel.MaterialWidth))
+            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name)  && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name))
             {
                 bodyContentLeft.Phrase = new Phrase(" ", normal_font);
                 tableBody.AddCell(bodyContentLeft);
-                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name + " Lebar: " + viewModel.MaterialWidth, normal_font);
+                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name, normal_font);
                 tableBody.AddCell(bodyContentLeft);
             }
 

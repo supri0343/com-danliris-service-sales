@@ -92,7 +92,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Konstruksi Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.MaterialConstruction.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.MaterialConstruction.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nomor Benang Material", normal_font);
@@ -102,7 +102,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Lebar Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.MaterialWidth, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.MaterialWidth, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jenis Order", normal_font);

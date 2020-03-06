@@ -50,10 +50,10 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.FinishingPrintingSalesContract.UOM.Id, opt => opt.MapFrom(s => s.UomId))
             .ForPath(d => d.FinishingPrintingSalesContract.UOM.Unit, opt => opt.MapFrom(s => s.UomUnit))
 
-            .ForPath(d => d.FinishingPrintingSalesContract.MaterialConstruction.Id, opt => opt.MapFrom(s => s.MaterialConstructionId))
-            .ForPath(d => d.FinishingPrintingSalesContract.MaterialConstruction.Code, opt => opt.MapFrom(s => s.MaterialConstructionCode))
-            .ForPath(d => d.FinishingPrintingSalesContract.MaterialConstruction.Name, opt => opt.MapFrom(s => s.MaterialConstructionName))
-            .ForPath(d => d.FinishingPrintingSalesContract.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.MaterialConstructionRemark))
+            .ForPath(d => d.MaterialConstruction.Id, opt => opt.MapFrom(s => s.MaterialConstructionId))
+            .ForPath(d => d.MaterialConstruction.Code, opt => opt.MapFrom(s => s.MaterialConstructionCode))
+            .ForPath(d => d.MaterialConstruction.Name, opt => opt.MapFrom(s => s.MaterialConstructionName))
+            .ForPath(d => d.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.MaterialConstructionRemark))
 
             .ForPath(d => d.StandardTests.Id, opt => opt.MapFrom(s => s.StandardTestId))
             .ForPath(d => d.StandardTests.Code, opt => opt.MapFrom(s => s.StandardTestCode))
@@ -67,7 +67,7 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.Account.Gender, opt => opt.MapFrom(s => s.ProfileGender))
 
             .ForPath(d => d.RunWidth, opt => opt.MapFrom(s => s.RunWidths))
-            .ForPath(d => d.FinishingPrintingSalesContract.MaterialWidth, opt => opt.MapFrom(s => s.MaterialWidth))
+            .ForPath(d => d.MaterialWidth, opt => opt.MapFrom(s => s.MaterialWidth))
             .ForPath(d => d.FinishingPrintingSalesContract.PreSalesContract.OrderQuantity, opt => opt.MapFrom(s => s.OrderQuantity))
             .ForPath(d => d.FinishingPrintingSalesContract.ShippingQuantityTolerance, opt => opt.MapFrom(s => s.ShippingQuantityTolerance))
 

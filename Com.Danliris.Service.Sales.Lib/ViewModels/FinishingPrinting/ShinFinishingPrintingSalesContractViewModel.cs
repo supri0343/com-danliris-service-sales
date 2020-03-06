@@ -33,8 +33,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public string DeliveredTo { get; set; }
         public DateTimeOffset? DeliverySchedule { get; set; }
         public string DispositionNumber { get; set; }
-        public MaterialConstructionViewModel MaterialConstruction { get; set; }
-        public string MaterialWidth { get; set; }
+        //public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        //public string MaterialWidth { get; set; }
         public string Packing { get; set; }
         public string PieceLength { get; set; }
         public double? PointLimit { get; set; }
@@ -85,20 +85,20 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
             }
 
 
-            if (MaterialConstruction == null || MaterialConstruction.Id.Equals(0))
-            {
-                yield return new ValidationResult("Konstruksi Finish harus diisi", new List<string> { "MaterialConstructionID" });
-            }
+            //if (MaterialConstruction == null || MaterialConstruction.Id.Equals(0))
+            //{
+            //    yield return new ValidationResult("Konstruksi Finish harus diisi", new List<string> { "MaterialConstructionID" });
+            //}
 
             if (YarnMaterial == null || YarnMaterial.Id.Equals(0))
             {
                 yield return new ValidationResult("Nomor Benang Material harus diisi", new List<string> { "YarnMaterialID" });
             }
 
-            if (string.IsNullOrWhiteSpace(MaterialWidth))
-            {
-                yield return new ValidationResult("Lebar Finish harus diisi", new List<string> { "MaterialWidth" });
-            }
+            //if (string.IsNullOrWhiteSpace(MaterialWidth))
+            //{
+            //    yield return new ValidationResult("Lebar Finish harus diisi", new List<string> { "MaterialWidth" });
+            //}
 
 
             if (Quality == null || Quality.Id.Equals(0))

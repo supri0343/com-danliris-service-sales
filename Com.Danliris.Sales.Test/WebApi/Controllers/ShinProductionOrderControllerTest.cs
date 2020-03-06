@@ -118,7 +118,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         Id = 1
                     },
-                    MaterialConstruction = new MaterialConstructionViewModel(),
+                    //MaterialConstruction = new MaterialConstructionViewModel(),
                     YarnMaterial = new YarnMaterialViewModel()
                 });
             ShinProductionOrderController controller = (ShinProductionOrderController)Activator.CreateInstance(typeof(ShinProductionOrderController), mocks.IdentityService.Object, mocks.ValidateService.Object, mocks.Facade.Object, mocks.Mapper.Object, mocks.ServiceProvider.Object);

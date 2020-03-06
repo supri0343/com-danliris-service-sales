@@ -212,14 +212,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Comodity", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": " + viewModel.Material.Name + " " + viewModel.MaterialConstruction.Name, normal_font);
+            bodyContentLeft.Phrase = new Phrase(": " + viewModel.Material.Name, normal_font);
             tableBody.AddCell(bodyContentLeft);
 
-            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name) && !string.IsNullOrEmpty(viewModel.MaterialWidth) && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name) && !string.IsNullOrWhiteSpace(viewModel.MaterialWidth))
+            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name) && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name))
             {
                 bodyContentLeft.Phrase = new Phrase(" ", normal_font);
                 tableBody.AddCell(bodyContentLeft);
-                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name + " WIDTH: " + viewModel.MaterialWidth, normal_font);
+                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name, normal_font);
                 tableBody.AddCell(bodyContentLeft);
             }
 
@@ -546,7 +546,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 string agentFirstParagraphStringDescription = viewModel.CommodityDescription;
                 Paragraph agentFirstParagraphDescription = new Paragraph(agentFirstParagraphStringDescription, normal_font) { Alignment = Element.ALIGN_JUSTIFIED };
                 document.Add(agentFirstParagraphDescription);
-                string agentFirstParagraphStringContruction = "CONSTRUCTION: " + viewModel.Material.Name + viewModel.MaterialConstruction.Name + " / " + viewModel.YarnMaterial.Name + " WIDTH: " + viewModel.MaterialWidth;
+                string agentFirstParagraphStringContruction = "CONSTRUCTION: " + viewModel.Material.Name  + " / " + viewModel.YarnMaterial.Name;
                 Paragraph agentFirstParagraphContruction = new Paragraph(agentFirstParagraphStringContruction, normal_font) { Alignment = Element.ALIGN_JUSTIFIED };
                 agentFirstParagraphContruction.SpacingAfter = 10f;
                 document.Add(agentFirstParagraphContruction);
