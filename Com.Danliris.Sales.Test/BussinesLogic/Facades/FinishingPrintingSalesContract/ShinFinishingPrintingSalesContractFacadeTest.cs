@@ -284,7 +284,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
                 new FinishingPrintingSalesContractDetailViewModel()
                 {
                     Color = "a0",
-                    Price = 0
+                    Price = 0,
+                    ScreenCost = 1,
+                    CostCalculationId = 1,
+                    ProductionOrderNo = "s"
                 }
             };
             response = vm.Validate(null);

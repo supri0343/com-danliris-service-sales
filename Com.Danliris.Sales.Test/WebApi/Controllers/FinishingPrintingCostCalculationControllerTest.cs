@@ -5,6 +5,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCo
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
@@ -132,10 +133,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public async Task Should_Success_CCApprovePPIC()
         {
             var mocks = GetMocks();
-            
+
             var id = 1;
             mocks.Facade.Setup(f => f.CCApprovePPIC(It.IsAny<long>())).ReturnsAsync(1);
-            
+
             var controller = GetController(mocks);
             var response = await controller.CCApproveByPPIC(id);
             Assert.Equal((int)HttpStatusCode.NoContent, GetStatusCode(response));
@@ -177,6 +178,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
             var controller = GetController(mocks);
             var response = await controller.CCApproveByMD(id);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void Should_Success_GetByPreSalesContract()
+        {
+            var mocks = GetMocks();
+
+            var id = 1;
+            mocks.Facade.Setup(f => f.GetByPreSalesContract(It.IsAny<long>()))
+                .Returns(new ReadResponse<FinishingPrintingCostCalculationModel>(new List<FinishingPrintingCostCalculationModel>(), 0, new Dictionary<string, string>(), new List<string>()));
+            mocks.Mapper.Setup(f => f.Map<List<FinishingPrintingCostCalculationViewModel>>(It.IsAny<List<FinishingPrintingCostCalculationModel>>())).Returns(this.ViewModels);
+            var controller = GetController(mocks);
+            var response = controller.GetByPreSalesContract(id);
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void Should_Error_GetByPreSalesContract()
+        {
+            var mocks = GetMocks();
+
+            var id = 1;
+            mocks.Facade.Setup(f => f.GetByPreSalesContract(It.IsAny<long>()))
+                .Throws(new Exception());
+            mocks.Mapper.Setup(f => f.Map<List<FinishingPrintingCostCalculationViewModel>>(It.IsAny<List<FinishingPrintingCostCalculationModel>>())).Returns(this.ViewModels);
+            var controller = GetController(mocks);
+            var response = controller.GetByPreSalesContract(id);
             Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
         }
     }
