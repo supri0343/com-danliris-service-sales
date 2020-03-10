@@ -48,6 +48,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
                 .Setup(x => x.GetService(typeof(ShinFinishingPrintingSalesContractLogic)))
                 .Returns(finishingprintingLogic);
 
+            var preSalesContractLogic = new FinishingPrintingPreSalesContractLogic(identityService, dbContext);
+            serviceProviderMock
+                .Setup(s => s.GetService(typeof(FinishingPrintingPreSalesContractLogic)))
+                .Returns(preSalesContractLogic);
+
             var ccLogic = new FinishingPrintingCostCalculationLogic(identityService, dbContext);
 
             serviceProviderMock
@@ -72,7 +77,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
 
         protected override ShinFinisihingPrintingSalesContractDataUtil DataUtil(ShinFinishingPrintingSalesContractFacade facade, SalesDbContext dbContext = null)
         {
-            FinishingPrintingCostCalculationFacade ccFacade = new FinishingPrintingCostCalculationFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinishingPrintingPreSalesContractFacade ccFacade = new FinishingPrintingPreSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
             ShinFinisihingPrintingSalesContractDataUtil dataUtil = Activator.CreateInstance(typeof(ShinFinisihingPrintingSalesContractDataUtil), facade, ccFacade) as ShinFinisihingPrintingSalesContractDataUtil;
             return dataUtil;
         }

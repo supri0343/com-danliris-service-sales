@@ -21,6 +21,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 
         public MaterialViewModel Material { get; set; }
 
+        public AccountViewModel Sales { get; set; }
+
         public AccountBankViewModel AccountBank { get; set; }
         public double? Amount { get; set; }
         public AgentViewModel Agent { get; set; }

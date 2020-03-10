@@ -19,7 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.FinishingPrintingSalesContract.PreSalesContract.Buyer.Type, opt => opt.MapFrom(s => s.BuyerType))
 
             .ForPath(d => d.FinishingPrintingSalesContract.Id, opt => opt.MapFrom(s => s.SalesContractId))
-            .ForPath(d => d.FinishingPrintingSalesContract.PreSalesContract.No, opt => opt.MapFrom(s => s.SalesContractNo))
+            .ForPath(d => d.FinishingPrintingSalesContract.SalesContractNo, opt => opt.MapFrom(s => s.SalesContractNo))
             .ForPath(d => d.ProductionOrderNo, opt => opt.MapFrom(s => s.OrderNo))
 
             .ForPath(d => d.FinishingPrintingSalesContract.YarnMaterial.Id, opt => opt.MapFrom(s => s.YarnMaterialId))

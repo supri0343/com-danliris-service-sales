@@ -20,6 +20,18 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         [MaxLength(512)]
         public string UnitName { get; set; }
 
+
+        public long SalesId { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesUserName { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesFirstName { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesLastName { get; set; }
+
         #endregion
 
         #region Account Bank

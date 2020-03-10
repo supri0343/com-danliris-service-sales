@@ -13,6 +13,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 
         public long CostCalculationId { get; set; }
 
-        public string ProductionOrdeNo { get; set; }
+        public string ProductionOrderNo { get; set; }
     }
 }

@@ -300,6 +300,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             serviceProviderMock.Setup(s => s.GetService(typeof(FinishingPrintingCostCalculationLogic)))
                 .Returns(ccLogic);
 
+            var preSalesContractLogic = new FinishingPrintingPreSalesContractLogic(identityService, dbContext);
+            serviceProviderMock
+                .Setup(s => s.GetService(typeof(FinishingPrintingPreSalesContractLogic)))
+                .Returns(preSalesContractLogic);
+
             var productionOrderDetailLogic = new ProductionOrder_DetailLogic(serviceProviderMock.Object, identityService, dbContext);
             var productionOrderlsLogic = new ProductionOrder_LampStandardLogic(serviceProviderMock.Object, identityService, dbContext);
             var productionOrderrwLogic = new ProductionOrder_RunWidthLogic(serviceProviderMock.Object, identityService, dbContext);

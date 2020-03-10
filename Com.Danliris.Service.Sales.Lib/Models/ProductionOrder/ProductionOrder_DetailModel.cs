@@ -26,5 +26,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ProductionOrder
         public long UomId { get; set; }
         [MaxLength(255)]
         public string UomUnit { get; set; }
+
+        [NotMapped]
+        public string ProductionOrderNo { get; set; }
     }
 }

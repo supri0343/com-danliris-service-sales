@@ -31,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesContractNo","BuyerName","ProductionOrderNo", "UnitName"
+                "SalesContractNo","BuyerName", "UnitName"
             };
 
             Query = QueryHelper<FinishingPrintingSalesContractModel>.Search(Query, SearchAttributes, keyword);
@@ -42,7 +42,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
             List<string> SelectedFields = new List<string>()
             {
                 "Id", "Code", "PreSalesContract", "DeliverySchedule", "YarnMaterial","Quality","Packing",
-                "ShippingQuantityTolerance", "LastModifiedUtc", "Details", "SalesContractNo"
+                "ShippingQuantityTolerance", "LastModifiedUtc", "Details", "SalesContractNo", "Material", "UOM", "Sales"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

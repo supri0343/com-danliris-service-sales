@@ -34,6 +34,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
         protected override ShinFinishingPrintingSalesContractViewModel ViewModel => new ShinFinishingPrintingSalesContractViewModel()
         {
+            Material = new MaterialViewModel(),
+            UOM = new UomViewModel()
+            {
+                Unit = "a"
+            },
             Amount = 1,
             ShipmentDescription = "a",
             DeliverySchedule = DateTimeOffset.UtcNow,
