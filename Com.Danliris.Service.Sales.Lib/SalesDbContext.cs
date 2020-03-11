@@ -86,10 +86,10 @@ namespace Com.Danliris.Service.Sales.Lib
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            //modelBuilder.Entity<FinishingPrintingSalesContractModel>()
-            //    .HasIndex(h => h.SalesContractNo)
-            //    .IsUnique()
-            //    .HasFilter("[IsDeleted]=(0)");
+            modelBuilder.Entity<FinishingPrintingSalesContractModel>()
+                .HasIndex(h => h.SalesContractNo)
+                .IsUnique()
+                .HasFilter("[IsDeleted]=(0)");
 
             modelBuilder.Entity<FinishingPrintingCostCalculationModel>()
                .Ignore(c => c.ImageFile);

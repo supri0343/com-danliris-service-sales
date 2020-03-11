@@ -42,7 +42,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             FinishingPrintingSalesContract = new ShinFinishingPrintingSalesContractViewModel()
             {
-                Id = 1
+                Id = 1,
+                Material = new MaterialViewModel()
+                {
+                    Name ="a"
+                }
             },
             Details = new List<ProductionOrder_DetailViewModel>()
             {
@@ -58,6 +62,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new ProductionOrder_RunWidthViewModel()
                 {
                     Value = 1
+                },
+                new ProductionOrder_RunWidthViewModel()
+                {
+                    Value = 1
                 }
             },
             LampStandards = new List<ProductionOrder_LampStandardViewModel>()
@@ -67,8 +75,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Name = "a"
                 }
             },
+            Run = "1 run",
             StandardTests = new StandardTestsViewModel(),
-            Account = new AccountViewModel()
+            Account = new AccountViewModel(),
+            MaterialConstruction = new MaterialConstructionViewModel()
         };
 
         protected override List<ShinProductionOrderViewModel> ViewModels => new List<ShinProductionOrderViewModel>() { ViewModel };
@@ -108,19 +118,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     ProcessType = new ProcessTypeViewModel()
                     {
                         OrderType = new OrderTypeViewModel()
-                    }
+                    },
                     
                 });
             mocks.Mapper.Setup(s => s.Map<ShinFinishingPrintingSalesContractViewModel>(It.IsAny<FinishingPrintingSalesContractModel>()))
                 .Returns(new ShinFinishingPrintingSalesContractViewModel()
                 {
-                    CostCalculation = new FinishingPrintingCostCalculationViewModel()
+                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
                     {
                         Id = 1
-                        
                     },
-                    MaterialConstruction = new MaterialConstructionViewModel(),
-                    YarnMaterial = new YarnMaterialViewModel()
+                    Material = new MaterialViewModel(),
+                    //MaterialConstruction = new MaterialConstructionViewModel(),
+                    YarnMaterial = new YarnMaterialViewModel(),
+                    UOM = new UomViewModel()
                 });
             ShinProductionOrderController controller = (ShinProductionOrderController)Activator.CreateInstance(typeof(ShinProductionOrderController), mocks.IdentityService.Object, mocks.ValidateService.Object, mocks.Facade.Object, mocks.Mapper.Object, mocks.ServiceProvider.Object);
             controller.ControllerContext = new ControllerContext()
@@ -604,6 +615,28 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Facade.Setup(f => f.ApproveByMD(It.IsAny<long>())).Throws(new Exception());
             var controller = GetController(mocks);
             var response = await controller.ApproveByMD(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async Task ApproveBySample_Success()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveBySample(It.IsAny<long>())).ReturnsAsync(1);
+            var controller = GetController(mocks);
+            var response = await controller.ApproveBySample(1);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NoContent, statusCode);
+        }
+
+        [Fact]
+        public async Task ApproveBySample_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ApproveBySample(It.IsAny<long>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = await controller.ApproveBySample(1);
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }

@@ -26,5 +26,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
         double GetTotalQuantityBySalesContractId(long id);
         Task<int> ApproveByMD(long id);
         List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo);
+
+        Task<int> ApproveBySample(long id);
     }
 }

@@ -116,8 +116,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
-                dateFrom = data.DeliveryDate,
-                dateTo = data.DeliveryDate,
+                dateFrom = data.DeliveryDate.AddDays(-2),
+                dateTo = data.DeliveryDate.AddDays(2),
             };
 
             var Response = profitgarmentByComodityReportLogic.Read(filter: JsonConvert.SerializeObject(filter));

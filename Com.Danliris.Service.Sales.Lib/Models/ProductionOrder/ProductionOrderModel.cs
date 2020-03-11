@@ -231,6 +231,13 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ProductionOrder
         [MaxLength(512)]
         public string ApprovedMDBy { get; set; }
 
+        public bool IsApprovedSample { get; set; }
+
+        public DateTimeOffset ApprovedSampleDate { get; set; }
+
+        [MaxLength(512)]
+        public string ApprovedSampleBy { get; set; }
+
 
     }
 }

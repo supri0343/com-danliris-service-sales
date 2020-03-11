@@ -86,17 +86,24 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     if(fpSCModel != null)
                     {
                         var fpSCVM = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(fpSCModel);
-                        var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(fpSCVM.CostCalculation.Id);
+                        //var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(fpSCVM.CostCalculation.Id);
 
-                        if(fpCCModel != null)
+                        var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpSCVM.PreSalesContract.Id);
+                        if (preSalesContractModel != null)
                         {
-                            var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
-                            var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
-                            fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
-                            fpSCVM.CostCalculation = fpCCVM;
+                            fpSCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
 
                             viewModel.FinishingPrintingSalesContract = fpSCVM;
                         }
+                        //if (fpCCModel != null)
+                        //{
+                        //    var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                        //    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                        //    fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                        //    fpSCVM.CostCalculation = fpCCVM;
+
+                        //    viewModel.FinishingPrintingSalesContract = fpSCVM;
+                        //}
                        
                     }
                     Dictionary<string, object> Result =
@@ -309,17 +316,24 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     if (fpSCModel != null)
                     {
                         var fpSCVM = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(fpSCModel);
-                        var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(fpSCVM.CostCalculation.Id);
+                        //var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(fpSCVM.CostCalculation.Id);
+                        var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpSCVM.PreSalesContract.Id);
 
-                        if (fpCCModel != null)
+                        if(preSalesContractModel != null)
                         {
-                            var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
-                            var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
-                            fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
-                            fpSCVM.CostCalculation = fpCCVM;
+                            fpSCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
 
                             viewModel.FinishingPrintingSalesContract = fpSCVM;
                         }
+                        //if (fpCCModel != null)
+                        //{
+                        //    var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                        //    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                        //    fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                        //    fpSCVM.CostCalculation = fpCCVM;
+
+                        //    viewModel.FinishingPrintingSalesContract = fpSCVM;
+                        //}
 
                     }
 
@@ -327,7 +341,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Production Order" + viewModel.FinishingPrintingSalesContract.CostCalculation.ProductionOrderNo + ".pdf"
+                        FileDownloadName = "Production Order" + viewModel.ProductionOrderNo + ".pdf"
                     };
                 }
             }
@@ -440,6 +454,26 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 ValidateUser();
 
                 var result = await Facade.ApproveByMD(id);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPost("approve/sample/{id}")]
+        public async Task<IActionResult> ApproveBySample([FromRoute] long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                var result = await Facade.ApproveBySample(id);
 
                 return NoContent();
             }

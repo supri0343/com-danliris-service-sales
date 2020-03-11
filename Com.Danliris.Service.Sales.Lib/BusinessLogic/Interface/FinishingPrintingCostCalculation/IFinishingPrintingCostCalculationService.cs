@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseInterface;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrinti
         Task<int> CCApproveMD(long id);
         Task<int> CCApprovePPIC(long id);
         Task<bool> ValidatePreSalesContractId(long id);
+        ReadResponse<FinishingPrintingCostCalculationModel> GetByPreSalesContract(long preSalesContractId);
     }
 }

@@ -34,11 +34,16 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
         protected override ShinFinishingPrintingSalesContractViewModel ViewModel => new ShinFinishingPrintingSalesContractViewModel()
         {
+            Material = new MaterialViewModel(),
+            UOM = new UomViewModel()
+            {
+                Unit = "a"
+            },
             Amount = 1,
             ShipmentDescription = "a",
             DeliverySchedule = DateTimeOffset.UtcNow,
             CommodityDescription = "a",
-            MaterialWidth= "a",
+            
             Quality = new QualityViewModel()
             {
                 Name = "a"
@@ -47,19 +52,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 Name = "a"
             },
-            MaterialConstruction = new MaterialConstructionViewModel()
+            
+            PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
             {
-                Name = "a"
-            },
-            CostCalculation = new FinishingPrintingCostCalculationViewModel()
-            {
-                Id = 1,
-                PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
                 {
-                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-                    {
-                        Id = 1
-                    }
+                    Id = 1
                 }
             },
             Details = new List<FinishingPrintingSalesContractDetailViewModel>()

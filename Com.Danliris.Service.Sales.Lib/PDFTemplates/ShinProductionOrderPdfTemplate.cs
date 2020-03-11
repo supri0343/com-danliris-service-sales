@@ -67,32 +67,32 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tableIdentity1 = new PdfPTable(2);
             cellIdentityContentLeft.Phrase = new Phrase("No. Sales Contract", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.No, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.PreSalesContract.No, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nomor Order", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.ProductionOrderNo, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.ProductionOrderNo, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nama Buyer", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.Buyer.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.PreSalesContract.Buyer.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Tipe Buyer", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.Buyer.Type, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.PreSalesContract.Buyer.Type, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.Material.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.Material.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Konstruksi Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.MaterialConstruction.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.MaterialConstruction.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nomor Benang Material", normal_font);
@@ -102,27 +102,27 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Lebar Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.MaterialWidth, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.MaterialWidth, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jenis Order", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.ProcessType.OrderType.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.PreSalesContract.ProcessType.OrderType.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jenis Proses", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.CostCalculation.PreSalesContract.ProcessType.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.PreSalesContract.ProcessType.Name, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jumlah Order", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.OrderQuantity + " " + viewModel.FinishingPrintingSalesContract.CostCalculation.UOM.Unit, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.OrderQuantity + " " + viewModel.FinishingPrintingSalesContract.UOM.Unit, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jumlah Order + Toleransi Jumlah Kirim", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + spellOrder + " " + viewModel.FinishingPrintingSalesContract.CostCalculation.UOM.Unit, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + spellOrder + " " + viewModel.FinishingPrintingSalesContract.UOM.Unit, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Asal Material", normal_font);
