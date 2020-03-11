@@ -41,7 +41,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "CostCalculation", "DeliverySchedule", "YarnMaterial","MaterialConstruction","Quality","Packing","ShippingQuantityTolerance", "LastModifiedUtc", "MaterialWidth", "Details"
+                "Id", "Code", "CostCalculation", "DeliverySchedule", "YarnMaterial", "MaterialConstruction", "Commodity", "Quality", "Packing", "ShippingQuantityTolerance", "LastModifiedUtc", "PieceLength", "MaterialWidth", "Details"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

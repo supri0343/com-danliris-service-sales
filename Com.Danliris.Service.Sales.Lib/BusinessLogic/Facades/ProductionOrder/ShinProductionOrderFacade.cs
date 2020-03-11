@@ -483,6 +483,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return await productionOrderLogic.ReadByIdAsync(id);
         }
 
+        public List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo)
+        {
+            return productionOrderLogic.ReadBySalesContractNo(salesContractNo);
+        }
+
         public async Task<int> UpdateAsync(int id, ProductionOrderModel model)
         {
             using (var transaction = DbContext.Database.BeginTransaction())

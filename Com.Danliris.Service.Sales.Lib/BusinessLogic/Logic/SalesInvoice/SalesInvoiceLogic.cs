@@ -17,10 +17,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
     public class SalesInvoiceLogic : BaseLogic<SalesInvoiceModel>
     {
         private SalesInvoiceDetailLogic salesInvoiceDetailLogic;
+        private SalesDbContext _dbContext;
 
         public SalesInvoiceLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
             this.salesInvoiceDetailLogic = serviceProvider.GetService<SalesInvoiceDetailLogic>();
+            _dbContext = dbContext;
         }
 
         public override ReadResponse<SalesInvoiceModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -29,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesInvoiceNo","DeliveryOrderNo","DeliveryOrderNo","ShipmentDocumentCode"
+                "SalesInvoiceNo","DeliveryOrderNo","ShipmentDocumentCode"
             };
 
             Query = QueryHelper<SalesInvoiceModel>.Search(Query, SearchAttributes, keyword);
@@ -39,10 +41,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceDate","DueDate","DeliveryOrderNo","DebtorIndexNo",
-                "ShipmentDocumentId","ShipmentDocumentCode","BuyerId","BuyerName","BuyerAddress","BuyerNPWP","IDNo",
-                "CurrencyId","CurrencyCode","CurrencySymbol","CurrencyRate","VatType","TotalPayment","TotalPaid","Remark", 
-                "SalesInvoiceDetails"
+                "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceDate","DueDate","DeliveryOrderNo",
+                "ShipmentDocumentId","ShipmentDocumentCode","Buyer","IDNo","Currency","VatType","TotalPayment","TotalPaid","Remark","IsPaidOff","SalesInvoiceDetails"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -127,7 +127,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
         public List<SalesInvoiceModel> ReadByBuyerIdAsync(int buyerId)
         {
-            var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId);
+            var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId && p.IsPaidOff == false);
+            //var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId).Select(x => x.Id);
+            //var salesReceipt = _dbContext.SalesReceiptDetails.Where(x => x.IsPaidOff == true || x.IsPaidOff == null && result.Contains(x.SalesInvoiceId)).Select(x => x.SalesInvoiceId);
+            //var invoices = DbSet.Include(x => x.SalesInvoiceDetails).Where(x => salesReceipt.Any(y => y == x.Id));
             return result.ToList();
         }
     }

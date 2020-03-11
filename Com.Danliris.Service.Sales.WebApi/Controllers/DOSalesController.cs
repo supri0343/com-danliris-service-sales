@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoice;
-using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
+using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.PDFTemplates;
 using Com.Danliris.Service.Sales.Lib.Services;
-using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,46 +17,20 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/sales/sales-invoices")]
+    [Route("v{version:apiVersion}/sales/do-sales")]
     [Authorize]
 
-    public class SalesInvoiceController : BaseController<SalesInvoiceModel, SalesInvoiceViewModel, ISalesInvoiceContract>
+    public class DOSalesController : BaseController<DOSalesModel, DOSalesViewModel, IDOSalesContract>
     {
-        private readonly ISalesInvoiceContract _facade;
+        private readonly IDOSalesContract _facade;
         private readonly static string apiVersion = "1.0";
-        public SalesInvoiceController(IIdentityService identityService, IValidateService validateService, ISalesInvoiceContract salesInvoiceFacade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, salesInvoiceFacade, mapper, apiVersion)
+        public DOSalesController(IIdentityService identityService, IValidateService validateService, IDOSalesContract doSalesFacade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, doSalesFacade, mapper, apiVersion)
         {
-            _facade = salesInvoiceFacade;
+            _facade = doSalesFacade;
         }
 
-        [HttpGet("filterByBuyer/{buyerId}")]
-        public virtual async Task<IActionResult> GetByBuyerId([FromRoute] int buyerId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                List<SalesInvoiceModel> model = Facade.ReadByBuyerIdAsync(buyerId);
-                List<SalesInvoiceViewModel> viewModel = Mapper.Map<List<SalesInvoiceViewModel>>(model);
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
-                    .Ok(Mapper, viewModel, 100, viewModel.Count, viewModel.Count, viewModel.Count, new Dictionary<string, string>(), new List<string>());
-                return Ok(Result);
-            }
-            catch (Exception e)
-            {
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
-                    .Fail();
-                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
-            }
-        }
-
-        [HttpGet("deliveryOrderPdf/{Id}")]
-        public async Task<IActionResult> GetDeliveryOrderPDF([FromRoute] int Id)
+        [HttpGet("doSalesLocalPdf/{Id}")]
+        public async Task<IActionResult> GetDOSalesLocalPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +41,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             {
                 var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
                 int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                SalesInvoiceModel model = await Facade.ReadByIdAsync(Id);
+                DOSalesModel model = await Facade.ReadByIdAsync(Id);
 
                 if (model == null)
                 {
@@ -78,13 +52,13 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 }
                 else
                 {
-                    SalesInvoiceViewModel viewModel = Mapper.Map<SalesInvoiceViewModel>(model);
+                    DOSalesViewModel viewModel = Mapper.Map<DOSalesViewModel>(model);
 
-                    DeliveryOrderPdfTemplate PdfTemplate = new DeliveryOrderPdfTemplate();
+                    DOSalesLocalPdfTemplate PdfTemplate = new DOSalesLocalPdfTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Surat_Jalan/" + viewModel.DeliveryOrderNo + ".pdf"
+                        FileDownloadName = "DO_Sales_Local/" + viewModel.LocalType + ".pdf"
                     };
                 }
             }
@@ -97,8 +71,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
-        [HttpGet("salesInvoicePdf/{Id}")]
-        public async Task<IActionResult> GetSalesInvoicePDF([FromRoute] int Id)
+        [HttpGet("doSalesExportPdf/{Id}")]
+        public async Task<IActionResult> GetDOSalesExportPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +83,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             {
                 var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
                 int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                SalesInvoiceModel model = await Facade.ReadByIdAsync(Id);
+                DOSalesModel model = await Facade.ReadByIdAsync(Id);
 
                 if (model == null)
                 {
@@ -120,13 +94,13 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 }
                 else
                 {
-                    SalesInvoiceViewModel viewModel = Mapper.Map<SalesInvoiceViewModel>(model);
+                    DOSalesViewModel viewModel = Mapper.Map<DOSalesViewModel>(model);
 
-                    SalesInvoicePdfTemplate PdfTemplate = new SalesInvoicePdfTemplate();
+                    DOSalesExportPdfTemplate PdfTemplate = new DOSalesExportPdfTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Faktur_Penjualan - " + viewModel.SalesInvoiceNo + ".pdf"
+                        FileDownloadName = "DO_Sales_Export/" + viewModel.LocalType + ".pdf"
                     };
                 }
             }

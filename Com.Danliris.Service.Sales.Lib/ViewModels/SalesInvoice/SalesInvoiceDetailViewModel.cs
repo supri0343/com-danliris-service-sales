@@ -1,6 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
-using System;
-using System.Collections.Generic;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
@@ -13,12 +12,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
-
-        /*Uom*/
-        public int? UomId { get; set; }
-        [MaxLength(255)]
-        public string UomUnit { get; set; }
-
+        public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
         public double? Price { get; set; }
         public double Amount { get; set; }

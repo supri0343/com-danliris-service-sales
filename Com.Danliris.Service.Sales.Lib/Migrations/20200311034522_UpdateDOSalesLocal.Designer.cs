@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200311034522_UpdateDOSalesLocal")]
+    partial class UpdateDOSalesLocal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -804,7 +806,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DOSales");
+                    b.ToTable("DOSalesItems");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.Efficiency", b =>

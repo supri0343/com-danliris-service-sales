@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200309075532_AddDOSales")]
+    partial class AddDOSales
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -605,8 +607,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("MaterialConstructionRemark");
 
-                    b.Property<int>("ProductionOrderId");
-
                     b.Property<string>("ProductionOrderNo")
                         .HasMaxLength(64);
 
@@ -619,14 +619,19 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("UId")
                         .HasMaxLength(255);
 
-                    b.Property<string>("UnitOrCode")
+                    b.Property<string>("UnitCode")
+                        .HasMaxLength(128);
+
+                    b.Property<int>("UnitId");
+
+                    b.Property<string>("UnitName")
                         .HasMaxLength(512);
 
                     b.HasKey("Id");
 
                     b.HasIndex("DOSalesModelId");
 
-                    b.ToTable("DOSalesLocalItems");
+                    b.ToTable("DOSalesLocalModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOSales.DOSalesModel", b =>
@@ -770,9 +775,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("MaterialConstructionName")
                         .HasMaxLength(255);
 
-                    b.Property<string>("MaterialConstructionRemark")
-                        .HasMaxLength(1000);
-
                     b.Property<string>("MetricUom")
                         .HasMaxLength(255);
 
@@ -786,12 +788,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("PieceLength")
                         .HasMaxLength(255);
 
-                    b.Property<string>("SalesFirstName")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("SalesId");
-
-                    b.Property<string>("SalesLastName")
+                    b.Property<string>("SalesName")
                         .HasMaxLength(255);
 
                     b.Property<int>("Sc");
@@ -804,7 +801,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DOSales");
+                    b.ToTable("DOSalesModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.Efficiency", b =>
@@ -3910,7 +3907,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOSales.DOSalesLocalModel", b =>
                 {
                     b.HasOne("Com.Danliris.Service.Sales.Lib.Models.DOSales.DOSalesModel", "DOSalesModel")
-                        .WithMany("DOSalesLocalItems")
+                        .WithMany("LocalItems")
                         .HasForeignKey("DOSalesModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

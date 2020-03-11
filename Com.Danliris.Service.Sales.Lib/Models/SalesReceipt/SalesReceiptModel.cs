@@ -13,30 +13,36 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
         public DateTimeOffset SalesReceiptDate { get; set; }
+
+        #region Unit
+        public int UnitId { get; set; }
         [MaxLength(255)]
         public string UnitName { get; set; }
+        #endregion
 
-        /*Buyer*/
+        #region Buyer
         public int BuyerId { get; set; }
         [MaxLength(255)]
         public string BuyerName { get; set; }
         [MaxLength(1000)]
         public string BuyerAddress { get; set; }
+        #endregion
 
         [MaxLength(255)]
         public string OriginBankName { get; set; }
         [MaxLength(255)]
         public string OriginAccountNumber { get; set; }
 
-        /*Currency*/
+        #region Currency
         public int CurrencyId { get; set; }
         [MaxLength(255)]
         public string CurrencyCode { get; set; }
         [MaxLength(255)]
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
+        #endregion
 
-        /*Bank*/
+        #region AccountBank
         public int BankId { get; set; }
         [MaxLength(255)]
         public string AccountCOA { get; set; }
@@ -48,6 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string BankName { get; set; }
         [MaxLength(255)]
         public string BankCode { get; set; }
+        #endregion
 
         public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }

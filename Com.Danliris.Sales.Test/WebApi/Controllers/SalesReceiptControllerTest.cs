@@ -3,6 +3,7 @@ using Com.Danliris.Sales.Test.WebApi.Utils;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
@@ -26,8 +27,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesReceiptDetailViewModel() 
                     {
-                    CurrencyCode = "IDR",
-                    CurrencySymbol = "Rp",}
+                    Currency = new CurrencyViewModel()
+                        {
+                            Code = "IDR",
+                            Symbol = "Rp",
+                        },
+                    }
                 }
 
             };
@@ -96,22 +101,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new SalesReceiptViewModel{
                     SalesReceiptDate = DateTimeOffset.UtcNow.AddDays(-1),
-                    UnitName = "",
-                    BuyerId = 0,
-                    BuyerName = "",
-                    BuyerAddress = "",
+                    Unit = new UnitViewModel()
+                    {
+                        Name = "",
+                    },
+                    Buyer = new BuyerViewModel()
+                    {
+                        Id = 0,
+                        Name = "",
+                        Address = "",
+                    },
                     OriginBankName = "",
                     OriginAccountNumber = "",
-                    CurrencyId = 0,
-                    CurrencyCode = "",
-                    CurrencySymbol = "",
-                    CurrencyRate = 0,
-                    BankId = 0,
+                    Currency = new CurrencyViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Symbol = "",
+                        Rate = 0,
+                    },
+                    AccountBank = new AccountBankViewModel()
+                    {
+                        Id = 0,
+                        AccountName = "",
+                        AccountNumber = "",
+                        BankName = "",
+                        Code = "",
+                    },
                     AccountCOA = "",
-                    AccountName = "",
-                    AccountNumber = "",
-                    BankName = "",
-                    BankCode = "",
                     AdministrationFee = -1,
                     TotalPaid = -1,
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
@@ -122,10 +139,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                             VatType = "",
                             Tempo = -1,
-                            CurrencyId = 0,
-                            CurrencyCode = "",
-                            CurrencySymbol = "",
-                            CurrencyRate = 0,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 0,
+                                Code = "",
+                                Symbol = "",
+                                Rate = 0,
+                            },
                             TotalPayment = -1,
                             TotalPaid = -1,
                             Paid = -1,
@@ -169,10 +189,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             DueDate = DateTimeOffset.UtcNow,
                             VatType = "PPN Kawasan Berikat",
                             Tempo = 10,
-                            CurrencyId = 10,
-                            CurrencyCode = "USD",
-                            CurrencySymbol = "$",
-                            CurrencyRate = 10,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 10,
+                                Code = "USD",
+                                Symbol = "$",
+                                Rate = 10,
+                            },
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,
@@ -188,10 +211,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             DueDate = DateTimeOffset.UtcNow,
                             VatType = "PPN Kawasan Berikat",
                             Tempo = 10,
-                            CurrencyId = 10,
-                            CurrencyCode = "USD",
-                            CurrencySymbol = "$",
-                            CurrencyRate = 10,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 10,
+                                Code = "USD",
+                                Symbol = "$",
+                                Rate = 10,
+                            },
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,

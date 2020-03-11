@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,42 +15,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
         public DateTimeOffset? SalesReceiptDate { get; set; }
-        [MaxLength(255)]
-        public string UnitName { get; set; }
-
-        /*Buyer*/
-        public int? BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-
+        public UnitViewModel Unit { get; set; }
+        public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string OriginBankName { get; set; }
         [MaxLength(255)]
         public string OriginAccountNumber { get; set; }
-
-        /*Currency*/
-        public int? CurrencyId { get; set; }
-        [MaxLength(255)]
-        public string CurrencyCode { get; set; }
-        [MaxLength(255)]
-        public string CurrencySymbol { get; set; }
-        public double CurrencyRate { get; set; }
-
-        /*Bank*/
-        public int? BankId { get; set; }
+        public CurrencyViewModel Currency { get; set; }
+        public AccountBankViewModel AccountBank { get; set; }
         [MaxLength(255)]
         public string AccountCOA { get; set; }
-        [MaxLength(255)]
-        public string AccountName { get; set; }
-        [MaxLength(255)]
-        public string AccountNumber { get; set; }
-        [MaxLength(255)]
-        public string BankName { get; set; }
-        [MaxLength(255)]
-        public string BankCode { get; set; }
-
         public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
@@ -60,13 +35,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (!SalesReceiptDate.HasValue || SalesReceiptDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Kuitansi harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesReceiptDate" });
 
-            if (string.IsNullOrWhiteSpace(UnitName))
+            if (string.IsNullOrWhiteSpace(Unit.Name))
                 yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
 
-            if (string.IsNullOrWhiteSpace(AccountName))
+            if (string.IsNullOrWhiteSpace(AccountBank.AccountName))
                 yield return new ValidationResult("Nama Bank Tujuan harus diisi", new List<string> { "AccountName" });
 
-            if (string.IsNullOrWhiteSpace(BuyerName))
+            if (string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Nama Buyer harus di isi", new List<string> { "BuyerName" });
 
             if (string.IsNullOrWhiteSpace(OriginBankName))
@@ -75,7 +50,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (string.IsNullOrWhiteSpace(OriginAccountNumber))
                 yield return new ValidationResult("No Rek. Bank Asal harus di isi", new List<string> { "OriginAccountNumber" });
 
-            if (string.IsNullOrWhiteSpace(CurrencyCode))
+            if (string.IsNullOrWhiteSpace(Currency.Code))
                 yield return new ValidationResult("Jenis Mata Uang harus diisi", new List<string> { "CurrencyCode" });
 
             if (AdministrationFee < 0)
@@ -101,7 +76,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         rowErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'Kode Faktur harus diisi',";
                     }
-                    if (!detail.CurrencyId.HasValue || string.IsNullOrWhiteSpace(detail.CurrencyCode))
+                    if (!detail.Currency.Id.HasValue || string.IsNullOrWhiteSpace(detail.Currency.Code))
                     {
                         Count++;
                         rowErrorCount++;
@@ -156,7 +131,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         DetailErrors += "OverPaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh kelebihan pembayaran',";
                     }
 
-                    var mustSameType = SalesReceiptDetails.Where(f => f.CurrencyCode != detail.CurrencyCode).ToList();
+                    var mustSameType = SalesReceiptDetails.Where(f => f.Currency.Code != detail.Currency.Code).ToList();
                     
                     if (mustSameType.Count > 0)
                     {

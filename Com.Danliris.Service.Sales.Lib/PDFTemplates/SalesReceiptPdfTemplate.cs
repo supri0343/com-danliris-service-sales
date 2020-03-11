@@ -29,13 +29,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             double convertCurrency = 0;
 
-            if (detailViewModel.CurrencySymbol == "Rp")
+            if (detailViewModel.Currency.Symbol == "Rp")
             {
                 convertCurrency = viewModel.TotalPaid;
             }
             else
             {
-                convertCurrency = (Math.Round((double)viewModel.TotalPaid * (double)detailViewModel.CurrencyRate));
+                convertCurrency = (Math.Round((double)viewModel.TotalPaid * (double)detailViewModel.Currency.Rate));
             }
 
             string TotalPaidString = NumberToTextIDN.terbilang(convertCurrency);
@@ -108,21 +108,21 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable3.AddCell(cellHeaderBody);
             cellHeaderBody.Phrase = new Phrase(":", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(viewModel.BankName + " " + viewModel.AccountNumber + " (" + detailViewModel.CurrencyCode + ")", normal_font);
+            cellHeaderBody.Phrase = new Phrase(viewModel.AccountBank.BankName + " " + viewModel.AccountBank.AccountNumber + " (" + detailViewModel.Currency.Code + ")", normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Telah terima dari ", normal_font);
             headerTable3.AddCell(cellHeaderBody);
             cellHeaderBody.Phrase = new Phrase(":", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(viewModel.BuyerName, normal_font);
+            cellHeaderBody.Phrase = new Phrase(viewModel.Buyer.Name, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("", normal_font);
             headerTable3.AddCell(cellHeaderBody);
             cellHeaderBody.Phrase = new Phrase("", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(viewModel.BuyerAddress, normal_font);
+            cellHeaderBody.Phrase = new Phrase(viewModel.Buyer.Address, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Banyaknya uang ", normal_font);
