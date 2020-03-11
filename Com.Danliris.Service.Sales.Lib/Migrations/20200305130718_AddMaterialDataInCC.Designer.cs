@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200305130718_AddMaterialDataInCC")]
+    partial class AddMaterialDataInCC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -718,8 +720,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Color")
                         .HasMaxLength(255);
 
-                    b.Property<long>("CostCalculationId");
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -765,9 +765,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<DateTime>("LastModifiedUtc");
 
                     b.Property<double>("Price");
-
-                    b.Property<string>("ProductionOrderNo")
-                        .HasMaxLength(64);
 
                     b.Property<decimal>("ScreenCost");
 
@@ -972,17 +969,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("SalesContractNo")
                         .HasMaxLength(25);
 
-                    b.Property<string>("SalesFirstName")
-                        .HasMaxLength(1024);
-
-                    b.Property<long>("SalesId");
-
-                    b.Property<string>("SalesLastName")
-                        .HasMaxLength(1024);
-
-                    b.Property<string>("SalesUserName")
-                        .HasMaxLength(1024);
-
                     b.Property<string>("ShipmentDescription")
                         .HasMaxLength(1000);
 
@@ -1027,10 +1013,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SalesContractNo")
-                        .IsUnique()
-                        .HasFilter("[IsDeleted]=(0)");
 
                     b.ToTable("FinishingPrintingSalesContracts");
                 });

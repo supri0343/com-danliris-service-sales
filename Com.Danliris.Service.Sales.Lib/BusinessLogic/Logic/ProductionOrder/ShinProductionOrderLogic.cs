@@ -47,7 +47,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             List<string> SelectedFields = new List<string>()
             {
 
-                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc", "ApprovalMD", "ApprovalSample", "OrderQuantity"
+                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc", "ApprovalMD", "ApprovalSample", "OrderQuantity",
+                "ProductionOrderNo"
 
             };
 
