@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
         List<MonthlyOrderQuantity> GetMonthlyOrderIdsByOrderType(int year, int month, int orderTypeId, int timeoffset);
         double GetTotalQuantityBySalesContractId(long id);
         Task<int> ApproveByMD(long id);
-        List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo);
+        //List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo);
 
         Task<int> ApproveBySample(long id);
     }
