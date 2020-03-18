@@ -142,32 +142,58 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new DOSalesViewModel{
                     DOSalesType = "Lokal",
-                    LocalType = "USS",
-                    LocalDate = DateTimeOffset.Now,
-                    LocalSalesContract = new FinishingPrintingSalesContractViewModel()
-                    {
-                        Id = 1,
-                        SalesContractNo = "SalesContractNo",
-                    },
-                    DestinationBuyerName = "DestinationBuyerName",
-                    DestinationBuyerAddress = "DestinationBuyerAddress",
-                    LocalHeadOfStorage = "LocalHeadOfStorage",
-                    SalesName = "SalesName",
-                    PackingUom = "PCS",
-                    MetricUom = "MTR",
-                    ImperialUom = "YDS",
-                    Disp = 1,
-                    Op = 1,
-                    Sc = 1,
+                    LocalType = "",
+                    LocalDate = DateTimeOffset.Now.AddYears(1),
+                    LocalSalesContract = new FinishingPrintingSalesContractViewModel(){ },
+                    DestinationBuyerName = "",
+                    DestinationBuyerAddress = "",
+                    LocalHeadOfStorage = "",
+                    SalesName = "",
+                    PackingUom = "",
+                    MetricUom = "",
+                    ImperialUom = "",
+                    Disp = -1,
+                    Op = -1,
+                    Sc = -1,
                     DOSalesLocalItems = new List<DOSalesLocalViewModel>()
                     {
                         new DOSalesLocalViewModel()
                         {
-                            TotalPacking = 1,
-                            TotalMetric = 1,
-                            TotalImperial = 1,
+                            TotalPacking = -1,
+                            TotalMetric = -1,
+                            TotalImperial = -1,
                         }
                     }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_ViewModel_For_Local_2()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    LocalType = null,
+                    LocalDate = DateTimeOffset.Now.AddYears(-1),
+                    LocalSalesContract = null,
+                    DestinationBuyerName = "",
+                    DestinationBuyerAddress = "",
+                    LocalHeadOfStorage = "",
+                    SalesName = "",
+                    PackingUom = "",
+                    MetricUom = "",
+                    ImperialUom = "",
+                    Disp = null,
+                    Op = null,
+                    Sc = null,
+                    DOSalesLocalItems = null,
                 }
             };
             foreach (var viewModel in viewModels)
@@ -184,15 +210,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new DOSalesViewModel{
                     DOSalesType = "Ekspor",
-                    ExportType = "KKP",
+                    ExportType = "",
                     ExportDate = DateTimeOffset.Now,
-                    DoneBy = "DoneBy",
-                    //ExportSalesContract = new FinishingPrintingSalesContractViewModel()
-                    //{
-                    //    Id = 2,
-                    //    SalesContractNo = "SalesContractNo",
-                    //},
-                    FillEachBale = 1,
+                    DoneBy = "",
+                    ExportSalesContract = new FinishingPrintingSalesContractViewModel() { },
+                    FillEachBale = -1,
                 }
             };
             foreach (var viewModel in viewModels)
