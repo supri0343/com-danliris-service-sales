@@ -1,7 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
@@ -149,7 +148,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                    bodyCell.Phrase = new Phrase(item.MaterialConstruction.Name, normal_font);
+                    bodyCell.Phrase = new Phrase(item.ProductionOrder.MaterialConstruction.Name, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;

@@ -147,20 +147,20 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                         var rowErrorCount = 0;
                         
-                        if (detail.Material == null)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "Material : 'Material gagal di load',";
-                        }
+                        //if (detail.Material == null)
+                        //{
+                        //    Count++;
+                        //    rowErrorCount++;
+                        //    DetailErrors += "Material : 'Material gagal di load',";
+                        //}
 
 
-                        if (detail.MaterialConstruction == null)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "MaterialConstruction : MaterialConstruction gagal di load',";
-                        }
+                        //if (detail.MaterialConstruction == null)
+                        //{
+                        //    Count++;
+                        //    rowErrorCount++;
+                        //    DetailErrors += "MaterialConstruction : MaterialConstruction gagal di load',";
+                        //}
 
                         if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
                         {

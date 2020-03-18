@@ -4,6 +4,8 @@ using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
+using Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting;
+using Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
 using System;
@@ -21,66 +23,96 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new DOSalesViewModel()
             {
-                LocalType = "US",
-                LocalDate = DateTimeOffset.UtcNow,
-                DestinationBuyerName = "DestinationBuyerName",
-                DestinationBuyerAddress = "DestinationBuyerAddress",
-                SalesName = "SalesName",
+                DOSalesType = "Lokal",
+                DOSalesNo = "DOSalesNo",
+                LocalDate = DateTimeOffset.Now,
                 LocalHeadOfStorage = "LocalHeadOfStorage",
+                DestinationBuyerName = "DestinationBuyerName",
                 PackingUom = "PCS",
-                ImperialUom = "YDS",
                 MetricUom = "MTR",
-                Disp = 1,
-                Op = 1,
-                Sc = 1,
-                LocalRemark = "LocalRemark",
+                ImperialUom = "YDS",
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>())).Returns(vm);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>())).Returns(new DOSalesViewModel()
+            {
                 DOSalesLocalItems = new List<DOSalesLocalViewModel>()
                 {
                     new DOSalesLocalViewModel()
                     {
+                        ProductionOrder = new ProductionOrderViewModel()
+                        {
+                            OrderNo = "OrderNo",
+                        },
+                        UnitOrCode = "UnitCode",
                         TotalPacking = 1,
                         TotalMetric = 1,
                         TotalImperial = 1,
                     }
                 }
-
-            };
-            var mocks = GetMocks();
-            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
-            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
-                .Returns(vm);
+            });
             var controller = GetController(mocks);
             var response = controller.GetDOSalesPDF(1).Result;
 
             Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_DO_Sales_Export_PDF_Success()
+        {
+            var vm = new DOSalesViewModel()
+            {
+                DOSalesType = "Ekspor",
+                DOSalesNo = "DOSalesNo",
+                ExportDate = DateTimeOffset.Now,
+                DoneBy = "DoneBy",
+                FillEachBale = 1,
+                ExportRemark = "ExportRemark",
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>())).Returns(vm);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>())).Returns(new DOSalesViewModel()
+            {
+                ExportSalesContract = new FinishingPrintingSalesContractViewModel()
+                {
+                    SalesContractNo = "SalesContractNo",
+                    PieceLength = "PieceLength",
+                    OrderQuantity = 1,
+                },
+            });
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Receipt_PDF_NotFound()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(DOSalesModel));
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
 
         }
 
-        //[Fact]
-        //public void Get_DO_Sales_Local_PDF_NotFound()
-        //{
-        //    var mocks = GetMocks();
-        //    mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(DOSalesModel));
-        //    var controller = GetController(mocks);
-        //    var response = controller.GetDOSalesLocalPDF(1).Result;
+        [Fact]
+        public void Get_Sales_Receipt_PDF_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
 
-        //    int statusCode = this.GetStatusCode(response);
-        //    Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
 
-        //}
-
-        //[Fact]
-        //public void Get_DO_Sales_Local_PDF_Exception()
-        //{
-        //    var mocks = GetMocks();
-        //    mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
-        //    var controller = GetController(mocks);
-        //    var response = controller.GetDOSalesLocalPDF(1).Result;
-
-        //    int statusCode = this.GetStatusCode(response);
-        //    Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
-
-        //}
+        }
 
         [Fact]
         public void Mapping_With_AutoMapper_Profiles()
@@ -104,10 +136,78 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Validate_Validation_ViewModel_For_Local()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    LocalType = "USS",
+                    LocalDate = DateTimeOffset.Now,
+                    LocalSalesContract = new FinishingPrintingSalesContractViewModel()
+                    {
+                        Id = 1,
+                        SalesContractNo = "SalesContractNo",
+                    },
+                    DestinationBuyerName = "DestinationBuyerName",
+                    DestinationBuyerAddress = "DestinationBuyerAddress",
+                    LocalHeadOfStorage = "LocalHeadOfStorage",
+                    SalesName = "SalesName",
+                    PackingUom = "PCS",
+                    MetricUom = "MTR",
+                    ImperialUom = "YDS",
+                    Disp = 1,
+                    Op = 1,
+                    Sc = 1,
+                    DOSalesLocalItems = new List<DOSalesLocalViewModel>()
+                    {
+                        new DOSalesLocalViewModel()
+                        {
+                            TotalPacking = 1,
+                            TotalMetric = 1,
+                            TotalImperial = 1,
+                        }
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_ViewModel_For_Export()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    ExportType = "KKP",
+                    ExportDate = DateTimeOffset.Now,
+                    DoneBy = "DoneBy",
+                    //ExportSalesContract = new FinishingPrintingSalesContractViewModel()
+                    //{
+                    //    Id = 2,
+                    //    SalesContractNo = "SalesContractNo",
+                    //},
+                    FillEachBale = 1,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
         public void Validate_Null_Model_and_DetailViewModel()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
-            { };
+            {
+            };
             foreach (var viewModel in viewModels)
             {
                 var defaultValidationResult = viewModel.Validate(null);
