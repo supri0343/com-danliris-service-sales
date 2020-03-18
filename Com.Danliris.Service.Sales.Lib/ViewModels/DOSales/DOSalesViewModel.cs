@@ -4,7 +4,6 @@ using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 {
@@ -28,13 +27,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         [MaxLength(255)]
         public string LocalType { get; set; }
         public DateTimeOffset? LocalDate { get; set; }
-        public ShinFinishingPrintingSalesContractViewModel LocalSalesContract { get; set; }
+        public FinishingPrintingSalesContractViewModel LocalSalesContract { get; set; }
+        public MaterialViewModel LocalMaterial { get; set; }
+        public MaterialConstructionViewModel LocalMaterialConstruction { get; set; }
         public BuyerViewModel LocalBuyer { get; set; }
         [MaxLength(255)]
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
-        public AccountViewModel Sales { get; set; }
+        //public AccountViewModel Sales { get; set; }[MaxLength(255)]
+        public string SalesName { get; set; }
         [MaxLength(255)]
         public string LocalHeadOfStorage { get; set; }
         [MaxLength(255)]
@@ -56,19 +58,17 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public DateTimeOffset? ExportDate { get; set; }
         [MaxLength(255)]
         public string DoneBy { get; set; }
-        public ShinFinishingPrintingSalesContractViewModel ExportSalesContract { get; set; }
-        public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        public FinishingPrintingSalesContractViewModel ExportSalesContract { get; set; }
+        public MaterialConstructionViewModel ExportMaterialConstruction { get; set; }
         public BuyerViewModel ExportBuyer { get; set; }
         public CommodityViewModel Commodity { get; set; }
-        [MaxLength(255)]
-        public string PieceLength { get; set; }
-        public double OrderQuantity { get; set; }
         public double? FillEachBale { get; set; }
         [MaxLength(1000)]
         public string ExportRemark { get; set; }
         #endregion
 
         public ICollection<DOSalesLocalViewModel> DOSalesLocalItems { get; set; }
+        public BuyerViewModel Buyer { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -88,7 +88,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (string.IsNullOrWhiteSpace(DoneBy))
                     yield return new ValidationResult("Dikerjakan oleh harus diisi", new List<string> { "DoneBy" });
 
-                if (ExportSalesContract == null || string.IsNullOrWhiteSpace(ExportSalesContract.CostCalculation.PreSalesContract.No))
+                if (ExportSalesContract == null || string.IsNullOrWhiteSpace(ExportSalesContract.SalesContractNo))
                     yield return new ValidationResult("No. Sales Contract harus diisi", new List<string> { "ExportSalesContract" });
 
                 if (!FillEachBale.HasValue || FillEachBale.Value <= 0)
@@ -102,7 +102,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (!LocalDate.HasValue)
                     yield return new ValidationResult("Tanggal DO Lokal harus diisi", new List<string> { "LocalDate" });
 
-                if (LocalSalesContract == null || string.IsNullOrWhiteSpace(LocalSalesContract.CostCalculation.PreSalesContract.No))
+                if (LocalSalesContract == null || string.IsNullOrWhiteSpace(LocalSalesContract.SalesContractNo))
                     yield return new ValidationResult("No. Sales Contract harus diisi", new List<string> { "LocalSalesContract" });
 
                 if (string.IsNullOrWhiteSpace(DestinationBuyerName))
@@ -113,6 +113,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if (string.IsNullOrWhiteSpace(LocalHeadOfStorage))
                     yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "LocalHeadOfStorage" });
+
+                if (string.IsNullOrWhiteSpace(SalesName))
+                    yield return new ValidationResult("Nama Sales harus diisi", new List<string> { "SalesName" });
 
                 if (string.IsNullOrWhiteSpace(PackingUom))
                     yield return new ValidationResult("Satuan Imperial harus dipilih", new List<string> { "PackingUom" });
@@ -143,6 +146,21 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                         DetailErrors += "{";
 
                         var rowErrorCount = 0;
+                        
+                        if (detail.Material == null)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Material : 'Material gagal di load',";
+                        }
+
+
+                        if (detail.MaterialConstruction == null)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "MaterialConstruction : MaterialConstruction gagal di load',";
+                        }
 
                         if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
                         {
@@ -167,23 +185,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                             Count++;
                             rowErrorCount++;
                             DetailErrors += "TotalPacking : 'Total Packing harus lebih besar dari 0',";
-                        }
-
-                        if (rowErrorCount == 0)
-                        {
-                            var duplicateDetails = DOSalesLocalItems.Where(f =>
-                                    f.ProductionOrder.Equals(detail.ProductionOrder) &&
-                                    f.MaterialConstruction.Equals(detail.MaterialConstruction) &&
-                                    f.UnitOrCode.Equals(detail.UnitOrCode)
-                                ).ToList();
-
-                            if (duplicateDetails.Count > 1)
-                            {
-                                Count++;
-                                //DetailErrors += "ProductionOrder : 'No.SPP, Material Konstruksi dan Unit/Kode tidak boleh duplikat',";
-                                //DetailErrors += "MaterialConstruction : 'No.SPP, Material Konstruksi dan Unit/Kode tidak boleh duplikat',";
-                                DetailErrors += "UnitOrCode : 'No.SPP, Material Konstruksi dan Unit/Kode tidak boleh duplikat',";
-                            }
                         }
                         DetailErrors += "}, ";
                     }

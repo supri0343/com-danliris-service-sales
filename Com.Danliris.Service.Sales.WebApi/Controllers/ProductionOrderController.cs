@@ -62,6 +62,32 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+        [HttpGet("filterBySalesContract/{salesContractId}")]
+        public virtual async Task<IActionResult> ReadBySalesContractId([FromRoute] long salesContractId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                List<ProductionOrderModel> model = Facade.ReadBySalesContractId(salesContractId);
+                List<ProductionOrderViewModel> viewModel = Mapper.Map<List<ProductionOrderViewModel>>(model);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, viewModel, 1, viewModel.Count, viewModel.Count, viewModel.Count, new Dictionary<string, string>(), new List<string>());
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpPut("update-requested-false")]
         public async Task<IActionResult> PutRequestedFalse([FromBody] List<int> ids)
         {

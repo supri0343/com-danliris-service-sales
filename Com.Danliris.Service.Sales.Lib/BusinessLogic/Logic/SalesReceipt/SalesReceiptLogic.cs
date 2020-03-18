@@ -29,7 +29,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesReceiptNo","AccountBank","Buyer"
+                "SalesReceiptNo"
             };
 
             Query = QueryHelper<SalesReceiptModel>.Search(Query, SearchAttributes, keyword);
@@ -39,7 +39,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","SalesReceiptNo","SalesReceiptDate","Unit","Buyer","OriginBankName","OriginAccountNumber","Currency","AccountBank","AdministrationFee","TotalPaid","SalesReceiptDetails"
+                "Id","Code","SalesReceiptNo","SalesReceiptDate","UnitName","Buyer","OriginBankName","OriginAccountNumber","Currency","AdministrationFee","TotalPaid","SalesReceiptDetails"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

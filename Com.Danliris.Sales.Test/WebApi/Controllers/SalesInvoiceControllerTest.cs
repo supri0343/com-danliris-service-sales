@@ -233,7 +233,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
-            var configuration = new MapperConfiguration(cfg => {
+            var configuration = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<SalesInvoiceMapper>();
                 cfg.AddProfile<SalesInvoiceDetailMapper>();
             });
@@ -304,6 +305,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new SalesInvoiceViewModel{
                     DueDate = DateTimeOffset.Now,
+                    Currency = new CurrencyViewModel() {},
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>{
                         new SalesInvoiceDetailViewModel{
                             SalesInvoiceId = 2,
@@ -347,7 +349,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public void Validate_Null_Model_and_DetailViewModel()
         {
             List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
-            {};
+            { };
             foreach (var viewModel in viewModels)
             {
                 var defaultValidationResult = viewModel.Validate(null);

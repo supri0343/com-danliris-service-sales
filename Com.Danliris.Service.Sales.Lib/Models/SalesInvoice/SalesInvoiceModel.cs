@@ -25,6 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public int ShipmentDocumentId { get; set; }
         [MaxLength(255)]
         public string ShipmentDocumentCode { get; set; }
+
         #region Buyer
         public int BuyerId { get; set; }
         [MaxLength(255)]
@@ -34,8 +35,10 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(255)]
         public string BuyerNPWP { get; set; }
         #endregion
+
         [MaxLength(255)]
         public string IDNo { get; set; }
+
         #region Currency
         public int CurrencyId { get; set; }
         [MaxLength(255)]
@@ -44,6 +47,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
         #endregion
+
         [MaxLength(255)]
         public string VatType { get; set; }
         public double TotalPayment { get; set; }

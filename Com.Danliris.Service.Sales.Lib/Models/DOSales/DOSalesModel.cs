@@ -30,6 +30,31 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         [MaxLength(255)]
         public string LocalSalesContractNo { get; set; }
         #endregion
+        #region Material
+        public long LocalMaterialId { get; set; }
+        [MaxLength(255)]
+        public string LocalMaterialCode { get; set; }
+        [MaxLength(1000)]
+        public string LocalMaterialName { get; set; }
+        public double LocalMaterialPrice { get; set; }
+        [MaxLength(255)]
+        public string LocalMaterialTags { get; set; }
+        #endregion
+        #region Material Construction
+        public int LocalMaterialConstructionId { get; set; }
+        [MaxLength(25)]
+        public string LocalMaterialConstructionCode { get; set; }
+        [MaxLength(255)]
+        public string LocalMaterialConstructionName { get; set; }
+        //[MaxLength(1000)]
+        //public string LocalMaterialConstructionRemark { get; set; }
+        [MaxLength(255)]
+        public string MaterialWidth { get; set; }
+        [MaxLength(255)]
+        public string ColorRequest { get; set; }
+        [MaxLength(255)]
+        public string ColorTemplate { get; set; }
+        #endregion
         #region Buyer
         public long LocalBuyerId { get; set; }
         [MaxLength(255)]
@@ -38,18 +63,22 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string LocalBuyerName { get; set; }
         [MaxLength(255)]
         public string LocalBuyerType { get; set; }
+        [MaxLength(1000)]
+        public string LocalBuyerAddress { get; set; }
         #endregion
         [MaxLength(255)]
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
-        #region Sales
-        public string SalesId { get; set; }
+        //#region Sales
+        //public string SalesId { get; set; }
+        //[MaxLength(255)]
+        //public string SalesFirstName { get; set; }
+        //[MaxLength(255)]
+        //public string SalesLastName { get; set; }
+        //#endregion
         [MaxLength(255)]
-        public string SalesFirstName { get; set; }
-        [MaxLength(255)]
-        public string SalesLastName { get; set; }
-        #endregion
+        public string SalesName { get; set; }
         [MaxLength(255)]
         public string LocalHeadOfStorage { get; set; }
         [MaxLength(255)]
@@ -65,7 +94,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string LocalRemark { get; set; }
         #endregion
 
-        # region Ekspor
+        #region Ekspor
         [MaxLength(255)]
         public string ExportType { get; set; }
         public DateTimeOffset ExportDate { get; set; }
@@ -77,13 +106,13 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string ExportSalesContractNo { get; set; }
         #endregion
         #region Material Construction
-        public int MaterialConstructionId { get; set; }
+        public int ExportMaterialConstructionId { get; set; }
         [MaxLength(25)]
-        public string MaterialConstructionCode { get; set; }
+        public string ExportMaterialConstructionCode { get; set; }
         [MaxLength(255)]
-        public string MaterialConstructionName { get; set; }
-        [MaxLength(1000)]
-        public string MaterialConstructionRemark { get; set; }
+        public string ExportMaterialConstructionName { get; set; }
+        //[MaxLength(1000)]
+        //public string ExportMaterialConstructionRemark { get; set; }
         #endregion
         #region Buyer
         public long ExportBuyerId { get; set; }

@@ -31,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             List<string> SearchAttributes = new List<string>()
             {
-                "Id","DOSalesNo","DOSalesType",
+                "Code","DOSalesNo","DOSalesType",
                 //"LocalType","ExportType"
             };
 
@@ -42,9 +42,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","DOSalesNo","DOSalesType","Status","Accepted","Declined",
-                "LocalType","LocalDate","LocalSalesContract","LocalBuyer","DestinationBuyerName","DestinationBuyerAddress","Sales","LocalHeadOfStorage","PackingUom","MetricUom","ImperialUom","Disp","Op","Sc","LocalRemark",
-                "ExportType","ExportDate","DoneBy","ExportSalesContract","MaterialConstruction","ExportBuyer","Commodity","PieceLength","OrderQuantity","FillEachBale","ExportRemark"
+                "Id","Code","DOSalesNo","DOSalesType","Status","Accepted","Declined",
+                "LocalType","LocalDate","LocalSalesContract","LocalBuyer","DestinationBuyerName","DestinationBuyerAddress","SalesName","LocalHeadOfStorage","PackingUom","MetricUom","ImperialUom","Disp","Op","Sc","LocalRemark",
+                "ExportType","ExportDate","DoneBy","ExportSalesContract","LocalMaterialConstruction","ExportMaterialConstruction","ExportBuyer","Commodity","FillEachBale","ExportRemark"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -121,9 +121,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
         public override async Task<DOSalesModel> ReadByIdAsync(long id)
         {
-            var DOSales = await DbSet.Where(p => p.DOSalesLocalItems.Select(d => d.DOSalesModel.Id)
-            .Contains(p.Id)).Include(p => p.DOSalesLocalItems).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
-            DOSales.DOSalesLocalItems = DOSales.DOSalesLocalItems.OrderBy(s => s.Id).ToArray();
+            //var DOSales = await DbSet.Where(p => p.DOSalesLocalItems.Select(d => d.DOSalesModel.Id)
+            //.Contains(p.Id)).Include(p => p.DOSalesLocalItems).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
+            //DOSales.DOSalesLocalItems = DOSales.DOSalesLocalItems.OrderBy(s => s.Id).ToArray();
+
+            var DOSales = DbSet.Include(x => x.DOSalesLocalItems).FirstOrDefault(x => x.Id == id);
             return DOSales;
         }
 

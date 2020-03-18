@@ -8,9 +8,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
     public class DOSalesLocalViewModel : BaseViewModel
     {
         [MaxLength(64)]
-        public ShinProductionOrderViewModel ProductionOrder { get; set; }
+        public ProductionOrderViewModel ProductionOrder { get; set; }
+        public MaterialViewModel Material { get; set; }
         public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        [MaxLength(1000)]
+        public string ConstructionName { get; set; }
         //public UnitViewModel Unit { get; set; }
+        [MaxLength(255)]
+        public string ColorRequest { get; set; }
+        [MaxLength(255)]
+        public string ColorTemplate { get; set; }
         [MaxLength(512)]
         public string UnitOrCode { get; set; }
         public double TotalPacking { get; set; }

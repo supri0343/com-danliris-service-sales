@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200312040216_DOSalesGetDataFromOldFPSalesContract")]
+    partial class DOSalesGetDataFromOldFPSalesContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -559,15 +561,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("ColorRequest")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ColorTemplate")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ConstructionName")
-                        .HasMaxLength(1000);
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -604,9 +597,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("MaterialCode")
-                        .HasMaxLength(255);
-
                     b.Property<string>("MaterialConstructionCode")
                         .HasMaxLength(255);
 
@@ -616,19 +606,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<string>("MaterialConstructionRemark");
-
-                    b.Property<long>("MaterialId");
-
-                    b.Property<string>("MaterialName")
-                        .HasMaxLength(1000);
-
-                    b.Property<double>("MaterialPrice");
-
-                    b.Property<string>("MaterialTags")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("MaterialWidth")
-                        .HasMaxLength(1000);
 
                     b.Property<int>("ProductionOrderId");
 
@@ -667,12 +644,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<long>("AutoIncreament");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ColorRequest")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ColorTemplate")
                         .HasMaxLength(255);
 
                     b.Property<string>("CommodityCode")
@@ -738,14 +709,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTimeOffset>("ExportDate");
 
-                    b.Property<string>("ExportMaterialConstructionCode")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("ExportMaterialConstructionId");
-
-                    b.Property<string>("ExportMaterialConstructionName")
-                        .HasMaxLength(255);
-
                     b.Property<string>("ExportRemark")
                         .HasMaxLength(1000);
 
@@ -774,9 +737,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("LocalBuyerAddress")
-                        .HasMaxLength(1000);
-
                     b.Property<string>("LocalBuyerCode")
                         .HasMaxLength(255);
 
@@ -793,27 +753,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("LocalHeadOfStorage")
                         .HasMaxLength(255);
 
-                    b.Property<string>("LocalMaterialCode")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("LocalMaterialConstructionCode")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("LocalMaterialConstructionId");
-
-                    b.Property<string>("LocalMaterialConstructionName")
-                        .HasMaxLength(255);
-
-                    b.Property<long>("LocalMaterialId");
-
-                    b.Property<string>("LocalMaterialName")
-                        .HasMaxLength(1000);
-
-                    b.Property<double>("LocalMaterialPrice");
-
-                    b.Property<string>("LocalMaterialTags")
-                        .HasMaxLength(255);
-
                     b.Property<string>("LocalRemark")
                         .HasMaxLength(1000);
 
@@ -825,8 +764,16 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("LocalType")
                         .HasMaxLength(255);
 
-                    b.Property<string>("MaterialWidth")
+                    b.Property<string>("MaterialConstructionCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("MaterialConstructionId");
+
+                    b.Property<string>("MaterialConstructionName")
                         .HasMaxLength(255);
+
+                    b.Property<string>("MaterialConstructionRemark")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("MetricUom")
                         .HasMaxLength(255);
@@ -3511,6 +3458,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AccountCOA")
+                        .HasMaxLength(255);
+
                     b.Property<string>("AccountName")
                         .HasMaxLength(255);
 
@@ -3599,6 +3549,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
+
+                    b.Property<int>("UnitId");
 
                     b.Property<string>("UnitName")
                         .HasMaxLength(255);

@@ -27,6 +27,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesReceipt
             data.AutoIncreament = 1;
             data.SalesReceiptNo = "SalesReceiptNo";
             data.SalesReceiptDate = DateTimeOffset.UtcNow;
+            //data.UnitId = 1;
             data.UnitName = "Dying";
             data.BuyerId = 1;
             data.BuyerName = "BuyerName";
@@ -38,7 +39,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesReceipt
             data.CurrencySymbol = "CurrencySymbol";
             data.CurrencyRate = 1;
             data.BankId = 1;
-            data.AccountCOA = "AccountCOA";
             data.AccountName = "AccountName";
             data.AccountNumber = "AccountNumber";
             data.BankName = "BankName";

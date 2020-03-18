@@ -15,16 +15,20 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
         public DateTimeOffset? SalesReceiptDate { get; set; }
-        public UnitViewModel Unit { get; set; }
+        //public UnitViewModel Unit { get; set; }
+        #region Unit
+        //Hanya terima unit string dari frontend
+        //public int? UnitId { get; set; }
+        [MaxLength(255)]
+        public string UnitName { get; set; }
+        #endregion
         public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string OriginBankName { get; set; }
         [MaxLength(255)]
         public string OriginAccountNumber { get; set; }
         public CurrencyViewModel Currency { get; set; }
-        public AccountBankViewModel AccountBank { get; set; }
-        [MaxLength(255)]
-        public string AccountCOA { get; set; }
+        public AccountBankViewModel Bank { get; set; }
         public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
@@ -35,10 +39,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (!SalesReceiptDate.HasValue || SalesReceiptDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Kuitansi harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesReceiptDate" });
 
-            if (string.IsNullOrWhiteSpace(Unit.Name))
+            if (string.IsNullOrWhiteSpace(UnitName))
                 yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
 
-            if (string.IsNullOrWhiteSpace(AccountBank.AccountName))
+            if (string.IsNullOrWhiteSpace(Bank.AccountName))
                 yield return new ValidationResult("Nama Bank Tujuan harus diisi", new List<string> { "AccountName" });
 
             if (string.IsNullOrWhiteSpace(Buyer.Name))

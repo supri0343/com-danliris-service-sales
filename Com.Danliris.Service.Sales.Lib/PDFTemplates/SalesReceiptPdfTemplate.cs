@@ -108,7 +108,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable3.AddCell(cellHeaderBody);
             cellHeaderBody.Phrase = new Phrase(":", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(viewModel.AccountBank.BankName + " " + viewModel.AccountBank.AccountNumber + " (" + detailViewModel.Currency.Code + ")", normal_font);
+            cellHeaderBody.Phrase = new Phrase(viewModel.Bank.BankName + " " + viewModel.Bank.AccountNumber + " (" + detailViewModel.Currency.Code + ")", normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Telah terima dari ", normal_font);

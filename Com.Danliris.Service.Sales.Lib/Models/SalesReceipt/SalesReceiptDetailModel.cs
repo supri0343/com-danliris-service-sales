@@ -13,6 +13,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         [MaxLength(255)]
         public string VatType { get; set; }
         public double Tempo { get; set; }
+
         #region Currency
         public int CurrencyId { get; set; }
         [MaxLength(255)]
@@ -21,6 +22,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
         #endregion
+
         public double TotalPayment { get; set; }
         public double TotalPaid { get; set; }
         public double Paid { get; set; }
