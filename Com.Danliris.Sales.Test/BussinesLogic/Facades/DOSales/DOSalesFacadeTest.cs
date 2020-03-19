@@ -27,17 +27,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOSales
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
 
-            var salesInvoiceDetailLogic = new DOSalesLocalLogic(serviceProviderMock.Object, identityService, dbContext);
+            var doSalesLocalLogic = new DOSalesLocalLogic(serviceProviderMock.Object, identityService, dbContext);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(DOSalesLocalLogic)))
-                .Returns(salesInvoiceDetailLogic);
+                .Returns(doSalesLocalLogic);
 
-            var salesInvoiceLogic = new DOSalesLogic(serviceProviderMock.Object, identityService, dbContext);
+            var doSalesLogic = new DOSalesLogic(serviceProviderMock.Object, identityService, dbContext);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(DOSalesLogic)))
-                .Returns(salesInvoiceLogic);
+                .Returns(doSalesLogic);
 
             return serviceProviderMock;
         }
