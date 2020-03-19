@@ -40,6 +40,32 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             fpPreSalesContractFacade = serviceProvider.GetService<IFinishingPrintingPreSalesContractFacade>();
         }
 
+            //[HttpGet("filterBySalesContract/{salesContractNo}")]
+            //public virtual async Task<IActionResult> ReadBySalesContractNo([FromRoute] string salesContractNo)
+            //{
+            //    if (!ModelState.IsValid)
+            //    {
+            //        return BadRequest(ModelState);
+            //    }
+
+            //    try
+            //    {
+            //        List<ProductionOrderModel> model = Facade.ReadBySalesContractNo(salesContractNo);
+            //        List<ShinProductionOrderViewModel> viewModel = Mapper.Map<List<ShinProductionOrderViewModel>>(model);
+            //        Dictionary<string, object> Result =
+            //            new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+            //            .Ok(Mapper, viewModel, 1, viewModel.Count, viewModel.Count, viewModel.Count, new Dictionary<string, string>(), new List<string>());
+            //        return Ok(Result);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Dictionary<string, object> Result =
+            //            new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+            //            .Fail();
+            //        return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            //    }
+            //}
+
         public override async Task<IActionResult> GetById([FromRoute] int id)
         {
             try

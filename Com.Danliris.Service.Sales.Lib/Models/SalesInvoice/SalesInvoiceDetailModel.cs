@@ -12,10 +12,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(255)]
         public string Quantity { get; set; }
 
-        /*Uom*/
+        #region Uom
         public int UomId { get; set; }
         [MaxLength(255)]
         public string UomUnit { get; set; }
+        #endregion
 
         public double Total { get; set; }
         public double Price { get; set; }

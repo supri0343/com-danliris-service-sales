@@ -12,14 +12,39 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public long AutoIncreament { get; set; }
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
-        [MaxLength(255)]
-        public string SalesReceiptType { get; set; }
         public DateTimeOffset SalesReceiptDate { get; set; }
 
-        /*Bank*/
-        public int BankId { get; set; }
+        #region Unit
+        //Hanya terima unit string dari frontend
+        //public int UnitId { get; set; }
         [MaxLength(255)]
-        public string AccountCOA { get; set; }
+        public string UnitName { get; set; }
+        #endregion
+
+        #region Buyer
+        public int BuyerId { get; set; }
+        [MaxLength(255)]
+        public string BuyerName { get; set; }
+        [MaxLength(1000)]
+        public string BuyerAddress { get; set; }
+        #endregion
+
+        [MaxLength(255)]
+        public string OriginBankName { get; set; }
+        [MaxLength(255)]
+        public string OriginAccountNumber { get; set; }
+
+        #region Currency
+        public int CurrencyId { get; set; }
+        [MaxLength(255)]
+        public string CurrencyCode { get; set; }
+        [MaxLength(255)]
+        public string CurrencySymbol { get; set; }
+        public double CurrencyRate { get; set; }
+        #endregion
+
+        #region Bank
+        public int BankId { get; set; }
         [MaxLength(255)]
         public string AccountName { get; set; }
         [MaxLength(255)]
@@ -28,14 +53,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string BankName { get; set; }
         [MaxLength(255)]
         public string BankCode { get; set; }
+        #endregion
 
-        /*Buyer*/
-        public int BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-
+        public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
         public virtual ICollection<SalesReceiptDetailModel> SalesReceiptDetails { get; set; }

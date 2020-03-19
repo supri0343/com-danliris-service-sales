@@ -38,7 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Buyer", "DeliverySchedule","OrderType", "SalesContractNo","YarnMaterial", "LastModifiedUtc","Material","DesignMotive","MaterialWidth", "Details"
+                "Id", "Code", "Buyer", "DeliverySchedule","OrderType","Commodity","SalesContractNo","YarnMaterial","PieceLength","OrderQuantity","LastModifiedUtc","Material","MaterialConstruction","DesignMotive","MaterialWidth", "Details"
             };
 
             Query = Query
@@ -51,9 +51,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     BuyerType = field.BuyerType,
                     BuyerName = field.BuyerName,
                     BuyerID = field.BuyerID,
+                    CommodityID = field.CommodityID,
+                    CommodityCode = field.CommodityCode,
+                    CommodityName = field.CommodityName,
                     DesignMotiveID = field.DesignMotiveID,
                     DesignMotiveCode = field.DesignMotiveCode,
                     DesignMotiveName = field.DesignMotiveName,
+                    MaterialConstructionId = field.MaterialConstructionId,
+                    MaterialConstructionCode = field.MaterialConstructionCode,
+                    MaterialConstructionName = field.MaterialConstructionName,
                     MaterialCode = field.MaterialCode,
                     MaterialID = field.MaterialID,
                     MaterialName = field.MaterialName,
@@ -61,6 +67,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     OrderTypeCode = field.OrderTypeCode,
                     OrderTypeID = field.OrderTypeID,
                     OrderTypeName = field.OrderTypeName,
+                    PieceLength = field.PieceLength,
                     DeliverySchedule = field.DeliverySchedule,
                     YarnMaterialID = field.YarnMaterialID,
                     YarnMaterialCode = field.YarnMaterialCode,

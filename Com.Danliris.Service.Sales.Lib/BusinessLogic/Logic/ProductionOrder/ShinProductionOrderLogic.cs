@@ -225,6 +225,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             EntityExtension.FlagForUpdate(model, IdentityService.Username, Agent);
         }
 
+        //public List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo)
+        //{
+        //    var result = DbSet.Where(p => p.SalesContractNo == salesContractNo);
+        //    return result.ToList();
+        //}
+        
         public async Task ApproveSample(long id)
         {
             var model = await DbSet.FirstOrDefaultAsync(d => d.Id == id);
