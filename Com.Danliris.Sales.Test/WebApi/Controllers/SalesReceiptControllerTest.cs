@@ -22,15 +22,33 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new SalesReceiptViewModel()
             {
-
+                SalesReceiptDate = DateTimeOffset.Now,
+                Buyer = new BuyerViewModel() 
+                {
+                   Name = "Name",
+                   Address = "Address",
+                },
+                Currency = new CurrencyViewModel()
+                {
+                    Code = "IDR",
+                    Symbol = "Rp",
+                    Rate = 14000,
+                },
+                Bank = new AccountBankViewModel()
+                {
+                    BankName = "BCA",
+                },
                 SalesReceiptDetails = new List<SalesReceiptDetailViewModel>()
                 {
                     new SalesReceiptDetailViewModel() 
                     {
-                    Currency = new CurrencyViewModel()
+                        VatType = "PPN BUMN",
+                        SalesInvoiceNo = "SalesInvoiceNo",
+                        Currency = new CurrencyViewModel()
                         {
                             Code = "IDR",
                             Symbol = "Rp",
+                            Rate = 14000,
                         },
                     }
                 }

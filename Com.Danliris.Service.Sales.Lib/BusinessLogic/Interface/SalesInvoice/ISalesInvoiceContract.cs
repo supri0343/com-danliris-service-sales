@@ -6,6 +6,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoice
 {
     public interface ISalesInvoiceContract : IBaseFacade<SalesInvoiceModel>
     {
-        List<SalesInvoiceModel> ReadByBuyerIdAsync(int buyerId);
+        List<SalesInvoiceModel> ReadByBuyerId(int buyerId);
     }
 }

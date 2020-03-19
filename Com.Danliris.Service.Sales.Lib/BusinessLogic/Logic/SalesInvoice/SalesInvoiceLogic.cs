@@ -125,7 +125,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             return SalesInvoice;
         }
 
-        public List<SalesInvoiceModel> ReadByBuyerIdAsync(int buyerId)
+        public List<SalesInvoiceModel> ReadByBuyerId(int buyerId)
         {
             var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId && p.IsPaidOff == false);
             //var result = DbSet.Include(x => x.SalesInvoiceDetails).Where(p => p.BuyerId == buyerId).Select(x => x.Id);

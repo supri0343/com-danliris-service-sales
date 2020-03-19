@@ -356,5 +356,29 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Assert.True(defaultValidationResult.Count() > 0);
             }
         }
+
+        [Fact]
+        public void Should_Success_Read_By_Buyer()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>() { new SalesInvoiceModel() });
+            mocks.Mapper.Setup(m => m.Map<List<SalesInvoiceViewModel>>(It.IsAny<List<SalesInvoiceModel>>())).Returns(new List<SalesInvoiceViewModel>());
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(It.IsAny<int>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void Should_ReturnFailed_Read_By_Buyer_ThrowException()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>() { new SalesInvoiceModel() });
+            mocks.Mapper.Setup(m => m.Map<List<SalesInvoiceViewModel>>(It.IsAny<List<SalesInvoiceModel>>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(It.IsAny<int>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
     }
 }

@@ -21,14 +21,14 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles
                 .ForPath(d => d.LocalSalesContract.Buyer.Type, opt => opt.MapFrom(s => s.LocalBuyerType))
                 .ForPath(d => d.LocalSalesContract.Buyer.Address, opt => opt.MapFrom(s => s.LocalBuyerAddress))
 
-                .ForPath(d => d.LocalMaterial.Id, opt => opt.MapFrom(s => s.LocalMaterialId))
-                .ForPath(d => d.LocalMaterial.Code, opt => opt.MapFrom(s => s.LocalMaterialCode))
-                .ForPath(d => d.LocalMaterial.Name, opt => opt.MapFrom(s => s.LocalMaterialName))
+                .ForPath(d => d.LocalSalesContract.Material.Id, opt => opt.MapFrom(s => s.LocalMaterialId))
+                .ForPath(d => d.LocalSalesContract.Material.Code, opt => opt.MapFrom(s => s.LocalMaterialCode))
+                .ForPath(d => d.LocalSalesContract.Material.Name, opt => opt.MapFrom(s => s.LocalMaterialName))
 
-                .ForPath(d => d.LocalMaterialConstruction.Id, opt => opt.MapFrom(s => s.LocalMaterialConstructionId))
-                .ForPath(d => d.LocalMaterialConstruction.Code, opt => opt.MapFrom(s => s.LocalMaterialConstructionCode))
-                .ForPath(d => d.LocalMaterialConstruction.Name, opt => opt.MapFrom(s => s.LocalMaterialConstructionName))
-                //.ForPath(d => d.LocalMaterialConstruction.Remark, opt => opt.MapFrom(s => s.LocalMaterialConstructionRemark))
+                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Id, opt => opt.MapFrom(s => s.LocalMaterialConstructionId))
+                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Code, opt => opt.MapFrom(s => s.LocalMaterialConstructionCode))
+                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Name, opt => opt.MapFrom(s => s.LocalMaterialConstructionName))
+                //.ForPath(d => d.LocalSalesContract.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.LocalMaterialConstructionRemark))
 
                 //.ForPath(d => d.LocalSalesContract.Sales._id, opt => opt.MapFrom(s => s.SalesId))
                 //.ForPath(d => d.LocalSalesContract.Sales.FirstName, opt => opt.MapFrom(s => s.SalesFirstName))

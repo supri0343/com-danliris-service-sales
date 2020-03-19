@@ -62,8 +62,10 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+
+        //[HttpGet("filter-by-sales-contract/{salesContractId}")]
         [HttpGet("filterBySalesContract/{salesContractId}")]
-        public virtual async Task<IActionResult> ReadBySalesContractId([FromRoute] long salesContractId)
+        public virtual IActionResult ReadBySalesContractId([FromRoute] long salesContractId)
         {
             if (!ModelState.IsValid)
             {

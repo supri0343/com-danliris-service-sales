@@ -30,7 +30,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("filterByBuyer/{buyerId}")]
-        public virtual async Task<IActionResult> GetByBuyerId([FromRoute] int buyerId)
+        public virtual IActionResult ReadByBuyerId([FromRoute] int buyerId)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
             try
             {
-                List<SalesInvoiceModel> model = Facade.ReadByBuyerIdAsync(buyerId);
+                List<SalesInvoiceModel> model = Facade.ReadByBuyerId(buyerId);
                 List<SalesInvoiceViewModel> viewModel = Mapper.Map<List<SalesInvoiceViewModel>>(model);
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
