@@ -362,7 +362,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Material.Name + " / " + viewModel.SalesContract.Material.Name + " / " + viewModel.SalesContract.MaterialWidth + "        " + viewModel.DOSalesNo, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Material.Name + " / " + viewModel.SalesContract.MaterialConstruction.Name + " / " + viewModel.SalesContract.MaterialWidth + "        " + viewModel.DOSalesNo, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("2. Jenis Untuk ", bold_font);

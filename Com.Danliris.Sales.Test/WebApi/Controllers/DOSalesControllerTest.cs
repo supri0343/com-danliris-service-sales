@@ -100,6 +100,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 SalesContract = new FinishingPrintingSalesContractViewModel()
                 {
                     SalesContractNo = "SalesContractNo",
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
                     MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
                     {
                         Name = "MaterialConstructionName",
@@ -108,12 +112,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         Name = "BuyerName",
                     },
-                    PieceLength = "PieceLength",
                     Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
                     {
                         Name = "CommodityName",
                     },
+                    MaterialWidth = "MaterialWidth",
                     OrderQuantity = 1,
+                    PieceLength = "PieceLength",
                 },
                 FillEachBale = 1,
                 Remark = "Remark",
@@ -198,12 +203,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Validation_DetailViewModel()
+        public void Validate_Validation()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
-                    DOSalesType = "Lokal",
+                    DOSalesType = "",
+                    Type = "",
+                    FillEachBale = null,
+                    SalesContract = new FinishingPrintingSalesContractViewModel()
+                    {
+                        SalesContractNo = null,
+                    },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                     {
                         new DOSalesDetailViewModel() { },
@@ -218,12 +229,30 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Validation_ViewModel_For_Local()
+        public void Validate_Validation_For_Local()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
                     DOSalesType = "Lokal",
+                    Type = null,
+                    Disp = -1,
+                    Op = -1,
+                    Sc = -1,
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Length = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Disp = null,
+                    Op = null,
+                    Sc = null,
                 }
             };
             foreach (var viewModel in viewModels)
@@ -233,13 +262,27 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
+
         [Fact]
-        public void Validate_Validation_ViewModel_For_Export()
+        public void Validate_Validation_For_Export()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
                     DOSalesType = "Ekspor",
+                    FillEachBale = -1,
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Weight = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    FillEachBale = null,
                 }
             };
             foreach (var viewModel in viewModels)
@@ -254,6 +297,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
+                new DOSalesViewModel{}
             };
             foreach (var viewModel in viewModels)
             {
