@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<FinishingPrintingCostCalculationChemicalModel> FinishingPrintingCostCalculationChemicals { get; set; }
 
         public DbSet<DOSalesModel> DOSales { get; set; }
-        public DbSet<DOSalesLocalModel> DOSalesLocalItems { get; set; }
+        public DbSet<DOSalesDetailModel> DOSalesLocalItems { get; set; }
         public DbSet<SalesInvoiceModel> SalesInvoices { get; set; }
         public DbSet<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
         public DbSet<SalesReceiptModel> SalesReceipts { get; set; }

@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200321083053_EnhancementDOSales")]
+    partial class EnhancementDOSales
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -568,8 +570,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("ConstructionName")
                         .HasMaxLength(1000);
 
-                    b.Property<double>("ConvertionValue");
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -606,8 +606,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<double>("Length");
-
                     b.Property<string>("MaterialCode")
                         .HasMaxLength(255);
 
@@ -634,20 +632,22 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("MaterialWidth")
                         .HasMaxLength(1000);
 
-                    b.Property<double>("Packing");
-
                     b.Property<int>("ProductionOrderId");
 
                     b.Property<string>("ProductionOrderNo")
                         .HasMaxLength(64);
+
+                    b.Property<double>("TotalImperial");
+
+                    b.Property<double>("TotalMetric");
+
+                    b.Property<double>("TotalPacking");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
 
                     b.Property<string>("UnitOrCode")
                         .HasMaxLength(512);
-
-                    b.Property<double>("Weight");
 
                     b.HasKey("Id");
 
@@ -748,6 +748,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("HeadOfStorage")
                         .HasMaxLength(255);
 
+                    b.Property<string>("ImperialUom")
+                        .HasMaxLength(255);
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LastModifiedAgent")
@@ -759,9 +762,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("LengthUom")
-                        .HasMaxLength(255);
 
                     b.Property<string>("MaterialCode")
                         .HasMaxLength(255);
@@ -788,6 +788,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("MaterialWidth")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("MetricUom")
                         .HasMaxLength(255);
 
                     b.Property<int>("Op");
@@ -820,9 +823,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("UId")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("WeightUom")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");

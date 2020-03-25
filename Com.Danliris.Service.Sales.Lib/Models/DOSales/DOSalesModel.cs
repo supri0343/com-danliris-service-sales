@@ -7,7 +7,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
 {
     public class DOSalesModel : BaseModel
     {
-        #region DOSalesTemplate
         [MaxLength(255)]
         public string Code { get; set; }
         public long AutoIncreament { get; set; }
@@ -19,52 +18,61 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string Status { get; set; }
         public bool Accepted { get; set; }
         public bool Declined { get; set; }
-        #endregion
-
-        #region Lokal
         [MaxLength(255)]
-        public string LocalType { get; set; }
-        public DateTimeOffset LocalDate { get; set; }
+        public string Type { get; set; }
+        public DateTimeOffset Date { get; set; }
         #region Sales Contract
-        public int LocalSalesContractId { get; set; }
+        public int SalesContractId { get; set; }
         [MaxLength(255)]
-        public string LocalSalesContractNo { get; set; }
-        #endregion
-        #region Material
-        public long LocalMaterialId { get; set; }
-        [MaxLength(255)]
-        public string LocalMaterialCode { get; set; }
-        [MaxLength(1000)]
-        public string LocalMaterialName { get; set; }
-        public double LocalMaterialPrice { get; set; }
-        [MaxLength(255)]
-        public string LocalMaterialTags { get; set; }
-        #endregion
-        #region Material Construction
-        public int LocalMaterialConstructionId { get; set; }
-        [MaxLength(25)]
-        public string LocalMaterialConstructionCode { get; set; }
-        [MaxLength(255)]
-        public string LocalMaterialConstructionName { get; set; }
-        //[MaxLength(1000)]
-        //public string LocalMaterialConstructionRemark { get; set; }
+        public string SalesContractNo { get; set; }
         [MaxLength(255)]
         public string MaterialWidth { get; set; }
+        [MaxLength(255)]
+        public string PieceLength { get; set; }
+        public double OrderQuantity { get; set; }
+        #endregion
+        #region Material
+        public long MaterialId { get; set; }
+        [MaxLength(255)]
+        public string MaterialCode { get; set; }
+        [MaxLength(1000)]
+        public string MaterialName { get; set; }
+        public double MaterialPrice { get; set; }
+        [MaxLength(255)]
+        public string MaterialTags { get; set; }
+        #endregion
+        #region Material Construction
+        public int MaterialConstructionId { get; set; }
+        [MaxLength(25)]
+        public string MaterialConstructionCode { get; set; }
+        [MaxLength(255)]
+        public string MaterialConstructionName { get; set; }
+        [MaxLength(1000)]
+        public string MaterialConstructionRemark { get; set; }
         [MaxLength(255)]
         public string ColorRequest { get; set; }
         [MaxLength(255)]
         public string ColorTemplate { get; set; }
         #endregion
+        #region Commodity
+        public int CommodityId { get; set; }
+        [MaxLength(25)]
+        public string CommodityCode { get; set; }
+        [MaxLength(255)]
+        public string CommodityName { get; set; }
+        [MaxLength(1000)]
+        public string CommodityDescription { get; set; }
+        #endregion
         #region Buyer
-        public long LocalBuyerId { get; set; }
+        public long BuyerId { get; set; }
         [MaxLength(255)]
-        public string LocalBuyerCode { get; set; }
+        public string BuyerCode { get; set; }
         [MaxLength(1000)]
-        public string LocalBuyerName { get; set; }
+        public string BuyerName { get; set; }
         [MaxLength(255)]
-        public string LocalBuyerType { get; set; }
+        public string BuyerType { get; set; }
         [MaxLength(1000)]
-        public string LocalBuyerAddress { get; set; }
+        public string BuyerAddress { get; set; }
         #endregion
         [MaxLength(255)]
         public string DestinationBuyerName { get; set; }
@@ -80,66 +88,22 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         [MaxLength(255)]
         public string SalesName { get; set; }
         [MaxLength(255)]
-        public string LocalHeadOfStorage { get; set; }
+        public string HeadOfStorage { get; set; }
         [MaxLength(255)]
         public string PackingUom { get; set; }
         [MaxLength(255)]
-        public string MetricUom { get; set; }
+        public string LengthUom { get; set; }
         [MaxLength(255)]
-        public string ImperialUom { get; set; }
+        public string WeightUom { get; set; }
         public int Disp { get; set; }
         public int Op { get; set; }
         public int Sc { get; set; }
-        [MaxLength(1000)]
-        public string LocalRemark { get; set; }
-        #endregion
-
-        #region Ekspor
-        [MaxLength(255)]
-        public string ExportType { get; set; }
-        public DateTimeOffset ExportDate { get; set; }
         [MaxLength(255)]
         public string DoneBy { get; set; }
-        #region Sales Contract
-        public int ExportSalesContractId { get; set; }
-        [MaxLength(255)]
-        public string ExportSalesContractNo { get; set; }
-        #endregion
-        #region Material Construction
-        public int ExportMaterialConstructionId { get; set; }
-        [MaxLength(25)]
-        public string ExportMaterialConstructionCode { get; set; }
-        [MaxLength(255)]
-        public string ExportMaterialConstructionName { get; set; }
-        //[MaxLength(1000)]
-        //public string ExportMaterialConstructionRemark { get; set; }
-        #endregion
-        #region Buyer
-        public long ExportBuyerId { get; set; }
-        [MaxLength(255)]
-        public string ExportBuyerCode { get; set; }
-        [MaxLength(1000)]
-        public string ExportBuyerName { get; set; }
-        [MaxLength(255)]
-        public string ExportBuyerType { get; set; }
-        #endregion
-        #region Commodity
-        public int CommodityId { get; set; }
-        [MaxLength(25)]
-        public string CommodityCode { get; set; }
-        [MaxLength(255)]
-        public string CommodityName { get; set; }
-        [MaxLength(1000)]
-        public string CommodityDescription { get; set; }
-        #endregion
-        [MaxLength(255)]
-        public string PieceLength { get; set; }
-        public double OrderQuantity { get; set; }
         public double FillEachBale { get; set; }
         [MaxLength(1000)]
-        public string ExportRemark { get; set; }
-        #endregion
-        
-        public virtual ICollection<DOSalesLocalModel> DOSalesLocalItems { get; set; }
+        public string Remark { get; set; }
+ 
+        public virtual ICollection<DOSalesDetailModel> DOSalesDetailItems { get; set; }
     }
 }

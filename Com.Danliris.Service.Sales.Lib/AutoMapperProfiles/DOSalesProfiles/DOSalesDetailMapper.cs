@@ -4,11 +4,11 @@ using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
 
 namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles
 {
-    public class DOSalesLocalMapper : Profile
+    public class DOSalesDetailMapper : Profile
     {
-        public DOSalesLocalMapper()
+        public DOSalesDetailMapper()
         {
-            CreateMap<DOSalesLocalModel, DOSalesLocalViewModel>()
+            CreateMap<DOSalesDetailModel, DOSalesDetailViewModel>()
 
                 .ForPath(d => d.ProductionOrder.Id, opt => opt.MapFrom(s => s.ProductionOrderId))
                 .ForPath(d => d.ProductionOrder.OrderNo, opt => opt.MapFrom(s => s.ProductionOrderNo))

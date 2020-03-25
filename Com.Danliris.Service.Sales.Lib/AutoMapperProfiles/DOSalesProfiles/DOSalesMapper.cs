@@ -10,50 +10,36 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles
         {
             CreateMap<DOSalesModel, DOSalesViewModel>()
 
-                //Local
-                .ForPath(d => d.LocalSalesContract.Id, opt => opt.MapFrom(s => s.LocalSalesContractId))
-                .ForPath(d => d.LocalSalesContract.SalesContractNo, opt => opt.MapFrom(s => s.LocalSalesContractNo))
-                .ForPath(d => d.LocalSalesContract.MaterialWidth, opt => opt.MapFrom(s => s.MaterialWidth))
+                .ForPath(d => d.SalesContract.Id, opt => opt.MapFrom(s => s.SalesContractId))
+                .ForPath(d => d.SalesContract.SalesContractNo, opt => opt.MapFrom(s => s.SalesContractNo))
+                .ForPath(d => d.SalesContract.MaterialWidth, opt => opt.MapFrom(s => s.MaterialWidth))
+                .ForPath(d => d.SalesContract.OrderQuantity, opt => opt.MapFrom(s => s.OrderQuantity))
+                .ForPath(d => d.SalesContract.PieceLength, opt => opt.MapFrom(s => s.PieceLength))
 
-                .ForPath(d => d.LocalSalesContract.Buyer.Id, opt => opt.MapFrom(s => s.LocalBuyerId))
-                .ForPath(d => d.LocalSalesContract.Buyer.Code, opt => opt.MapFrom(s => s.LocalBuyerCode))
-                .ForPath(d => d.LocalSalesContract.Buyer.Name, opt => opt.MapFrom(s => s.LocalBuyerName))
-                .ForPath(d => d.LocalSalesContract.Buyer.Type, opt => opt.MapFrom(s => s.LocalBuyerType))
-                .ForPath(d => d.LocalSalesContract.Buyer.Address, opt => opt.MapFrom(s => s.LocalBuyerAddress))
+                .ForPath(d => d.SalesContract.Material.Id, opt => opt.MapFrom(s => s.MaterialId))
+                .ForPath(d => d.SalesContract.Material.Code, opt => opt.MapFrom(s => s.MaterialCode))
+                .ForPath(d => d.SalesContract.Material.Name, opt => opt.MapFrom(s => s.MaterialName))
+                .ForPath(d => d.SalesContract.Material.Tags, opt => opt.MapFrom(s => s.MaterialTags))
 
-                .ForPath(d => d.LocalSalesContract.Material.Id, opt => opt.MapFrom(s => s.LocalMaterialId))
-                .ForPath(d => d.LocalSalesContract.Material.Code, opt => opt.MapFrom(s => s.LocalMaterialCode))
-                .ForPath(d => d.LocalSalesContract.Material.Name, opt => opt.MapFrom(s => s.LocalMaterialName))
+                .ForPath(d => d.SalesContract.MaterialConstruction.Id, opt => opt.MapFrom(s => s.MaterialConstructionId))
+                .ForPath(d => d.SalesContract.MaterialConstruction.Code, opt => opt.MapFrom(s => s.MaterialConstructionCode))
+                .ForPath(d => d.SalesContract.MaterialConstruction.Name, opt => opt.MapFrom(s => s.MaterialConstructionName))
+                .ForPath(d => d.SalesContract.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.MaterialConstructionRemark))
 
-                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Id, opt => opt.MapFrom(s => s.LocalMaterialConstructionId))
-                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Code, opt => opt.MapFrom(s => s.LocalMaterialConstructionCode))
-                .ForPath(d => d.LocalSalesContract.MaterialConstruction.Name, opt => opt.MapFrom(s => s.LocalMaterialConstructionName))
-                //.ForPath(d => d.LocalSalesContract.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.LocalMaterialConstructionRemark))
+                .ForPath(d => d.SalesContract.Commodity.Id, opt => opt.MapFrom(s => s.CommodityId))
+                .ForPath(d => d.SalesContract.Commodity.Code, opt => opt.MapFrom(s => s.CommodityCode))
+                .ForPath(d => d.SalesContract.Commodity.Name, opt => opt.MapFrom(s => s.CommodityName))
+                .ForPath(d => d.SalesContract.CommodityDescription, opt => opt.MapFrom(s => s.CommodityDescription))
 
-                //.ForPath(d => d.LocalSalesContract.Sales._id, opt => opt.MapFrom(s => s.SalesId))
-                //.ForPath(d => d.LocalSalesContract.Sales.FirstName, opt => opt.MapFrom(s => s.SalesFirstName))
-                //.ForPath(d => d.LocalSalesContract.Sales.LastName, opt => opt.MapFrom(s => s.SalesLastName))
+                .ForPath(d => d.SalesContract.Buyer.Id, opt => opt.MapFrom(s => s.BuyerId))
+                .ForPath(d => d.SalesContract.Buyer.Code, opt => opt.MapFrom(s => s.BuyerCode))
+                .ForPath(d => d.SalesContract.Buyer.Name, opt => opt.MapFrom(s => s.BuyerName))
+                .ForPath(d => d.SalesContract.Buyer.Type, opt => opt.MapFrom(s => s.BuyerType))
+                .ForPath(d => d.SalesContract.Buyer.Address, opt => opt.MapFrom(s => s.BuyerAddress))
 
-                //Ekspor
-                .ForPath(d => d.ExportSalesContract.Id, opt => opt.MapFrom(s => s.ExportSalesContractId))
-                .ForPath(d => d.ExportSalesContract.SalesContractNo, opt => opt.MapFrom(s => s.ExportSalesContractNo))
-                .ForPath(d => d.ExportSalesContract.OrderQuantity, opt => opt.MapFrom(s => s.OrderQuantity))
-                .ForPath(d => d.ExportSalesContract.PieceLength, opt => opt.MapFrom(s => s.PieceLength))
-
-                .ForPath(d => d.ExportSalesContract.MaterialConstruction.Id, opt => opt.MapFrom(s => s.ExportMaterialConstructionId))
-                .ForPath(d => d.ExportSalesContract.MaterialConstruction.Name, opt => opt.MapFrom(s => s.ExportMaterialConstructionCode))
-                .ForPath(d => d.ExportSalesContract.MaterialConstruction.Code, opt => opt.MapFrom(s => s.ExportMaterialConstructionName))
-                //.ForPath(d => d.ExportSalesContract.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.ExportMaterialConstructionRemark))
-
-                .ForPath(d => d.ExportSalesContract.Buyer.Id, opt => opt.MapFrom(s => s.ExportBuyerId))
-                .ForPath(d => d.ExportSalesContract.Buyer.Code, opt => opt.MapFrom(s => s.ExportBuyerCode))
-                .ForPath(d => d.ExportSalesContract.Buyer.Name, opt => opt.MapFrom(s => s.ExportBuyerName))
-                .ForPath(d => d.ExportSalesContract.Buyer.Type, opt => opt.MapFrom(s => s.ExportBuyerType))
-
-                .ForPath(d => d.ExportSalesContract.Commodity.Id, opt => opt.MapFrom(s => s.CommodityId))
-                .ForPath(d => d.ExportSalesContract.Commodity.Code, opt => opt.MapFrom(s => s.CommodityCode))
-                .ForPath(d => d.ExportSalesContract.Commodity.Name, opt => opt.MapFrom(s => s.CommodityName))
-                .ForPath(d => d.ExportSalesContract.CommodityDescription, opt => opt.MapFrom(s => s.CommodityDescription))
+                //.ForPath(d => d.SalesContract.Sales._id, opt => opt.MapFrom(s => s.SalesId))
+                //.ForPath(d => d.SalesContract.Sales.FirstName, opt => opt.MapFrom(s => s.SalesFirstName))
+                //.ForPath(d => d.SalesContract.Sales.LastName, opt => opt.MapFrom(s => s.SalesLastName))
 
                 .ReverseMap();
         }

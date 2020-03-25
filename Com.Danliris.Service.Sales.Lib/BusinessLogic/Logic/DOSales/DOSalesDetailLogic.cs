@@ -10,39 +10,39 @@ using Newtonsoft.Json;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 {
-    public class DOSalesLocalLogic : BaseLogic<DOSalesLocalModel>
+    public class DOSalesDetailLogic : BaseLogic<DOSalesDetailModel>
     {
-        public DOSalesLocalLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
+        public DOSalesDetailLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
         }
 
-        public override ReadResponse<DOSalesLocalModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
+        public override ReadResponse<DOSalesDetailModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
         {
-            IQueryable<DOSalesLocalModel> Query = DbSet;
+            IQueryable<DOSalesDetailModel> Query = DbSet;
 
             List<string> SearchAttributes = new List<string>()
             {
               ""
             };
 
-            Query = QueryHelper<DOSalesLocalModel>.Search(Query, SearchAttributes, keyword);
+            Query = QueryHelper<DOSalesDetailModel>.Search(Query, SearchAttributes, keyword);
 
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
-            Query = QueryHelper<DOSalesLocalModel>.Filter(Query, FilterDictionary);
+            Query = QueryHelper<DOSalesDetailModel>.Filter(Query, FilterDictionary);
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","ProductionOrder","ConstructionName","UnitOrCode","TotalPacking","TotalImperial","TotalMetric"
+                "Id","ProductionOrder","ConstructionName","UnitOrCode","Packing","Length","Weight"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-            Query = QueryHelper<DOSalesLocalModel>.Order(Query, OrderDictionary);
+            Query = QueryHelper<DOSalesDetailModel>.Order(Query, OrderDictionary);
 
-            Pageable<DOSalesLocalModel> pageable = new Pageable<DOSalesLocalModel>(Query, page - 1, size);
-            List<DOSalesLocalModel> data = pageable.Data.ToList<DOSalesLocalModel>();
+            Pageable<DOSalesDetailModel> pageable = new Pageable<DOSalesDetailModel>(Query, page - 1, size);
+            List<DOSalesDetailModel> data = pageable.Data.ToList<DOSalesDetailModel>();
             int totalData = pageable.TotalCount;
 
-            return new ReadResponse<DOSalesLocalModel>(data, totalData, OrderDictionary, SelectedFields);
+            return new ReadResponse<DOSalesDetailModel>(data, totalData, OrderDictionary, SelectedFields);
         }
         public HashSet<long> GetIds(long id)
         {
