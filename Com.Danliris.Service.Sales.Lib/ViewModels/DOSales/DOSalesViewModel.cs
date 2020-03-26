@@ -9,7 +9,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 {
     public class DOSalesViewModel : BaseViewModel, IValidatableObject
     {
-        #region DOSalesTemplate
         [MaxLength(255)]
         public string Code { get; set; }
         public long AutoIncreament { get; set; }
@@ -21,16 +20,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public string Status { get; set; }
         public bool Accepted { get; set; }
         public bool Declined { get; set; }
-        #endregion
-
-        #region Lokal
         [MaxLength(255)]
-        public string LocalType { get; set; }
-        public DateTimeOffset? LocalDate { get; set; }
-        public FinishingPrintingSalesContractViewModel LocalSalesContract { get; set; }
-        public MaterialViewModel LocalMaterial { get; set; }
-        public MaterialConstructionViewModel LocalMaterialConstruction { get; set; }
-        public BuyerViewModel LocalBuyer { get; set; }
+        public string Type { get; set; }
+        public DateTimeOffset? Date { get; set; }
+        public FinishingPrintingSalesContractViewModel SalesContract { get; set; }
+        public MaterialViewModel Material { get; set; }
+        public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        public CommodityViewModel Commodity { get; set; }
+        public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
@@ -38,37 +35,22 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         //public AccountViewModel Sales { get; set; }[MaxLength(255)]
         public string SalesName { get; set; }
         [MaxLength(255)]
-        public string LocalHeadOfStorage { get; set; }
+        public string HeadOfStorage { get; set; }
         [MaxLength(255)]
         public string PackingUom { get; set; }
         [MaxLength(255)]
-        public string MetricUom { get; set; }
+        public string LengthUom { get; set; }
         [MaxLength(255)]
-        public string ImperialUom { get; set; }
+        public string WeightUom { get; set; }
         public int? Disp { get; set; }
         public int? Op { get; set; }
         public int? Sc { get; set; }
-        [MaxLength(1000)]
-        public string LocalRemark { get; set; }
-        #endregion
-
-        # region Ekspor
-        [MaxLength(255)]
-        public string ExportType { get; set; }
-        public DateTimeOffset? ExportDate { get; set; }
-        [MaxLength(255)]
         public string DoneBy { get; set; }
-        public FinishingPrintingSalesContractViewModel ExportSalesContract { get; set; }
-        public MaterialConstructionViewModel ExportMaterialConstruction { get; set; }
-        public BuyerViewModel ExportBuyer { get; set; }
-        public CommodityViewModel Commodity { get; set; }
         public double? FillEachBale { get; set; }
         [MaxLength(1000)]
-        public string ExportRemark { get; set; }
-        #endregion
+        public string Remark { get; set; }
 
-        public ICollection<DOSalesLocalViewModel> DOSalesLocalItems { get; set; }
-        public BuyerViewModel Buyer { get; set; }
+        public ICollection<DOSalesDetailViewModel> DOSalesDetailItems { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -77,54 +59,36 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
             {
                 yield return new ValidationResult("Jenis DO harus dipilih", new List<string> { "DOSalesType" });
             }
-            if (DOSalesType == "Ekspor")
+
+            if (string.IsNullOrWhiteSpace(Type) || Type == "")
+                yield return new ValidationResult("Seri DO Lokal harus dipilih", new List<string> { "Type" });
+
+            if (!Date.HasValue)
+                yield return new ValidationResult("Tanggal DO Lokal harus diisi", new List<string> { "Date" });
+
+            if (SalesContract == null || string.IsNullOrWhiteSpace(SalesContract.SalesContractNo))
+                yield return new ValidationResult("No. Sales Contract harus diisi", new List<string> { "SalesContract" });
+
+            if (string.IsNullOrWhiteSpace(PackingUom))
+                yield return new ValidationResult("Satuan Packing harus dipilih", new List<string> { "PackingUom" });
+
+
+            if (DOSalesType == "Lokal")
             {
-                if (string.IsNullOrWhiteSpace(ExportType) || ExportType == "")
-                    yield return new ValidationResult("Seri DO Ekspor harus dipilih", new List<string> { "ExportType" });
-
-                if (!ExportDate.HasValue)
-                    yield return new ValidationResult("Tanggal DO Ekspor harus diisi", new List<string> { "ExportDate" });
-
-                if (string.IsNullOrWhiteSpace(DoneBy))
-                    yield return new ValidationResult("Dikerjakan oleh harus diisi", new List<string> { "DoneBy" });
-
-                if (ExportSalesContract == null || string.IsNullOrWhiteSpace(ExportSalesContract.SalesContractNo))
-                    yield return new ValidationResult("No. Sales Contract harus diisi", new List<string> { "ExportSalesContract" });
-
-                if (!FillEachBale.HasValue || FillEachBale.Value <= 0)
-                    yield return new ValidationResult("Isi tiap bale harus lebih besar dari 0", new List<string> { "FillEachBale" });
-            }
-            else if (DOSalesType == "Lokal")
-            {
-                if (string.IsNullOrWhiteSpace(LocalType) || LocalType == "")
-                    yield return new ValidationResult("Seri DO Lokal harus dipilih", new List<string> { "LocalType" });
-
-                if (!LocalDate.HasValue)
-                    yield return new ValidationResult("Tanggal DO Lokal harus diisi", new List<string> { "LocalDate" });
-
-                if (LocalSalesContract == null || string.IsNullOrWhiteSpace(LocalSalesContract.SalesContractNo))
-                    yield return new ValidationResult("No. Sales Contract harus diisi", new List<string> { "LocalSalesContract" });
-
                 if (string.IsNullOrWhiteSpace(DestinationBuyerName))
                     yield return new ValidationResult("Nama Penerima harus diisi", new List<string> { "DestinationBuyerName" });
 
                 if (string.IsNullOrWhiteSpace(DestinationBuyerAddress))
                     yield return new ValidationResult("Alamat Tujuan harus diisi", new List<string> { "DestinationBuyerAddress" });
 
-                if (string.IsNullOrWhiteSpace(LocalHeadOfStorage))
-                    yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "LocalHeadOfStorage" });
+                if (string.IsNullOrWhiteSpace(HeadOfStorage))
+                    yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
 
                 if (string.IsNullOrWhiteSpace(SalesName))
                     yield return new ValidationResult("Nama Sales harus diisi", new List<string> { "SalesName" });
 
-                if (string.IsNullOrWhiteSpace(PackingUom))
-                    yield return new ValidationResult("Satuan Imperial harus dipilih", new List<string> { "PackingUom" });
-
-                if (string.IsNullOrWhiteSpace(ImperialUom))
-                    yield return new ValidationResult("Satuan Imperial harus dipilih", new List<string> { "ImperialUom" });
-
-                if (string.IsNullOrWhiteSpace(MetricUom))
-                    yield return new ValidationResult("Satuan Imperial harus dipilih", new List<string> { "MetricUom" });
+                if (string.IsNullOrWhiteSpace(LengthUom))
+                    yield return new ValidationResult("Satuan Panjang harus dipilih", new List<string> { "LengthUom" });
 
                 if (!Disp.HasValue || Disp <= 0)
                     yield return new ValidationResult("Disp harus diisi", new List<string> { "Disp" });
@@ -134,72 +98,73 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if (!Sc.HasValue || Sc <= 0)
                     yield return new ValidationResult("Sc harus diisi", new List<string> { "Sc" });
-
-
-                int Count = 0;
-                string DetailErrors = "[";
-
-                if (DOSalesLocalItems != null && DOSalesLocalItems.Count > 0)
-                {
-                    foreach (DOSalesLocalViewModel detail in DOSalesLocalItems)
-                    {
-                        DetailErrors += "{";
-
-                        var rowErrorCount = 0;
-                        
-                        //if (detail.Material == null)
-                        //{
-                        //    Count++;
-                        //    rowErrorCount++;
-                        //    DetailErrors += "Material : 'Material gagal di load',";
-                        //}
-
-
-                        //if (detail.MaterialConstruction == null)
-                        //{
-                        //    Count++;
-                        //    rowErrorCount++;
-                        //    DetailErrors += "MaterialConstruction : MaterialConstruction gagal di load',";
-                        //}
-
-                        if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "UnitOrCode : 'Unit/Kode harus diisi',";
-                        }
-                        if (detail.TotalImperial <= 0)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "TotalImperial : 'Total Imperial harus lebih besar dari 0',";
-                        }
-                        if (detail.TotalMetric <= 0)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "TotalMetric : 'Total Metric harus lebih besar dari 0',";
-                        }
-                        if (detail.TotalPacking <= 0)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "TotalPacking : 'Total Packing harus lebih besar dari 0',";
-                        }
-                        DetailErrors += "}, ";
-                    }
-                }
-                else
-                {
-                    yield return new ValidationResult("Detail harus diisi", new List<string> { "LocalItem" });
-                }
-
-                DetailErrors += "]";
-
-                if (Count > 0)
-                    yield return new ValidationResult(DetailErrors, new List<string> { "DOSalesLocalItems" });
-
             }
+            else if (DOSalesType == "Ekspor")
+            {
+                if (string.IsNullOrWhiteSpace(DoneBy))
+                    yield return new ValidationResult("Dikerjakan oleh harus diisi", new List<string> { "DoneBy" });
+
+                if (!FillEachBale.HasValue || FillEachBale.Value <= 0)
+                    yield return new ValidationResult("Isi tiap bale harus lebih besar dari 0", new List<string> { "FillEachBale" });
+
+                if (string.IsNullOrWhiteSpace(WeightUom))
+                    yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+            }
+
+            int Count = 0;
+            string DetailErrors = "[";
+
+            if (DOSalesDetailItems != null && DOSalesDetailItems.Count > 0)
+            {
+                foreach (DOSalesDetailViewModel detail in DOSalesDetailItems)
+                {
+                    DetailErrors += "{";
+
+                    var rowErrorCount = 0;
+
+                    if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "UnitOrCode : 'Unit/Kode harus diisi',";
+                    }
+                    if (detail.Packing <= 0)
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
+                    }
+                    if (DOSalesType == "Lokal" && detail.Length <= 0)
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                    }
+                    if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
+                    }
+                    if (detail.ConvertionValue < 0)
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "ConvertionValue : 'Nilai Berat/Panjang gagal dikonversi ke bentuk satuan lain',";
+                    }
+                    DetailErrors += "}, ";
+                }
+            }
+            else
+            {
+                yield return new ValidationResult("Detail tidak boleh kosong", new List<string> { "DetailItem" });
+            }
+
+            DetailErrors += "]";
+
+            if (Count > 0)
+                yield return new ValidationResult(DetailErrors, new List<string> { "DOSalesDetailItems" });
+
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 {
-    public class DOSalesLocalViewModel : BaseViewModel
+    public class DOSalesDetailViewModel : BaseViewModel
     {
         [MaxLength(64)]
         public ProductionOrderViewModel ProductionOrder { get; set; }
@@ -20,9 +20,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public string ColorTemplate { get; set; }
         [MaxLength(512)]
         public string UnitOrCode { get; set; }
-        public double TotalPacking { get; set; }
-        public double TotalImperial { get; set; }
-        public double TotalMetric { get; set; }
+        public double Packing { get; set; }
+        public double Length { get; set; }
+        public double Weight { get; set; }
+        public double ConvertionValue { get; set; }
 
         public int? DOSalesId { get; set; }
     }

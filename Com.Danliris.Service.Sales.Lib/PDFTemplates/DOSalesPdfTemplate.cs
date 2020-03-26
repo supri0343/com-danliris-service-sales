@@ -13,6 +13,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             const int MARGIN = 15;
 
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 12);
+            Font header_bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 12);
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
 
@@ -60,7 +61,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                cellHeaderBody.Phrase = new Phrase("Sukoharjo, " + viewModel.LocalDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
+                cellHeaderBody.Phrase = new Phrase("Sukoharjo, " + viewModel.Date?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -68,7 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.LocalHeadOfStorage, normal_font);
+                cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.HeadOfStorage, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -82,8 +83,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                //cellHeaderBody.Phrase = new Phrase("Order dari " + viewModel.LocalBuyer.Name, normal_font);
-                cellHeaderBody.Phrase = new Phrase("Order dari " + viewModel.DestinationBuyerName, normal_font);
+                cellHeaderBody.Phrase = new Phrase("Order dari " + viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase("", normal_font);
                 headerTable2.AddCell(cellHeaderBody);
@@ -101,8 +101,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 #region Custom
                 int index = 1;
                 double totalPackingQuantity = 0;
-                double totalImperialQuantity = 0;
-                double totalMetricQuantity = 0;
+                double totalLengthQuantity = 0;
+                double totalWeightQuantity = 0;
                 #endregion
 
                 #region Body
@@ -110,7 +110,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 PdfPTable bodyTable = new PdfPTable(7);
                 PdfPCell bodyCell = new PdfPCell();
 
-                float[] widthsBody = new float[] { 3f, 10f, 10f, 7f, 7f, 7f, 7f };
+                float[] widthsBody = new float[] { 3f, 7f, 13f, 7f, 7f, 7f, 7f };
                 bodyTable.SetWidths(widthsBody);
                 bodyTable.WidthPercentage = 100;
 
@@ -127,52 +127,56 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
                 bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Total Packing\n(" + viewModel.PackingUom + ")", bold_font);
+                bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
                 bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Total Metrik\n(" + viewModel.MetricUom + ")", bold_font);
+                bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
                 bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Total Imperial\n(" + viewModel.ImperialUom + ")", bold_font);
+                bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
                 bodyTable.AddCell(bodyCell);
 
-                foreach (DOSalesLocalViewModel item in viewModel.DOSalesLocalItems)
+                //bodyCell.Phrase = new Phrase("Total Packing\n(" + viewModel.PackingUom + ")", bold_font);
+                //bodyTable.AddCell(bodyCell);
+
+                //bodyCell.Phrase = new Phrase("Total Panjang\n(" + viewModel.LengthUom + ")", bold_font);
+                //bodyTable.AddCell(bodyCell);
+
+                //bodyCell.Phrase = new Phrase("Total Berat\n(" + viewModel.WeightUom + ")", bold_font);
+                //bodyTable.AddCell(bodyCell);
+
+                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
                 {
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.VerticalAlignment = Element.ALIGN_TOP;
+                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
                     bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
                     bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                    bodyCell.Phrase = new Phrase(item.ProductionOrder.MaterialConstruction.Name, normal_font);
+                    bodyCell.Phrase = new Phrase(item.ConstructionName, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
                     bodyCell.Phrase = new Phrase(item.UnitOrCode, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n2}", item.TotalPacking), normal_font);
+                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n2}", item.TotalMetric), normal_font);
+                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n2}", item.TotalImperial), normal_font);
+                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
                     bodyTable.AddCell(bodyCell);
                 }
 
-                foreach (DOSalesLocalViewModel total in viewModel.DOSalesLocalItems)
+                foreach (DOSalesDetailViewModel total in viewModel.DOSalesDetailItems)
                 {
-                    totalPackingQuantity += total.TotalPacking;
-                    totalImperialQuantity += total.TotalImperial;
-                    totalMetricQuantity += total.TotalMetric;
+                    totalPackingQuantity += total.Packing;
+                    totalLengthQuantity += total.Length;
+                    totalWeightQuantity += total.Weight;
                 }
 
 
@@ -194,12 +198,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 bodyCell.Colspan = 1;
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(string.Format("{0:n2}", totalImperialQuantity), bold_font);
+                bodyCell.Phrase = new Phrase(string.Format("{0:n2}", totalLengthQuantity), bold_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.Colspan = 1;
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(string.Format("{0:n2}", totalMetricQuantity), bold_font);
+                bodyCell.Phrase = new Phrase(string.Format("{0:n2}", totalWeightQuantity), bold_font);
                 bodyTable.AddCell(bodyCell);
 
                 document.Add(bodyTable);
@@ -232,7 +236,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 footerTable.AddCell(cellFooterLeft);
 
                 cellFooterLeft.Colspan = 3;
-                cellFooterLeft.Phrase = new Phrase("Keterangan : " + viewModel.LocalRemark, bold_font);
+                cellFooterLeft.Phrase = new Phrase("Keterangan : " + viewModel.Remark, bold_font);
                 footerTable.AddCell(cellFooterLeft);
 
                 cellFooterLeft.Colspan = 3;
@@ -303,18 +307,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 PdfPCell cellHeader4 = new PdfPCell() { Border = Rectangle.NO_BORDER };
                 PdfPCell cellHeaderBody = new PdfPCell() { Border = Rectangle.NO_BORDER };
 
-                cellHeaderBody.Phrase = new Phrase("PT. DANLIRIS", bold_font);
-                headerTable1.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("INDUSTRIAL & TRADING CO.LTD.", bold_font);
-                headerTable1.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("Kel. Banaran (Selatan Lawehan)", normal_font);
-                headerTable1.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("Telp. 714400, 719113", normal_font);
-                headerTable1.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("SOLO - INDONESIA 57100", normal_font);
-                headerTable1.AddCell(cellHeaderBody);
-
                 cellHeaderBody.Phrase = new Phrase("", normal_font);
+                headerTable1.AddCell(cellHeaderBody);
+                cellHeaderBody.Phrase = new Phrase(viewModel.DOSalesNo, header_font);
                 headerTable1.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase("", normal_font);
                 headerTable1.AddCell(cellHeaderBody);
@@ -324,13 +319,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeader1.AddElement(headerTable1);
                 headerTable_A.AddCell(cellHeader1);
 
-                cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
+                cellHeaderBody.HorizontalAlignment = Element.ALIGN_LEFT;
 
                 cellHeaderBody.Phrase = new Phrase("", header_font);
                 headerTable2.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("", header_font);
-                headerTable2.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("KERTAS KERJA DO. EKSPORT", header_font);
+                cellHeaderBody.Phrase = new Phrase("KERTAS KERJA EKSPORT", header_bold_font);
                 headerTable2.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase("", header_font);
                 headerTable2.AddCell(cellHeaderBody);
@@ -344,19 +337,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_LEFT;
 
-                cellHeaderBody.Phrase = new Phrase("No. DO Penjualan ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(":", bold_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.DOSalesNo, normal_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Tanggal ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(":", bold_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
-
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("Dikerjakan Oleh ", bold_font);
@@ -366,60 +358,61 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase(viewModel.DoneBy, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("No. Sales Contract ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("1. Order Untuk ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.SalesContractNo, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Material.Name + " / " + viewModel.SalesContract.MaterialConstruction.Name + " / " + viewModel.SalesContract.MaterialWidth + "        " + viewModel.DOSalesNo, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Order Untuk ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("2. Jenis Untuk ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.MaterialConstruction.Name, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Buyer ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.Buyer.Name, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.OrderQuantity + " METER", normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Panjang Satuan ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("4. Piece Length ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.PieceLength, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.PieceLength, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Cap Komposisi Persen ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("5. Cap Komposisi Persen ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.Commodity.Name, normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Commodity.Name, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Jumlah Order ", bold_font);
-                headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(":", bold_font);
-                headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportSalesContract.OrderQuantity.GetValueOrDefault().ToString("N2"), normal_font);
-                headerTable3.AddCell(cellHeaderBody);
-
-                cellHeaderBody.Phrase = new Phrase("Isi tiap Bale", bold_font);
+                cellHeaderBody.Phrase = new Phrase("6. Isi tiap Bale", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(viewModel.FillEachBale.GetValueOrDefault().ToString("N2"), normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
-                cellHeaderBody.Phrase = new Phrase("Catatan ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("CATATAN KETERANGAN ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.ExportRemark, normal_font);
+                cellHeaderBody.Phrase = new Phrase("", bold_font);
+                headerTable3.AddCell(cellHeaderBody);
+                //foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                //{
+                //    cellHeaderBody.Phrase = new Phrase("\n" + item.ProductionOrder.OrderNo + " (" + item.ColorRequest + ")", normal_font);
+                //    //headerTable3.AddCell(cellHeaderBody);
+                //}
+                headerTable3.AddCell(cellHeaderBody);
+                cellHeaderBody.Phrase = new Phrase(" ", normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeader3.AddElement(headerTable3);
@@ -431,6 +424,82 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 document.Add(headerTable_B);
 
                 #endregion Header
+
+                #region Body
+
+                PdfPTable bodyTable = new PdfPTable(1);
+                PdfPCell bodyCell = new PdfPCell() { Border = Rectangle.NO_BORDER };
+
+                float[] widthsBody = new float[] { 1f };
+                bodyTable.SetWidths(widthsBody);
+                bodyTable.WidthPercentage = 80;
+
+                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                    bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo + " " + item.ColorRequest, bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase(viewModel.Remark, bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+                bodyCell.Phrase = new Phrase("", bold_font);
+                bodyTable.AddCell(bodyCell);
+
+                document.Add(bodyTable);
+
+                #endregion Body
+
+                #region Footer
+
+                PdfPTable footerTable = new PdfPTable(1);
+
+                PdfPTable signatureTable = new PdfPTable(2) { HorizontalAlignment = Element.ALIGN_CENTER };
+                PdfPCell signatureCell = new PdfPCell() { HorizontalAlignment = Element.ALIGN_CENTER , VerticalAlignment = Element.ALIGN_MIDDLE };
+
+                float[] widthsSignanture = new float[] { 10f, 10f };
+                signatureTable.SetWidths(widthsSignanture);
+                signatureTable.WidthPercentage = 80;
+
+                signatureCell.Phrase = new Phrase("Diterima Tgl. ......................", normal_font);
+                signatureTable.AddCell(signatureCell);
+                signatureCell.Phrase = new Phrase("Sukoharjo, " + viewModel.Date?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")) + "\n\nParaf Pembuat,", normal_font);
+                signatureTable.AddCell(signatureCell);
+
+                signatureTable.AddCell(new PdfPCell()
+                {
+                    Phrase = new Phrase("--------------------------------", normal_font),
+                    FixedHeight = 50,
+                    VerticalAlignment = Element.ALIGN_BOTTOM,
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                }); 
+                signatureTable.AddCell(new PdfPCell()
+                {
+                    Phrase = new Phrase("--------------------------------", normal_font),
+                    FixedHeight = 50,
+                    VerticalAlignment = Element.ALIGN_BOTTOM,
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+
+                footerTable.AddCell(new PdfPCell(signatureTable));
+                document.Add(footerTable);
+
+                #endregion Footer
             }
 
             document.Close();

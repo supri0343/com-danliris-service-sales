@@ -18,172 +18,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 {
     public class DOSalesControllerTest : BaseControllerTest<DOSalesController, DOSalesModel, DOSalesViewModel, IDOSalesContract>
     {
-        ////[Fact]
-        ////public void Get_DO_Sales_Local_PDF_Success()
-        ////{
-        ////    var vm = new DOSalesViewModel()
-        ////    {
-        ////        DOSalesType = "Lokal",
-        ////        DOSalesNo = "DOSalesNo",
-        ////        LocalDate = DateTimeOffset.Now,
-        ////        LocalHeadOfStorage = "LocalHeadOfStorage",
-        ////        DestinationBuyerName = "DestinationBuyerName",
-        ////        PackingUom = "PCS",
-        ////        MetricUom = "MTR",
-        ////        ImperialUom = "YDS",
-        ////        Disp = 1,
-        ////        Op = 1,
-        ////        Sc = 1,
-        ////        LocalSalesContract = new FinishingPrintingSalesContractViewModel()
-        ////        {
-        ////            SalesContractNo = "SalesContractNo",
-        ////            Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-        ////            {
-        ////                Name = "BuyerName",
-        ////            },
-        ////            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
-        ////            {
-        ////                Name = "MaterialName",
-        ////            },
-        ////            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////            {
-        ////                Name = "MaterialConstructionName",
-        ////            },
-        ////        },
-        ////        ExportSalesContract = new FinishingPrintingSalesContractViewModel()
-        ////        {
-        ////            SalesContractNo = "SalesContractNo",
-        ////            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////            {
-        ////                Name = "MaterialConstructionName",
-        ////            },
-        ////            Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-        ////            {
-        ////                Name = "BuyerName",
-        ////            },
-        ////            PieceLength = "PieceLength",
-        ////            Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
-        ////            {
-        ////                Name = "CommodityName",
-        ////            },
-        ////            OrderQuantity = 1,
-        ////        },
-        ////        DOSalesLocalItems = new List<DOSalesLocalViewModel>()
-        ////        {
-        ////            new DOSalesLocalViewModel()
-        ////            {
-        ////                ProductionOrder = new ProductionOrderViewModel()
-        ////                {
-        ////                    OrderNo = "OrderNo",
-        ////                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
-        ////                    {
-        ////                        Name = "MaterialName",
-        ////                    },
-        ////                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////                    {
-        ////                        Name = "MaterialConstructionName",
-        ////                    },
-        ////                },
-        ////                UnitOrCode = "UnitCode",
-        ////                TotalPacking = 1,
-        ////                TotalMetric = 1,
-        ////                TotalImperial = 1,
-        ////            }
-        ////        }
-        ////    };
-        ////    var mocks = GetMocks();
-        ////    mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
-        ////    mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
-        ////        .Returns(vm);
-        ////    var controller = GetController(mocks);
-        ////    var response = controller.GetDOSalesPDF(1).Result;
-
-        ////    Assert.NotNull(response);
-        ////}
-
-        ////[Fact]
-        ////public void Get_DO_Sales_Export_PDF_Success()
-        ////{
-        ////    var vm = new DOSalesViewModel()
-        ////    {
-        ////        DOSalesType = "Ekspor",
-        ////        DOSalesNo = "DOSalesNo",
-        ////        LocalDate = DateTimeOffset.Now,
-        ////        LocalHeadOfStorage = "LocalHeadOfStorage",
-        ////        DestinationBuyerName = "DestinationBuyerName",
-        ////        PackingUom = "PCS",
-        ////        MetricUom = "MTR",
-        ////        ImperialUom = "YDS",
-        ////        Disp = 1,
-        ////        Op = 1,
-        ////        Sc = 1,
-        ////        LocalSalesContract = new FinishingPrintingSalesContractViewModel()
-        ////        {
-        ////            SalesContractNo = "SalesContractNo",
-        ////            Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-        ////            {
-        ////                Name = "BuyerName",
-        ////            },
-        ////            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
-        ////            {
-        ////                Name = "MaterialName",
-        ////            },
-        ////            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////            {
-        ////                Name = "MaterialConstructionName",
-        ////            },
-        ////        },
-        ////        ExportSalesContract = new FinishingPrintingSalesContractViewModel()
-        ////        {
-        ////            SalesContractNo = "SalesContractNo",
-        ////            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////            {
-        ////                Name = "MaterialConstructionName",
-        ////            },
-        ////            Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-        ////            {
-        ////                Name = "BuyerName",
-        ////            },
-        ////            PieceLength = "PieceLength",
-        ////            Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
-        ////            {
-        ////                Name = "CommodityName",
-        ////            },
-        ////            OrderQuantity = 1,
-        ////        },
-        ////        DOSalesLocalItems = new List<DOSalesLocalViewModel>()
-        ////        {
-        ////            new DOSalesLocalViewModel()
-        ////            {
-        ////                ProductionOrder = new ProductionOrderViewModel()
-        ////                {
-        ////                    OrderNo = "OrderNo",
-        ////                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
-        ////                    {
-        ////                        Name = "MaterialName",
-        ////                    },
-        ////                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-        ////                    {
-        ////                        Name = "MaterialConstructionName",
-        ////                    },
-        ////                },
-        ////                UnitOrCode = "UnitCode",
-        ////                TotalPacking = 1,
-        ////                TotalMetric = 1,
-        ////                TotalImperial = 1,
-        ////            }
-        ////        }
-        ////    };
-        ////    var mocks = GetMocks();
-        ////    mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
-        ////    mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
-        ////        .Returns(vm);
-        ////    var controller = GetController(mocks);
-        ////    var response = controller.GetDOSalesPDF(1).Result;
-
-        ////    Assert.NotNull(response);
-        ////}
-
         [Fact]
         public void Get_DO_Sales_Local_PDF_Success()
         {
@@ -191,16 +25,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 DOSalesType = "Lokal",
                 DOSalesNo = "DOSalesNo",
-                LocalDate = DateTimeOffset.Now,
-                LocalHeadOfStorage = "LocalHeadOfStorage",
-                DestinationBuyerName = "DestinationBuyerName",
+                Date = DateTimeOffset.Now,
+                HeadOfStorage = "HeadOfStorage",
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                },
+                //DestinationBuyerName = "DestinationBuyerName",
                 PackingUom = "PCS",
-                MetricUom = "MTR",
-                ImperialUom = "YDS",
+                LengthUom = "MTR",
                 Disp = 1,
                 Op = 1,
                 Sc = 1,
-                LocalSalesContract = new FinishingPrintingSalesContractViewModel()
+                SalesContract = new FinishingPrintingSalesContractViewModel()
                 {
                     SalesContractNo = "SalesContractNo",
                     Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
@@ -216,27 +53,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Name = "MaterialConstructionName",
                     },
                 },
-                ExportSalesContract = new FinishingPrintingSalesContractViewModel()
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                 {
-                    SalesContractNo = "",
-                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-                    {
-                        Name = "",
-                    },
-                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-                    {
-                        Name = "",
-                    },
-                    PieceLength = "",
-                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
-                    {
-                        Name = "",
-                    },
-                    OrderQuantity = 1,
-                },
-                DOSalesLocalItems = new List<DOSalesLocalViewModel>()
-                {
-                    new DOSalesLocalViewModel()
+                    new DOSalesDetailViewModel()
                     {
                         ProductionOrder = new ProductionOrderViewModel()
                         {
@@ -251,9 +70,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             },
                         },
                         UnitOrCode = "UnitCode",
-                        TotalPacking = 1,
-                        TotalMetric = 1,
-                        TotalImperial = 1,
+                        Packing = 1,
+                        Length = 1,
+                        ConvertionValue = 1,
                     }
                 }
             };
@@ -274,11 +93,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 DOSalesType = "Ekspor",
                 DOSalesNo = "DOSalesNo",
-                ExportDate = DateTimeOffset.Now,
+                Date = DateTimeOffset.Now,
                 DoneBy = "DoneBy",
-                ExportSalesContract = new FinishingPrintingSalesContractViewModel()
+                PackingUom = "PT",
+                WeightUom = "BALE",
+                SalesContract = new FinishingPrintingSalesContractViewModel()
                 {
                     SalesContractNo = "SalesContractNo",
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
                     MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
                     {
                         Name = "MaterialConstructionName",
@@ -287,48 +112,36 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         Name = "BuyerName",
                     },
-                    PieceLength = "PieceLength",
                     Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
                     {
                         Name = "CommodityName",
                     },
+                    MaterialWidth = "MaterialWidth",
                     OrderQuantity = 1,
+                    PieceLength = "PieceLength",
                 },
                 FillEachBale = 1,
-                ExportRemark = "ExportRemark",
-                LocalSalesContract = new FinishingPrintingSalesContractViewModel()
+                Remark = "Remark",
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                 {
-                    SalesContractNo = "",
-                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
-                    {
-                        Name = "",
-                    },
-                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
-                    {
-                        Name = "",
-                    },
-                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
-                    {
-                        Name = "",
-                    },
-                },
-                DOSalesLocalItems = new List<DOSalesLocalViewModel>()
-                {
-                    new DOSalesLocalViewModel()
+                    new DOSalesDetailViewModel()
                     {
                         ProductionOrder = new ProductionOrderViewModel()
                         {
-                            OrderNo = "",
+                            OrderNo = "OrderNo",
                             Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
                             {
-                                Name = "",
+                                Name = "MaterialName",
                             },
                             MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
                             {
-                                Name = "",
+                                Name = "MaterialConstructionName",
                             },
                         },
-                        UnitOrCode = "",
+                        UnitOrCode = "UnitCode",
+                        Packing = 1,
+                        Weight = 1,
+                        ConvertionValue = 1,
                     }
                 }
             };
@@ -374,7 +187,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<DOSalesMapper>();
-                cfg.AddProfile<DOSalesLocalMapper>();
+                cfg.AddProfile<DOSalesDetailMapper>();
             });
             var mapper = configuration.CreateMapper();
 
@@ -383,40 +196,28 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
             Assert.Equal(salesInvoiceViewModel.Id, salesInvoiceModel.Id);
 
-            DOSalesLocalViewModel salesInvoiceDetailViewModel = new DOSalesLocalViewModel { Id = 1 };
-            DOSalesLocalModel salesInvoiceDetailModel = mapper.Map<DOSalesLocalModel>(salesInvoiceDetailViewModel);
+            DOSalesDetailViewModel salesInvoiceDetailViewModel = new DOSalesDetailViewModel { Id = 1 };
+            DOSalesDetailModel salesInvoiceDetailModel = mapper.Map<DOSalesDetailModel>(salesInvoiceDetailViewModel);
 
             Assert.Equal(salesInvoiceDetailViewModel.Id, salesInvoiceDetailModel.Id);
         }
 
         [Fact]
-        public void Validate_Validation_ViewModel_For_Local()
+        public void Validate_Validation()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
-                    DOSalesType = "Lokal",
-                    LocalType = "",
-                    LocalDate = DateTimeOffset.Now.AddYears(1),
-                    LocalSalesContract = new FinishingPrintingSalesContractViewModel(){ },
-                    DestinationBuyerName = "",
-                    DestinationBuyerAddress = "",
-                    LocalHeadOfStorage = "",
-                    SalesName = "",
-                    PackingUom = "",
-                    MetricUom = "",
-                    ImperialUom = "",
-                    Disp = -1,
-                    Op = -1,
-                    Sc = -1,
-                    DOSalesLocalItems = new List<DOSalesLocalViewModel>()
+                    DOSalesType = "",
+                    Type = "",
+                    FillEachBale = null,
+                    SalesContract = new FinishingPrintingSalesContractViewModel()
                     {
-                        new DOSalesLocalViewModel()
-                        {
-                            TotalPacking = -1,
-                            TotalMetric = -1,
-                            TotalImperial = -1,
-                        }
+                        SalesContractNo = null,
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel() { },
                     }
                 }
             };
@@ -428,26 +229,30 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Validation_ViewModel_For_Local_2()
+        public void Validate_Validation_For_Local()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
                     DOSalesType = "Lokal",
-                    LocalType = null,
-                    LocalDate = DateTimeOffset.Now.AddYears(-1),
-                    LocalSalesContract = null,
-                    DestinationBuyerName = "",
-                    DestinationBuyerAddress = "",
-                    LocalHeadOfStorage = "",
-                    SalesName = "",
-                    PackingUom = "",
-                    MetricUom = "",
-                    ImperialUom = "",
+                    Type = null,
+                    Disp = -1,
+                    Op = -1,
+                    Sc = -1,
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Length = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
                     Disp = null,
                     Op = null,
                     Sc = null,
-                    DOSalesLocalItems = null,
                 }
             };
             foreach (var viewModel in viewModels)
@@ -457,18 +262,27 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
+
         [Fact]
-        public void Validate_Validation_ViewModel_For_Export()
+        public void Validate_Validation_For_Export()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
                     DOSalesType = "Ekspor",
-                    ExportType = "",
-                    ExportDate = DateTimeOffset.Now,
-                    DoneBy = "",
-                    ExportSalesContract = new FinishingPrintingSalesContractViewModel() { },
                     FillEachBale = -1,
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Weight = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    FillEachBale = null,
                 }
             };
             foreach (var viewModel in viewModels)
@@ -483,6 +297,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
+                new DOSalesViewModel{}
             };
             foreach (var viewModel in viewModels)
             {

@@ -16,23 +16,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 {
     public class DOSalesLogic : BaseLogic<DOSalesModel>
     {
-        private DOSalesLocalLogic doSalesLocalLogic;
+        private DOSalesDetailLogic doSalesLocalLogic;
         private SalesDbContext _dbContext;
 
         public DOSalesLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
-            this.doSalesLocalLogic = serviceProvider.GetService<DOSalesLocalLogic>();
+            this.doSalesLocalLogic = serviceProvider.GetService<DOSalesDetailLogic>();
             _dbContext = dbContext;
         }
 
         public override ReadResponse<DOSalesModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
         {
-            IQueryable<DOSalesModel> Query = DbSet.Include(x => x.DOSalesLocalItems);
+            IQueryable<DOSalesModel> Query = DbSet.Include(x => x.DOSalesDetailItems);
 
             List<string> SearchAttributes = new List<string>()
             {
-                "Code","DOSalesNo","DOSalesType",
-                //"LocalType","ExportType"
+                "DOSalesNo","DOSalesType",
+                "SalesContractNo","BuyerName"
             };
 
             Query = QueryHelper<DOSalesModel>.Search(Query, SearchAttributes, keyword);
@@ -42,9 +42,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","DOSalesNo","DOSalesType","Status","Accepted","Declined",
-                "LocalType","LocalDate","LocalSalesContract","LocalBuyer","DestinationBuyerName","DestinationBuyerAddress","SalesName","LocalHeadOfStorage","PackingUom","MetricUom","ImperialUom","Disp","Op","Sc","LocalRemark",
-                "ExportType","ExportDate","DoneBy","ExportSalesContract","LocalMaterialConstruction","ExportMaterialConstruction","ExportBuyer","Commodity","FillEachBale","ExportRemark"
+                "Id","Code","DOSalesNo","DOSalesType","Type","Date","SalesContract","Material","MaterialConstruction","Commodity","Buyer",
+                //"DestinationBuyerName","DestinationBuyerAddress","SalesName","HeadOfStorage","PackingUom","Disp","Op","Sc","DoneBy","FillEachBale","Remark","Status","Accepted","Declined",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -61,12 +60,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
         {
             try
             {
-                if (model.DOSalesLocalItems != null)
+                if (model.DOSalesDetailItems != null)
                 {
                     HashSet<long> detailIds = doSalesLocalLogic.GetIds(id);
                     foreach (var itemId in detailIds)
                     {
-                        DOSalesLocalModel data = model.DOSalesLocalItems.FirstOrDefault(prop => prop.Id.Equals(itemId));
+                        DOSalesDetailModel data = model.DOSalesDetailItems.FirstOrDefault(prop => prop.Id.Equals(itemId));
                         if (data == null)
                             await doSalesLocalLogic.DeleteAsync(itemId);
                         else
@@ -75,7 +74,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
                         }
                     }
 
-                    foreach (DOSalesLocalModel item in model.DOSalesLocalItems)
+                    foreach (DOSalesDetailModel item in model.DOSalesDetailItems)
                     {
                         if (item.Id == 0)
                             doSalesLocalLogic.Create(item);
@@ -93,9 +92,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
         public override void Create(DOSalesModel model)
         {
-            if (model.DOSalesLocalItems.Count > 0)
+            if (model.DOSalesDetailItems.Count > 0)
             {
-                foreach (var detail in model.DOSalesLocalItems)
+                foreach (var detail in model.DOSalesDetailItems)
                 {
                     doSalesLocalLogic.Create(detail);
                 }
@@ -110,7 +109,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             DOSalesModel model = await ReadByIdAsync(id);
 
-            foreach (var detail in model.DOSalesLocalItems)
+            foreach (var detail in model.DOSalesDetailItems)
             {
                 await doSalesLocalLogic.DeleteAsync(detail.Id);
             }
@@ -121,11 +120,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
         public override async Task<DOSalesModel> ReadByIdAsync(long id)
         {
-            //var DOSales = await DbSet.Where(p => p.DOSalesLocalItems.Select(d => d.DOSalesModel.Id)
-            //.Contains(p.Id)).Include(p => p.DOSalesLocalItems).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
-            //DOSales.DOSalesLocalItems = DOSales.DOSalesLocalItems.OrderBy(s => s.Id).ToArray();
+            //var DOSales = await DbSet.Where(p => p.DOSalesDetailItems.Select(d => d.DOSalesModel.Id)
+            //.Contains(p.Id)).Include(p => p.DOSalesDetailItems).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
+            //DOSales.DOSalesDetailItems = DOSales.DOSalesDetailItems.OrderBy(s => s.Id).ToArray();
 
-            var DOSales = DbSet.Include(x => x.DOSalesLocalItems).FirstOrDefault(x => x.Id == id);
+            var DOSales = DbSet.Include(x => x.DOSalesDetailItems).FirstOrDefault(x => x.Id == id);
             return DOSales;
         }
 

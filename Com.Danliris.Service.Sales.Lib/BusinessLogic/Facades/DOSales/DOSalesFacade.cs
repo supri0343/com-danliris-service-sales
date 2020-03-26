@@ -115,54 +115,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales
         private void DOSalesNumberGenerator(DOSalesModel model, int index)
         {
 
+            index = 0;
             int YearNow = DateTime.Now.Year;
             var YearNowString = DateTime.Now.ToString("yy");
 
-            if(model.DOSalesType == "Lokal")
-            {
-                DOSalesModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.LocalType.Equals(model.LocalType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            DOSalesModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.Type.Equals(model.Type)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
-                if (lastLocalData == null)
+            if (lastLocalData == null)
+            {
+                model.AutoIncreament = 1 + index;
+                model.DOSalesNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+            }
+            else
+            {
+                if (YearNow > lastLocalData.CreatedUtc.Year)
                 {
-                    index = 0;
                     model.AutoIncreament = 1 + index;
-                    model.DOSalesNo = $"{YearNowString}{model.LocalType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.DOSalesNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
-                    if (YearNow > lastLocalData.CreatedUtc.Year)
-                    {
-                        model.AutoIncreament = 1 + index;
-                        model.DOSalesNo = $"{YearNowString}{model.LocalType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
-                    }
-                    else
-                    {
-                        model.AutoIncreament = lastLocalData.AutoIncreament + (1 + index);
-                        model.DOSalesNo = $"{YearNowString}{model.LocalType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
-                    }
-                }
-            } else if(model.DOSalesType == "Ekspor")
-            {
-                DOSalesModel lastExportData = DbSet.IgnoreQueryFilters().Where(w => w.ExportType.Equals(model.ExportType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
-
-                if (lastExportData == null)
-                {
-                    index = 0;
-                    model.AutoIncreament = 1 + index;
-                    model.DOSalesNo = $"{YearNowString}{model.ExportType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
-                }
-                else
-                {
-                    if (YearNow > lastExportData.CreatedUtc.Year)
-                    {
-                        model.AutoIncreament = 1 + index;
-                        model.DOSalesNo = $"{YearNowString}{model.ExportType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
-                    }
-                    else
-                    {
-                        model.AutoIncreament = lastExportData.AutoIncreament + (1 + index);
-                        model.DOSalesNo = $"{YearNowString}{model.ExportType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
-                    }
+                    model.AutoIncreament = lastLocalData.AutoIncreament + (1 + index);
+                    model.DOSalesNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }
