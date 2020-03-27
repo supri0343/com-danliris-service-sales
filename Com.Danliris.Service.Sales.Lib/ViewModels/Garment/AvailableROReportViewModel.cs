@@ -6,6 +6,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Garment
     {
         public DateTime AcceptedDate { get; set; }
         public DateTime AvailableDate { get; set; }
+        public DateTime ValidatedMDDate { get; set; }
+        public DateTime ValidatedSampleDate { get; set; }
         public string RONo { get; set; }
         public string Article { get; set; }
         public int DateDiff { get; set; }

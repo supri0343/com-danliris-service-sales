@@ -65,6 +65,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 ROAcceptedDate = cc.ROAcceptedDate,
                 ROAvailableDate = cc.ROAvailableDate,
                 ValidationSampleDate = cc.ValidationSampleDate,
+                ValidationMDDate = cc.ValidationMDDate,
                 RO_Number = cc.RO_Number,
                 Article = cc.Article,
                 BuyerBrandCode = cc.BuyerBrandCode,
