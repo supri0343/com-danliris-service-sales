@@ -29,6 +29,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation
         [MaxLength(1024)]
         public string MaterialName { get; set; }
 
+        [MaxLength(25)]
+        public string MaterialCode { get; set; }
+
+        public double MaterialPrice { get; set; }
+
+        [MaxLength(255)]
+        public string MaterialTags { get; set; }
+
         [MaxLength(256)]
         public string Color { get; set; }
 

@@ -16,16 +16,21 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
     {
         private readonly FinishingPrintingCostCalculationFacade finishingPrintingCostCalculationFacade;
         private readonly ShinFinishingPrintingSalesContractFacade scFacade;
-        public ShinProductionOrderDataUtil(ShinProductionOrderFacade facade, ShinFinishingPrintingSalesContractFacade _scFacade, FinishingPrintingCostCalculationFacade costCalculationFacade) : base(facade)
+        private readonly FinishingPrintingPreSalesContractFacade preSCFacade;
+        public ShinProductionOrderDataUtil(ShinProductionOrderFacade facade, ShinFinishingPrintingSalesContractFacade _scFacade, FinishingPrintingCostCalculationFacade costCalculationFacade, FinishingPrintingPreSalesContractFacade preSalesContractFacade) : base(facade)
         {
             finishingPrintingCostCalculationFacade = costCalculationFacade;
+            preSCFacade = preSalesContractFacade;
             scFacade = _scFacade;
         }
 
         public override async Task<ProductionOrderModel> GetNewData()
         {
-            ShinFinisihingPrintingSalesContractDataUtil scDU = new ShinFinisihingPrintingSalesContractDataUtil(scFacade, finishingPrintingCostCalculationFacade);
+            ShinFinisihingPrintingSalesContractDataUtil scDU = new ShinFinisihingPrintingSalesContractDataUtil(scFacade, preSCFacade);
             var scData = await scDU.GetTestData();
+
+            FinishingPrintingCostCalculationDataUtils ccDU = new FinishingPrintingCostCalculationDataUtils(finishingPrintingCostCalculationFacade);
+            var ccData = await ccDU.GetTestData();
 
             return new ProductionOrderModel()
             {
@@ -65,7 +70,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                 OrderTypeId = 1,
                 OrderTypeName = "name",
                 OrderTypeRemark = "remar",
-                OrderNo = scData.ProductionOrderNo,
+                OrderNo = ccData.ProductionOrderNo,
                 ProcessTypeCode = "cpde",
                 Details = new List<ProductionOrder_DetailModel>()
                 {

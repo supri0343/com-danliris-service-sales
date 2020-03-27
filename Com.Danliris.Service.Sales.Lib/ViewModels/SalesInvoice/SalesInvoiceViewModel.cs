@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,40 +18,23 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string SalesInvoiceType { get; set; }
         public DateTimeOffset? SalesInvoiceDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
-
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
-        [MaxLength(255)]
-        public string DebtorIndexNo { get; set; }
-
+        //[MaxLength(255)]
+        //public string DebtorIndexNo { get; set; }
         /*Shipment Document*/
         public int? ShipmentDocumentId { get; set; }
         [MaxLength(255)]
         public string ShipmentDocumentCode { get; set; }
-
-        /*Buyer*/
-        public int? BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-        [MaxLength(255)]
-        public string BuyerNPWP { get; set; }
+        public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string IDNo { get; set; }
-
-        /*Currency*/
-        public int? CurrencyId { get; set; }
-        [MaxLength(255)]
-        public string CurrencyCode { get; set; }
-        [MaxLength(255)]
-        public string CurrencySymbol { get; set; }
-        public double CurrencyRate { get; set; }
-
+        public CurrencyViewModel Currency { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }
         public double TotalPayment { get; set; }
         public double TotalPaid { get; set; }
+        public bool IsPaidOff { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
 
@@ -72,10 +56,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
             if (string.IsNullOrWhiteSpace(DeliveryOrderNo))
                 yield return new ValidationResult("No. Surat Jalan harus diisi", new List<string> { "DeliveryOrderNo" });
 
-            if (string.IsNullOrWhiteSpace(DebtorIndexNo))
-                yield return new ValidationResult("No. Index Debitur harus diisi", new List<string> { "DebtorIndexNo" });
+            //if (string.IsNullOrWhiteSpace(DebtorIndexNo))
+            //    yield return new ValidationResult("No. Index Debitur harus diisi", new List<string> { "DebtorIndexNo" });
 
-            if (string.IsNullOrWhiteSpace(CurrencyCode))
+            if (string.IsNullOrWhiteSpace(Currency.Code))
                 yield return new ValidationResult("Kurs harus diisi", new List<string> { "CurrencyCode" });
 
             if (!DueDate.HasValue || Id == 0 && DueDate.Value < DateTimeOffset.Now.AddDays(-1))
@@ -125,7 +109,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                         rowErrorCount++;
                         DetailErrors += "Total : 'Jumlah harus lebih besar dari 0',";
                     }
-                    if (string.IsNullOrWhiteSpace(detail.UomUnit))
+                    if (string.IsNullOrWhiteSpace(detail.Uom.Unit))
                     {
                         Count++;
                         rowErrorCount++;
@@ -150,7 +134,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                                 f.ProductCode.Equals(detail.ProductCode) &&
                                 f.ProductName.Equals(detail.ProductName) &&
                                 f.Price.GetValueOrDefault().Equals(detail.Price.GetValueOrDefault()) &&
-                                f.UomId.GetValueOrDefault().Equals(detail.UomId.GetValueOrDefault())
+                                f.Uom.Id.GetValueOrDefault().Equals(detail.Uom.Id.GetValueOrDefault())
                             ).ToList();
 
                         if (duplicateDetails.Count > 1)

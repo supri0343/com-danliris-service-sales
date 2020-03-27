@@ -38,8 +38,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                     int index = 0;
                     foreach (var item in model.SalesReceiptDetails)
                     {
-                        var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                        updateTotalPaid.TotalPaid = item.Paid;
+                        var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                        updateToSalesInvoice.TotalPaid = item.Paid;
+                        updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                     }
 
                     do
@@ -78,8 +79,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
 
                         foreach (var item in model.SalesReceiptDetails)
                         {
-                            var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                            updateTotalPaid.TotalPaid = updateTotalPaid.TotalPaid - item.Nominal;
+                            var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                            updateToSalesInvoice.TotalPaid = updateToSalesInvoice.TotalPaid - item.Nominal;
+                            updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                         }
 
                         salesReceiptModel = model;
@@ -114,8 +116,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                 {
                     foreach (var item in model.SalesReceiptDetails)
                     {
-                        var updateTotalPaid = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                        updateTotalPaid.TotalPaid = item.Paid;
+                        var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
+                        updateToSalesInvoice.TotalPaid = item.Paid;
+                        updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                     }
 
                     salesReceiptLogic.UpdateAsync(id, model);
@@ -132,46 +135,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
 
         private void SalesReceiptNumberGenerator(SalesReceiptModel model, int index)
         {
-            SalesReceiptModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesReceiptType.Equals(model.SalesReceiptType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
-
+            int MonthNow = DateTime.Now.Month;
             int YearNow = DateTime.Now.Year;
+            var MonthNowString = DateTime.Now.ToString("MM");
+            var YearNowString = DateTime.Now.ToString("yy");
+            SalesReceiptModel lastData = DbSet.IgnoreQueryFilters().OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             if (lastData == null)
             {
-                if (model.SalesReceiptType == "A")
-                {
-                    index = 28;
-                }
-                else if (model.SalesReceiptType == "B")
-                {
-                    index = 8;
-                }
-                else if (model.SalesReceiptType == "C")
-                {
-                    index = 98;
-                }
-                else if (model.SalesReceiptType == "D")
-                {
-                    index = 14;
-                }
-                else
-                {
-                    index = 0;
-                }
                 model.AutoIncreament = 1 + index;
-                model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
             else
             {
-                if (YearNow > lastData.CreatedUtc.Year)
+                if (YearNow > lastData.CreatedUtc.Year || MonthNow > lastData.CreatedUtc.Month)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesReceiptNo = $"{model.SalesReceiptType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesReceiptNo = $"{YearNowString}{MonthNowString}{model.BankCode}K{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }

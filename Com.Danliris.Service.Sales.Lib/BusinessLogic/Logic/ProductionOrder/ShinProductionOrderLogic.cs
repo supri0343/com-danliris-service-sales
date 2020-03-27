@@ -47,7 +47,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             List<string> SelectedFields = new List<string>()
             {
 
-                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc", "ApprovalMD", "OrderQuantity"
+                "Id", "Code", "FinishingPrintingSalesContract", "DeliveryDate", "IsClosed", "LastModifiedUtc", "ApprovalMD", "ApprovalSample", "OrderQuantity",
+                "ProductionOrderNo"
 
             };
 
@@ -220,6 +221,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             model.IsApprovedMD = true;
             model.ApprovedMDBy = IdentityService.Username;
             model.ApprovedMDDate = DateTimeOffset.UtcNow;
+
+            EntityExtension.FlagForUpdate(model, IdentityService.Username, Agent);
+        }
+
+        //public List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo)
+        //{
+        //    var result = DbSet.Where(p => p.SalesContractNo == salesContractNo);
+        //    return result.ToList();
+        //}
+        
+        public async Task ApproveSample(long id)
+        {
+            var model = await DbSet.FirstOrDefaultAsync(d => d.Id == id);
+            model.IsApprovedSample = true;
+            model.ApprovedSampleBy = IdentityService.Username;
+            model.ApprovedSampleDate = DateTimeOffset.UtcNow;
 
             EntityExtension.FlagForUpdate(model, IdentityService.Username, Agent);
         }

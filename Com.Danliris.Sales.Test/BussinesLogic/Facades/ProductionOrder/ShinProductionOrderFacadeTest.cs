@@ -114,14 +114,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             vm.FinishingPrintingSalesContract = new ShinFinishingPrintingSalesContractViewModel()
             {
                 Id = 1,
-                CostCalculation = new FinishingPrintingCostCalculationViewModel()
+                PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
                 {
-                    PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+                    Unit = new UnitViewModel()
                     {
-                        Unit = new UnitViewModel()
-                        {
-                            Name = "printing"
-                        }
+                        Name = "printing"
                     }
                 }
             };
@@ -245,7 +242,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
         {
             FinishingPrintingCostCalculationFacade ccFacade = new FinishingPrintingCostCalculationFacade(GetServiceProviderMock(dbContext).Object, dbContext);
             ShinFinishingPrintingSalesContractFacade scFacade = new ShinFinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
-            ShinProductionOrderDataUtil dataUtil = new ShinProductionOrderDataUtil(facade, scFacade, ccFacade);
+            FinishingPrintingPreSalesContractFacade prescFacade = new FinishingPrintingPreSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            ShinProductionOrderDataUtil dataUtil = new ShinProductionOrderDataUtil(facade, scFacade, ccFacade, prescFacade);
             return dataUtil;
         }
 
@@ -301,6 +299,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var ccLogic = new FinishingPrintingCostCalculationLogic(identityService, dbContext);
             serviceProviderMock.Setup(s => s.GetService(typeof(FinishingPrintingCostCalculationLogic)))
                 .Returns(ccLogic);
+
+            var preSalesContractLogic = new FinishingPrintingPreSalesContractLogic(identityService, dbContext);
+            serviceProviderMock
+                .Setup(s => s.GetService(typeof(FinishingPrintingPreSalesContractLogic)))
+                .Returns(preSalesContractLogic);
 
             var productionOrderDetailLogic = new ProductionOrder_DetailLogic(serviceProviderMock.Object, identityService, dbContext);
             var productionOrderlsLogic = new ProductionOrder_LampStandardLogic(serviceProviderMock.Object, identityService, dbContext);
@@ -552,6 +555,23 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
 
 
             var tuple = await facade.ApproveByMD(all.Data.FirstOrDefault().Id);
+            Assert.NotEqual(0, tuple);
+
+
+        }
+
+        [Fact]
+        public async void Should_Success_Approve_Sample()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProviderMock = GetServiceProviderMock(dbContext);
+
+            ShinProductionOrderFacade facade = Activator.CreateInstance(typeof(ShinProductionOrderFacade), serviceProviderMock.Object, dbContext) as ShinProductionOrderFacade;
+            await DataUtil(facade, dbContext).GetTestData();
+            var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
+
+
+            var tuple = await facade.ApproveBySample(all.Data.FirstOrDefault().Id);
             Assert.NotEqual(0, tuple);
 
 
