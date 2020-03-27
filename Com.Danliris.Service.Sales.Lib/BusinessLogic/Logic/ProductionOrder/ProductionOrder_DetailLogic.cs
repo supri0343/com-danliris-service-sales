@@ -34,13 +34,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Buyer", "DeliverySchedule", "SalesContractNo", "LastModifiedUtc"
+                "Id", "ColorRequest", "ColorTemplate", "Code", "Buyer", "DeliverySchedule", "SalesContractNo", "LastModifiedUtc"
             };
 
             Query = Query
                 .Select(field => new ProductionOrder_DetailModel
                 {
                     Id = field.Id,
+                    ColorRequest = field.ColorRequest,
+                    ColorTemplate = field.ColorTemplate,
                     //SalesContractNo = field.SalesContractNo,
                     //BuyerType = field.BuyerType,
                     //BuyerName = field.BuyerName,

@@ -24,7 +24,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
-                DebtorIndexNo = "DebtorIndexNo",
                 ShipmentDocumentId = 1,
                 ShipmentDocumentCode = "ShipmentDocumentCode",
                 BuyerId = 1,

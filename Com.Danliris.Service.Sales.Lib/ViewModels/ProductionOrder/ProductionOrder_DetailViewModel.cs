@@ -9,6 +9,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 {
     public class ProductionOrder_DetailViewModel : BaseViewModel, IValidatableObject
     {
+        public string ProductionOrderNo { get; set; }
         [MaxLength(255)]
         public string ColorRequest { get; set; }
         [MaxLength(255)]

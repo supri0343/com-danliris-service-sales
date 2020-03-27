@@ -73,12 +73,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("Kepada Yth. ", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.BuyerName, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Name, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Alamat", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.BuyerAddress, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Address, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("", normal_font);
@@ -151,7 +151,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Total + " " + item.UomUnit, normal_font);
+                bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;

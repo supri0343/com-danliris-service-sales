@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,47 +14,51 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         public long? AutoIncreament { get; set; }
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
-        [MaxLength(255)]
-        public string SalesReceiptType { get; set; }
         public DateTimeOffset? SalesReceiptDate { get; set; }
-
-        /*Bank*/
-        public int? BankId { get; set; }
+        //public UnitViewModel Unit { get; set; }
+        #region Unit
+        //Hanya terima unit string dari frontend
+        //public int? UnitId { get; set; }
         [MaxLength(255)]
-        public string AccountCOA { get; set; }
+        public string UnitName { get; set; }
+        #endregion
+        public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
-        public string AccountName { get; set; }
+        public string OriginBankName { get; set; }
         [MaxLength(255)]
-        public string AccountNumber { get; set; }
-        [MaxLength(255)]
-        public string BankName { get; set; }
-        [MaxLength(255)]
-        public string BankCode { get; set; }
-
-        /*Buyer*/
-        public int? BuyerId { get; set; }
-        [MaxLength(255)]
-        public string BuyerName { get; set; }
-        [MaxLength(1000)]
-        public string BuyerAddress { get; set; }
-
+        public string OriginAccountNumber { get; set; }
+        public CurrencyViewModel Currency { get; set; }
+        public AccountBankViewModel Bank { get; set; }
+        public double AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
         public ICollection<SalesReceiptDetailViewModel> SalesReceiptDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrWhiteSpace(SalesReceiptType))
-                yield return new ValidationResult("Tipe Kuitansi harus diisi", new List<string> { "SalesReceiptType" });
-
             if (!SalesReceiptDate.HasValue || SalesReceiptDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Kuitansi harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesReceiptDate" });
 
-            if (string.IsNullOrWhiteSpace(AccountName))
-                yield return new ValidationResult("Nama Bank harus diisi", new List<string> { "AccountName" });
+            if (string.IsNullOrWhiteSpace(UnitName))
+                yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
 
-            if (string.IsNullOrWhiteSpace(BuyerName))
+            if (string.IsNullOrWhiteSpace(Bank.AccountName))
+                yield return new ValidationResult("Nama Bank Tujuan harus diisi", new List<string> { "AccountName" });
+
+            if (string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Nama Buyer harus di isi", new List<string> { "BuyerName" });
+
+            if (string.IsNullOrWhiteSpace(OriginBankName))
+                yield return new ValidationResult("Nama Bank Asal harus di isi", new List<string> { "OriginBankName" });
+
+            if (string.IsNullOrWhiteSpace(OriginAccountNumber))
+                yield return new ValidationResult("No Rek. Bank Asal harus di isi", new List<string> { "OriginAccountNumber" });
+
+            if (string.IsNullOrWhiteSpace(Currency.Code))
+                yield return new ValidationResult("Jenis Mata Uang harus diisi", new List<string> { "CurrencyCode" });
+
+            if (AdministrationFee < 0)
+                yield return new ValidationResult("Total Paid kosong", new List<string> { "AdministrationFee" });
 
             if (TotalPaid <= 0)
                 yield return new ValidationResult("Total Paid kosong", new List<string> { "TotalPaid" });
@@ -75,7 +80,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         rowErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'Kode Faktur harus diisi',";
                     }
-                    if (!detail.CurrencyId.HasValue || string.IsNullOrWhiteSpace(detail.CurrencyCode))
+                    if (!detail.Currency.Id.HasValue || string.IsNullOrWhiteSpace(detail.Currency.Code))
                     {
                         Count++;
                         rowErrorCount++;
@@ -111,11 +116,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         rowErrorCount++;
                         DetailErrors += "Paid : 'Kode Faktur harus diisi untuk memperoleh jumlah yang sudah dibayar',";
                     }
-                    if (detail.Nominal <= 0)
+                    if (detail.Nominal < 0)
                     {
                         Count++;
                         rowErrorCount++;
-                        DetailErrors += "Nominal : 'Nominal tidak boleh kosong & harus lebih besar dari 0',";
+                        DetailErrors += "Nominal : 'Nominal tidak boleh kosong & atau lebih kecil dari 0',";
                     }
                     if (detail.Unpaid < 0)
                     {
@@ -130,7 +135,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         DetailErrors += "OverPaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh kelebihan pembayaran',";
                     }
 
-                    var mustSameType = SalesReceiptDetails.Where(f => f.CurrencyCode != detail.CurrencyCode).ToList();
+                    var mustSameType = SalesReceiptDetails.Where(f => f.Currency.Code != detail.Currency.Code).ToList();
                     
                     if (mustSameType.Count > 0)
                     {

@@ -153,5 +153,37 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        [HttpGet("by-presalescontract/{preSalesContractId}")]
+        public IActionResult GetByPreSalesContract(long preSalesContractId)
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<FinishingPrintingCostCalculationModel> read = Facade.GetByPreSalesContract(preSalesContractId);
+
+                List<FinishingPrintingCostCalculationViewModel> DataVM = Mapper.Map<List<FinishingPrintingCostCalculationViewModel>>(read.Data);
+
+                foreach (var vm in DataVM)
+                {
+                    var preSalesContractModel = fpPreSalesContractFacade.ReadByIdAsync((int)vm.PreSalesContract.Id).Result;
+                    vm.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                }
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<FinishingPrintingCostCalculationViewModel>(Mapper, DataVM, 1, read.Count, read.Count, DataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

@@ -131,5 +131,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
         {
             return finishingPrintingCostCalculationLogic.ValidatePreSalesContractId(id);
         }
+
+        public ReadResponse<FinishingPrintingCostCalculationModel> GetByPreSalesContract(long preSalesContractId)
+        {
+            return finishingPrintingCostCalculationLogic.GetByPreSalesContract(preSalesContractId);
+        }
     }
 }

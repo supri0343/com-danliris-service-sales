@@ -962,5 +962,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             return await DbContext.SaveChangesAsync();
         }
+
+        public List<ProductionOrderModel> ReadBySalesContractId(long salesContractId)
+        {
+            return productionOrderLogic.ReadBySalesContractId(salesContractId);
+        }
+
     }
 }

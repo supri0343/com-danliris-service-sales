@@ -25,21 +25,21 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region customViewModel
 
-            string jumlahTerbilang = NumberToTextIDN.terbilang(viewModel.CostCalculation.PreSalesContract.OrderQuantity);
+            string jumlahTerbilang = NumberToTextIDN.terbilang(viewModel.PreSalesContract.OrderQuantity);
             List<string> details = new List<string>();
 
             var uomLocal = "";
-            if (viewModel.CostCalculation.UOM.Unit.ToLower() == "yds")
+            if (viewModel.UOM.Unit.ToLower() == "yds")
             {
                 uomLocal = "YARD";
             }
-            else if (viewModel.CostCalculation.UOM.Unit.ToLower() == "mtr")
+            else if (viewModel.UOM.Unit.ToLower() == "mtr")
             {
                 uomLocal = "METER";
             }
             else
             {
-                uomLocal = viewModel.CostCalculation.UOM.Unit;
+                uomLocal = viewModel.UOM.Unit;
             }
 
             foreach (var i in viewModel.Details)
@@ -110,7 +110,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell cellIdentityContentRight = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
             cellIdentityContentLeft.Phrase = new Phrase("No", normal_font);
             tableIdentity.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.CostCalculation.PreSalesContract.No, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.SalesContractNo, normal_font);
             tableIdentity.AddCell(cellIdentityContentLeft);
             cellIdentityContentLeft.Phrase = new Phrase($"Sukoharjo, {viewModel.CreatedUtc.AddHours(timeoffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID"))}", normal_font);
             tableIdentity.AddCell(cellIdentityContentLeft);
@@ -137,19 +137,19 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
-            cellIdentityContentLeft.Phrase = new Phrase(viewModel.CostCalculation.PreSalesContract.Buyer.Name, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(viewModel.PreSalesContract.Buyer.Name, normal_font);
             tableIdentityOpeningLetter.AddCell(cellIdentityContentLeft);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
-            cellIdentityContentLeft.Phrase = new Phrase(viewModel.CostCalculation.PreSalesContract.Buyer.Address, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(viewModel.PreSalesContract.Buyer.Address, normal_font);
             tableIdentityOpeningLetter.AddCell(cellIdentityContentLeft);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentityOpeningLetter.AddCell(cellIdentityContentRight);
-            cellIdentityContentLeft.Phrase = new Phrase(viewModel.CostCalculation.PreSalesContract.Buyer.City, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(viewModel.PreSalesContract.Buyer.City, normal_font);
             tableIdentityOpeningLetter.AddCell(cellIdentityContentLeft);
             PdfPCell cellIdentityOpeningLetter = new PdfPCell(tableIdentityOpeningLetter); // dont remove
             tableIdentityOpeningLetter.ExtendLastRow = false;
@@ -179,14 +179,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             bodyContentLeft.Phrase = new Phrase("Material", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": " + viewModel.CostCalculation.Material.Name + " " + viewModel.MaterialConstruction.Name, normal_font);
+            bodyContentLeft.Phrase = new Phrase(": " + viewModel.Material.Name, normal_font);
             tableBody.AddCell(bodyContentLeft);
 
-            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name) && !string.IsNullOrEmpty(viewModel.MaterialWidth) && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name) && !string.IsNullOrWhiteSpace(viewModel.MaterialWidth))
+            if (!string.IsNullOrEmpty(viewModel.YarnMaterial.Name)  && !string.IsNullOrWhiteSpace(viewModel.YarnMaterial.Name))
             {
                 bodyContentLeft.Phrase = new Phrase(" ", normal_font);
                 tableBody.AddCell(bodyContentLeft);
-                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name + " Lebar: " + viewModel.MaterialWidth, normal_font);
+                bodyContentLeft.Phrase = new Phrase("  " + viewModel.YarnMaterial.Name, normal_font);
                 tableBody.AddCell(bodyContentLeft);
             }
 
@@ -200,7 +200,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             bodyContentLeft.Phrase = new Phrase("Jumlah", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": " + viewModel.CostCalculation.PreSalesContract.OrderQuantity.ToString("N2") + " (" + jumlahTerbilang + ") " + uomLocal, normal_font);
+            bodyContentLeft.Phrase = new Phrase(": " + viewModel.PreSalesContract.OrderQuantity.ToString("N2") + " (" + jumlahTerbilang + ") " + uomLocal, normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Kualitas", normal_font);
             tableBody.AddCell(bodyContentLeft);

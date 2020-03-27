@@ -31,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesContractNo","BuyerName","ProductionOrderNo", "UnitName"
+                "SalesContractNo","BuyerName", "UnitName"
             };
 
             Query = QueryHelper<FinishingPrintingSalesContractModel>.Search(Query, SearchAttributes, keyword);
@@ -41,7 +41,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "CostCalculation", "DeliverySchedule", "YarnMaterial","MaterialConstruction","Quality","Packing","ShippingQuantityTolerance", "LastModifiedUtc", "MaterialWidth", "Details"
+                "Id", "Code", "PreSalesContract", "DeliverySchedule", "YarnMaterial","Quality","Packing",
+                "ShippingQuantityTolerance", "LastModifiedUtc", "Details", "SalesContractNo", "Material", "UOM", "Sales"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -56,6 +57,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
         public override void Create(FinishingPrintingSalesContractModel model)
         {
+            SalesContractNumberGenerator(model);
             foreach (var detail in model.Details)
             {
                 FinishingPrintingSalesContractDetailLogic.Create(detail);
@@ -64,7 +66,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             EntityExtension.FlagForCreate(model, IdentityService.Username, Agent);
             DbSet.Add(model);
-            UpdateFPCostCalculationIsSCCreated(model, true);
+            //UpdateFPCostCalculationIsSCCreated(model, true);
         }
 
         public override async Task<FinishingPrintingSalesContractModel> ReadByIdAsync(long id)
@@ -119,14 +121,56 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
             EntityExtension.FlagForDelete(model, IdentityService.Username, Agent);
             DbSet.Update(model);
 
-            UpdateFPCostCalculationIsSCCreated(model, false);
+            //UpdateFPCostCalculationIsSCCreated(model, false);
         }
 
 
-        private void UpdateFPCostCalculationIsSCCreated(FinishingPrintingSalesContractModel model, bool flagSC)
+        //private void UpdateFPCostCalculationIsSCCreated(FinishingPrintingSalesContractModel model, bool flagSC)
+        //{
+        //    var relatedFPCC = DbContext.FinishingPrintingCostCalculations.FirstOrDefault(x => x.Id == model.CostCalculationId);
+        //    relatedFPCC.IsSCCreated = flagSC;
+        //}
+
+        private void SalesContractNumberGenerator(FinishingPrintingSalesContractModel model)
         {
-            var relatedFPCC = DbContext.FinishingPrintingCostCalculations.FirstOrDefault(x => x.Id == model.CostCalculationId);
-            relatedFPCC.IsSCCreated = flagSC;
+            FinishingPrintingSalesContractModel lastData;
+            if (model.BuyerType.Equals("ekspor", StringComparison.OrdinalIgnoreCase) || model.BuyerType.Equals("export", StringComparison.OrdinalIgnoreCase))
+            {
+                lastData = DbSet.IgnoreQueryFilters()
+                    .Where(w => w.BuyerType == "ekspor" || w.BuyerType == "export")
+                    .OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
+            else
+            {
+                lastData = DbSet.IgnoreQueryFilters()
+                    .Where(w => w.BuyerType != "ekspor" && w.BuyerType != "export")
+                    .OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
+
+            string DocumentType = model.BuyerType.ToLower().Equals("ekspor") || model.BuyerType.ToLower().Equals("export") ? "FPE" : "FPL";
+
+            DateTime Now = DateTime.Now;
+            string Year = Now.ToString("yyyy");
+            string month = Now.ToString("MM");
+
+            if (lastData == null)
+            {
+                model.AutoIncrementNumber = 1;
+                model.SalesContractNo = $"0001/{DocumentType}/{month}.{Year}";
+            }
+            else
+            {
+                if (Now.Year > lastData.CreatedUtc.Year)
+                {
+                    model.AutoIncrementNumber = 1;
+                    model.SalesContractNo = $"0001/{DocumentType}/{month}.{Year}";
+                }
+                else
+                {
+                    model.AutoIncrementNumber = lastData.AutoIncrementNumber + 1;
+                    model.SalesContractNo = $"{model.AutoIncrementNumber.ToString().PadLeft(4, '0')}/{DocumentType}/{month}.{Year}";
+                }
+            }
         }
     }
 }

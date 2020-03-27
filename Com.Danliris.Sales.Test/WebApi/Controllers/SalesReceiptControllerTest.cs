@@ -3,6 +3,7 @@ using Com.Danliris.Sales.Test.WebApi.Utils;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
@@ -21,13 +22,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new SalesReceiptViewModel()
             {
-
+                SalesReceiptDate = DateTimeOffset.Now,
+                Buyer = new BuyerViewModel() 
+                {
+                   Name = "Name",
+                   Address = "Address",
+                },
+                Currency = new CurrencyViewModel()
+                {
+                    Code = "IDR",
+                    Symbol = "Rp",
+                    Rate = 14000,
+                },
+                Bank = new AccountBankViewModel()
+                {
+                    BankName = "BCA",
+                },
                 SalesReceiptDetails = new List<SalesReceiptDetailViewModel>()
                 {
-                    new SalesReceiptDetailViewModel()
+                    new SalesReceiptDetailViewModel() 
                     {
-                        CurrencyCode = "IDR",
-                        CurrencySymbol = "Rp",
+                        VatType = "PPN BUMN",
+                        SalesInvoiceNo = "SalesInvoiceNo",
+                        Currency = new CurrencyViewModel()
+                        {
+                            Code = "IDR",
+                            Symbol = "Rp",
+                            Rate = 14000,
+                        },
                     }
                 }
 
@@ -72,7 +94,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
-            var configuration = new MapperConfiguration(cfg => {
+            var configuration = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<SalesReceiptMapper>();
                 cfg.AddProfile<SalesReceiptDetailMapper>();
             });
@@ -95,17 +118,38 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
                 new SalesReceiptViewModel{
-                    SalesReceiptType = "",
                     SalesReceiptDate = DateTimeOffset.UtcNow.AddDays(-1),
-                    BankId = 0,
-                    AccountCOA = "",
-                    AccountName = "",
-                    AccountNumber = "",
-                    BankName = "",
-                    BankCode = "",
-                    BuyerId = 0,
-                    BuyerName = "",
-                    BuyerAddress = "",
+                    //UnitId = 0,
+                    UnitName = "",
+                    //Unit = new UnitViewModel()
+                    //{
+                    //    Id = 0,
+                    //    Name = "",
+                    //},
+                    Buyer = new BuyerViewModel()
+                    {
+                        Id = 0,
+                        Name = "",
+                        Address = "",
+                    },
+                    OriginBankName = "",
+                    OriginAccountNumber = "",
+                    Currency = new CurrencyViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Symbol = "",
+                        Rate = 0,
+                    },
+                    Bank = new AccountBankViewModel()
+                    {
+                        Id = 0,
+                        AccountName = "",
+                        AccountNumber = "",
+                        BankName = "",
+                        Code = "",
+                    },
+                    AdministrationFee = -1,
                     TotalPaid = -1,
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
@@ -114,10 +158,14 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             SalesInvoiceNo = "",
                             DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                             VatType = "",
-                            CurrencyId = 0,
-                            CurrencyCode = "",
-                            CurrencySymbol = "",
-                            CurrencyRate = 0,
+                            Tempo = -1,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 0,
+                                Code = "",
+                                Symbol = "",
+                                Rate = 0,
+                            },
                             TotalPayment = -1,
                             TotalPaid = -1,
                             Paid = -1,
@@ -139,7 +187,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public void Validate_Null_Model_and_DetailViewModel()
         {
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
-            {};
+            { };
             foreach (var viewModel in viewModels)
             {
                 var defaultValidationResult = viewModel.Validate(null);
@@ -153,6 +201,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
                 new SalesReceiptViewModel{
+                    Buyer = new BuyerViewModel()
+                    {
+                        Id = 28,
+                    },
+                    Currency = new CurrencyViewModel()
+                    {
+                        Id = 8,
+                    },
+                    Bank = new AccountBankViewModel()
+                    {
+                        Id = 98,
+                    },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
                             SalesReceiptId = 10,
@@ -161,10 +221,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             DueDate = DateTimeOffset.UtcNow,
                             VatType = "PPN Kawasan Berikat",
                             Tempo = 10,
-                            CurrencyId = 10,
-                            CurrencyCode = "USD",
-                            CurrencySymbol = "$",
-                            CurrencyRate = 10,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 10,
+                                Code = "USD",
+                                Symbol = "$",
+                                Rate = 10,
+                            },
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,
@@ -180,10 +243,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             DueDate = DateTimeOffset.UtcNow,
                             VatType = "PPN Kawasan Berikat",
                             Tempo = 10,
-                            CurrencyId = 10,
-                            CurrencyCode = "USD",
-                            CurrencySymbol = "$",
-                            CurrencyRate = 10,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 10,
+                                Code = "USD",
+                                Symbol = "$",
+                                Rate = 10,
+                            },
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,
@@ -208,9 +274,25 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
                 new SalesReceiptViewModel{
+                    Buyer = new BuyerViewModel()
+                    {
+                        Id = 14,
+                    },
+                    Currency = new CurrencyViewModel()
+                    {
+                        Id = 2,
+                    },
+                    Bank = new AccountBankViewModel()
+                    {
+                        Id = 18,
+                    },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
                             VatType = "PPN Umum",
+                            Currency = new CurrencyViewModel()
+                            {
+                                Id = 20,
+                            },
                         }
                     }
                 }

@@ -6,7 +6,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
 {
     public class SalesReceiptDetailModel : BaseModel
     {
-        /*Sales Invoice*/
         public int SalesInvoiceId { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceNo { get; set; }
@@ -15,13 +14,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string VatType { get; set; }
         public double Tempo { get; set; }
 
-        /*Currency*/
+        #region Currency
         public int CurrencyId { get; set; }
         [MaxLength(255)]
         public string CurrencyCode { get; set; }
         [MaxLength(255)]
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
+        #endregion
 
         public double TotalPayment { get; set; }
         public double TotalPaid { get; set; }
