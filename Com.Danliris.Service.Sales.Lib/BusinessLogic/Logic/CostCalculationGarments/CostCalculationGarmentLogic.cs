@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             {
                   "Id", "Code", "PreSCNo", "RO_Number", "Quantity", "ConfirmPrice", "Article", "Unit", "LastModifiedUtc","UnitName",
                     "Comodity", "UOM", "Buyer", "DeliveryDate", "BuyerBrand", "ApprovalMD", "ApprovalPurchasing", "ApprovalIE", "ApprovalKadivMD", "ApprovalPPIC",
-                    "IsPosted","SectionName","CommodityDescription"
+                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription"
             };
 
             Query = Query
@@ -111,7 +111,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                      IsPosted = ccg.IsPosted,
 
                      LastModifiedUtc = ccg.LastModifiedUtc,
-                     SectionName = ccg.SectionName
+                     SectionName = ccg.SectionName,
+                     Section = ccg.Section,
+                     CreatedBy = ccg.CreatedBy
                  });
 
 			Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

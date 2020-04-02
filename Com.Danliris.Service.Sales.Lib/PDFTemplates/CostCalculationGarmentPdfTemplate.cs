@@ -470,12 +470,43 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_signature.Phrase = new Phrase(signatureArea, normal_font);
 			table_signature.AddCell(cell_signature);
 
-			cell_signature.Phrase = new Phrase("Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Kasie. Kabag. Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Kadiv. Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
+            var AssignmentKabag = "";
+            var AssignmentKadiv = "";
+
+
+            if (viewModel.ApprovalMD.IsApproved)
+            {
+                AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
+            }
+            else
+            {
+                AssignmentKabag = " ____________________ ";
+            }
+
+            if (viewModel.ApprovalKadivMD.IsApproved)
+            {
+                AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
+            }
+            else
+            {
+                AssignmentKadiv = " ____________________ ";
+            }
+
+            string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
+
+            cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
             #endregion
 
             #region Cost Calculation Material

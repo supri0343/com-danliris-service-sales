@@ -26,32 +26,29 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
 
         public override IQueryable<CostCalculationGarmentApprovalReportViewModel> GetQuery(string filter)
         {
-            Dictionary<string, object> FilterDictionary = new Dictionary<string, object>(JsonConvert.DeserializeObject<Dictionary<string, object>>(filter), StringComparer.OrdinalIgnoreCase);
+            Filter _filter = JsonConvert.DeserializeObject<Filter>(filter);
 
             IQueryable<CostCalculationGarment> Query = dbSet;
 
-            try
+            if (!string.IsNullOrWhiteSpace(_filter.section))
             {
-                var dateFrom = (DateTime) (FilterDictionary["dateFrom"]);
-                var dateTo= (DateTime) (FilterDictionary["dateTo"]);
-
-                Query = dbSet.Where(d => d.ApprovedKadivMDDate >= dateFrom && 
-                                         d.ApprovedKadivMDDate <= dateTo
-                );
-            }
-            catch (KeyNotFoundException e)
-            {
-                throw new Exception(e.Message);
+                Query = Query.Where(cc => cc.Section == _filter.section);
             }
 
-            if (FilterDictionary.TryGetValue("unitName", out object unitName))
+            if (!string.IsNullOrWhiteSpace(_filter.unitName))
             {
-                Query = Query.Where(d => d.UnitName == unitName.ToString());
+                Query = Query.Where(cc => cc.UnitName == _filter.unitName);
             }
 
-            if (FilterDictionary.TryGetValue("section", out object section))
+            if (_filter.dateFrom != null)
             {
-                Query = Query.Where(d => d.Section == section.ToString());
+                var filterDate = _filter.dateFrom.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date;
+                Query = Query.Where(cc => cc.ApprovedKadivMDDate.AddHours(identityService.TimezoneOffset).Date >= filterDate);
+            }
+            if (_filter.dateTo != null)
+            {
+                var filterDate = _filter.dateTo.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).AddDays(1).Date;
+                Query = Query.Where(cc => cc.ApprovedKadivMDDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
             }
 
             Query = Query.OrderBy(o => o.UnitName).ThenBy(o => o.RO_Number);
@@ -80,6 +77,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                     });
 
             return newQ;
+        }
+
+        private class Filter
+        {
+            public string unitName { get; set; }
+            public string section { get; set; }
+            public DateTimeOffset? dateFrom { get; set; }
+            public DateTimeOffset? dateTo { get; set; }
         }
     }
 }
