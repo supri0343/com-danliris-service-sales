@@ -118,8 +118,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             {
                 unitName = data.UnitName,
                 section = data.Section, 
-                dateFrom = data.ApprovedKadivMDDate,
-                dateTo = data.ApprovedKadivMDDate,
+                dateFrom = data.ApprovedKadivMDDate.AddDays(-1),
+                dateTo = data.ApprovedKadivMDDate.AddDays(1),
             };
 
             var Response = CCGarmentApprovalReport.Read(filter: JsonConvert.SerializeObject(filter));
