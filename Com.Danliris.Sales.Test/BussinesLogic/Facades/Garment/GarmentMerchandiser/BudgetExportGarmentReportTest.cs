@@ -118,8 +118,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             {
               unitName = data.UnitName, 
               section = data.Section, 
-              dateFrom = data.DeliveryDate,
-              dateTo = data.DeliveryDate,
+              dateFrom = data.DeliveryDate.AddDays(-1),
+              dateTo = data.DeliveryDate.AddDays(1),
             };
 
             var Response = budgetexportgarmentReport.Read(filter: JsonConvert.SerializeObject(filter));
