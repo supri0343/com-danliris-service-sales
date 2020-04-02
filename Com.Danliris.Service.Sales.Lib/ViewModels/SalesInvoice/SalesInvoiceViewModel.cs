@@ -22,10 +22,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string DeliveryOrderNo { get; set; }
         //[MaxLength(255)]
         //public string DebtorIndexNo { get; set; }
-        /*Shipment Document*/
-        public int? ShipmentDocumentId { get; set; }
-        [MaxLength(255)]
-        public string ShipmentDocumentCode { get; set; }
         public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string IDNo { get; set; }
@@ -49,9 +45,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (!SalesInvoiceDate.HasValue || SalesInvoiceDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Faktur Penjualan harus diisi & lebih kecil  atau sama dengan hari ini", new List<string> { "SalesInvoiceDate" });
-
-            if (string.IsNullOrWhiteSpace(ShipmentDocumentCode))
-                yield return new ValidationResult("No. Bon Pengiriman Barang harus diisi", new List<string> { "ShipmentDocumentCode" });
 
             if (string.IsNullOrWhiteSpace(DeliveryOrderNo))
                 yield return new ValidationResult("No. Surat Jalan harus diisi", new List<string> { "DeliveryOrderNo" });
@@ -85,64 +78,75 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
                     var rowErrorCount = 0;
 
-                    if (string.IsNullOrWhiteSpace(detail.ProductCode))
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "ProductCode : 'Kode harus diisi',";
-                    }
-                    if (string.IsNullOrWhiteSpace(detail.ProductName))
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "ProductName : 'Kode harus diisi',";
-                    }
-                    if (string.IsNullOrWhiteSpace(detail.Quantity))
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Quantity : 'Kuantitas harus diisi',";
-                    }
-                    if (!detail.Total.HasValue || detail.Total.Value <= 0)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Total : 'Jumlah harus lebih besar dari 0',";
-                    }
-                    if (string.IsNullOrWhiteSpace(detail.Uom.Unit))
+                    if (string.IsNullOrWhiteSpace(detail.ShipmentDocumentCode))
                     {
                         Count++;
                         rowErrorCount++;
                         DetailErrors += "UomUnit : 'Satuan harus diisi',";
                     }
-                    if (!detail.Price.HasValue || detail.Price.Value <= 0)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Price : 'Harga barang harus lebih besar dari 0',";
-                    }
-                    if (detail.Amount <= 0)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Amount : 'Jumlah & Harga Satuan harus diisi',";
-                    }
 
-                    if (rowErrorCount == 0)
+                    foreach (SalesInvoiceItemViewModel item in detail.SalesInvoiceItems)
                     {
-                        var duplicateDetails = SalesInvoiceDetails.Where(f =>
-                                f.ProductCode.Equals(detail.ProductCode) &&
-                                f.ProductName.Equals(detail.ProductName) &&
-                                f.Price.GetValueOrDefault().Equals(detail.Price.GetValueOrDefault()) &&
-                                f.Uom.Id.GetValueOrDefault().Equals(detail.Uom.Id.GetValueOrDefault())
-                            ).ToList();
 
-                        if (duplicateDetails.Count > 1)
+                        if (string.IsNullOrWhiteSpace(item.ProductCode))
                         {
                             Count++;
-                            DetailErrors += "ProductCode : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
-                            DetailErrors += "ProductName : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
-                            DetailErrors += "Price : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
+                            rowErrorCount++;
+                            DetailErrors += "ProductCode : 'Kode harus diisi',";
+                        }
+                        if (string.IsNullOrWhiteSpace(item.ProductName))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ProductName : 'Kode harus diisi',";
+                        }
+                        if (string.IsNullOrWhiteSpace(item.Quantity))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Quantity : 'Kuantitas harus diisi',";
+                        }
+                        if (!item.Total.HasValue || item.Total.Value <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Total : 'Jumlah harus lebih besar dari 0',";
+                        }
+                        if (string.IsNullOrWhiteSpace(item.Uom.Unit))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "UomUnit : 'Satuan harus diisi',";
+                        }
+                        if (!item.Price.HasValue || item.Price.Value <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Price : 'Harga barang harus lebih besar dari 0',";
+                        }
+                        if (item.Amount <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Amount : 'Jumlah & Harga Satuan harus diisi',";
+                        }
+
+                        if (rowErrorCount == 0)
+                        {
+                            var duplicateDetails = detail.SalesInvoiceItems.Where(f =>
+                                    f.ProductCode.Equals(item.ProductCode) &&
+                                    f.ProductName.Equals(item.ProductName) &&
+                                    f.Price.GetValueOrDefault().Equals(item.Price.GetValueOrDefault()) &&
+                                    f.Uom.Id.GetValueOrDefault().Equals(item.Uom.Id.GetValueOrDefault())
+                                ).ToList();
+
+                            if (duplicateDetails.Count > 1)
+                            {
+                                Count++;
+                                DetailErrors += "ProductCode : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
+                                DetailErrors += "ProductName : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
+                                DetailErrors += "Price : 'Kode, Nama Barang, dan Harga Satuan tidak boleh duplikat',";
+                            }
                         }
                     }
                     DetailErrors += "}, ";

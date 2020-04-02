@@ -184,40 +184,46 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("Total", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            foreach (SalesInvoiceDetailViewModel item in viewModel.SalesInvoiceDetails)
+            foreach (var detail in viewModel.SalesInvoiceDetails)
             {
-                bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
-                bodyTable.AddCell(bodyCell);
+                foreach (var item in detail.SalesInvoiceItems)
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                    bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                    bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2"), normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2"), normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Uom.Unit, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Uom.Unit, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Price.GetValueOrDefault().ToString("N2"), normal_font );
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Price.GetValueOrDefault().ToString("N2"), normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Amount.ToString("N2"), normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Amount.ToString("N2"), normal_font);
+                    bodyTable.AddCell(bodyCell);
+                }
             }
 
-            foreach (var amount in viewModel.SalesInvoiceDetails)
+            foreach (var item in viewModel.SalesInvoiceDetails)
             {
-                result += amount.Amount;
+                foreach (var amount in item.SalesInvoiceItems)
+                {
+                    result += amount.Amount;
+                }
             }
             totalTax = result * 0.1;
             totalPay = totalTax + result;

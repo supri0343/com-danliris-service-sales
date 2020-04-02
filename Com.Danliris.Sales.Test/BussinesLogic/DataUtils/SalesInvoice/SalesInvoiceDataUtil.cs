@@ -24,8 +24,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
-                ShipmentDocumentId = 1,
-                ShipmentDocumentCode = "ShipmentDocumentCode",
                 BuyerId = 1,
                 BuyerName = "BuyerName",
                 BuyerAddress = "BuyerAddress",
@@ -44,14 +42,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ProductCode = "ProductCode",
-                        ProductName = "ProductName",
-                        Quantity = "Quantity",
-                        UomId = 1,
-                        UomUnit = "PCS",
-                        Total = 1,
-                        Price = 1,
-                        Amount = 1
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        { 
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
                     }
                 }
             };
