@@ -90,6 +90,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
                 new CostCalculationGarment_Material
                 {
                     ProductId = "1",
+                    CategoryCode = "EMB",
                     CategoryName = "FABRIC",
                     Total = 109375,
                     CM_Price = 172450,
