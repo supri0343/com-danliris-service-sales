@@ -558,7 +558,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             var data = DbSet.Where(w => listRO.Contains(w.RO_Number)).Select(s => new CostCalculationGarmentDataProductionReport
             {
 			    ro = s.RO_Number,
-			    buyerCode = s.BuyerCode,
+			    buyerCode = s.BuyerBrandCode,
 			    hours = s.SMV_Cutting,
 			    comodityName = s.Commodity,
 			    qtyOrder = s.Quantity,
