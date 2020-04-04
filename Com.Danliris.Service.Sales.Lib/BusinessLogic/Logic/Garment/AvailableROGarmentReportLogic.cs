@@ -24,7 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
         {
             Filter filter = JsonConvert.DeserializeObject<Filter>(filterString);
 
-            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsApprovedKadivMD);
+            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsValidatedROSample);
 
             if (!string.IsNullOrWhiteSpace(filter.section))
             {

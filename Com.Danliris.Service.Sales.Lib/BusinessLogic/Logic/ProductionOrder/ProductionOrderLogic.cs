@@ -44,8 +44,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             List<string> SelectedFields = new List<string>()
             {
 
-                "Id", "Code", "Buyer", "ProcessType", "LastModifiedUtc", "FinishingPrintingSalesContract", "OrderNo", "Details", "OrderType", "HandlingStandard", "Material", "YarnMaterial", "DeliveryDate", "SalesContractNo", "MaterialConstruction", "FinishWidth", "DesignCode", "DesignNumber", "OrderQuantity", "Uom",
-                "DistributedQuantity", "IsCompleted", "IsClosed", "IsCalculated", "Account"
+                "Id", "Code", "Buyer", "ProcessType", "LastModifiedUtc", "FinishingPrintingSalesContract", "OrderNo", "Details", "OrderType", "HandlingStandard", "Material", "YarnMaterial", "DeliveryDate","SalesContractNo", "MaterialConstruction", "FinishWidth", "DesignCode", "DesignNumber", "OrderQuantity", "Uom",
+                "DistributedQuantity", "IsCompleted", "IsClosed", "IsCalculated", "Account", "MaterialWidth", "PackingInstruction"
 
             };
 
@@ -73,6 +73,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     ProcessTypeCode = field.ProcessTypeCode,
                     ProcessTypeName = field.ProcessTypeName,
                     UomId = field.UomId,
+                    MaterialWidth = field.MaterialWidth,
                     UomUnit = field.UomUnit,
                     YarnMaterialId = field.YarnMaterialId,
                     YarnMaterialCode = field.YarnMaterialCode,
@@ -93,6 +94,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     ProfileFirstName = field.ProfileFirstName,
                     ProfileGender = field.ProfileGender,
                     ProfileLastName = field.ProfileLastName,
+                    PackingInstruction = field.PackingInstruction
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -251,6 +253,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             ProductionOrder.LampStandards = ProductionOrder.LampStandards.OrderBy(s => s.Id).ToArray();
             ProductionOrder.RunWidths = ProductionOrder.RunWidths.OrderBy(s => s.Id).ToArray();
             return ProductionOrder;
+        }
+
+        public List<ProductionOrderModel> ReadBySalesContractId(long salesContractId)
+        {
+            var result = DbSet.Where(p => p.SalesContractId == salesContractId).Include(p => p.Details);
+            return result.ToList();
         }
     }
 }

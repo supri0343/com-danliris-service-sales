@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
 
-            writer.PageEvent = new PageEvent();
+            writer.PageEvent = new GarmentSalesContractPDFTemplatePageEvent();
 
 
             document.Open();
@@ -514,7 +514,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
     }
 
-    class PageEvent : PDFPages
+    class GarmentSalesContractPDFTemplatePageEvent : PDFPages
     {
         public override void OnStartPage(PdfWriter writer, Document document)
         {

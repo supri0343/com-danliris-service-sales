@@ -52,15 +52,20 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
                 foreach(var data in DataVM)
                 {
-                    var fpCCModel = finishingPrintingCostCalculationService.ReadParent(data.CostCalculation.Id).Result;
-                    if(fpCCModel != null)
+                    var preSalesContractModel = fpPreSalesContractFacade.ReadByIdAsync((int)data.PreSalesContract.Id).Result;
+                    if (preSalesContractModel != null)
                     {
-
-                        var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
-                        var preSalesContractModel = fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id).Result;
-                        fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
-                        data.CostCalculation = fpCCVM;
+                        data.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
                     }
+                    //var fpCCModel = finishingPrintingCostCalculationService.ReadParent(data.CostCalculation.Id).Result;
+                    //if(fpCCModel != null)
+                    //{
+
+                    //    var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                    //    var preSalesContractModel = fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id).Result;
+                    //    fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                    //    data.CostCalculation = fpCCVM;
+                    //}
                 }
 
                 Dictionary<string, object> Result =
@@ -94,16 +99,21 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 else
                 {
                     ShinFinishingPrintingSalesContractViewModel viewModel = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(model);
-                    var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(viewModel.CostCalculation.Id);
 
-                    if(fpCCModel != null)
+                    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)viewModel.PreSalesContract.Id);
+                    //var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(viewModel.CostCalculation.Id);
+                    if(preSalesContractModel != null)
                     {
-
-                        var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
-                        var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
-                        fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
-                        viewModel.CostCalculation = fpCCVM;
+                        viewModel.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
                     }
+                    //if(fpCCModel != null)
+                    //{
+
+                    //    var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                    //    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                    //    fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                    //    viewModel.CostCalculation = fpCCVM;
+                    //}
 
                     Dictionary<string, object> Result =
                         new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
@@ -145,19 +155,34 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     string Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
 
 
-                    FinishingPrintingSalesContractViewModel viewModel = Mapper.Map<FinishingPrintingSalesContractViewModel>(model);
+                    ShinFinishingPrintingSalesContractViewModel viewModel = Mapper.Map<ShinFinishingPrintingSalesContractViewModel>(model);
+                    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)viewModel.PreSalesContract.Id);
+                    //var fpCCModel = await finishingPrintingCostCalculationService.ReadParent(viewModel.CostCalculation.Id);
+                    if(preSalesContractModel != null)
+                    {
+                        viewModel.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+
+                    }
+                    //if (fpCCModel != null)
+                    //{
+
+                    //    var fpCCVM = Mapper.Map<FinishingPrintingCostCalculationViewModel>(fpCCModel);
+                    //    var preSalesContractModel = await fpPreSalesContractFacade.ReadByIdAsync((int)fpCCVM.PreSalesContract.Id);
+                    //    fpCCVM.PreSalesContract = Mapper.Map<FinishingPrintingPreSalesContractViewModel>(preSalesContractModel);
+                    //    viewModel.CostCalculation = fpCCVM;
+                    //}
 
                     /* Get Buyer */
-                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.Buyer.Id).Result.Content.ReadAsStringAsync();
+                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.PreSalesContract.Buyer.Id).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
                     object json;
                     if (result.TryGetValue("data", out json))
                     {
                         Dictionary<string, object> buyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(json.ToString());
-                        viewModel.Buyer.City = buyer.TryGetValue("City", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Address = buyer.TryGetValue("Address", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Contact = buyer.TryGetValue("Contact", out json) ? (json != null ? json.ToString() : "") : "";
-                        viewModel.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.PreSalesContract.Buyer.City = buyer.TryGetValue("City", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.PreSalesContract.Buyer.Address = buyer.TryGetValue("Address", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.PreSalesContract.Buyer.Contact = buyer.TryGetValue("Contact", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.PreSalesContract.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
                     }
 
                     /* Get Agent */
@@ -197,9 +222,9 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
                     }
 
-                    if (viewModel.Buyer.Type != "Ekspor")
+                    if (viewModel.PreSalesContract.Buyer.Type != "Ekspor")
                     {
-                        FinishingPrintingSalesContractPDFTemplate PdfTemplate = new FinishingPrintingSalesContractPDFTemplate();
+                        ShinFinishingPrintingSalesContractPDFTemplate PdfTemplate = new ShinFinishingPrintingSalesContractPDFTemplate();
                         MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                         return new FileStreamResult(stream, "application/pdf")
                         {
@@ -208,7 +233,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     }
                     else
                     {
-                        FinishingPrintingSalesContractExportPDFTemplate PdfTemplate = new FinishingPrintingSalesContractExportPDFTemplate();
+                        ShinFinishingPrintingSalesContractExportPDFTemplate PdfTemplate = new ShinFinishingPrintingSalesContractExportPDFTemplate();
                         MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                         return new FileStreamResult(stream, "application/pdf")
                         {

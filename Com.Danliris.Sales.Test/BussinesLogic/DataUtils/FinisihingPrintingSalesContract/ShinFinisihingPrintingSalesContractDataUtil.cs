@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinishingPrintingCostCalculation;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinishingPrintingPreSalesContract;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrintingCostCalculation;
@@ -12,15 +13,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSale
 {
     public class ShinFinisihingPrintingSalesContractDataUtil : BaseDataUtil<ShinFinishingPrintingSalesContractFacade, FinishingPrintingSalesContractModel>
     {
-        private readonly FinishingPrintingCostCalculationFacade finishingPrintingCostCalculationFacade;
-        public ShinFinisihingPrintingSalesContractDataUtil(ShinFinishingPrintingSalesContractFacade facade, FinishingPrintingCostCalculationFacade costCalculationFacade) : base(facade)
+        private readonly FinishingPrintingPreSalesContractFacade finishingPrintingPreSalesContractFacade;
+        public ShinFinisihingPrintingSalesContractDataUtil(ShinFinishingPrintingSalesContractFacade facade, FinishingPrintingPreSalesContractFacade preSalesContractFacade) : base(facade)
         {
-            finishingPrintingCostCalculationFacade = costCalculationFacade;
+            finishingPrintingPreSalesContractFacade = preSalesContractFacade;
         }
 
         public override async Task<FinishingPrintingSalesContractModel> GetNewData()
         {
-            FinishingPrintingCostCalculationDataUtils ccDU = new FinishingPrintingCostCalculationDataUtils(finishingPrintingCostCalculationFacade);
+            FinishingPrintingPreSalesContractDataUtil ccDU = new FinishingPrintingPreSalesContractDataUtil(finishingPrintingPreSalesContractFacade);
             var ccData = await ccDU.GetTestData();
 
             return new FinishingPrintingSalesContractModel()
@@ -29,12 +30,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSale
                 AgentID = 1,
                 AgentName = "name",
                 Amount = 1,
-                CostCalculationId = ccData.Id,
+                //CostCalculationId = ccData.Id,
+                PreSalesContractId = ccData.Id,
+                PreSalesContractNo = ccData.No,
                 DesignMotiveID = 1,
                 SalesContractNo = "np",
                 UnitName = "np",
                 BuyerName = "a00",
-                ProductionOrderNo = "no",
+                //ProductionOrderNo = "no",
                 AccountBankAccountName = "a",
                 AccountBankCode = "a",
                 AccountBankCurrencyCode = "a",

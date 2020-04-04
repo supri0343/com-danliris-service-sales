@@ -94,6 +94,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             return await salesInvoiceLogic.ReadByIdAsync(id);
         }
 
+        public List<SalesInvoiceModel> ReadByBuyerId(int buyerId)
+        {
+            return salesInvoiceLogic.ReadByBuyerId(buyerId);
+        }
+
         public async Task<int> UpdateAsync(int id, SalesInvoiceModel model)
         {
             using (var transaction = DbContext.Database.BeginTransaction())
@@ -117,6 +122,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             int YearNow = DateTime.Now.Year;
+            var YearNowString = DateTime.Now.ToString("yy");
 
             if (lastData == null)
             {
@@ -217,19 +223,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     index = 0;
                 }
                 model.AutoIncreament = 1 + index;
-                model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
             else
             {
                 if (YearNow > lastData.CreatedUtc.Year)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesInvoiceNo = $"{model.SalesInvoiceType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }

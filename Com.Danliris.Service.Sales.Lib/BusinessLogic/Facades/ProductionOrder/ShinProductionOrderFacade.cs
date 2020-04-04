@@ -43,6 +43,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             this.identityService = serviceProvider.GetService<IIdentityService>();
         }
 
+        public async Task<int> ApproveByMD(long id)
+        {
+            await productionOrderLogic.ApproveMD(id);
+            return await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> ApproveBySample(long id)
+        {
+            await productionOrderLogic.ApproveSample(id);
+            return await DbContext.SaveChangesAsync();
+        }
+
         public async Task<int> CreateAsync(ProductionOrderModel model)
         {
             int result = 0;
@@ -57,6 +69,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
                         ProductionOrderModel productionOrder = new ProductionOrderModel()
                         {
+                            OrderQuantity = item.Quantity,
+                            OrderNo = item.ProductionOrderNo,
                             UnitCode = model.UnitCode,
                             UnitId = model.UnitId,
                             UnitName = model.UnitName,
@@ -110,8 +124,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                             MaterialPrice = model.MaterialPrice,
                             MaterialTags = model.MaterialTags,
                             MaterialWidth = model.MaterialWidth,
-                            OrderNo = model.OrderNo,
-                            OrderQuantity = item.Quantity,
+                            
                             OrderTypeCode = model.OrderTypeCode,
                             OrderTypeId = model.OrderTypeId,
                             OrderTypeName = model.OrderTypeName,
@@ -476,6 +489,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         {
             return await productionOrderLogic.ReadByIdAsync(id);
         }
+
+        //public List<ProductionOrderModel> ReadBySalesContractNo(string salesContractNo)
+        //{
+        //    return productionOrderLogic.ReadBySalesContractNo(salesContractNo);
+        //}
 
         public async Task<int> UpdateAsync(int id, ProductionOrderModel model)
         {

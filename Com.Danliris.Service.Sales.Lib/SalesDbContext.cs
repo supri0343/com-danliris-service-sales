@@ -18,6 +18,7 @@ using Com.Danliris.Service.Sales.Lib.Models.GarmentOmzetTargetModel;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 
 namespace Com.Danliris.Service.Sales.Lib
 {
@@ -68,6 +69,8 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<FinishingPrintingCostCalculationMachineModel> FinishingPrintingCostCalculationMachines { get; set; }
         public DbSet<FinishingPrintingCostCalculationChemicalModel> FinishingPrintingCostCalculationChemicals { get; set; }
 
+        public DbSet<DOSalesModel> DOSales { get; set; }
+        public DbSet<DOSalesDetailModel> DOSalesLocalItems { get; set; }
         public DbSet<SalesInvoiceModel> SalesInvoices { get; set; }
         public DbSet<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
         public DbSet<SalesReceiptModel> SalesReceipts { get; set; }
@@ -87,6 +90,9 @@ namespace Com.Danliris.Service.Sales.Lib
                 .HasIndex(h => h.SalesContractNo)
                 .IsUnique()
                 .HasFilter("[IsDeleted]=(0)");
+
+            modelBuilder.Entity<FinishingPrintingCostCalculationModel>()
+               .Ignore(c => c.ImageFile);
 
             modelBuilder.Entity<CostCalculationGarment>()
                 .Ignore(c => c.ImageFile);

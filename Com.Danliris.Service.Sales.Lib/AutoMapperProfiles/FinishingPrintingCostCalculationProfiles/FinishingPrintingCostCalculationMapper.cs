@@ -30,6 +30,9 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingCos
 
                 .ForPath(d => d.Material.Id, opt => opt.MapFrom(s => s.MaterialId))
                 .ForPath(d => d.Material.Name, opt => opt.MapFrom(s => s.MaterialName))
+                .ForPath(d => d.Material.Code, opt => opt.MapFrom(s => s.MaterialCode))
+                .ForPath(d => d.Material.Price, opt => opt.MapFrom(s => s.MaterialPrice))
+                .ForPath(d => d.Material.Tags , opt => opt.MapFrom(s => s.MaterialTags))
 
                 .ForPath(d => d.ApprovalMD.IsApproved, opt => opt.MapFrom(s => s.IsApprovedMD))
                 .ForPath(d => d.ApprovalMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMDBy))

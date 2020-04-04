@@ -10,9 +10,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 {
     public class ShinFinishingPrintingSalesContractViewModel : BaseViewModel, IValidatableObject
     {
+        public string SalesContractNo { get; set; }
         public DateTimeOffset Date { get; set; }
 
-        public FinishingPrintingCostCalculationViewModel CostCalculation { get; set; }
+        //public FinishingPrintingCostCalculationViewModel CostCalculation { get; set; }
+
+        public FinishingPrintingPreSalesContractViewModel PreSalesContract { get; set; }
+
+        public UomViewModel UOM { get; set; }
+
+        public MaterialViewModel Material { get; set; }
+
+        public AccountViewModel Sales { get; set; }
 
         public AccountBankViewModel AccountBank { get; set; }
         public double? Amount { get; set; }
@@ -26,8 +35,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public string DeliveredTo { get; set; }
         public DateTimeOffset? DeliverySchedule { get; set; }
         public string DispositionNumber { get; set; }
-        public MaterialConstructionViewModel MaterialConstruction { get; set; }
-        public string MaterialWidth { get; set; }
+        //public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        //public string MaterialWidth { get; set; }
         public string Packing { get; set; }
         public string PieceLength { get; set; }
         public double? PointLimit { get; set; }
@@ -45,13 +54,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if(CostCalculation == null || CostCalculation.Id == 0)
+            if (PreSalesContract == null || PreSalesContract.Id == 0)
             {
-                yield return new ValidationResult("Sales Contract harus di isi", new List<string> { "CostCalculation" });
+                yield return new ValidationResult("Sales Contract harus di isi", new List<string> { "PreSalesContract" });
             }
             else
             {
-                if(CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || CostCalculation.PreSalesContract.Buyer.Type.ToLower().Equals("export"))
+                if (PreSalesContract.Buyer.Type.ToLower().Equals("ekspor") || PreSalesContract.Buyer.Type.ToLower().Equals("export"))
                 {
                     if (string.IsNullOrWhiteSpace(TermOfShipment))
                     {
@@ -70,7 +79,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                     }
                 }
             }
-            
+
 
             if (Commodity == null || Commodity.Id.Equals(0))
             {
@@ -78,20 +87,20 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
             }
 
 
-            if (MaterialConstruction == null || MaterialConstruction.Id.Equals(0))
-            {
-                yield return new ValidationResult("Konstruksi Finish harus diisi", new List<string> { "MaterialConstructionID" });
-            }
+            //if (MaterialConstruction == null || MaterialConstruction.Id.Equals(0))
+            //{
+            //    yield return new ValidationResult("Konstruksi Finish harus diisi", new List<string> { "MaterialConstructionID" });
+            //}
 
             if (YarnMaterial == null || YarnMaterial.Id.Equals(0))
             {
                 yield return new ValidationResult("Nomor Benang Material harus diisi", new List<string> { "YarnMaterialID" });
             }
 
-            if (string.IsNullOrWhiteSpace(MaterialWidth))
-            {
-                yield return new ValidationResult("Lebar Finish harus diisi", new List<string> { "MaterialWidth" });
-            }
+            //if (string.IsNullOrWhiteSpace(MaterialWidth))
+            //{
+            //    yield return new ValidationResult("Lebar Finish harus diisi", new List<string> { "MaterialWidth" });
+            //}
 
 
             if (Quality == null || Quality.Id.Equals(0))
@@ -114,9 +123,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                 yield return new ValidationResult("Tujuan Kirim harus diisi", new List<string> { "DeliveredTo" });
             }
 
-            if (DeliverySchedule == null || DeliverySchedule.GetValueOrDefault().Date <= DateTimeOffset.Now.Date)
+            if (DeliverySchedule == null)
             {
                 yield return new ValidationResult("Jadwal Pengiriman harus diisi", new List<string> { "DeliverySchedule" });
+            }
+            else if (DeliverySchedule.GetValueOrDefault().Date < DateTimeOffset.Now.Date)
+            {
+                yield return new ValidationResult("Jadwal Pengiriman harus lebih besar dari hari ini", new List<string> { "DeliverySchedule" });
             }
 
             if (PointSystem != 10 && PointSystem != 4)

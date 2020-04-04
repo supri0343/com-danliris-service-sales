@@ -562,5 +562,28 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
+        [Fact]
+        public void Should_Success_Read_By_Sales_Contract()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadBySalesContractId(It.IsAny<long>())).Returns(new List<ProductionOrderModel>() { new ProductionOrderModel() });
+            mocks.Mapper.Setup(m => m.Map<List<ProductionOrderViewModel>>(It.IsAny<List<ProductionOrderModel>>())).Returns(new List<ProductionOrderViewModel>());
+            var controller = GetController(mocks);
+            var response = controller.ReadBySalesContractId(It.IsAny<long>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void Should_ReturnFailed_Read_By_Sales_Contract_ThrowException()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadBySalesContractId(It.IsAny<long>())).Returns(new List<ProductionOrderModel>() { new ProductionOrderModel() });
+            mocks.Mapper.Setup(m => m.Map<List<ProductionOrderViewModel>>(It.IsAny<List<ProductionOrderModel>>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = controller.ReadBySalesContractId(It.IsAny<long>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
     }
 }

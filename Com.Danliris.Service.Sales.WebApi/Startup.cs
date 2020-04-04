@@ -73,6 +73,9 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.LocalMerchandiserFacades;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -111,6 +114,9 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<ICostCalculationGarmentValidationReport, CostCalculationGarmentValidationReportFacade>()
                 .AddTransient<IProfitGarmentBySectionReport, ProfitGarmentBySectionReportFacade>()
                 .AddTransient<IAvailableROGarmentReportFacade, AvailableROGarmentReportFacade>()
+                .AddTransient<ICostCalculationGarmentApprovalReport, CostCalculationGarmentApprovalReportFacade>()
+                .AddTransient<IProfitGarmentByComodityReport, ProfitGarmentByComodityReportFacade>()
+                .AddTransient<IBudgetExportGarmentReport, BudgetExportGarmentReportFacade>()
                 .AddTransient<IROGarment, ROGarmentFacade>()
                 .AddTransient<IArticleColor, ArticleColorFacade>()
                 .AddTransient<IRate, RateFacade>()
@@ -139,6 +145,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IGarmentPreSalesContract, GarmentPreSalesContractFacade>()
                 .AddTransient<IGarmentPurchasingQualityObjectiveReportFacade, GarmentPurchasingQualityObjectiveReportFacade>()
                 .AddTransient<IGarmentOmzetTarget, GarmentOmzetTargetFacade>()
+                .AddTransient<IDOSalesContract, DOSalesFacade>()
                 .AddTransient<ISalesInvoiceContract, SalesInvoiceFacade>()
                 .AddTransient<ISalesReceiptContract, SalesReceiptFacade>()
                 .AddTransient<IFinishingPrintingPreSalesContractFacade, FinishingPrintingPreSalesContractFacade>()
@@ -172,6 +179,9 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<CostCalculationGarmentValidationReportLogic>()
                 .AddTransient<ProfitGarmentBySectionReportLogic>()
                 .AddTransient<AvailableROGarmentReportLogic>()
+                .AddTransient<CostCalculationGarmentApprovalReportLogic>()
+                .AddTransient<ProfitGarmentByComodityReportLogic>()
+                .AddTransient<BudgetExportGarmentReportLogic>()
                 .AddTransient<GarmentSalesContractLogic>()
                 .AddTransient<GarmentSalesContractItemLogic>()
                 .AddTransient<ArticleColorLogic>()
@@ -201,6 +211,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<GarmentPreSalesContractLogic>()
                 .AddTransient<GarmentPurchasingQualityObjectiveReportLogic>()
                 .AddTransient<GarmentOmzetTargetLogic>()
+                .AddTransient<DOSalesLogic>()
+                .AddTransient<DOSalesDetailLogic>()
                 .AddTransient<SalesInvoiceLogic>()
                 .AddTransient<SalesInvoiceDetailLogic>()
                 .AddTransient<SalesReceiptLogic>()

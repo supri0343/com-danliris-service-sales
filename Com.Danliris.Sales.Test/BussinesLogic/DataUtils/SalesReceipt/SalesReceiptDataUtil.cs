@@ -26,17 +26,24 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesReceipt
             data.Code = "code";
             data.AutoIncreament = 1;
             data.SalesReceiptNo = "SalesReceiptNo";
-            data.SalesReceiptType = "A";
             data.SalesReceiptDate = DateTimeOffset.UtcNow;
+            //data.UnitId = 1;
+            data.UnitName = "Dying";
+            data.BuyerId = 1;
+            data.BuyerName = "BuyerName";
+            data.BuyerAddress = "BuyerAddress";
+            data.OriginBankName = "OriginBankName";
+            data.OriginAccountNumber = "OriginAccountNumber";
+            data.CurrencyId = 1;
+            data.CurrencyCode = "CurrencyCode";
+            data.CurrencySymbol = "CurrencySymbol";
+            data.CurrencyRate = 1;
             data.BankId = 1;
-            data.AccountCOA = "AccountCOA";
             data.AccountName = "AccountName";
             data.AccountNumber = "AccountNumber";
             data.BankName = "BankName";
             data.BankCode = "BankCode";
-            data.BuyerId = 1;
-            data.BuyerName = "BuyerName";
-            data.BuyerAddress = "BuyerAddress";
+            data.AdministrationFee = 1;
             data.TotalPaid = 1;
 
             data.SalesReceiptDetails = new List<SalesReceiptDetailModel>()
@@ -46,6 +53,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesReceipt
                         SalesInvoiceId = Convert.ToInt32(salesInvoiceData.Id),
                         SalesInvoiceNo = salesInvoiceData.SalesInvoiceNo,
                         DueDate = salesInvoiceData.DueDate,
+                        VatType = "PPN BUMN",
                         Tempo = 16,
                         CurrencyId = 1,
                         CurrencyCode = "IDR",

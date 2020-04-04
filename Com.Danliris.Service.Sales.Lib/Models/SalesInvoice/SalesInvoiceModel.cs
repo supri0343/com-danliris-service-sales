@@ -19,15 +19,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
+        //[MaxLength(255)]
+        //public string DebtorIndexNo { get; set; }
+        /*Shipment Document*/
+        public int ShipmentDocumentId { get; set; }
         [MaxLength(255)]
-        public string DebtorIndexNo { get; set; }
+        public string ShipmentDocumentCode { get; set; }
 
-        /*DO Sales*/
-        public int DOSalesId { get; set; }
-        [MaxLength(255)]
-        public string DOSalesNo { get; set; }
-
-        /*Buyer*/
+        #region Buyer
         public int BuyerId { get; set; }
         [MaxLength(255)]
         public string BuyerName { get; set; }
@@ -35,26 +34,25 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string BuyerAddress { get; set; }
         [MaxLength(255)]
         public string BuyerNPWP { get; set; }
+        #endregion
+
         [MaxLength(255)]
         public string IDNo { get; set; }
 
-        /*Currency*/
+        #region Currency
         public int CurrencyId { get; set; }
         [MaxLength(255)]
         public string CurrencyCode { get; set; }
         [MaxLength(255)]
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
+        #endregion
 
         [MaxLength(255)]
-        public string Disp { get; set; }
-        [MaxLength(255)]
-        public string Op { get; set; }
-        [MaxLength(255)]
-        public string Sc { get; set; }
-        public bool UseVat { get; set; }
+        public string VatType { get; set; }
         public double TotalPayment { get; set; }
         public double TotalPaid { get; set; }
+        public bool IsPaidOff { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
 

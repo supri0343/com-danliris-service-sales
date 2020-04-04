@@ -17,7 +17,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
 
-            Document document = new Document(PageSize.A5.Rotate(), MARGIN, MARGIN, MARGIN, MARGIN);
+            Document document = new Document(PageSize.A4, MARGIN, MARGIN, MARGIN, MARGIN);
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
@@ -73,12 +73,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("Kepada Yth. ", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.BuyerName, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Name, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Alamat", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.BuyerAddress, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Address, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("", normal_font);
@@ -122,7 +122,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable bodyTable = new PdfPTable(4);
             PdfPCell bodyCell = new PdfPCell();
 
-            float[] widthsBody = new float[] { 3f, 10f, 10f, 10f };
+            float[] widthsBody = new float[] { 3f, 15f, 7f, 8f };
             bodyTable.SetWidths(widthsBody);
             bodyTable.WidthPercentage = 100;
 
@@ -147,11 +147,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.UnitName, normal_font);
+                bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Total + " " + item.UomUnit, normal_font);
+                bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
                 bodyTable.AddCell(bodyCell);
 
                 bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;

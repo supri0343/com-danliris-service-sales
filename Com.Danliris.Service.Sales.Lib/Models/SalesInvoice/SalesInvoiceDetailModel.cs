@@ -6,22 +6,22 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
     public class SalesInvoiceDetailModel : BaseModel
     {
         [MaxLength(255)]
-        public string UnitCode { get; set; }
+        public string ProductCode { get; set; }
+        [MaxLength(255)]
+        public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
-        public double Total { get; set; }
 
-        /*Uom*/
+        #region Uom
         public int UomId { get; set; }
         [MaxLength(255)]
         public string UomUnit { get; set; }
+        #endregion
 
-        [MaxLength(255)]
-        public string UnitName { get; set; }
-        public double UnitPrice { get; set; }
+        public double Total { get; set; }
+        public double Price { get; set; }
         public double Amount { get; set; }
         public int SalesInvoiceId { get; set; }
-
 
         public virtual SalesInvoiceModel SalesInvoiceModel { get; set; }
     }

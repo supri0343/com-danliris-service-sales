@@ -32,23 +32,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Quantity","Total","UomId","UomUnit","UnitCode","UnitName","UnitPrice","Amount","LastModifiedUtc"
+                "Id","ProductName","ProductCode","Quantity","Uom","Total","Price","Amount"
             };
-
-            Query = Query
-                .Select(field => new SalesInvoiceDetailModel
-                {
-                    Id = field.Id,
-                    Quantity = field.Quantity,
-                    Total = field.Total,
-                    UomId = field.UomId,
-                    UomUnit = field.UomUnit,
-                    UnitCode = field.UnitCode,
-                    UnitName = field.UnitName,
-                    UnitPrice = field.UnitPrice,
-                    Amount = field.Amount,
-                    LastModifiedUtc = field.LastModifiedUtc,
-                });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
             Query = QueryHelper<SalesInvoiceDetailModel>.Order(Query, OrderDictionary);

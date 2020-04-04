@@ -3,6 +3,7 @@ using Com.Danliris.Sales.Test.WebApi.Utils;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesInvoiceProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
@@ -24,15 +25,21 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 DeliveryOrderNo = "DeliveryOrderNo",
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
-                BuyerName = "BuyerName",
-                BuyerAddress = "BuyerAddress",
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                },
                 Remark = "Remark",
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                 {
                     new SalesInvoiceDetailViewModel()
                     {
-                        UnitName = "UnitName",
-                        UomUnit = "PACKS",
+                        ProductName = "ProductName",
+                        Uom = new UomViewModel()
+                        {
+                            Unit = "PACKS",
+                        },
                         Quantity = "Quantity",
                         Total = 1,
                     }
@@ -77,31 +84,39 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_UseVat_Is_True_And_CurrencySymbol_Is_IDR()
+        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
         {
             var vm = new SalesInvoiceViewModel()
             {
-                BuyerName = "BuyerName",
-                BuyerAddress = "BuyerAddress",
-                BuyerNPWP = "BuyerNPWP",
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                DebtorIndexNo = "DebtorIndexNo",
                 IDNo = "IDNo",
-                CurrencySymbol = "Rp",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "Rp",
+                },
                 Remark = "Remark",
-                UseVat = true,
+                VatType = "PPN Umum",
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                 {
                     new SalesInvoiceDetailViewModel()
                     {
-                        UnitCode = "UnitCode",
+                        ProductCode = "ProductCode",
                         Quantity = "Quantity",
-                        UomUnit = "PACKS",
-                        UnitName = "UnitName",
+                        Uom = new UomViewModel()
+                        {
+                            Unit = "PACKS",
+                        },
+                        ProductName = "ProductName",
                         Total = 1,
-                        UnitPrice = 1,
+                        Price = 1,
                         Amount = 1,
                     }
                 }
@@ -118,31 +133,39 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
         }
         [Fact]
-        public void Get_Sales_Invoice_PDF_UseVat_Is_False_And_CurrencySymbol_Is_USD()
+        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
         {
             var vm = new SalesInvoiceViewModel()
             {
-                BuyerName = "BuyerName",
-                BuyerAddress = "BuyerAddress",
-                BuyerNPWP = "BuyerNPWP",
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                DebtorIndexNo = "DebtorIndexNo",
                 IDNo = "IDNo",
-                CurrencySymbol = "$",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "$",
+                },
                 Remark = "Remark",
-                UseVat = false,
+                VatType = "PPN BUMN",
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                 {
                     new SalesInvoiceDetailViewModel()
                     {
-                        UnitCode = "UnitCode",
+                        ProductCode = "ProductCode",
                         Quantity = "Quantity",
-                        UomUnit = "PACKS",
-                        UnitName = "UnitName",
+                        Uom = new UomViewModel()
+                        {
+                            Unit = "PACKS",
+                        },
+                        ProductName = "ProductName",
                         Total = 1,
-                        UnitPrice = 1,
+                        Price = 1,
                         Amount = 1,
                     }
                 }
@@ -164,7 +187,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new SalesInvoiceViewModel()
             {
-                CurrencySymbol = "Rp",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "Rp",
+                },
             };
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
@@ -207,7 +233,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
-            var configuration = new MapperConfiguration(cfg => {
+            var configuration = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<SalesInvoiceMapper>();
                 cfg.AddProfile<SalesInvoiceDetailMapper>();
             });
@@ -233,27 +260,32 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     SalesInvoiceType = "",
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
                     DeliveryOrderNo = "",
-                    DOSalesId = 0,
-                    DOSalesNo = "",
-                    CurrencyId = 0,
-                    CurrencyCode = "",
-                    CurrencyRate = 0,
-                    BuyerId = 0,
-                    BuyerName = "",
-                    DebtorIndexNo = "",
+                    ShipmentDocumentId = 0,
+                    ShipmentDocumentCode = "",
+                    Currency = new CurrencyViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Rate = 0,
+                    },
+                    Buyer = new BuyerViewModel()
+                    {
+                        Id = 0,
+                        Name = "",
+                    },
                     DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                     TotalPayment = 0,
                     TotalPaid = -1,
-                    Disp = "",
-                    Op = "",
-                    Sc = "",
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>{
                         new SalesInvoiceDetailViewModel{
-                            UnitCode = "",
+                            ProductCode = "",
                             Quantity = "",
-                            UomId = 0,
-                            UomUnit = "",
-                            UnitName = "",
+                            Uom = new UomViewModel()
+                        {
+                            Id = 0,
+                            Unit = "",
+                        },
+                            ProductName = "",
                             Amount = 0,
                         }
                     }
@@ -273,27 +305,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new SalesInvoiceViewModel{
                     DueDate = DateTimeOffset.Now,
+                    Currency = new CurrencyViewModel() {},
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>{
                         new SalesInvoiceDetailViewModel{
                             SalesInvoiceId = 2,
-                            UnitCode = "UnitCode",
+                            ProductCode = "ProductCode",
                             Quantity = "Quantity",
                             Total = 10,
-                            UomId = 10,
-                            UomUnit = "PCS",
-                            UnitName = "UnitName",
-                            UnitPrice = 100,
+                            Uom = new UomViewModel()
+                            {
+                                Id = 10,
+                                Unit = "PCS",
+                            },
+                            ProductName = "ProductName",
+                            Price = 100,
                             Amount = 100,
                         },
                         new SalesInvoiceDetailViewModel{
                             SalesInvoiceId = 2,
-                            UnitCode = "UnitCode",
+                            ProductCode = "ProductCode",
                             Quantity = "Quantity",
                             Total = 10,
-                            UomId = 10,
-                            UomUnit = "PCS",
-                            UnitName = "UnitName",
-                            UnitPrice = 100,
+                            Uom = new UomViewModel()
+                            {
+                                Id = 10,
+                                Unit = "PCS",
+                            },
+                            ProductName = "ProductName",
+                            Price = 100,
                             Amount = 100,
                         }
                     }
@@ -310,12 +349,36 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public void Validate_Null_Model_and_DetailViewModel()
         {
             List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
-            {};
+            { };
             foreach (var viewModel in viewModels)
             {
                 var defaultValidationResult = viewModel.Validate(null);
                 Assert.True(defaultValidationResult.Count() > 0);
             }
+        }
+
+        [Fact]
+        public void Should_Success_Read_By_Buyer()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>() { new SalesInvoiceModel() });
+            mocks.Mapper.Setup(m => m.Map<List<SalesInvoiceViewModel>>(It.IsAny<List<SalesInvoiceModel>>())).Returns(new List<SalesInvoiceViewModel>());
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(It.IsAny<int>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void Should_ReturnFailed_Read_By_Buyer_ThrowException()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>() { new SalesInvoiceModel() });
+            mocks.Mapper.Setup(m => m.Map<List<SalesInvoiceViewModel>>(It.IsAny<List<SalesInvoiceModel>>())).Throws(new Exception());
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(It.IsAny<int>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
     }
 }

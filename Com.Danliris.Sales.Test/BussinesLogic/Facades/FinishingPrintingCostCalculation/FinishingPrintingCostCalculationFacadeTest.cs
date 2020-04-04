@@ -236,6 +236,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
         }
 
         [Fact]
+        public async void ValidatePreSalesContractId_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            var Response = await facade.ValidatePreSalesContractId(data.PreSalesContractId);
+            Assert.True(Response);
+        }
+
+        [Fact]
         public async void ValidateVM()
         {
 
@@ -464,6 +477,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
 
             Assert.Equal(vm.Id, model.Id);
 
+        }
+
+        [Fact]
+        public async void GetByPreSalesContract_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            var Response = facade.GetByPreSalesContract(data.PreSalesContractId);
+            Assert.NotEmpty(Response.Data);
         }
     }
 

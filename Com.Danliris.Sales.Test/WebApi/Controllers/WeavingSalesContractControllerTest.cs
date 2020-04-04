@@ -99,7 +99,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
                 {
                     Name = "a"
-                }
+                },
+                ComodityDescription = "a"
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
@@ -171,7 +172,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
                 {
                     Name ="a"
-                }
+                },
+                ComodityDescription = "a"
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);

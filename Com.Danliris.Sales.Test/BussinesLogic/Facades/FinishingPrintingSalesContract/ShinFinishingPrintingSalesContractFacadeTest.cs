@@ -48,6 +48,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
                 .Setup(x => x.GetService(typeof(ShinFinishingPrintingSalesContractLogic)))
                 .Returns(finishingprintingLogic);
 
+            var preSalesContractLogic = new FinishingPrintingPreSalesContractLogic(identityService, dbContext);
+            serviceProviderMock
+                .Setup(s => s.GetService(typeof(FinishingPrintingPreSalesContractLogic)))
+                .Returns(preSalesContractLogic);
+
             var ccLogic = new FinishingPrintingCostCalculationLogic(identityService, dbContext);
 
             serviceProviderMock
@@ -72,7 +77,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
 
         protected override ShinFinisihingPrintingSalesContractDataUtil DataUtil(ShinFinishingPrintingSalesContractFacade facade, SalesDbContext dbContext = null)
         {
-            FinishingPrintingCostCalculationFacade ccFacade = new FinishingPrintingCostCalculationFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinishingPrintingPreSalesContractFacade ccFacade = new FinishingPrintingPreSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
             ShinFinisihingPrintingSalesContractDataUtil dataUtil = Activator.CreateInstance(typeof(ShinFinisihingPrintingSalesContractDataUtil), facade, ccFacade) as ShinFinisihingPrintingSalesContractDataUtil;
             return dataUtil;
         }
@@ -144,22 +149,26 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             var response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation = new FinishingPrintingCostCalculationViewModel();
+            vm.PreSalesContract = new FinishingPrintingPreSalesContractViewModel();
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation.Id = 1;
-            vm.CostCalculation.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+            vm.PreSalesContract.Id = 1;
+            vm.PreSalesContract.Buyer = new BuyerViewModel()
             {
-                Buyer = new BuyerViewModel()
-                {
-                    Type = "ekspor"
-                }
+                Type = "ekspor"
             };
+            //vm.CostCalculation.PreSalesContract = new FinishingPrintingPreSalesContractViewModel()
+            //{
+            //    Buyer = new BuyerViewModel()
+            //    {
+            //        Type = "ekspor"
+            //    }
+            //};
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.CostCalculation.PreSalesContract.Buyer.Type = "export";
+            vm.PreSalesContract.Buyer.Type = "export";
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
@@ -191,12 +200,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.MaterialConstruction = new MaterialConstructionViewModel()
-            {
-                Id = 1
-            };
-            response = vm.Validate(null);
-            Assert.NotEmpty(response);
+            //vm.MaterialConstruction = new MaterialConstructionViewModel()
+            //{
+            //    Id = 1
+            //};
+            //response = vm.Validate(null);
+            //Assert.NotEmpty(response);
 
             vm.YarnMaterial = new YarnMaterialViewModel()
             {
@@ -205,9 +214,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
-            vm.MaterialWidth = "tes";
-            response = vm.Validate(null);
-            Assert.NotEmpty(response);
+            //vm.MaterialWidth = "tes";
+            //response = vm.Validate(null);
+            //Assert.NotEmpty(response);
 
             vm.Quality = new QualityViewModel()
             {
@@ -231,6 +240,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
             Assert.NotEmpty(response);
 
             vm.DeliveredTo = "test";
+            response = vm.Validate(null);
+            Assert.NotEmpty(response);
+
+            vm.DeliverySchedule = DateTimeOffset.UtcNow.AddDays(-1);
             response = vm.Validate(null);
             Assert.NotEmpty(response);
 
@@ -271,7 +284,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingSalesCo
                 new FinishingPrintingSalesContractDetailViewModel()
                 {
                     Color = "a0",
-                    Price = 0
+                    Price = 0,
+                    ScreenCost = 1,
+                    CostCalculationId = 1,
+                    ProductionOrderNo = "s"
                 }
             };
             response = vm.Validate(null);

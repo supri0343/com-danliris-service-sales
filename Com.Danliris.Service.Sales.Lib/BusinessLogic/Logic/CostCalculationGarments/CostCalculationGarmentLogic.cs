@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             {
                   "Id", "Code", "PreSCNo", "RO_Number", "Quantity", "ConfirmPrice", "Article", "Unit", "LastModifiedUtc","UnitName",
                     "Comodity", "UOM", "Buyer", "DeliveryDate", "BuyerBrand", "ApprovalMD", "ApprovalPurchasing", "ApprovalIE", "ApprovalKadivMD", "ApprovalPPIC",
-                    "IsPosted","SectionName"
+                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription"
             };
 
             Query = Query
@@ -111,8 +111,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                      IsPosted = ccg.IsPosted,
 
                      LastModifiedUtc = ccg.LastModifiedUtc,
-                     SectionName=ccg.SectionName
-				 });
+                     SectionName = ccg.SectionName,
+                     Section = ccg.Section,
+                     CreatedBy = ccg.CreatedBy
+                 });
 
 			Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
 			Query = QueryHelper<CostCalculationGarment>.Order(Query, OrderDictionary);
@@ -549,16 +551,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             reasonDbSet.Add(costCalculationGarmentUnpostReason);
         }
 
-		internal CostCalculationGarmentDataProductionReport GetComodityQtyOrderHoursBuyerByRo(string ro)
+		internal List<CostCalculationGarmentDataProductionReport> GetComodityQtyOrderHoursBuyerByRo(string ro)
 		{
-			CostCalculationGarmentDataProductionReport costCalculationGarmentDataProductionReport = new CostCalculationGarmentDataProductionReport();
-			var costCalculation = DbSet.Single(m => m.RO_Number == ro);
-			costCalculationGarmentDataProductionReport.ro = costCalculation.RO_Number;
-			costCalculationGarmentDataProductionReport.buyerCode = costCalculation.BuyerCode;
-			costCalculationGarmentDataProductionReport.hours = costCalculation.SMV_Cutting;
-			costCalculationGarmentDataProductionReport.comodityName = costCalculation.Commodity;
-			costCalculationGarmentDataProductionReport.qtyOrder = costCalculation.Quantity;
-			return costCalculationGarmentDataProductionReport;
+            var listRO = ro.Split(",");
+
+            var data = DbSet.Where(w => listRO.Contains(w.RO_Number)).Select(s => new CostCalculationGarmentDataProductionReport
+            {
+			    ro = s.RO_Number,
+			    buyerCode = s.BuyerCode,
+			    hours = s.SMV_Cutting,
+			    comodityName = s.Commodity,
+			    qtyOrder = s.Quantity,
+            }).ToList();
+
+			return data;
 		}
 		internal List<string> ReadUnpostReasonCreators(string keyword, int page, int size)
         {

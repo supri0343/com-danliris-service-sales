@@ -1,6 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
-using System;
-using System.Collections.Generic;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
@@ -8,19 +7,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
     public class SalesInvoiceDetailViewModel : BaseViewModel
     {
         [MaxLength(255)]
-        public string UnitCode { get; set; }
+        public string ProductCode { get; set; }
+        [MaxLength(255)]
+        public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
+        public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
-
-        /*Uom*/
-        public int? UomId { get; set; }
-        [MaxLength(255)]
-        public string UomUnit { get; set; }
-
-        [MaxLength(255)]
-        public string UnitName { get; set; }
-        public double? UnitPrice { get; set; }
+        public double? Price { get; set; }
         public double Amount { get; set; }
         public int? SalesInvoiceId { get; set; }
     }
