@@ -554,7 +554,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
 			CostCalculationGarmentDataProductionReport costCalculationGarmentDataProductionReport = new CostCalculationGarmentDataProductionReport();
 			var costCalculation = DbSet.Single(m => m.RO_Number == ro);
 			costCalculationGarmentDataProductionReport.ro = costCalculation.RO_Number;
-			costCalculationGarmentDataProductionReport.buyerCode = costCalculation.BuyerCode;
+			costCalculationGarmentDataProductionReport.buyerCode = costCalculation.BuyerBrandCode;
 			costCalculationGarmentDataProductionReport.hours = costCalculation.SMV_Cutting;
 			costCalculationGarmentDataProductionReport.comodityName = costCalculation.Commodity;
 			costCalculationGarmentDataProductionReport.qtyOrder = costCalculation.Quantity;
