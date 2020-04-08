@@ -139,6 +139,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 			   .Include(d => d.CostCalculationGarment_Materials)
 			   .FirstOrDefaultAsync();
 
+            read.CostCalculationGarment_Materials = read.CostCalculationGarment_Materials.OrderBy(o => o.MaterialIndex).ToList();
+
             if (read.ImagePath != null)
             {
                 read.ImageFile = await this.AzureImageFacade.DownloadImage(read.GetType().Name, read.ImagePath);

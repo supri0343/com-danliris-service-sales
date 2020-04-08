@@ -7,6 +7,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
 {
     public class CostCalculationGarment_MaterialViewModel : BaseViewModel
     {
+        public int MaterialIndex { get; set; }
+
         public string Code { get; set; }
         public string PO_SerialNumber { get; set; }
         public string PO { get; set; }

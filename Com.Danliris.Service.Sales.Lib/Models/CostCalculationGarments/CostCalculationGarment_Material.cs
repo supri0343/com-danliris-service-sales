@@ -13,6 +13,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments
         public long CostCalculationGarmentId { get; set; }
         [ForeignKey("CostCalculationGarmentId")]
         public virtual CostCalculationGarment CostCalculationGarment { get; set; }
+        public int MaterialIndex { get; set; }
+
         [MaxLength(50)]
         public string Code { get; set; }
         [MaxLength(50)]
