@@ -120,9 +120,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
         public override async Task<SalesInvoiceModel> ReadByIdAsync(long id)
         {
-            var SalesInvoice = await DbSet.Where(p => p.SalesInvoiceDetails.Select(d => d.SalesInvoiceModel.Id)
-            .Contains(p.Id)).Include(p => p.SalesInvoiceDetails).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
-            SalesInvoice.SalesInvoiceDetails = SalesInvoice.SalesInvoiceDetails.OrderBy(s => s.Id).ToArray();
+            var SalesInvoice = await DbSet.Include(s => s.SalesInvoiceDetails).ThenInclude(s => s.SalesInvoiceItems).FirstOrDefaultAsync(s => s.Id == id);
             return SalesInvoice;
         }
 

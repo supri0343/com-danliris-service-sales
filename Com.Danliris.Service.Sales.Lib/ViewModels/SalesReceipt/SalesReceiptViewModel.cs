@@ -29,7 +29,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         public string OriginAccountNumber { get; set; }
         public CurrencyViewModel Currency { get; set; }
         public AccountBankViewModel Bank { get; set; }
-        public double AdministrationFee { get; set; }
+        public double? AdministrationFee { get; set; }
         public double TotalPaid { get; set; }
 
         public ICollection<SalesReceiptDetailViewModel> SalesReceiptDetails { get; set; }
@@ -42,10 +42,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (string.IsNullOrWhiteSpace(UnitName))
                 yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
 
-            if (string.IsNullOrWhiteSpace(Bank.AccountName))
+            if (Bank == null || string.IsNullOrWhiteSpace(Bank.AccountName))
                 yield return new ValidationResult("Nama Bank Tujuan harus diisi", new List<string> { "AccountName" });
 
-            if (string.IsNullOrWhiteSpace(Buyer.Name))
+            if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Nama Buyer harus di isi", new List<string> { "BuyerName" });
 
             if (string.IsNullOrWhiteSpace(OriginBankName))
@@ -54,7 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (string.IsNullOrWhiteSpace(OriginAccountNumber))
                 yield return new ValidationResult("No Rek. Bank Asal harus di isi", new List<string> { "OriginAccountNumber" });
 
-            if (string.IsNullOrWhiteSpace(Currency.Code))
+            if (Currency == null || string.IsNullOrWhiteSpace(Currency.Code))
                 yield return new ValidationResult("Jenis Mata Uang harus diisi", new List<string> { "CurrencyCode" });
 
             if (AdministrationFee < 0)
@@ -74,13 +74,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
 
                     var rowErrorCount = 0;
 
-                    if (!detail.SalesInvoiceId.HasValue || string.IsNullOrWhiteSpace(detail.SalesInvoiceNo))
+                    if (detail.SalesInvoice == null || string.IsNullOrWhiteSpace(detail.SalesInvoice.SalesInvoiceNo))
                     {
                         Count++;
                         rowErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'Kode Faktur harus diisi',";
                     }
-                    if (!detail.Currency.Id.HasValue || string.IsNullOrWhiteSpace(detail.Currency.Code))
+                    if (detail.SalesInvoice.Currency == null || string.IsNullOrWhiteSpace(detail.SalesInvoice.Currency.Code))
                     {
                         Count++;
                         rowErrorCount++;
@@ -135,7 +135,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         DetailErrors += "OverPaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh kelebihan pembayaran',";
                     }
 
-                    var mustSameType = SalesReceiptDetails.Where(f => f.Currency.Code != detail.Currency.Code).ToList();
+                    var mustSameType = SalesReceiptDetails.Where(f => f.SalesInvoice.Currency.Code != detail.SalesInvoice.Currency.Code).ToList();
                     
                     if (mustSameType.Count > 0)
                     {
@@ -146,8 +146,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                     if (rowErrorCount == 0)
                     {
                         var duplicateDetails = SalesReceiptDetails.Where(f =>
-                                f.SalesInvoiceNo.Equals(detail.SalesInvoiceNo) &&
-                                f.SalesInvoiceId.GetValueOrDefault().Equals(detail.SalesInvoiceId.GetValueOrDefault())
+                                f.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo) &&
+                                f.SalesInvoice.Id.Equals(detail.SalesInvoice.Id)
                             ).ToList();
 
                         if (duplicateDetails.Count > 1)

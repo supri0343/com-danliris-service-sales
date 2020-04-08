@@ -101,18 +101,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
         public async Task<int> UpdateAsync(int id, SalesInvoiceModel model)
         {
-            using (var transaction = DbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    salesInvoiceLogic.UpdateAsync(id, model);
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    throw new Exception(e.Message);
-                }
-            }
+            salesInvoiceLogic.UpdateAsync(id, model);
 
             return await DbContext.SaveChangesAsync();
         }

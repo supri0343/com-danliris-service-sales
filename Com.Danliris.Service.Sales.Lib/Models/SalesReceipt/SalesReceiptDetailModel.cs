@@ -6,9 +6,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
 {
     public class SalesReceiptDetailModel : BaseModel
     {
+        #region SalesInvoice
         public int SalesInvoiceId { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceNo { get; set; }
+        #endregion
+
         public DateTimeOffset DueDate { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }
