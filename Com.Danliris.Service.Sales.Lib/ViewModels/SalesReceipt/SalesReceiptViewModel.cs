@@ -143,20 +143,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         DetailErrors += "CurrencyCode : 'Tiap No. Jual harus memiliki kurs yang sama',";
                     }
 
-                    if (rowErrorCount == 0)
-                    {
-                        var duplicateDetails = SalesReceiptDetails.Where(f =>
-                                f.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo) &&
-                                f.SalesInvoice.Id.Equals(detail.SalesInvoice.Id)
-                            ).ToList();
-
-                        if (duplicateDetails.Count > 1)
-                        {
-                            Count++;
-                            DetailErrors += "SalesInvoiceNo : 'Nomor Faktur Penjualan tidak boleh duplikat',";
-                        }
-                    }
-
 
                     DetailErrors += "}, ";
                 }

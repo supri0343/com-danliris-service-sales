@@ -247,6 +247,73 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Get_Sales_Invoice_ReadByBuyerId_OK()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
+                IDNo = "IDNo",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "$",
+                },
+                Remark = "Remark",
+                VatType = "PPN BUMN",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                        ProductCode = "ProductCode",
+                        Quantity = "Quantity",
+                        Uom = new UomViewModel()
+                        {
+                            Unit = "PACKS",
+                        },
+                        ProductName = "ProductName",
+                        Total = 1,
+                        Price = 1,
+                        Amount = 1,
+                    }
+                } } }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>());
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(1);
+
+            Assert.NotNull(response);
+
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_ReadByBuyerId_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByBuyerId(It.IsAny<int>())).Throws(new Exception("error"));
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(1);
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+
+        }
+
+        [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
             var configuration = new MapperConfiguration(cfg =>
@@ -384,17 +451,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
-        [Fact]
-        public void Validate_Null_Model_and_DetailViewModel()
-        {
-            List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
-            { };
-            foreach (var viewModel in viewModels)
-            {
-                var defaultValidationResult = viewModel.Validate(null);
-                Assert.True(defaultValidationResult.Count() > 0);
-            }
-        }
+        //[Fact]
+        //public void Validate_Null_Model_and_DetailViewModel()
+        //{
+        //    List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
+        //    { };
+        //    foreach (var viewModel in viewModels)
+        //    {
+        //        var defaultValidationResult = viewModel.Validate(null);
+        //        Assert.True(defaultValidationResult.Count() > 0);
+        //    }
+        //}
 
         [Fact]
         public void Should_Success_Read_By_Buyer()
