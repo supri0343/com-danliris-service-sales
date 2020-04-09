@@ -4,6 +4,7 @@ using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
+using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
 using Moq;
@@ -23,10 +24,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var vm = new SalesReceiptViewModel()
             {
                 SalesReceiptDate = DateTimeOffset.Now,
-                Buyer = new BuyerViewModel() 
+                Buyer = new BuyerViewModel()
                 {
-                   Name = "Name",
-                   Address = "Address",
+                    Name = "Name",
+                    Address = "Address",
                 },
                 Currency = new CurrencyViewModel()
                 {
@@ -40,10 +41,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 },
                 SalesReceiptDetails = new List<SalesReceiptDetailViewModel>()
                 {
-                    new SalesReceiptDetailViewModel() 
+                    new SalesReceiptDetailViewModel()
                     {
                         VatType = "PPN BUMN",
-                        SalesInvoiceNo = "SalesInvoiceNo",
+                        SalesInvoice = new SalesInvoiceViewModel()
+                        {
+                            SalesInvoiceNo = "SalesInvoiceNo",
+                        },
                         Currency = new CurrencyViewModel()
                         {
                             Code = "IDR",
@@ -154,18 +158,21 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
                             SalesReceiptId = 0,
-                            SalesInvoiceId = 0,
-                            SalesInvoiceNo = "",
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 0,
+                                SalesInvoiceNo = "",
+                                Currency = new CurrencyViewModel()
+                                {
+                                    Id = 0,
+                                    Code = "",
+                                    Symbol = "",
+                                    Rate = 0,
+                                },
+                            },
                             DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                             VatType = "",
                             Tempo = -1,
-                            Currency = new CurrencyViewModel()
-                            {
-                                Id = 0,
-                                Code = "",
-                                Symbol = "",
-                                Rate = 0,
-                            },
                             TotalPayment = -1,
                             TotalPaid = -1,
                             Paid = -1,
@@ -216,18 +223,21 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
                             SalesReceiptId = 10,
-                            SalesInvoiceId = 10,
-                            SalesInvoiceNo = "SalesInvoiceNo",
-                            DueDate = DateTimeOffset.UtcNow,
-                            VatType = "PPN Kawasan Berikat",
-                            Tempo = 10,
-                            Currency = new CurrencyViewModel()
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 10,
+                                SalesInvoiceNo = "SalesInvoiceNo",
+                                Currency = new CurrencyViewModel()
                             {
                                 Id = 10,
                                 Code = "USD",
                                 Symbol = "$",
                                 Rate = 10,
                             },
+                            },
+                            DueDate = DateTimeOffset.UtcNow,
+                            VatType = "PPN Kawasan Berikat",
+                            Tempo = 10,
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,
@@ -238,18 +248,21 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                         new SalesReceiptDetailViewModel{
                             SalesReceiptId = 10,
-                            SalesInvoiceId = 10,
-                            SalesInvoiceNo = "SalesInvoiceNo",
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 10,
+                                SalesInvoiceNo = "SalesInvoiceNo",
+                                Currency = new CurrencyViewModel()
+                                {
+                                    Id = 10,
+                                    Code = "USD",
+                                    Symbol = "$",
+                                    Rate = 10,
+                                },
+                            },
                             DueDate = DateTimeOffset.UtcNow,
                             VatType = "PPN Kawasan Berikat",
                             Tempo = 10,
-                            Currency = new CurrencyViewModel()
-                            {
-                                Id = 10,
-                                Code = "USD",
-                                Symbol = "$",
-                                Rate = 10,
-                            },
                             TotalPayment = 10,
                             TotalPaid = 10,
                             Paid = 10,
@@ -288,10 +301,14 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            VatType = "PPN Umum",
-                            Currency = new CurrencyViewModel()
+                            VatType = "PPN Umum",                            
+                            SalesInvoice = new SalesInvoiceViewModel()
                             {
-                                Id = 20,
+                                Id = 1,
+                                Currency = new CurrencyViewModel()
+                                {
+                                    Id = 20,
+                                },
                             },
                         }
                     }
