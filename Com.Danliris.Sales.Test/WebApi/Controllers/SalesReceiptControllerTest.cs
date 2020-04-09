@@ -47,12 +47,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         SalesInvoice = new SalesInvoiceViewModel()
                         {
                             SalesInvoiceNo = "SalesInvoiceNo",
-                        },
-                        Currency = new CurrencyViewModel()
-                        {
-                            Code = "IDR",
-                            Symbol = "Rp",
-                            Rate = 14000,
+                            Currency = new CurrencyViewModel()
+                            {
+                                Code = "IDR",
+                                Symbol = "Rp",
+                                Rate = 14000,
+                            },
                         },
                     }
                 }
@@ -191,18 +191,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Null_Model_and_DetailViewModel()
-        {
-            List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
-            { };
-            foreach (var viewModel in viewModels)
-            {
-                var defaultValidationResult = viewModel.Validate(null);
-                Assert.True(defaultValidationResult.Count() > 0);
-            }
-        }
-
-        [Fact]
         public void Validate_Duplicate_DetailViewModel()
         {
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
@@ -282,7 +270,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_VatType_DetailViewModel()
+        public void Validate_CurrencySymbol_And_VatType_For_PDF()
         {
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
@@ -308,6 +296,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 Currency = new CurrencyViewModel()
                                 {
                                     Id = 20,
+                                    Symbol = "$",
+                                    Rate = 1000,
                                 },
                             },
                         }
