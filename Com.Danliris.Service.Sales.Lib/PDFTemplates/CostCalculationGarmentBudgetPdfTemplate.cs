@@ -227,32 +227,64 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_signature.AddCell(cell_signature);
 			table_signature.AddCell(cell_signature);
 
+            var AssignmentKabag = "";
+            var AssignmentPurch = "";
+            var AssignmentKadiv = "";
 
-			cell_signature.Phrase = new Phrase("(................)", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("(................)", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("(................)", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("(................)", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("(................)", normal_font);
-			table_signature.AddCell(cell_signature);
+            if (viewModel.ApprovalMD.IsApproved)
+            {
+                AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
+            }
+            else
+            {
+                AssignmentKabag = " ____________________ ";
+            }
 
-			cell_signature.Phrase = new Phrase("Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Ka. Bag Pembelian", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Ka. Div Produksi Garment", normal_font);
-			table_signature.AddCell(cell_signature);
-			cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
-			table_signature.AddCell(cell_signature);
-			#endregion
+            if (viewModel.ApprovalPurchasing.IsApproved)
+            {
+                AssignmentPurch = viewModel.ApprovalPurchasing.ApprovedBy;
+            }
+            else
+            {
+                AssignmentPurch = " ____________________ ";
+            }
 
-			#region Cost Calculation Material
-			PdfPTable table_ccm = new PdfPTable(11);
+            if (viewModel.ApprovalKadivMD.IsApproved)
+            {
+                AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
+            }
+            else
+            {
+                AssignmentKadiv = " ____________________ ";
+            }
+
+            string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
+
+            cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(  " + AssignmentPurch + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("( ____________________ )", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
+            table_signature.AddCell(cell_signature);
+
+            cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Bag Pembelian", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Div Produksi Garment", normal_font);
+            table_signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
+            table_signature.AddCell(cell_signature);
+            #endregion
+
+            #region Cost Calculation Material
+            PdfPTable table_ccm = new PdfPTable(11);
 			table_ccm.TotalWidth = 570f;
 
 			float[] ccm_widths = new float[] { 1f, 3f, 2f, 6f, 2f, 3f, 2f, 2f, 3f, 3f, 3f };

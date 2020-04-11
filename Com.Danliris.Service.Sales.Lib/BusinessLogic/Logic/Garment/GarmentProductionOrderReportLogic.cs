@@ -50,6 +50,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                 Query = Query.Where(w => w.BuyerBrandCode == filter.buyer);
             }
 
+            Query = Query.Where(w => w.IsApprovedKadivMD == true);
+
             var costCalculations = Query.Select(s => new CostCalculationGarment
             {
                 DeliveryDate = s.DeliveryDate,

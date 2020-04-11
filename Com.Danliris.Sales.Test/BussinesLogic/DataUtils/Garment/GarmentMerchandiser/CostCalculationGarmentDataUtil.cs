@@ -77,7 +77,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.IsApprovedPurchasing = false;
             data.IsApprovedKadivMD = true;
             data.IsValidatedROSample = true;
+            data.IsValidatedROMD = true;
             data.ApprovedKadivMDBy = "Test";
+            data.ValidationMDDate = DateTimeOffset.Now;
+            data.ApprovedMDDate = DateTimeOffset.Now;
+            data.ApprovedIEDate = DateTimeOffset.Now;
+            data.ApprovedPurchasingDate = DateTimeOffset.Now;
             data.ApprovedKadivMDDate = DateTimeOffset.Now;
             data.ValidationSampleDate = DateTimeOffset.Now;
             data.CostCalculationGarment_Materials = new List<CostCalculationGarment_Material>()
@@ -85,6 +90,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
                 new CostCalculationGarment_Material
                 {
                     ProductId = "1",
+                    CategoryCode = "EMB",
                     CategoryName = "FABRIC",
                     Total = 109375,
                     CM_Price = 172450,

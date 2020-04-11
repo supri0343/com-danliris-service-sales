@@ -27,9 +27,9 @@ using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandiser
 {
-    public class CostCalculationGarmentApprovalReportTest 
+    public class CCROGarmentHistorBySectionReportTest 
    {
-        private const string ENTITY = "CostCalculationGarmentApprovalReport";
+        private const string ENTITY = "CCROGarmentHistorBySectionReportTest";
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private string GetCurrentMethod()
@@ -60,7 +60,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             CostCalculationGarmentMaterialLogic costCalculationGarmentMaterialLogic = new CostCalculationGarmentMaterialLogic(serviceProviderMock.Object, identityService, dbContext);
             CostCalculationGarmentLogic costCalculationGarmentLogic = new CostCalculationGarmentLogic(costCalculationGarmentMaterialLogic, serviceProviderMock.Object, identityService, dbContext);
-            CostCalculationGarmentApprovalReportLogic costcalculationGarmentApprovalReportLogic = new CostCalculationGarmentApprovalReportLogic(identityService, dbContext);
+            CCROGarmentHistoryBySectionReportLogic ccroGarmentHistoryBySectionReportLogic = new CCROGarmentHistoryBySectionReportLogic(identityService, dbContext);
 
             GarmentPreSalesContractLogic garmentPreSalesContractLogic = new GarmentPreSalesContractLogic(identityService, dbContext);
 
@@ -80,8 +80,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 .Returns(garmentPreSalesContractLogic);
 
             serviceProviderMock
-                .Setup(x => x.GetService(typeof(CostCalculationGarmentApprovalReportLogic)))
-                .Returns(costcalculationGarmentApprovalReportLogic);
+                .Setup(x => x.GetService(typeof(CCROGarmentHistoryBySectionReportLogic)))
+                .Returns(ccroGarmentHistoryBySectionReportLogic);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAzureImageFacade)))
@@ -112,17 +112,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var data = await DataUtil(facade, dbContext).GetTestData();
 
-            ICostCalculationGarmentApprovalReport CCGarmentApprovalReport = new CostCalculationGarmentApprovalReportFacade(serviceProvider, dbContext);
+            ICCROGarmentHistoryBySectionReport ccroGarmentHistoryBySectionReportLogic = new CCROGarmentHistoryBySectionReportFacade(serviceProvider, dbContext);
 
             var filter = new
             {
-                unitName = data.UnitName,
-                section = data.Section, 
-                dateFrom = data.ApprovedKadivMDDate.AddDays(-1),
-                dateTo = data.ApprovedKadivMDDate.AddDays(1),
+              section = data.Section,
+              roNo = data.RO_Number,
+              dateFrom = data.ValidationMDDate.AddDays(-30),
+              dateTo = data.ValidationMDDate.AddDays(30),
             };
 
-            var Response = CCGarmentApprovalReport.Read(filter: JsonConvert.SerializeObject(filter));
+            var Response = ccroGarmentHistoryBySectionReportLogic.Read(filter: JsonConvert.SerializeObject(filter));
 
             Assert.NotEqual(Response.Item2, 0);
         }
@@ -137,17 +137,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var data = await DataUtil(facade, dbContext).GetTestData();
 
-            ICostCalculationGarmentApprovalReport CCGarmentApprovalReport = new CostCalculationGarmentApprovalReportFacade(serviceProvider, dbContext);
+            ICCROGarmentHistoryBySectionReport ccroGarmentHistoryBySectionReportLogic = new CCROGarmentHistoryBySectionReportFacade(serviceProvider, dbContext);
 
             var filter = new
             {
-                unitName = data.UnitName,
                 section = data.Section,
-                dateFrom = data.ApprovedKadivMDDate.AddDays(30),
-                dateTo = data.ApprovedKadivMDDate.AddDays(30),
+                roNo = data.RO_Number,
+                dateFrom = data.ValidationMDDate.AddDays(30),
+                dateTo = data.ValidationMDDate.AddDays(30),
             };
 
-            var Response = CCGarmentApprovalReport.Read(filter: JsonConvert.SerializeObject(filter));
+            var Response = ccroGarmentHistoryBySectionReportLogic.Read(filter: JsonConvert.SerializeObject(filter));
 
             Assert.Equal(Response.Item2, 0);
         }
@@ -162,17 +162,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var data = await DataUtil(facade, dbContext).GetTestData();
 
-            ICostCalculationGarmentApprovalReport CCGarmentApprovalReport = new CostCalculationGarmentApprovalReportFacade(serviceProvider, dbContext);
+            ICCROGarmentHistoryBySectionReport ccroGarmentHistoryBySectionReportLogic = new CCROGarmentHistoryBySectionReportFacade(serviceProvider, dbContext);
 
             var filter = new
             {
-                unitName = data.UnitName,
-                section = data.Section, 
-                dateFrom = data.ApprovedKadivMDDate,
-                dateTo = data.ApprovedKadivMDDate,
+                section = data.Section,
+                roNo = data.RO_Number,
+                dateFrom = data.ValidationMDDate.AddDays(-30),
+                dateTo = data.ValidationMDDate.AddDays(30)
             };
 
-            var Response = CCGarmentApprovalReport.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
+            var Response = ccroGarmentHistoryBySectionReportLogic.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
            
             Assert.NotNull(Response.Item2);
         }
@@ -186,17 +186,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var data = await DataUtil(facade, dbContext).GetTestData();
 
-            ICostCalculationGarmentApprovalReport CCGarmentApprovalReport = new CostCalculationGarmentApprovalReportFacade(serviceProvider, dbContext);
+            ICCROGarmentHistoryBySectionReport ccroGarmentHistoryBySectionReportLogic = new CCROGarmentHistoryBySectionReportFacade(serviceProvider, dbContext);
 
             var filter = new
             {
-                unitName = data.UnitName,
-                section = data.Section, 
-                dateFrom = data.ApprovedKadivMDDate.AddDays(30),
-                dateTo = data.ApprovedKadivMDDate.AddDays(30),
+                section = data.Section,
+                roNo = data.RO_Number,
+                dateFrom = data.ValidationMDDate.AddDays(30),
+                dateTo = data.ValidationMDDate.AddDays(30)
             };
 
-            var Response = CCGarmentApprovalReport.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
+            var Response = ccroGarmentHistoryBySectionReportLogic.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
 
             Assert.NotNull(Response.Item2);
         }

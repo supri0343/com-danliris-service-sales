@@ -11,53 +11,46 @@ using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarments
 {
-    public class BudgetExportGarmentReportLogic : BaseMonitoringLogic<BudgetExportGarmentReportViewModel>
+    public class CCGEmbroideryApprovalReportLogic : BaseMonitoringLogic<CCGEmbroideryApprovalReportViewModel>
     {
         private IIdentityService identityService;
         private SalesDbContext dbContext;
         private DbSet<CostCalculationGarment> dbSet;
 
-        public BudgetExportGarmentReportLogic(IIdentityService identityService, SalesDbContext dbContext)
+        public CCGEmbroideryApprovalReportLogic(IIdentityService identityService, SalesDbContext dbContext)
         {
             this.identityService = identityService;
             this.dbContext = dbContext;
             dbSet = dbContext.Set<CostCalculationGarment>();
         }
 
-        public override IQueryable<BudgetExportGarmentReportViewModel> GetQuery(string filter)
+        public override IQueryable<CCGEmbroideryApprovalReportViewModel> GetQuery(string filter)
         {
-            Filter _filter = JsonConvert.DeserializeObject<Filter>(filter);
+            Dictionary<string, object> FilterDictionary = new Dictionary<string, object>(JsonConvert.DeserializeObject<Dictionary<string, object>>(filter), StringComparer.OrdinalIgnoreCase);
 
             IQueryable<CostCalculationGarment> Query = dbSet;
 
-            if (!string.IsNullOrWhiteSpace(_filter.section))
+            try
             {
-                Query = Query.Where(cc => cc.Section == _filter.section);
-            }
+                var dateFrom = (DateTime)(FilterDictionary["dateFrom"]);
+                var dateTo = (DateTime)(FilterDictionary["dateTo"]);
 
-            if (!string.IsNullOrWhiteSpace(_filter.unitName))
-            {
-                Query = Query.Where(cc => cc.UnitName == _filter.unitName);
+                Query = dbSet.Where(d => d.ApprovedKadivMDDate >= dateFrom &&
+                                         d.ApprovedKadivMDDate <= dateTo
+                );
             }
-
-            if (_filter.dateFrom != null)
+            catch (KeyNotFoundException e)
             {
-                var filterDate = _filter.dateFrom.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date;
-                Query = Query.Where(cc => cc.DeliveryDate.AddHours(identityService.TimezoneOffset).Date >= filterDate);
-            }
-            if (_filter.dateTo != null)
-            {
-                var filterDate = _filter.dateTo.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).AddDays(1).Date;
-                Query = Query.Where(cc => cc.DeliveryDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
+                throw new Exception(e.Message);
             }
 
             Query = Query.OrderBy(o => o.RO_Number).ThenBy(o => o.BuyerBrandCode);
 
             var newQ = (from a in Query
                         join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId 
-                        where b.CategoryName != "PROCESS" && a.IsApprovedKadivMD == true
+                        where b.CategoryCode == "EMB" && a.IsApprovedKadivMD == true
 
-                        select new BudgetExportGarmentReportViewModel
+                        select new CCGEmbroideryApprovalReportViewModel
                         {
                             RO_Number = a.RO_Number,
                             UnitName = a.UnitCode + "-" + a.UnitName,
@@ -65,20 +58,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             BuyerCode = a.BuyerBrandCode,
                             BuyerName = a.BuyerBrandName,
                             Article = a.Article,
+                            Quantity = a.Quantity,
+                            UOMUnit = a.UOMUnit, 
                             DeliveryDate = a.DeliveryDate,
+                            ValidatedDate = a.ApprovedKadivMDDate,
                             PONumber = b.PO_SerialNumber,
-                            CategoryName = b.CategoryName,
                             ProductCode = b.ProductCode,
                             ProductName = b.Description,
                             BudgetQuantity = b.BudgetQuantity,
                             BudgetUOM = b.UOMPriceName,
-                            BudgetPrice = b.Price,
-                            BudgetAmount = b.Price * b.BudgetQuantity, 
                         });
-
             return newQ;
         }
-
         private class Filter
         {
             public string unitName { get; set; }

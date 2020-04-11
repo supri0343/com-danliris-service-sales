@@ -35,6 +35,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(int) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Validasi RO - MD", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Validasi RO - Sample", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Penerimaan RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
@@ -53,10 +55,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 int i = 0;
                 foreach (var d in data)
                 {
-                    dataTable.Rows.Add(++i, d.RONo, d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.AvailableDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DateDiff, d.BuyerCode, d.Buyer, d.Article, d.Quantity, d.Uom, d.AvailableBy);
+                    dataTable.Rows.Add(++i, d.RONo, d.ValidatedMDDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.ValidatedSampleDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.AcceptedDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.AvailableDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DeliveryDate.ToString("dd MMMM yyyy", new CultureInfo("id-ID")), d.DateDiff, d.BuyerCode, d.Buyer, d.Article, d.Quantity, d.Uom, d.AvailableBy);
                 }
-                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null);
-                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
                 var count = data.Count;
                 var countOk = data.Count(d => d.DateDiff <= 2);
@@ -107,6 +109,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
         {
             var data = CostCalculationGarments.Select(cc => new AvailableROReportViewModel
             {
+                ValidatedMDDate = cc.ValidationMDDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
+                ValidatedSampleDate = cc.ValidationSampleDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 AcceptedDate = cc.ROAcceptedDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 AvailableDate = cc.ROAvailableDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 RONo = cc.RO_Number,
