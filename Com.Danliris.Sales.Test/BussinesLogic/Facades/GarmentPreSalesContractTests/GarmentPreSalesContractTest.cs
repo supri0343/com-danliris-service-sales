@@ -5,10 +5,13 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesContra
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesContractLogics;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentPreSalesContractModel;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentPreSalesContractViewModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -80,6 +83,16 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentPreSalesContractT
             var data = await DataUtil(facade).GetTestData();
             var Response = await facade.PreSalesUnpost(data.Id, "test");
             Assert.NotEqual(Response, 0);
+        }
+
+        [Fact]
+        public void Validate_ViewModel()
+        {
+            GarmentPreSalesContractViewModel viewModel = new GarmentPreSalesContractViewModel();
+
+            var response = viewModel.Validate(new ValidationContext(viewModel, null, null));
+
+            Assert.NotEmpty(response.ToList());
         }
     }
 }

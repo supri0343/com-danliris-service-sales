@@ -115,6 +115,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
                     {
                         DeliveryDate=data.DeliveryDate,
                         
+                        ConfirmDate = DateTimeOffset.MinValue,
+                        Remark = null,
+                        IsCanceled = false,
+                        CanceledDate = DateTimeOffset.MinValue
                     },
                     new GarmentBookingOrderItemViewModel
                     {
