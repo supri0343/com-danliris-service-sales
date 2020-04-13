@@ -35,13 +35,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceDetailViewModel()
                     {
-                        ProductName = "ProductName",
-                        Uom = new UomViewModel()
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                         {
-                            Unit = "PACKS",
-                        },
-                        Quantity = "Quantity",
-                        Total = 1,
+                            new SalesInvoiceItemViewModel()
+                            {
+                                ProductName = "ProductName",
+                                Uom = new UomViewModel()
+                                {
+                                    Unit = "PACKS",
+                                },
+                                Quantity = "Quantity",
+                                Total = 1,
+                            }
+                        }
                     }
                 }
 
@@ -108,6 +114,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceDetailViewModel()
                     {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
                         ProductCode = "ProductCode",
                         Quantity = "Quantity",
                         Uom = new UomViewModel()
@@ -118,6 +128,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Total = 1,
                         Price = 1,
                         Amount = 1,
+                    }
+                }
                     }
                 }
 
@@ -157,6 +169,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceDetailViewModel()
                     {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
                         ProductCode = "ProductCode",
                         Quantity = "Quantity",
                         Uom = new UomViewModel()
@@ -168,7 +184,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Price = 1,
                         Amount = 1,
                     }
-                }
+                } } }
 
             };
             var mocks = GetMocks();
@@ -231,12 +247,80 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Get_Sales_Invoice_ReadByBuyerId_OK()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
+                IDNo = "IDNo",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "$",
+                },
+                Remark = "Remark",
+                VatType = "PPN BUMN",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                        ProductCode = "ProductCode",
+                        Quantity = "Quantity",
+                        Uom = new UomViewModel()
+                        {
+                            Unit = "PACKS",
+                        },
+                        ProductName = "ProductName",
+                        Total = 1,
+                        Price = 1,
+                        Amount = 1,
+                    }
+                } } }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByBuyerId(It.IsAny<int>())).Returns(new List<SalesInvoiceModel>());
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(1);
+
+            Assert.NotNull(response);
+
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_ReadByBuyerId_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByBuyerId(It.IsAny<int>())).Throws(new Exception("error"));
+            var controller = GetController(mocks);
+            var response = controller.ReadByBuyerId(1);
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+
+        }
+
+        [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<SalesInvoiceMapper>();
                 cfg.AddProfile<SalesInvoiceDetailMapper>();
+                cfg.AddProfile<SalesInvoiceItemMapper>();
             });
             var mapper = configuration.CreateMapper();
 
@@ -249,6 +333,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             SalesInvoiceDetailModel salesInvoiceDetailModel = mapper.Map<SalesInvoiceDetailModel>(salesInvoiceDetailViewModel);
 
             Assert.Equal(salesInvoiceDetailViewModel.Id, salesInvoiceDetailModel.Id);
+
+            SalesInvoiceItemViewModel salesInvoiceItemViewModel = new SalesInvoiceItemViewModel { Id = 1 };
+            SalesInvoiceItemModel salesInvoiceItemModel = mapper.Map<SalesInvoiceItemModel>(salesInvoiceItemViewModel);
+
+            Assert.Equal(salesInvoiceItemViewModel.Id, salesInvoiceItemModel.Id);
         }
 
         [Fact]
@@ -260,8 +349,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     SalesInvoiceType = "",
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
                     DeliveryOrderNo = "",
-                    ShipmentDocumentId = 0,
-                    ShipmentDocumentCode = "",
                     Currency = new CurrencyViewModel()
                     {
                         Id = 0,
@@ -276,19 +363,29 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                     TotalPayment = 0,
                     TotalPaid = -1,
-                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>{
-                        new SalesInvoiceDetailViewModel{
-                            ProductCode = "",
-                            Quantity = "",
-                            Uom = new UomViewModel()
-                        {
-                            Id = 0,
-                            Unit = "",
-                        },
-                            ProductName = "",
-                            Amount = 0,
-                        }
-                    }
+                    //SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    //{
+                    //    new SalesInvoiceDetailViewModel()
+                    //    {
+                    //    ShipmentDocumentId = 0,
+                    //    ShipmentDocumentCode = "",
+                    //        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                    //        {
+                    //            new SalesInvoiceItemViewModel()
+                    //            {
+                    //                ProductCode = "",
+                    //                Quantity = "",
+                    //                Uom = new UomViewModel()
+                    //                {
+                    //                    Id = 0,
+                    //                    Unit = "",
+                    //                },
+                    //                ProductName = "",
+                    //                Amount = 0,
+                    //            }                 
+                    //        } 
+                    //    } 
+                    //}
                 }
             };
             foreach (var viewModel in viewModels)
@@ -303,38 +400,47 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
             {
-                new SalesInvoiceViewModel{
+                new SalesInvoiceViewModel {
                     DueDate = DateTimeOffset.Now,
                     Currency = new CurrencyViewModel() {},
-                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>{
-                        new SalesInvoiceDetailViewModel{
-                            SalesInvoiceId = 2,
-                            ProductCode = "ProductCode",
-                            Quantity = "Quantity",
-                            Total = 10,
-                            Uom = new UomViewModel()
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel()
+                        {
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
-                                Id = 10,
-                                Unit = "PCS",
-                            },
-                            ProductName = "ProductName",
-                            Price = 100,
-                            Amount = 100,
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    SalesInvoiceDetailId = 2,
+                                    ProductCode = "ProductCode",
+                                    Quantity = "Quantity",
+                                    Total = 10,
+                                    Uom = new UomViewModel()
+                                    {
+                                        Id = 10,
+                                        Unit = "PCS",
+                                    },
+                                    ProductName = "ProductName",
+                                    Price = 100,
+                                    Amount = 100,
+                                },
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    SalesInvoiceDetailId = 2,
+                                    ProductCode = "ProductCode",
+                                    Quantity = "Quantity",
+                                    Total = 10,
+                                    Uom = new UomViewModel()
+                                    {
+                                        Id = 10,
+                                        Unit = "PCS",
+                                    },
+                                    ProductName = "ProductName",
+                                    Price = 100,
+                                    Amount = 100,
+                                },
+                            }
                         },
-                        new SalesInvoiceDetailViewModel{
-                            SalesInvoiceId = 2,
-                            ProductCode = "ProductCode",
-                            Quantity = "Quantity",
-                            Total = 10,
-                            Uom = new UomViewModel()
-                            {
-                                Id = 10,
-                                Unit = "PCS",
-                            },
-                            ProductName = "ProductName",
-                            Price = 100,
-                            Amount = 100,
-                        }
                     }
                 }
             };
@@ -345,17 +451,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
-        [Fact]
-        public void Validate_Null_Model_and_DetailViewModel()
-        {
-            List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
-            { };
-            foreach (var viewModel in viewModels)
-            {
-                var defaultValidationResult = viewModel.Validate(null);
-                Assert.True(defaultValidationResult.Count() > 0);
-            }
-        }
+        //[Fact]
+        //public void Validate_Null_Model_and_DetailViewModel()
+        //{
+        //    List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
+        //    { };
+        //    foreach (var viewModel in viewModels)
+        //    {
+        //        var defaultValidationResult = viewModel.Validate(null);
+        //        Assert.True(defaultValidationResult.Count() > 0);
+        //    }
+        //}
 
         [Fact]
         public void Should_Success_Read_By_Buyer()

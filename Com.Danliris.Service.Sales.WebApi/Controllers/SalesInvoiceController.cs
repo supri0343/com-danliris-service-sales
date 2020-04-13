@@ -29,7 +29,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             _facade = salesInvoiceFacade;
         }
 
-        [HttpGet("filterByBuyer/{buyerId}")]
+        [HttpGet("filter-by-buyer/{buyerId}")]
         public virtual IActionResult ReadByBuyerId([FromRoute] int buyerId)
         {
             if (!ModelState.IsValid)
@@ -55,7 +55,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
-        [HttpGet("deliveryOrderPdf/{Id}")]
+        [HttpGet("delivery-order-pdf/{Id}")]
         public async Task<IActionResult> GetDeliveryOrderPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)
@@ -97,7 +97,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
-        [HttpGet("salesInvoicePdf/{Id}")]
+        [HttpGet("sales-invoice-pdf/{Id}")]
         public async Task<IActionResult> GetSalesInvoicePDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)
