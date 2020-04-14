@@ -115,102 +115,106 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
             if (lastData == null)
             {
-                if (model.SalesInvoiceType == "BNG")
-                {
-                    index = 28;
-                }
-                else if (model.SalesInvoiceType == "BAB")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "BNS")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "RNG")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "BRG")
-                {
-                    index = 28;
-                }
-                else if (model.SalesInvoiceType == "BAG")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "BGS")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "RRG")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "BLL")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "BPF")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "BSF")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "RPF")
-                {
-                    index = 28;
-                }
-                else if (model.SalesInvoiceType == "BPR")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "BSR")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "RPR")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "BAV")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "BON")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "BGM")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "GPF")
-                {
-                    index = 28;
-                }
-                else if (model.SalesInvoiceType == "RGF")
-                {
-                    index = 8;
-                }
-                else if (model.SalesInvoiceType == "GPR")
-                {
-                    index = 98;
-                }
-                else if (model.SalesInvoiceType == "RGR")
-                {
-                    index = 14;
-                }
-                else if (model.SalesInvoiceType == "RON")
-                {
-                    index = 14;
-                }
-                else
-                {
-                    index = 0;
-                }
+                //Using this if SalesInvoiceType not declare index for each Type
+                index = 0;
+
+                //if (model.SalesInvoiceType == "BNG")
+                //{
+                //    index = 28;
+                //}
+                //else if (model.SalesInvoiceType == "BAB")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "BNS")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "RNG")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "BRG")
+                //{
+                //    index = 28;
+                //}
+                //else if (model.SalesInvoiceType == "BAG")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "BGS")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "RRG")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "BLL")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "BPF")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "BSF")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "RPF")
+                //{
+                //    index = 28;
+                //}
+                //else if (model.SalesInvoiceType == "BPR")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "BSR")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "RPR")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "BAV")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "BON")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "BGM")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "GPF")
+                //{
+                //    index = 28;
+                //}
+                //else if (model.SalesInvoiceType == "RGF")
+                //{
+                //    index = 8;
+                //}
+                //else if (model.SalesInvoiceType == "GPR")
+                //{
+                //    index = 98;
+                //}
+                //else if (model.SalesInvoiceType == "RGR")
+                //{
+                //    index = 14;
+                //}
+                //else if (model.SalesInvoiceType == "RON")
+                //{
+                //    index = 14;
+                //}
+                //else
+                //{
+                //    index = 0;
+                //}
+
                 model.AutoIncreament = 1 + index;
                 model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
