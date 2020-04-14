@@ -59,11 +59,15 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new RO_Garment_SizeBreakdownViewModel()
                     {
+                        SizeBreakdownIndex = 0,
+                        Code = null,
                         Color = new ArticleColorViewModel(),
                         RO_Garment_SizeBreakdown_Details = new List<RO_Garment_SizeBreakdown_DetailViewModel>()
                         {
                             new RO_Garment_SizeBreakdown_DetailViewModel()
                             {
+                                SizeBreakdownDetailIndex = 0,
+                                Code = null,
                                 Quantity = 1,
                             },
                             new RO_Garment_SizeBreakdown_DetailViewModel()

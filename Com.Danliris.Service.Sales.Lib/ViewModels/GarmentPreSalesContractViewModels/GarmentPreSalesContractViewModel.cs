@@ -32,7 +32,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentPreSalesContractViewM
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            SalesDbContext dbContext = (SalesDbContext)validationContext.GetService(typeof(SalesDbContext));
+            //SalesDbContext dbContext = (SalesDbContext)validationContext.GetService(typeof(SalesDbContext));
             //var duplicateRONo = dbContext.GarmentPurchaseRequests.Where(m => m.RONo.Equals(RONo) && m.Id != Id).Count();
             //IGarmentSalesContract Service = (IGarmentSalesContract)validationContext.GetService(typeof(IGarmentSalesContract));
             if (SCDate == DateTimeOffset.MinValue || SCDate == null)
