@@ -10,12 +10,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public int SalesInvoiceId { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceNo { get; set; }
-        #endregion
-
-        public DateTimeOffset DueDate { get; set; }
-        [MaxLength(255)]
-        public string VatType { get; set; }
-        public double Tempo { get; set; }
 
         #region Currency
         public int CurrencyId { get; set; }
@@ -25,7 +19,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string CurrencySymbol { get; set; }
         public double CurrencyRate { get; set; }
         #endregion
+        #endregion
 
+        public DateTimeOffset DueDate { get; set; }
+        [MaxLength(255)]
+        public string VatType { get; set; }
+        public double Tempo { get; set; }
         public double TotalPayment { get; set; }
         public double TotalPaid { get; set; }
         public double Paid { get; set; }

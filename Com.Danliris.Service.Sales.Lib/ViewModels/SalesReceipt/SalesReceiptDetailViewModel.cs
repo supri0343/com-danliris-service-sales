@@ -13,7 +13,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         [MaxLength(255)]
         public string VatType { get; set; }
         public double? Tempo { get; set; }
-        public CurrencyViewModel Currency { get; set; }
         public double? TotalPayment { get; set; }
         public double? TotalPaid { get; set; }
         public double? Paid { get; set; }
