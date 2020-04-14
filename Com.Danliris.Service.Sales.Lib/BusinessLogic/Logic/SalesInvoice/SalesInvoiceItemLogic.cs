@@ -12,7 +12,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 {
     public class SalesInvoiceItemLogic : BaseLogic<SalesInvoiceItemModel>
     {
-        public SalesInvoiceItemLogic(IIdentityService IdentityService, IServiceProvider serviceProvider, SalesDbContext dbContext) : base(IdentityService, serviceProvider, dbContext)
+        public SalesInvoiceItemLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
         }
 
@@ -43,11 +43,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             int totalData = pageable.TotalCount;
 
             return new ReadResponse<SalesInvoiceItemModel>(data, totalData, OrderDictionary, SelectedFields);
-        }
-
-        public HashSet<long> GetIds(long id)
-        {
-            return new HashSet<long>(DbSet.Where(d => d.SalesInvoiceDetailModel.Id == id).Select(d => d.Id));
         }
     }
 }
