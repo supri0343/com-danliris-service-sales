@@ -28,7 +28,6 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles
                 .ForPath(d => d.Bank.BankName, opt => opt.MapFrom(s => s.BankName))
                 .ForPath(d => d.Bank.Code, opt => opt.MapFrom(s => s.BankCode))
 
-
                 .ReverseMap();
         }
     }

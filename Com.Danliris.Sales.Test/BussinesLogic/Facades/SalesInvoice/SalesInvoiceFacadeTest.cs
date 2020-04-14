@@ -26,6 +26,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
+            
+            var salesInvoiceItemLogic = new SalesInvoiceItemLogic(serviceProviderMock.Object, identityService, dbContext);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(SalesInvoiceItemLogic)))
+                .Returns(salesInvoiceItemLogic);
 
             var salesInvoiceDetailLogic = new SalesInvoiceDetailLogic(serviceProviderMock.Object, identityService, dbContext);
 
