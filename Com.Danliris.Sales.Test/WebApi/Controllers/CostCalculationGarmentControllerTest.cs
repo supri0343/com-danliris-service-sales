@@ -72,16 +72,59 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 BuyerBrand = new BuyerBrandViewModel(),
                 DeliveryDate = DateTimeOffset.UtcNow,
                 OTL1 = new RateCalculatedViewModel(),
-                OTL2 = new RateCalculatedViewModel()
+                OTL2 = new RateCalculatedViewModel(),
+                ApprovalMD = new Approval(),
+                ApprovalKadivMD = new Approval(),
+                IsPosted = true
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
             mocks.Mapper.Setup(f => f.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>())).Returns(viewModel);
 
             var controller = GetController(mocks);
-            var response = controller.GetPDF(1).Result;
+            var response = (FileStreamResult)controller.GetPDF(1).Result;
 
-            Assert.NotNull(response);
+            Assert.Equal("application/pdf", response.ContentType);
+
+        }
+
+        [Fact]
+        public void Get_PDF_Draft_OK()
+        {
+            var mocks = GetMocks();
+
+            var viewModel = new CostCalculationGarmentViewModel()
+            {
+                Comodity = new MasterPlanComodityViewModel(),
+                Unit = new UnitViewModel(),
+                Rate = new RateViewModel(),
+                CostCalculationGarment_Materials = new List<CostCalculationGarment_MaterialViewModel>()
+                {
+                    new CostCalculationGarment_MaterialViewModel()
+                    {
+                        Category = new CategoryViewModel(),
+                        Product = new GarmentProductViewModel(),
+                        UOMQuantity = new UOMViewModel(),
+                        UOMPrice = new UOMViewModel()
+                    }
+                },
+                UOM = new UOMViewModel(),
+                Buyer = new BuyerViewModel(),
+                BuyerBrand = new BuyerBrandViewModel(),
+                DeliveryDate = DateTimeOffset.UtcNow,
+                OTL1 = new RateCalculatedViewModel(),
+                OTL2 = new RateCalculatedViewModel(),
+                ApprovalMD = new Approval(),
+                ApprovalKadivMD = new Approval()
+            };
+
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(f => f.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>())).Returns(viewModel);
+
+            var controller = GetController(mocks);
+            var response = (FileStreamResult)controller.GetPDF(1).Result;
+
+            Assert.Equal("application/pdf", response.ContentType);
 
         }
 
@@ -678,17 +721,65 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 OTL1 = new RateCalculatedViewModel(),
                 OTL2 = new RateCalculatedViewModel(),
                 ConfirmPrice = 1,
-                ConfirmDate = DateTimeOffset.UtcNow
+                ConfirmDate = DateTimeOffset.UtcNow,
+                ApprovalMD = new Approval(),
+                ApprovalPurchasing = new Approval(),
+                ApprovalKadivMD = new Approval(),
+                IsPosted = true
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
             mocks.Mapper.Setup(f => f.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>())).Returns(viewModel);
 
             var controller = GetController(mocks);
-            var response = controller.GetBudget(1).Result;
+            var response = (FileStreamResult)controller.GetBudget(1).Result;
 
-            Assert.NotNull(response);
+            Assert.Equal("application/pdf", response.ContentType);
+        }
 
+        [Fact]
+        public void Get_Budget_Draft_OK()
+        {
+            var mocks = GetMocks();
+
+            var viewModel = new CostCalculationGarmentViewModel()
+            {
+                Comodity = new MasterPlanComodityViewModel(),
+                Unit = new UnitViewModel(),
+                Rate = new RateViewModel()
+                {
+                    Value = 1
+                },
+                CostCalculationGarment_Materials = new List<CostCalculationGarment_MaterialViewModel>()
+                {
+                    new CostCalculationGarment_MaterialViewModel()
+                    {
+                        Category = new CategoryViewModel(),
+                        Product = new GarmentProductViewModel(),
+                        UOMQuantity = new UOMViewModel(),
+                        UOMPrice = new UOMViewModel()
+                    }
+                },
+                UOM = new UOMViewModel(),
+                Buyer = new BuyerViewModel(),
+                BuyerBrand = new BuyerBrandViewModel(),
+                DeliveryDate = DateTimeOffset.UtcNow,
+                OTL1 = new RateCalculatedViewModel(),
+                OTL2 = new RateCalculatedViewModel(),
+                ConfirmPrice = 1,
+                ConfirmDate = DateTimeOffset.UtcNow,
+                ApprovalMD = new Approval(),
+                ApprovalPurchasing = new Approval(),
+                ApprovalKadivMD = new Approval()
+            };
+
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(f => f.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>())).Returns(viewModel);
+
+            var controller = GetController(mocks);
+            var response = (FileStreamResult)controller.GetBudget(1).Result;
+
+            Assert.Equal("application/pdf", response.ContentType);
         }
 
         [Fact]
