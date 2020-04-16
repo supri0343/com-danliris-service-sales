@@ -65,7 +65,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 string BgtAmt = string.Format("{0:N2}", d.BudgetQuantity * d.Price);
 
                 result.Rows.Add(i + 1, d.RO_Number, d.BuyerCode, d.BuyerName, d.BrandCode, d.BrandName, d.Article, d.ComodityCode, QtyOrder, d.UOMUnit, ShipDate,
-                                d.ProductCode, d.Description, BgtQty, d.UomPriceName, BgtPrc, BgtAmt, d.POSerialNumber);
+                                d.ProductCode, d.Description, d.ProductRemark, BgtQty, d.UomPriceName, BgtPrc, BgtAmt, d.POSerialNumber);
             }
 
             var excel = Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, FilterDictionary.GetValueOrDefault("RONo")) }, false);
