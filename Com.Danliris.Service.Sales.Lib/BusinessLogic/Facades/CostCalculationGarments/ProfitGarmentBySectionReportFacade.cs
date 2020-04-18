@@ -66,10 +66,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Confirm Price", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "CM Price", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "FOB Price", DataType = typeof(String) });
-            
+            result.Columns.Add(new DataColumn() { ColumnName = "Amount", DataType = typeof(String) });
+
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 Dictionary<string, List<ProfitGarmentBySectionReportViewModel>> dataBySection = new Dictionary<string, List<ProfitGarmentBySectionReportViewModel>>();
@@ -102,6 +103,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         FOBPrice = item.FOBPrice,
                         FabAllow = item.FabAllow,
                         AccAllow = item.AccAllow,
+                        Amount = item.Amount, 
                     });
 
                     if (!subTotalAmount.ContainsKey(Section))
@@ -109,7 +111,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         subTotalAmount.Add(Section, 0);
                     };
 
-                    subTotalAmount[Section] += item.FOBPrice;
+                    subTotalAmount[Section] += item.Amount;
                 }
 
                 double totalAmount = 0;
@@ -131,19 +133,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         string PrftGmt = string.Format("{0:N2}", item.Profit);
                         string CMPrc1 = string.Format("{0:N4}", item.CMPrice);
                         string FOBPrc = string.Format("{0:N4}", item.FOBPrice);
+                        string Amnt = string.Format("{0:N2}", item.Amount);
 
                         result.Rows.Add(index, item.RO_Number, item.Section, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Article,
-                                        item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, PrftGmt, QtyOrder, item.UOMUnit, CfrmPrc, CMPrc1, FOBPrc);
+                                        item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, PrftGmt, QtyOrder, item.UOMUnit, CfrmPrc, CMPrc1, FOBPrc, Amnt);
 
                         rowPosition += 1;
                         SECTION = item.Section;
                     }
-                    result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "SUB TOTAL", "", "", "", "", "SEKSI :", SECTION, Math.Round(subTotalAmount[Seksi.Key], 2));
+                    result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "SUB TOTAL", "", "", "", "", "", "SEKSI :", SECTION, Math.Round(subTotalAmount[Seksi.Key], 2));
 
                     rowPosition += 1;
                     totalAmount += subTotalAmount[Seksi.Key];
                 }
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "T O T A L", "", "", "", "", "", "", Math.Round(totalAmount, 2));
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "T O T A L", "", "", "", "", "", "", "", Math.Round(totalAmount, 2));
                 rowPosition += 1;
             }
             ExcelPackage package = new ExcelPackage();
