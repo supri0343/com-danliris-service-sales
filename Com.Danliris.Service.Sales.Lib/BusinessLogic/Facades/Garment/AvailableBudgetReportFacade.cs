@@ -36,7 +36,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(int) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Cost Calculation", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan Budget\n(Validasi Kadiv MD)", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan Budget\n(Validasi Kadiv Md)", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Shipment", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "+/-\nSiap - Shipment", DataType = typeof(int) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Lead Time", DataType = typeof(double) });

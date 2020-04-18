@@ -55,7 +55,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "validasi CC IE", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Validasi CC Purch", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Validasi CC Kadiv Md", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Validasi RO MD", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Validasi RO Md", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Validasi RO Sample", DataType = typeof(String) });
             
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();

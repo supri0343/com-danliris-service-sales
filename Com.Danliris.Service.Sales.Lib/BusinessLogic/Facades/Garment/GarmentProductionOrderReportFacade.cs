@@ -42,7 +42,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             result.Columns.Add(new DataColumn() { ColumnName = "Amount", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Confirm", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Shipment", DataType = typeof(string) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Validasi Kadiv MD", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Validasi Kadiv Md", DataType = typeof(string) });
 
             List<(string, Enum, Enum)> mergeCells = new List<(string, Enum, Enum)>() { };
 
