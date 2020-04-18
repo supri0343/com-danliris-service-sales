@@ -35,7 +35,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(int) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(string) });
-            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Validasi RO - MD", DataType = typeof(string) });
+            dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Validasi RO - Md", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Validasi RO - Sample", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Penerimaan RO", DataType = typeof(string) });
             dataTable.Columns.Add(new DataColumn() { ColumnName = "Tanggal Kesiapan RO", DataType = typeof(string) });

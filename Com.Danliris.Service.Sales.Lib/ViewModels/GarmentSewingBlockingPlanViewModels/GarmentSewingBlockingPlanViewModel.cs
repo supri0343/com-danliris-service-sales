@@ -27,7 +27,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentSewingBlockingPlanVie
         {
             if (string.IsNullOrWhiteSpace(BookingOrderNo))
             {
-                yield return new ValidationResult("Kode Booking MD tidak boleh kosong", new List<string> { "BookingOrderNo" });
+                yield return new ValidationResult("Kode Booking Md tidak boleh kosong", new List<string> { "BookingOrderNo" });
             }
             if(Items==null || Items.Count == 0)
             {
