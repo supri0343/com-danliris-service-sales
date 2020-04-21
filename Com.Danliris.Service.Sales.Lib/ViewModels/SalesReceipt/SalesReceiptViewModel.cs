@@ -111,13 +111,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         DetailErrors += "Unpaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh sisa pembayaran',";
                     }
 
-                    var mustSameType = SalesReceiptDetails.Where(f => f.Currency.Code != detail.Currency.Code).ToList();
+                    //var mustSameType = SalesReceiptDetails.Where(f => f.Currency != detail.Currency).FirstOrDefault(f => f.Currency.Code == detail.Currency.Code);
                     
-                    if (mustSameType.Count > 0)
-                    {
-                        Count++;
-                        DetailErrors += "CurrencyCode : 'Tiap No. Jual harus memiliki kurs yang sama',";
-                    }
+                    //if (mustSameType.Count > 0)
+                    //{
+                    //    Count++;
+                    //    DetailErrors += "CurrencyCode : 'Tiap No. Jual harus memiliki kurs yang sama',";
+                    //}
 
 
                     DetailErrors += "}, ";
