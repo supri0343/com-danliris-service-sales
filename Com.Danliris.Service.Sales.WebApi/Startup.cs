@@ -76,6 +76,9 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.LocalMerchandiserFaca
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -148,6 +151,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IGarmentPurchasingQualityObjectiveReportFacade, GarmentPurchasingQualityObjectiveReportFacade>()
                 .AddTransient<IGarmentOmzetTarget, GarmentOmzetTargetFacade>()
                 .AddTransient<IDOSalesContract, DOSalesFacade>()
+                .AddTransient<IDOReturnContract, DOReturnFacade>()
                 .AddTransient<ISalesInvoiceContract, SalesInvoiceFacade>()
                 .AddTransient<ISalesReceiptContract, SalesReceiptFacade>()
                 .AddTransient<IFinishingPrintingPreSalesContractFacade, FinishingPrintingPreSalesContractFacade>()
@@ -216,6 +220,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<GarmentPurchasingQualityObjectiveReportLogic>()
                 .AddTransient<GarmentOmzetTargetLogic>()
                 .AddTransient<DOSalesLogic>()
+                .AddTransient<DOReturnLogic>()
                 .AddTransient<DOSalesDetailLogic>()
                 .AddTransient<SalesInvoiceLogic>()
                 .AddTransient<SalesInvoiceDetailLogic>()

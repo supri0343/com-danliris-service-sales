@@ -9,6 +9,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
     public class SalesReceiptDetailViewModel : BaseViewModel
     {
         public SalesInvoiceViewModel SalesInvoice { get; set; }
+        public CurrencyViewModel Currency { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }

@@ -92,7 +92,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("No. Fakt./Inv.", normal_font);
             headerTable4.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.SalesInvoiceNo, normal_font);
+            cellHeaderBody.Phrase = new Phrase($": {viewModel.SalesInvoiceType}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", normal_font);
             headerTable4.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Tgl. Fakt./Inv.", normal_font);

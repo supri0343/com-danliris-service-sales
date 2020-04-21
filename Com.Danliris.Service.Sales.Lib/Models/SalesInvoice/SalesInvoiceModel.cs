@@ -26,6 +26,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public int BuyerId { get; set; }
         [MaxLength(255)]
         public string BuyerName { get; set; }
+        [MaxLength(255)]
+        public string BuyerCode { get; set; }
         [MaxLength(1000)]
         public string BuyerAddress { get; set; }
         [MaxLength(255)]

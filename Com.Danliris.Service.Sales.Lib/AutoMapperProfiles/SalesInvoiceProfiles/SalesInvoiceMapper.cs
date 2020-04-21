@@ -12,6 +12,7 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesInvoiceProfiles
 
                 .ForPath(d => d.Buyer.Id, opt => opt.MapFrom(s => s.BuyerId))
                 .ForPath(d => d.Buyer.Name, opt => opt.MapFrom(s => s.BuyerName))
+                .ForPath(d => d.Buyer.Code, opt => opt.MapFrom(s => s.BuyerCode))
                 .ForPath(d => d.Buyer.Address, opt => opt.MapFrom(s => s.BuyerAddress))
                 .ForPath(d => d.Buyer.NPWP, opt => opt.MapFrom(s => s.BuyerNPWP))
 
