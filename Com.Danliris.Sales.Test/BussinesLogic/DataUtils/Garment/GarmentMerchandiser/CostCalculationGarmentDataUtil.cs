@@ -96,6 +96,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
                     CM_Price = 172450,
                     ProductCode = "Test001",
                     Description = "Test Description",
+                    ProductRemark = "Test ProoductRemark",
                     BudgetQuantity = 1000,
                     UOMPriceName = "Test Sat",
                     Price = 10000,

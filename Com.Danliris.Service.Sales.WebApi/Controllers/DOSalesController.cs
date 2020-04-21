@@ -29,7 +29,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             _facade = doSalesFacade;
         }
 
-        [HttpGet("doSalesPdf/{Id}")]
+        [HttpGet("pdf/{Id}")]
         public async Task<IActionResult> GetDOSalesPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)

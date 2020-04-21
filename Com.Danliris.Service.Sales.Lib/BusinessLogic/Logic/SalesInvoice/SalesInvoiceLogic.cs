@@ -31,7 +31,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesInvoiceNo","DeliveryOrderNo","ShipmentDocumentCode"
+                "SalesInvoiceNo","DeliveryOrderNo",
+                //"ShipmentDocumentCode"
             };
 
             Query = QueryHelper<SalesInvoiceModel>.Search(Query, SearchAttributes, keyword);
@@ -42,7 +43,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             List<string> SelectedFields = new List<string>()
             {
                 "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceDate","DueDate","DeliveryOrderNo",
-                "ShipmentDocumentId","ShipmentDocumentCode","Buyer","IDNo","Currency","VatType","TotalPayment","TotalPaid","Remark","IsPaidOff","SalesInvoiceDetails"
+                "Buyer","IDNo","Currency","VatType","TotalPayment","TotalPaid","Remark","IsPaidOff","SalesInvoiceDetails"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -119,9 +120,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
         public override async Task<SalesInvoiceModel> ReadByIdAsync(long id)
         {
-            var SalesInvoice = await DbSet.Where(p => p.SalesInvoiceDetails.Select(d => d.SalesInvoiceModel.Id)
-            .Contains(p.Id)).Include(p => p.SalesInvoiceDetails).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
-            SalesInvoice.SalesInvoiceDetails = SalesInvoice.SalesInvoiceDetails.OrderBy(s => s.Id).ToArray();
+            var SalesInvoice = await DbSet.Include(s => s.SalesInvoiceDetails).ThenInclude(s => s.SalesInvoiceItems).FirstOrDefaultAsync(s => s.Id == id);
             return SalesInvoice;
         }
 

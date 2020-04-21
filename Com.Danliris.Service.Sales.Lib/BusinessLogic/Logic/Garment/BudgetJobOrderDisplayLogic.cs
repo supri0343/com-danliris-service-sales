@@ -58,6 +58,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
                             ComodityCode = a.ComodityCode,
                             ProductCode = b.ProductCode,
                             Description = b.Description,
+                            ProductRemark = b.ProductRemark, 
                             BudgetQuantity = b.BudgetQuantity,
                             UomPriceName = b.UOMPriceName,
                             Price = b.Price,

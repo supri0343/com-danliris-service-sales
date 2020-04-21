@@ -29,13 +29,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             double convertCurrency = 0;
 
-            if (detailViewModel.Currency.Symbol == "Rp")
+            if (detailViewModel.SalesInvoice.Currency.Symbol == "Rp")
             {
                 convertCurrency = viewModel.TotalPaid;
             }
             else
             {
-                convertCurrency = (Math.Round((double)viewModel.TotalPaid * (double)detailViewModel.Currency.Rate));
+                convertCurrency = (Math.Round((double)viewModel.TotalPaid * (double)detailViewModel.SalesInvoice.Currency.Rate));
             }
 
             string TotalPaidString = NumberToTextIDN.terbilang(convertCurrency);
@@ -108,7 +108,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable3.AddCell(cellHeaderBody);
             cellHeaderBody.Phrase = new Phrase(":", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(viewModel.Bank.BankName + " " + viewModel.Bank.AccountNumber + " (" + detailViewModel.Currency.Code + ")", normal_font);
+            cellHeaderBody.Phrase = new Phrase(viewModel.Bank.BankName + " " + viewModel.Bank.AccountNumber + " (" + detailViewModel.SalesInvoice.Currency.Code + ")", normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Telah terima dari ", normal_font);
@@ -138,7 +138,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable3.AddCell(cellHeaderBody);
             foreach (SalesReceiptDetailViewModel item in viewModel.SalesReceiptDetails)
             {
-                cellHeaderBody.Phrase = new Phrase(item.SalesInvoiceNo + "  ", normal_font);
+                cellHeaderBody.Phrase = new Phrase(item.SalesInvoice.SalesInvoiceNo + "  ", normal_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(" ", normal_font);
                 headerTable3.AddCell(cellHeaderBody);

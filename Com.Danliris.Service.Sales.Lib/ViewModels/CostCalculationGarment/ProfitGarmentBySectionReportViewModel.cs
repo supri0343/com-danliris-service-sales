@@ -27,6 +27,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double FOBPrice { get; set; }
         public double FabAllow { get; set; }
         public double AccAllow { get; set; }
-
+        public double Amount { get; set; }
     }
 }

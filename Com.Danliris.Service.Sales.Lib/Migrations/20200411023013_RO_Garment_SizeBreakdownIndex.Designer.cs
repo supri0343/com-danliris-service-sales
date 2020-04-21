@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200411023013_RO_Garment_SizeBreakdownIndex")]
+    partial class RO_Garment_SizeBreakdownIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3221,65 +3223,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("CreatedUtc");
-
-                    b.Property<string>("DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("DeletedUtc");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<int>("SalesInvoiceId");
-
-                    b.Property<long?>("SalesInvoiceModelId");
-
-                    b.Property<string>("ShipmentDocumentCode")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("ShipmentDocumentId");
-
-                    b.Property<string>("UId")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SalesInvoiceModelId");
-
-                    b.ToTable("SalesInvoiceDetails");
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.SalesInvoice.SalesInvoiceItemModel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
                     b.Property<double>("Amount");
 
                     b.Property<string>("CreatedAgent")
@@ -3325,9 +3268,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Quantity")
                         .HasMaxLength(255);
 
-                    b.Property<int>("SalesInvoiceDetailId");
+                    b.Property<int>("SalesInvoiceId");
 
-                    b.Property<long?>("SalesInvoiceDetailModelId");
+                    b.Property<long?>("SalesInvoiceModelId");
 
                     b.Property<double>("Total");
 
@@ -3341,9 +3284,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SalesInvoiceDetailModelId");
+                    b.HasIndex("SalesInvoiceModelId");
 
-                    b.ToTable("SalesInvoiceItems");
+                    b.ToTable("SalesInvoiceDetails");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.SalesInvoice.SalesInvoiceModel", b =>
@@ -3432,6 +3375,11 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("SalesInvoiceType")
                         .HasMaxLength(255);
+
+                    b.Property<string>("ShipmentDocumentCode")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("ShipmentDocumentId");
 
                     b.Property<double>("TotalPaid");
 
@@ -4142,14 +4090,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.HasOne("Com.Danliris.Service.Sales.Lib.Models.SalesInvoice.SalesInvoiceModel", "SalesInvoiceModel")
                         .WithMany("SalesInvoiceDetails")
                         .HasForeignKey("SalesInvoiceModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.SalesInvoice.SalesInvoiceItemModel", b =>
-                {
-                    b.HasOne("Com.Danliris.Service.Sales.Lib.Models.SalesInvoice.SalesInvoiceDetailModel", "SalesInvoiceDetailModel")
-                        .WithMany("SalesInvoiceItems")
-                        .HasForeignKey("SalesInvoiceDetailModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

@@ -73,6 +73,7 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<DOSalesDetailModel> DOSalesLocalItems { get; set; }
         public DbSet<SalesInvoiceModel> SalesInvoices { get; set; }
         public DbSet<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
+        public DbSet<SalesInvoiceItemModel> SalesInvoiceItems { get; set; }
         public DbSet<SalesReceiptModel> SalesReceipts { get; set; }
         public DbSet<SalesReceiptDetailModel> SalesReceiptDetails { get; set; }
 

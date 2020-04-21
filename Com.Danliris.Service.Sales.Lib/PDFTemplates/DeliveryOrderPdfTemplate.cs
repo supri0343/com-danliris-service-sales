@@ -139,24 +139,27 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("Keterangan", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            foreach (SalesInvoiceDetailViewModel item in viewModel.SalesInvoiceDetails)
+            foreach (var detail in viewModel.SalesInvoiceDetails)
             {
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.VerticalAlignment = Element.ALIGN_TOP;
-                bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
-                bodyTable.AddCell(bodyCell);
+                foreach (var item in detail.SalesInvoiceItems)
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.VerticalAlignment = Element.ALIGN_TOP;
+                    bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                    bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
+                    bodyTable.AddCell(bodyCell);
+                }
             }
             document.Add(bodyTable);
 

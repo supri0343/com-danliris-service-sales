@@ -18,6 +18,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Garment
         public string UOMUnit { get; set; }
         public string ProductCode { get; set; }
         public string Description { get; set; }
+        public string ProductRemark { get; set; }
         public double BudgetQuantity { get; set; }
         public string UomPriceName { get; set; }
         public double Price { get; set; }
