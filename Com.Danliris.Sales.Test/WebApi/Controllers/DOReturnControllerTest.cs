@@ -21,7 +21,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         [Fact]
         public void Get_DO_Return_PDF_Success()
         {
-            var vm = new DOReturnViewModel() 
+            var vm = new DOReturnViewModel()
             {
                 //============================================
             };
@@ -95,7 +95,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Validation()
+        public void Validate_Validation_ViewModei()
         {
             List<DOReturnViewModel> viewModels = new List<DOReturnViewModel>
             {
@@ -105,6 +105,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         new DOReturnDetailViewModel()
                         {
                             SalesInvoice = new SalesInvoiceViewModel() {},
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
+                            {
+                                new DOReturnDetailItemViewModel()
+                                {
+                                    DOReturnItems = new List<DOReturnItemViewModel>()
+                                    {
+                                        new DOReturnItemViewModel()
+                                        {
+                                            Uom = new UomViewModel() {},
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        new DOReturnDetailViewModel() {
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 1,
+                                SalesInvoiceNo ="SalesInvoiceNo",
+                            },
+                        },
+                        new DOReturnDetailViewModel()
+                        {
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 1,
+                                SalesInvoiceNo ="SalesInvoiceNo",
+                            },
                             DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
                             {
                                 new DOReturnDetailItemViewModel()
