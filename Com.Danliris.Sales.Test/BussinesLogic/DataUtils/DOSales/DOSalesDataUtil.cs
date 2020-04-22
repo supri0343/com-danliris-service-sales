@@ -91,6 +91,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                     }
                 }
             };
+        }
     }
-}
 }

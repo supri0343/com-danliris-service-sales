@@ -28,6 +28,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Buyer = new BuyerViewModel()
                 {
                     Name = "BuyerName",
+                    Code = "BuyerCode",
                     Address = "BuyerAddress",
                 },
                 Remark = "Remark",
@@ -45,6 +46,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                     Unit = "PACKS",
                                 },
                                 Quantity = "Quantity",
+                                PackingUom = "PackingUom",
                                 Total = 1,
                             }
                         }
@@ -97,6 +99,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Buyer = new BuyerViewModel()
                 {
                     Name = "BuyerName",
+                    Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
                 },
@@ -120,6 +123,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                         ProductCode = "ProductCode",
                         Quantity = "Quantity",
+                        PackingUom = "PackingUom",
                         Uom = new UomViewModel()
                         {
                             Unit = "PACKS",
@@ -152,6 +156,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Buyer = new BuyerViewModel()
                 {
                     Name = "BuyerName",
+                    Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
                 },
@@ -175,6 +180,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                         ProductCode = "ProductCode",
                         Quantity = "Quantity",
+                        PackingUom = "PackingUom",
                         Uom = new UomViewModel()
                         {
                             Unit = "PACKS",
@@ -292,33 +298,34 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         Id = 0,
                         Name = "",
+                        Code = "",
                     },
                     DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                     TotalPayment = 0,
                     TotalPaid = -1,
-                    //SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
-                    //{
-                    //    new SalesInvoiceDetailViewModel()
-                    //    {
-                    //    ShipmentDocumentId = 0,
-                    //    ShipmentDocumentCode = "",
-                    //        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
-                    //        {
-                    //            new SalesInvoiceItemViewModel()
-                    //            {
-                    //                ProductCode = "",
-                    //                Quantity = "",
-                    //                Uom = new UomViewModel()
-                    //                {
-                    //                    Id = 0,
-                    //                    Unit = "",
-                    //                },
-                    //                ProductName = "",
-                    //                Amount = 0,
-                    //            }                 
-                    //        } 
-                    //    } 
-                    //}
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel()
+                        {
+                        ShipmentDocumentId = 0,
+                        ShipmentDocumentCode = "",
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                            {
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    ProductCode = "",
+                                    Quantity = "",
+                                    Uom = new UomViewModel()
+                                    {
+                                        Id = 0,
+                                        Unit = "",
+                                    },
+                                    ProductName = "",
+                                    Amount = 0,
+                                }
+                            }
+                        }
+                    }
                 }
             };
             foreach (var viewModel in viewModels)
@@ -347,6 +354,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                     SalesInvoiceDetailId = 2,
                                     ProductCode = "ProductCode",
                                     Quantity = "Quantity",
+                                    PackingUom = "PackingUom",
                                     Total = 10,
                                     Uom = new UomViewModel()
                                     {
@@ -362,6 +370,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                     SalesInvoiceDetailId = 2,
                                     ProductCode = "ProductCode",
                                     Quantity = "Quantity",
+                                    PackingUom = "PackingUom",
                                     Total = 10,
                                     Uom = new UomViewModel()
                                     {

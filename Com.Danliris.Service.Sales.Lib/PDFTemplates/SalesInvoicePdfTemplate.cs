@@ -4,6 +4,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 
 namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 {
@@ -16,7 +17,6 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 18);
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
-            Font bold_2_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
 
             Document document = new Document(PageSize.A4, MARGIN, MARGIN, MARGIN, MARGIN);
             MemoryStream stream = new MemoryStream();
@@ -93,7 +93,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderCS2.Phrase = new Phrase("FAKTUR PENJUALAN", header_font);
             headerTable.AddCell(cellHeaderCS2);
-            cellHeaderCS2.Phrase = new Phrase("No. " + viewModel.SalesInvoiceType + viewModel.AutoIncreament.ToString().PadLeft(6, '0'), bold_font);
+            cellHeaderCS2.Phrase = new Phrase($"No. {viewModel.SalesInvoiceType}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", bold_font);
             headerTable.AddCell(cellHeaderCS2);
             cellHeaderCS2.Phrase = new Phrase("", normal_font);
             headerTable.AddCell(cellHeaderCS2);
@@ -113,7 +113,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("No Index Debitur ", normal_font);
             headerTable3.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Id, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.Code, normal_font);
             headerTable3.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("", normal_font);
@@ -127,7 +127,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("NIK", normal_font);
             headerTable4.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.IsPaidOff, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.IDNo, normal_font);
             headerTable4.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("NPWP Buyer", normal_font);
@@ -197,7 +197,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
+                    bodyCell.Phrase = new Phrase(item.Quantity + " " + item.PackingUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -232,14 +232,20 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #endregion Body
 
-            #region Footer
+            #region Footerda
 
             var dueDate = viewModel.DueDate.Value.Date;
             var salesInvoiceDate = viewModel.SalesInvoiceDate.Value.Date;
             var tempo = (dueDate - salesInvoiceDate).ToString("dd");
 
-            string TotalPayWithVat = NumberToTextIDN.terbilang(totalPay);
-            string TotalPayWithoutVat = NumberToTextIDN.terbilang(result);
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+            string TotalPayWithVat = textInfo.ToTitleCase(NumberToTextIDN.terbilang(totalPay));
+            string TotalPayWithoutVat = textInfo.ToTitleCase(NumberToTextIDN.terbilang(result));
+
+            //string TotalPayWithVat = NumberToTextIDN.terbilang(totalPay);
+            //string TotalPayWithoutVat = NumberToTextIDN.terbilang(result);
 
             PdfPTable footerTable = new PdfPTable(2);
             PdfPTable footerTable1 = new PdfPTable(1);
@@ -360,22 +366,22 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             if (viewModel.VatType.Equals("PPN Umum"))
             {
-                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, bold_2_font);
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else if (viewModel.VatType.Equals("PPN Kawasan Berikat"))
             {
-                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, bold_font);
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else if (viewModel.VatType.Equals("PPN BUMN"))
             {
-                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, bold_font);
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else
             {
-                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, bold_font);
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
 

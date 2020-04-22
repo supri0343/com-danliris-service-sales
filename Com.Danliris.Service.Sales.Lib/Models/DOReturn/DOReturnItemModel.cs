@@ -1,9 +1,9 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
 using System.ComponentModel.DataAnnotations;
 
-namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
+namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 {
-    public class SalesInvoiceItemModel : BaseModel
+    public class DOReturnItemModel : BaseModel
     {
         [MaxLength(255)]
         public string ProductCode { get; set; }
@@ -11,8 +11,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
-        [MaxLength(255)]
-        public string PackingUom { get; set; }
 
         #region Uom
         public int UomId { get; set; }
@@ -23,8 +21,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public double Total { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
-        public int SalesInvoiceDetailId { get; set; }
+        public int DOReturnDetailItemId { get; set; }
 
-        public virtual SalesInvoiceDetailModel SalesInvoiceDetailModel { get; set; }
+        public virtual DOReturnDetailItemModel DOReturnDetailItemModel { get; set; }
     }
 }

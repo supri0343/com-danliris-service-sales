@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200419161047_AddBuyerCodeInSalesInvoice")]
+    partial class AddBuyerCodeInSalesInvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3396,8 +3398,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long>("RO_GarmentId");
 
-                    b.Property<int>("SizeBreakdownIndex");
-
                     b.Property<int>("Total");
 
                     b.Property<string>("UId")
@@ -3462,8 +3462,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("Size")
                         .HasMaxLength(50);
-
-                    b.Property<int>("SizeBreakdownDetailIndex");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
@@ -3575,9 +3573,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("PackingUom")
-                        .HasMaxLength(255);
 
                     b.Property<double>("Price");
 

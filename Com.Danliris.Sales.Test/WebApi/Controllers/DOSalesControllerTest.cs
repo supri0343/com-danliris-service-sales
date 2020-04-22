@@ -156,7 +156,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Receipt_PDF_NotFound()
+        public void Get_DO_Sales_PDF_NotFound()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(DOSalesModel));
@@ -169,7 +169,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Receipt_PDF_Exception()
+        public void Get_DO_Sales_PDF_Exception()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
@@ -293,7 +293,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Null_Model_and_DetailViewModel()
+        public void Validate_Null_Model_and_Null_DetailViewModel()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {

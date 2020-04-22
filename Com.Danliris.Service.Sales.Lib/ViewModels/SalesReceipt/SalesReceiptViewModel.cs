@@ -74,29 +74,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
 
                     var rowErrorCount = 0;
 
-                    if (detail.SalesInvoice == null || string.IsNullOrWhiteSpace(detail.SalesInvoice.SalesInvoiceNo))
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "SalesInvoiceNo : 'Kode Faktur harus diisi',";
-                    }
-                    if (detail.SalesInvoice.Currency == null || string.IsNullOrWhiteSpace(detail.SalesInvoice.Currency.Code))
+                    if (detail.Currency == null || string.IsNullOrWhiteSpace(detail.Currency.Code))
                     {
                         Count++;
                         rowErrorCount++;
                         DetailErrors += "CurrencyCode : 'Kurs harus diisi',";
-                    }
-                    if (string.IsNullOrWhiteSpace(detail.VatType))
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "VatType : 'Type PPN kosong',";
-                    }
-                    if (!detail.Tempo.HasValue)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Tempo : 'Kode Faktur dan tanggal kuitansi harus diisi untuk memperoleh tempo',";
                     }
                     if (detail.TotalPayment <= 0)
                     {
@@ -128,20 +110,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                         rowErrorCount++;
                         DetailErrors += "Unpaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh sisa pembayaran',";
                     }
-                    if (!detail.OverPaid.HasValue)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "OverPaid : 'Kode Faktur & Nominal harus diisi untuk memperoleh kelebihan pembayaran',";
-                    }
 
-                    var mustSameType = SalesReceiptDetails.Where(f => f.SalesInvoice.Currency.Code != detail.SalesInvoice.Currency.Code).ToList();
+                    //var mustSameType = SalesReceiptDetails.Where(f => f.Currency != detail.Currency).FirstOrDefault(f => f.Currency.Code == detail.Currency.Code);
                     
-                    if (mustSameType.Count > 0)
-                    {
-                        Count++;
-                        DetailErrors += "CurrencyCode : 'Tiap No. Jual harus memiliki kurs yang sama',";
-                    }
+                    //if (mustSameType.Count > 0)
+                    //{
+                    //    Count++;
+                    //    DetailErrors += "CurrencyCode : 'Tiap No. Jual harus memiliki kurs yang sama',";
+                    //}
 
 
                     DetailErrors += "}, ";
