@@ -303,29 +303,29 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                     TotalPayment = 0,
                     TotalPaid = -1,
-                    //SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
-                    //{
-                    //    new SalesInvoiceDetailViewModel()
-                    //    {
-                    //    ShipmentDocumentId = 0,
-                    //    ShipmentDocumentCode = "",
-                    //        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
-                    //        {
-                    //            new SalesInvoiceItemViewModel()
-                    //            {
-                    //                ProductCode = "",
-                    //                Quantity = "",
-                    //                Uom = new UomViewModel()
-                    //                {
-                    //                    Id = 0,
-                    //                    Unit = "",
-                    //                },
-                    //                ProductName = "",
-                    //                Amount = 0,
-                    //            }                 
-                    //        } 
-                    //    } 
-                    //}
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel()
+                        {
+                        ShipmentDocumentId = 0,
+                        ShipmentDocumentCode = "",
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                            {
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    ProductCode = "",
+                                    Quantity = "",
+                                    Uom = new UomViewModel()
+                                    {
+                                        Id = 0,
+                                        Unit = "",
+                                    },
+                                    ProductName = "",
+                                    Amount = 0,
+                                }
+                            }
+                        }
+                    }
                 }
             };
             foreach (var viewModel in viewModels)
