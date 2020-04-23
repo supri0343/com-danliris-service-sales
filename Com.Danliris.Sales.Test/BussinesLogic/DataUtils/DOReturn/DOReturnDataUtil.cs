@@ -41,7 +41,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                                 {
                                     new DOReturnItemModel()
                                     {
-                                        DOReturnDetailItemId = 1,
                                         ProductCode = "ProductCode",
                                         ProductName = "ProductName",
                                         Quantity = "Quantity",

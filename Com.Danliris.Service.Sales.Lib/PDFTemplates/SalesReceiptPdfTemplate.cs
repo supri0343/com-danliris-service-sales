@@ -230,7 +230,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             foreach (SalesReceiptDetailViewModel item in viewModel.SalesReceiptDetails)
             {
-                if(item.VatType == "PPN BUMN")
+                if (item.VatType == "PPN BUMN")
                 {
                     cellHeaderFooter.Phrase = new Phrase("Note : PPN dibayarkan oleh buyer secara terpisah", note_font);
                 }

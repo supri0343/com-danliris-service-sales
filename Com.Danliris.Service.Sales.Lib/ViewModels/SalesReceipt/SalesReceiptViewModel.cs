@@ -15,16 +15,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         [MaxLength(255)]
         public string SalesReceiptNo { get; set; }
         public DateTimeOffset? SalesReceiptDate { get; set; }
-        //public UnitViewModel Unit { get; set; }
-        #region Unit
-        //Hanya terima unit string dari frontend
-        //public int? UnitId { get; set; }
-        [MaxLength(255)]
-        public string UnitName { get; set; }
-        #endregion
+        public UnitViewModel Unit { get; set; }
         public BuyerViewModel Buyer { get; set; }
-        [MaxLength(255)]
-        public string OriginBankName { get; set; }
         [MaxLength(255)]
         public string OriginAccountNumber { get; set; }
         public CurrencyViewModel Currency { get; set; }
@@ -39,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
             if (!SalesReceiptDate.HasValue || SalesReceiptDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Kuitansi harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesReceiptDate" });
 
-            if (string.IsNullOrWhiteSpace(UnitName))
+            if (Unit == null || string.IsNullOrWhiteSpace(Unit.Name))
                 yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitName" });
 
             if (Bank == null || string.IsNullOrWhiteSpace(Bank.AccountName))
@@ -47,9 +39,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
 
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Nama Buyer harus di isi", new List<string> { "BuyerName" });
-
-            if (string.IsNullOrWhiteSpace(OriginBankName))
-                yield return new ValidationResult("Nama Bank Asal harus di isi", new List<string> { "OriginBankName" });
 
             if (string.IsNullOrWhiteSpace(OriginAccountNumber))
                 yield return new ValidationResult("No Rek. Bank Asal harus di isi", new List<string> { "OriginAccountNumber" });
@@ -74,6 +63,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
 
                     var rowErrorCount = 0;
 
+                    if (detail.SalesInvoice == null || string.IsNullOrWhiteSpace(detail.SalesInvoice.SalesInvoiceNo))
+                    {
+                        Count++;
+                        rowErrorCount++;
+                        DetailErrors += "SalesInvoiceNo : 'Gagal memperoleh No. Faktur Jual',";
+                    }
                     if (detail.Currency == null || string.IsNullOrWhiteSpace(detail.Currency.Code))
                     {
                         Count++;
@@ -112,7 +107,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
                     }
 
                     //var mustSameType = SalesReceiptDetails.Where(f => f.Currency != detail.Currency).FirstOrDefault(f => f.Currency.Code == detail.Currency.Code);
-                    
+
                     //if (mustSameType.Count > 0)
                     //{
                     //    Count++;

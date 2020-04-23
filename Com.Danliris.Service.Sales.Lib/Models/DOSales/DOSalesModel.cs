@@ -78,13 +78,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
-        //#region Sales
-        //public string SalesId { get; set; }
-        //[MaxLength(255)]
-        //public string SalesFirstName { get; set; }
-        //[MaxLength(255)]
-        //public string SalesLastName { get; set; }
-        //#endregion
         [MaxLength(255)]
         public string SalesName { get; set; }
         [MaxLength(255)]
@@ -103,7 +96,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double FillEachBale { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
- 
+
         public virtual ICollection<DOSalesDetailModel> DOSalesDetailItems { get; set; }
     }
 }

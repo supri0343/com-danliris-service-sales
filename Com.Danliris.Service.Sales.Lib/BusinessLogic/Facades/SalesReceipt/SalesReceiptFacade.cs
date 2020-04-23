@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
@@ -38,9 +39,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                     int index = 0;
                     foreach (var item in model.SalesReceiptDetails)
                     {
-                        var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                        updateToSalesInvoice.TotalPaid = item.Paid;
-                        updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
+                        //var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => new SalesInvoiceModel().Id == item.SalesInvoiceId);
+                        //updateToSalesInvoice.TotalPaid = item.Paid;
+                        //updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                     }
 
                     do
@@ -79,9 +80,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
 
                         foreach (var item in model.SalesReceiptDetails)
                         {
-                            var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                            updateToSalesInvoice.TotalPaid = updateToSalesInvoice.TotalPaid - item.Nominal;
-                            updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
+                            //var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => new SalesInvoiceModel().Id == item.SalesInvoiceId);
+                            //updateToSalesInvoice.TotalPaid = updateToSalesInvoice.TotalPaid - item.Nominal;
+                            //updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                         }
 
                         salesReceiptModel = model;
@@ -116,9 +117,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                 {
                     foreach (var item in model.SalesReceiptDetails)
                     {
-                        var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
-                        updateToSalesInvoice.TotalPaid = item.Paid;
-                        updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
+                        //var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => new SalesInvoiceModel().Id == item.SalesInvoiceId);
+                        //updateToSalesInvoice.TotalPaid = item.Paid;
+                        //updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
                     }
 
                     salesReceiptLogic.UpdateAsync(id, model);

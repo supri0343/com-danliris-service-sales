@@ -306,7 +306,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + result.ToString("N2"), normal_font);
             footerTable3.AddCell(cellHeaderFooter);
 
-            if(viewModel.VatType.Equals("PPN Umum"))
+            if (viewModel.VatType.Equals("PPN Umum"))
             {
                 cellHeaderFooter.Phrase = new Phrase("PPN 10%", normal_font);
                 footerTable3.AddCell(cellHeaderFooter);

@@ -6,12 +6,13 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 {
     public class DOReturnDetailModel : BaseModel
     {
-        /*Sales Invoice*/
+        #region Sales Invoice
         public int SalesInvoiceId { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceNo { get; set; }
+        #endregion
 
-        public int DOReturnId { get; set; }
+        //public int DOReturnId { get; set; }
         public virtual DOReturnModel DOReturnModel { get; set; }
         public virtual ICollection<DOReturnDetailItemModel> DOReturnDetailItems { get; set; }
     }

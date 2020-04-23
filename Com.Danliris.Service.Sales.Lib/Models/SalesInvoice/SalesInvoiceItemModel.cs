@@ -23,7 +23,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public double Total { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
-        public int SalesInvoiceDetailId { get; set; }
+        //public int SalesInvoiceDetailId { get; set; }
 
         public virtual SalesInvoiceDetailModel SalesInvoiceDetailModel { get; set; }
     }

@@ -19,9 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
-        //[MaxLength(255)]
-        //public string DebtorIndexNo { get; set; }
-        
+
         #region Buyer
         public int BuyerId { get; set; }
         [MaxLength(255)]

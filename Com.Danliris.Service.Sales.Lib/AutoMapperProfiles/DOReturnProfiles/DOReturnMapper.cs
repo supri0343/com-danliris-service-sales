@@ -9,7 +9,7 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOReturnProfiles
         public DOReturnMapper()
         {
             CreateMap<DOReturnModel, DOReturnViewModel>()
-                
+
                 .ReverseMap();
         }
     }

@@ -10,9 +10,9 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles
         {
             CreateMap<SalesReceiptModel, SalesReceiptViewModel>()
 
-                //.ForPath(d => d.Unit.Id, opt => opt.MapFrom(s => s.UnitId))
-                //.ForPath(d => d.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
-                
+                .ForPath(d => d.Unit.Id, opt => opt.MapFrom(s => s.UnitId))
+                .ForPath(d => d.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
+
                 .ForPath(d => d.Buyer.Id, opt => opt.MapFrom(s => s.BuyerId))
                 .ForPath(d => d.Buyer.Name, opt => opt.MapFrom(s => s.BuyerName))
                 .ForPath(d => d.Buyer.Address, opt => opt.MapFrom(s => s.BuyerAddress))
@@ -27,6 +27,11 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesReceiptProfiles
                 .ForPath(d => d.Bank.AccountNumber, opt => opt.MapFrom(s => s.AccountNumber))
                 .ForPath(d => d.Bank.BankName, opt => opt.MapFrom(s => s.BankName))
                 .ForPath(d => d.Bank.Code, opt => opt.MapFrom(s => s.BankCode))
+
+                //.ForPath(d => d.Bank.Currency.Id, opt => opt.MapFrom(s => s.BankCurrencyId))
+                //.ForPath(d => d.Bank.Currency.Code, opt => opt.MapFrom(s => s.BankCurrencyCode))
+                //.ForPath(d => d.Bank.Currency.Symbol, opt => opt.MapFrom(s => s.BankCurrencySymbol))
+                //.ForPath(d => d.Bank.Currency.Rate, opt => opt.MapFrom(s => s.BankCurrencyRate))
 
                 .ReverseMap();
         }

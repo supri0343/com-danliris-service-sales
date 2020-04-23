@@ -20,10 +20,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
         public override void Create(SalesInvoiceDetailModel model)
         {
             EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
-            foreach(var item in model.SalesInvoiceItems)
+            foreach (var item in model.SalesInvoiceItems)
             {
                 EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
-                
+
             }
             base.Create(model);
         }

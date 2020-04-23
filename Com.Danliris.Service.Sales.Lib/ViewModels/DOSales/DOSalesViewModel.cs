@@ -32,7 +32,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
-        //public AccountViewModel Sales { get; set; }[MaxLength(255)]
         public string SalesName { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }

@@ -15,8 +15,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public DateTimeOffset SalesReceiptDate { get; set; }
 
         #region Unit
-        //Hanya terima unit string dari frontend
-        //public int UnitId { get; set; }
+        public int UnitId { get; set; }
         [MaxLength(255)]
         public string UnitName { get; set; }
         #endregion
@@ -29,8 +28,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string BuyerAddress { get; set; }
         #endregion
 
-        [MaxLength(255)]
-        public string OriginBankName { get; set; }
         [MaxLength(255)]
         public string OriginAccountNumber { get; set; }
 
@@ -53,6 +50,16 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesReceipt
         public string BankName { get; set; }
         [MaxLength(255)]
         public string BankCode { get; set; }
+
+        //#region BankCurrency
+        //public int BankCurrencyId { get; set; }
+        //[MaxLength(255)]
+        //public string BankCurrencyCode { get; set; }
+        //[MaxLength(255)]
+        //public string BankCurrencySymbol { get; set; }
+        //public double BankCurrencyRate { get; set; }
+        //#endregion
+
         #endregion
 
         public double AdministrationFee { get; set; }
