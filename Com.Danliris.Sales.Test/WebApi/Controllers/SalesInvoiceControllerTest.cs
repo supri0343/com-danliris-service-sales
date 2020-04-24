@@ -284,6 +284,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
             {
+                new SalesInvoiceViewModel(){},
+                new SalesInvoiceViewModel()
+                {
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel() {},
+                        new SalesInvoiceDetailViewModel() {
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                            {
+                                new SalesInvoiceItemViewModel() {},
+                            }
+                        },
+                    }
+                },
                 new SalesInvoiceViewModel{
                     SalesInvoiceType = "",
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
@@ -347,6 +361,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         new SalesInvoiceDetailViewModel()
                         {
+                            ShipmentDocumentId = 1,
+                            ShipmentDocumentCode ="ShipmentDocumentCode",
                             SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
                                 new SalesInvoiceItemViewModel()
@@ -383,6 +399,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 },
                             }
                         },
+                        new SalesInvoiceDetailViewModel()
+                        {
+                            ShipmentDocumentId = 1,
+                            ShipmentDocumentCode ="ShipmentDocumentCode",
+                        }
                     }
                 }
             };
@@ -392,6 +413,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Assert.True(defaultValidationResult.Count() > 0);
             }
         }
+
 
         [Fact]
         public void Should_Success_Read_By_Buyer()
