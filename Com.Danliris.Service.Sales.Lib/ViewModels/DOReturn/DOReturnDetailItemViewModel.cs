@@ -12,7 +12,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string ShipmentDocumentCode { get; set; }
         #endregion
 
-        public int? DOReturnDetailId { get; set; }
+        //public int? DOReturnDetailId { get; set; }
         public virtual ICollection<DOReturnItemViewModel> DOReturnItems { get; set; }
     }
 }

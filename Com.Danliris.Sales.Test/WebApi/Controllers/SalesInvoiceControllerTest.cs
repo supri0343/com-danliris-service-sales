@@ -351,7 +351,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                                 new SalesInvoiceItemViewModel()
                                 {
-                                    SalesInvoiceDetailId = 2,
+                                    Id = 2,
                                     ProductCode = "ProductCode",
                                     Quantity = "Quantity",
                                     PackingUom = "PackingUom",
@@ -367,7 +367,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 },
                                 new SalesInvoiceItemViewModel()
                                 {
-                                    SalesInvoiceDetailId = 2,
+                                    Id = 2,
                                     ProductCode = "ProductCode",
                                     Quantity = "Quantity",
                                     PackingUom = "PackingUom",

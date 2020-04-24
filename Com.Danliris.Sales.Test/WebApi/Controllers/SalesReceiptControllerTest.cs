@@ -158,7 +158,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     TotalPaid = -1,
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 0,
+                            Id = 0,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 0,
@@ -215,7 +215,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 10,
+                            Id = 10,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 10,
@@ -240,7 +240,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             IsPaidOff = true
                         },
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 10,
+                            Id = 10,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 10,

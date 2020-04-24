@@ -29,7 +29,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             _facade = salesReceiptFacade;
         }
 
-        [HttpGet("salesReceiptPdf/{Id}")]
+        [HttpGet("pdf/{Id}")]
         public async Task<IActionResult> GetSalesReceiptPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)

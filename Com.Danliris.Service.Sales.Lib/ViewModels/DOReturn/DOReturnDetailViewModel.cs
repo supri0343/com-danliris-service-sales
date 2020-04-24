@@ -8,7 +8,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
     {
         public SalesInvoiceViewModel SalesInvoice { get; set; }
 
-        public int? DOReturnId { get; set; }
+        //public int? DOReturnId { get; set; }
         public virtual ICollection<DOReturnDetailItemViewModel> DOReturnDetailItems { get; set; }
     }
 }

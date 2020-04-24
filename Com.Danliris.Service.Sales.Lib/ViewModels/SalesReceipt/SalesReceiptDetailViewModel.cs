@@ -22,7 +22,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesReceipt
         public double? OverPaid { get; set; }
         public bool? IsPaidOff { get; set; }
 
-        public int? SalesReceiptId { get; set; }
+        //public int? SalesReceiptId { get; set; }
 
     }
 }
