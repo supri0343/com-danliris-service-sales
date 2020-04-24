@@ -46,8 +46,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(255)]
         public string VatType { get; set; }
+        //TotalPayment => jumlah yang ditangguhkan
         public double TotalPayment { get; set; }
+        //TotalPaid => jumlah yang sudah dibayar
         public double TotalPaid { get; set; }
+        //IsPaidOff => status lunas/tidak
         public bool IsPaidOff { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
