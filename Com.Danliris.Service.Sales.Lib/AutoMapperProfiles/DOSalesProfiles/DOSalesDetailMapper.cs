@@ -25,9 +25,6 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles
                 .ForPath(d => d.ProductionOrder.MaterialConstruction.Code, opt => opt.MapFrom(s => s.MaterialConstructionCode))
                 .ForPath(d => d.ProductionOrder.MaterialConstruction.Remark, opt => opt.MapFrom(s => s.MaterialConstructionRemark))
 
-                //.ForPath(d => d.Unit.Id, opt => opt.MapFrom(s => s.UnitId))
-                //.ForPath(d => d.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
-
                 .ReverseMap();
         }
     }

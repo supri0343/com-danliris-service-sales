@@ -10,7 +10,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public int? ShipmentDocumentId { get; set; }
         [MaxLength(255)]
         public string ShipmentDocumentCode { get; set; }
-        public int? SalesInvoiceId { get; set; }
+        //public int? SalesInvoiceId { get; set; }
 
         public ICollection<SalesInvoiceItemViewModel> SalesInvoiceItems { get; set; }
     }

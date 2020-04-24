@@ -5,6 +5,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 {
     public class SalesInvoiceItemModel : BaseModel
     {
+        #region Product
         [MaxLength(255)]
         public string ProductCode { get; set; }
         [MaxLength(255)]
@@ -21,9 +22,13 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         #endregion
 
         public double Total { get; set; }
+        #endregion
+
+        //Price => harga satuan item
         public double Price { get; set; }
+        //Amount => total yang harus dibayarkan
         public double Amount { get; set; }
-        public int SalesInvoiceDetailId { get; set; }
+        //public int SalesInvoiceDetailId { get; set; }
 
         public virtual SalesInvoiceDetailModel SalesInvoiceDetailModel { get; set; }
     }

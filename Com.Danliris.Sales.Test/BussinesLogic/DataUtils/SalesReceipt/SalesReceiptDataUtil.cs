@@ -27,12 +27,11 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesReceipt
             data.AutoIncreament = 1;
             data.SalesReceiptNo = "SalesReceiptNo";
             data.SalesReceiptDate = DateTimeOffset.UtcNow;
-            //data.UnitId = 1;
+            data.UnitId = 1;
             data.UnitName = "Dying";
             data.BuyerId = 1;
             data.BuyerName = "BuyerName";
             data.BuyerAddress = "BuyerAddress";
-            data.OriginBankName = "OriginBankName";
             data.OriginAccountNumber = "OriginAccountNumber";
             data.CurrencyId = 1;
             data.CurrencyCode = "CurrencyCode";

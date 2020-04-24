@@ -20,8 +20,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public DateTimeOffset? DueDate { get; set; }
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
-        //[MaxLength(255)]
-        //public string DebtorIndexNo { get; set; }
         public BuyerViewModel Buyer { get; set; }
         [MaxLength(255)]
         public string IDNo { get; set; }
@@ -84,7 +82,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                     int ErrorCount = 0;
                     DetailErrors += "{";
 
-                    if (!detail.SalesInvoiceId.HasValue || string.IsNullOrWhiteSpace(detail.ShipmentDocumentCode))
+                    if (!detail.ShipmentDocumentId.HasValue || string.IsNullOrWhiteSpace(detail.ShipmentDocumentCode))
                     {
                         Count++;
                         ErrorCount++;
@@ -99,7 +97,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                         DetailErrors += "ShipmentDocumentCode : 'No. Bon Pengiriman duplikat',";
                     }
 
-                    if(ErrorCount == 0)
+                    if (ErrorCount == 0)
                     {
                         if (detail.SalesInvoiceItems == null || detail.SalesInvoiceItems.Count == 0)
                         {

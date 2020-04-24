@@ -6,12 +6,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
 {
     public class DOReturnDetailItemViewModel : BaseViewModel
     {
-        /*Shipment Document*/
+        #region Shipment Document
         public int? ShipmentDocumentId { get; set; }
         [MaxLength(255)]
         public string ShipmentDocumentCode { get; set; }
+        #endregion
 
-        public int? DOReturnDetailId { get; set; }
+        //public int? DOReturnDetailId { get; set; }
         public virtual ICollection<DOReturnItemViewModel> DOReturnItems { get; set; }
     }
 }

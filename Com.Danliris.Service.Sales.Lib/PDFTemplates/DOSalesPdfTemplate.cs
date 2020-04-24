@@ -10,7 +10,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
     {
         public MemoryStream GeneratePdfTemplate(DOSalesViewModel viewModel, int clientTimeZoneOffset)
         {
-            const int MARGIN_LEFT_RIGHT = 15; 
+            const int MARGIN_LEFT_RIGHT = 15;
             const int MARGIN_TOP_BOTTOM = 20;
 
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 12);
@@ -286,7 +286,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 #endregion Footer
 
-            } else if(viewModel.DOSalesType == "Ekspor")
+            }
+            else if (viewModel.DOSalesType == "Ekspor")
             {
                 #region Header
                 PdfPTable headerTable_A = new PdfPTable(2);
@@ -471,7 +472,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 PdfPTable footerTable = new PdfPTable(1);
 
                 PdfPTable signatureTable = new PdfPTable(2) { HorizontalAlignment = Element.ALIGN_CENTER };
-                PdfPCell signatureCell = new PdfPCell() { HorizontalAlignment = Element.ALIGN_CENTER , VerticalAlignment = Element.ALIGN_MIDDLE };
+                PdfPCell signatureCell = new PdfPCell() { HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE };
 
                 float[] widthsSignanture = new float[] { 10f, 10f };
                 signatureTable.SetWidths(widthsSignanture);
@@ -488,7 +489,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     FixedHeight = 50,
                     VerticalAlignment = Element.ALIGN_BOTTOM,
                     HorizontalAlignment = Element.ALIGN_CENTER
-                }); 
+                });
                 signatureTable.AddCell(new PdfPCell()
                 {
                     Phrase = new Phrase("--------------------------------", normal_font),

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Models.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
@@ -81,7 +82,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt
                         {
                             var updateToSalesInvoice = DbContext.SalesInvoices.FirstOrDefault(x => x.Id == item.SalesInvoiceId);
                             updateToSalesInvoice.TotalPaid = updateToSalesInvoice.TotalPaid - item.Nominal;
-                            updateToSalesInvoice.IsPaidOff = item.IsPaidOff;
+                            updateToSalesInvoice.IsPaidOff = false ;
                         }
 
                         salesReceiptModel = model;

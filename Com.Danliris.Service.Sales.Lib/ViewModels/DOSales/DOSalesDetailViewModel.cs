@@ -13,7 +13,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public MaterialConstructionViewModel MaterialConstruction { get; set; }
         [MaxLength(1000)]
         public string ConstructionName { get; set; }
-        //public UnitViewModel Unit { get; set; }
         [MaxLength(255)]
         public string ColorRequest { get; set; }
         [MaxLength(255)]
@@ -25,6 +24,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public double Weight { get; set; }
         public double ConvertionValue { get; set; }
 
-        public int? DOSalesId { get; set; }
+        //public int? DOSalesId { get; set; }
     }
 }

@@ -24,6 +24,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var vm = new SalesReceiptViewModel()
             {
                 SalesReceiptDate = DateTimeOffset.Now,
+                Unit = new UnitViewModel()
+                {
+                    Name = "Name",
+                },
                 Buyer = new BuyerViewModel()
                 {
                     Name = "Name",
@@ -123,20 +127,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new SalesReceiptViewModel{
                     SalesReceiptDate = DateTimeOffset.UtcNow.AddDays(-1),
-                    //UnitId = 0,
-                    UnitName = "",
-                    //Unit = new UnitViewModel()
-                    //{
-                    //    Id = 0,
-                    //    Name = "",
-                    //},
+                    Unit = new UnitViewModel()
+                    {
+                        Id = 0,
+                        Name = "",
+                    },
                     Buyer = new BuyerViewModel()
                     {
                         Id = 0,
                         Name = "",
                         Address = "",
                     },
-                    OriginBankName = "",
                     OriginAccountNumber = "",
                     Currency = new CurrencyViewModel()
                     {
@@ -157,7 +158,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     TotalPaid = -1,
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 0,
+                            Id = 0,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 0,
@@ -196,6 +197,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
                 new SalesReceiptViewModel{
+                    Unit = new UnitViewModel()
+                    {
+                        Id = 14,
+                    },
                     Buyer = new BuyerViewModel()
                     {
                         Id = 28,
@@ -210,7 +215,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 10,
+                            Id = 10,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 10,
@@ -235,7 +240,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             IsPaidOff = true
                         },
                         new SalesReceiptDetailViewModel{
-                            SalesReceiptId = 10,
+                            Id = 10,
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 10,
@@ -275,6 +280,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             List<SalesReceiptViewModel> viewModels = new List<SalesReceiptViewModel>
             {
                 new SalesReceiptViewModel{
+                    Unit = new UnitViewModel()
+                    {
+                        Id = 8,
+                    },
                     Buyer = new BuyerViewModel()
                     {
                         Id = 14,
@@ -289,7 +298,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     SalesReceiptDetails = new List<SalesReceiptDetailViewModel>{
                         new SalesReceiptDetailViewModel{
-                            VatType = "PPN Umum",                            
+                            VatType = "PPN Umum",
                             SalesInvoice = new SalesInvoiceViewModel()
                             {
                                 Id = 1,

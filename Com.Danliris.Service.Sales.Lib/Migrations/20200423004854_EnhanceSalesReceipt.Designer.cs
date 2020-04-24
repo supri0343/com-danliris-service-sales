@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200423004854_EnhanceSalesReceipt")]
+    partial class EnhanceSalesReceipt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -571,6 +573,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
+                    b.Property<int>("DOReturnDetailId");
+
                     b.Property<long?>("DOReturnDetailModelId");
 
                     b.Property<string>("DeletedAgent")
@@ -627,6 +631,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("CreatedUtc");
+
+                    b.Property<int>("DOReturnId");
 
                     b.Property<long?>("DOReturnModelId");
 
@@ -686,6 +692,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("CreatedUtc");
+
+                    b.Property<int>("DOReturnDetailItemId");
 
                     b.Property<long?>("DOReturnDetailItemModelId");
 
@@ -837,6 +845,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("CreatedUtc");
+
+                    b.Property<int>("DOSalesId");
 
                     b.Property<long?>("DOSalesModelId");
 
@@ -3507,6 +3517,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
+                    b.Property<int>("SalesInvoiceId");
+
                     b.Property<long?>("SalesInvoiceModelId");
 
                     b.Property<string>("ShipmentDocumentCode")
@@ -3579,6 +3591,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("Quantity")
                         .HasMaxLength(255);
+
+                    b.Property<int>("SalesInvoiceDetailId");
 
                     b.Property<long?>("SalesInvoiceDetailModelId");
 
@@ -3768,6 +3782,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("SalesInvoiceNo")
                         .HasMaxLength(255);
+
+                    b.Property<int>("SalesReceiptId");
 
                     b.Property<long?>("SalesReceiptModelId");
 
