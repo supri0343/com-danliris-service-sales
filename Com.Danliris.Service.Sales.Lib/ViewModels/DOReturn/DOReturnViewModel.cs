@@ -17,6 +17,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string Type { get; set; }
         public DateTimeOffset? Date { get; set; }
         [MaxLength(255)]
+        public string ReturnFrom { get; set; }
+        [MaxLength(255)]
         public string LKTPNo { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }
@@ -30,13 +32,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                 yield return new ValidationResult("Kode Retur harus diisi", new List<string> { "Type" });
 
             if (!Date.HasValue || Date.Value > DateTimeOffset.Now)
-                yield return new ValidationResult("Tgl Retur harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesInvoiceDate" });
+                yield return new ValidationResult("Tgl Retur harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "Date" });
+
+            if (string.IsNullOrWhiteSpace(ReturnFrom))
+                yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "ReturnFrom" });
 
             if (string.IsNullOrWhiteSpace(LKTPNo))
-                yield return new ValidationResult("nO LTKP harus diisi", new List<string> { "Type" });
+                yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "LKTPNo" });
 
             if (string.IsNullOrWhiteSpace(HeadOfStorage))
-                yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "Type" });
+                yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
 
             int Count = 0;
             string DetailErrors = "[";
@@ -56,13 +61,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                         DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan kosong / tidak ditemukan',";
                     }
 
-                    var duplicate = DOReturnDetails.Where(w => w.SalesInvoice.Equals(detail.SalesInvoice)).ToList();
+                    //var duplicate = DOReturnDetails.Where(w => w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
 
-                    if (duplicate.Count > 1)
-                    {
-                        Count++;
-                        DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
-                    }
+                    //if (duplicate.Count > 1)
+                    //{
+                    //    Count++;
+                    //    DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
+                    //}
 
                     if (ErrorCount == 0)
                     {
@@ -127,19 +132,24 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             DetailErrors += "], ";
                         }
                     }
+                    else
+                    {
+                        yield return new ValidationResult("DetailItem kosong", new List<string> { "DOReturnDetailItem" });
+                    }
+
 
                     DetailErrors += "}, ";
                 }
             }
             else
             {
-                yield return new ValidationResult("Detail harus diisi", new List<string> { "SalesInvoiceDetail" });
+                yield return new ValidationResult("Detail harus diisi", new List<string> { "DOReturnDetail" });
             }
 
             DetailErrors += "]";
 
             if (Count > 0)
-                yield return new ValidationResult(DetailErrors, new List<string> { "SalesInvoiceDetails" });
+                yield return new ValidationResult(DetailErrors, new List<string> { "DOReturnDetails" });
 
         }
     }

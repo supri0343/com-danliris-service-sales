@@ -22,6 +22,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                 DOReturnNo = "DOReturnNo",
                 Type = "Type",
                 Date = DateTimeOffset.UtcNow,
+                ReturnFrom = "ReturnFrom",
                 LKTPNo = "LKTPNo",
                 HeadOfStorage = "HeadOfStorage",
                 Remark = "Remark",
