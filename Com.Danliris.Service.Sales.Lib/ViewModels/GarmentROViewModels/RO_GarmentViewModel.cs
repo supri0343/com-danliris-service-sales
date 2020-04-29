@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (this.CostCalculationGarment == null)
+            if (this.CostCalculationGarment == null || string.IsNullOrWhiteSpace(CostCalculationGarment.RO_Number))
                 yield return new ValidationResult("Nomor RO harus diisi", new List<string> { "CostCalculationGarment" });
 
             if (string.IsNullOrWhiteSpace(Instruction))
