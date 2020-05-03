@@ -55,6 +55,25 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+        [HttpPut("update-from-sales-receipt/{id}")]
+        public async Task<IActionResult> UpdateFromSalesReceiptAsync([FromRoute] int id, [FromBody] SalesInvoiceUpdateModel model)
+        {
+            try
+            {
+                ValidateUser();
+
+                await Facade.UpdateFromSalesReceiptAsync(id, model);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpGet("delivery-order-pdf/{Id}")]
         public async Task<IActionResult> GetDeliveryOrderPDF([FromRoute] int Id)
         {
