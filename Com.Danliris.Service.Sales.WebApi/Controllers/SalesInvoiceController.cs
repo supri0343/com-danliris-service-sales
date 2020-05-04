@@ -32,11 +32,6 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         [HttpGet("filter-by-buyer/{buyerId}")]
         public virtual IActionResult ReadByBuyerId([FromRoute] int buyerId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 List<SalesInvoiceModel> model = Facade.ReadByBuyerId(buyerId);
