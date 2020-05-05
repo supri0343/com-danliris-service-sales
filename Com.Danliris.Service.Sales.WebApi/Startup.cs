@@ -68,9 +68,6 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrintingCostCalculation;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.LocalMerchandiserFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales;
@@ -153,7 +150,6 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IDOSalesContract, DOSalesFacade>()
                 .AddTransient<IDOReturnContract, DOReturnFacade>()
                 .AddTransient<ISalesInvoiceContract, SalesInvoiceFacade>()
-                .AddTransient<ISalesReceiptContract, SalesReceiptFacade>()
                 .AddTransient<IFinishingPrintingPreSalesContractFacade, FinishingPrintingPreSalesContractFacade>()
                 .AddTransient<IFinishingPrintingCostCalculationService, FinishingPrintingCostCalculationFacade>()
                 .AddTransient<IShinFinishingPrintingSalesContractFacade, ShinFinishingPrintingSalesContractFacade>()
@@ -224,8 +220,6 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<DOSalesDetailLogic>()
                 .AddTransient<SalesInvoiceLogic>()
                 .AddTransient<SalesInvoiceDetailLogic>()
-                .AddTransient<SalesReceiptLogic>()
-                .AddTransient<SalesReceiptDetailLogic>()
                 .AddTransient<FinishingPrintingPreSalesContractLogic>()
                 .AddTransient<FinishingPrintingCostCalculationLogic>()
                 .AddTransient<ShinFinishingPrintingSalesContractLogic>()

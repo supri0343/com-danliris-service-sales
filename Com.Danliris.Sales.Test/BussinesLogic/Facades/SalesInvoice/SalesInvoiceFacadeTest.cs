@@ -7,6 +7,8 @@ using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
 {
@@ -46,6 +48,40 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
                 .Returns(salesInvoiceLogic);
 
             return serviceProviderMock;
+        }
+
+        [Fact]
+        public async void Update_From_SalesReceipt_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+            var model = new SalesInvoiceUpdateModel()
+            {
+                IsPaidOff = false,
+                TotalPaid = 1000,
+            };
+
+
+            var Response = await facade.UpdateFromSalesReceiptAsync((int)data.Id, model);
+            Assert.NotEqual(Response, 0);
+        }
+
+        [Fact]
+        public virtual async void Read_By_BuyerId_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            var Response = facade.ReadByBuyerId((int)data.BuyerId);
+
+            Assert.NotEqual(Response.Count, 0);
         }
     }
 }

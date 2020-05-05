@@ -16,6 +16,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
         public string Type { get; set; }
         public DateTimeOffset Date { get; set; }
         [MaxLength(255)]
+        public string ReturnFrom { get; set; }
+        [MaxLength(255)]
         public string LKTPNo { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }

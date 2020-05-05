@@ -131,5 +131,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             //var invoices = DbSet.Include(x => x.SalesInvoiceDetails).Where(x => salesReceipt.Any(y => y == x.Id));
             return result.ToList();
         }
+
+        internal void UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)
+        {
+            var data = DbSet.Single(m => m.Id == id);
+            data.TotalPaid = model.TotalPaid;
+            data.IsPaidOff = model.IsPaidOff;
+            EntityExtension.FlagForUpdate(data, IdentityService.Username, "sales-service");
+        }
     }
 }

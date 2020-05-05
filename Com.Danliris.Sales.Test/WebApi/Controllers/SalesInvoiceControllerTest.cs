@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.WebApi.Controllers
@@ -436,6 +437,31 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var controller = GetController(mocks);
             var response = controller.ReadByBuyerId(It.IsAny<int>());
             int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async Task Should_Success_Update_From_Sales_Receipt()
+        {
+            var mocks = this.GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<SalesInvoiceViewModel>())).Verifiable();
+            mocks.Facade.Setup(f => f.UpdateFromSalesReceiptAsync(It.IsAny<int>(), It.IsAny<SalesInvoiceUpdateModel>())).ReturnsAsync(1);
+            var controller = GetController(mocks);
+            var response = await controller.UpdateFromSalesReceiptAsync(It.IsAny<int>(), It.IsAny<SalesInvoiceUpdateModel>());
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NoContent, statusCode);
+        }
+
+        [Fact]
+        public async Task Should_Fail_Update_From_Sales_Receipt()
+        {
+            var mocks = this.GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<SalesInvoiceViewModel>())).Verifiable();
+            mocks.Facade.Setup(f => f.UpdateFromSalesReceiptAsync(It.IsAny<int>(), It.IsAny<SalesInvoiceUpdateModel>()))
+                .ThrowsAsync(new Exception());
+            var controller = GetController(mocks);
+            var response = await controller.UpdateFromSalesReceiptAsync(It.IsAny<int>(), It.IsAny<SalesInvoiceUpdateModel>());
+            int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
     }

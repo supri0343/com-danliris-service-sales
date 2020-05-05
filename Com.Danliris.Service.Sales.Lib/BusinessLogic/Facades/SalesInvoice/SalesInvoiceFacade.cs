@@ -232,5 +232,26 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                 }
             }
         }
+
+        public async Task<int> UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)
+
+        {
+            int Updated = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    salesInvoiceLogic.UpdateFromSalesReceiptAsync(id, model);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw e;
+                }
+            }
+            return Updated;
+        }
     }
 }
