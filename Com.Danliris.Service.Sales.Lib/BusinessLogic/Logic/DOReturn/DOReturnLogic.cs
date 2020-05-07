@@ -17,12 +17,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
     public class DOReturnLogic : BaseLogic<DOReturnModel>
     {
         private DOReturnDetailLogic doReturnDetailLogic;
-        private SalesDbContext _dbContext;
 
         public DOReturnLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
-            this.doReturnDetailLogic = serviceProvider.GetService<DOReturnDetailLogic>();
-            _dbContext = dbContext;
         }
 
         public override ReadResponse<DOReturnModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -54,6 +51,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
             return new ReadResponse<DOReturnModel>(data, totalData, OrderDictionary, SelectedFields);
         }
 
+        public override void Create(DOReturnModel model)
+        {
+            if (model.DOReturnDetails.Count > 0)
+            {
+                EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
+                foreach (var detail in model.DOReturnDetails)
+                {
+                    EntityExtension.FlagForCreate(detail, IdentityService.Username, "sales-service");
+                    foreach (var detailItem in detail.DOReturnDetailItems)
+                    {
+                        EntityExtension.FlagForCreate(detailItem, IdentityService.Username, "sales-service");
+                        foreach (var item in detailItem.DOReturnItems)
+                        {
+                            EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
+                        }
+                    }
+                }
+            }
+            EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
+            DbSet.Add(model);
+        }
+
         public override async void UpdateAsync(long id, DOReturnModel model)
         {
             try
@@ -64,8 +83,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
                     foreach (var itemId in detailIds)
                     {
                         DOReturnDetailModel data = model.DOReturnDetails.FirstOrDefault(prop => prop.Id.Equals(itemId));
-                        if (data == null)
-                            await doReturnDetailLogic.DeleteAsync(itemId);
+                        if (data == null) 
+                        {
+                            foreach (var detail in model.DOReturnDetails)
+                            {
+                                EntityExtension.FlagForDelete(detail, IdentityService.Username, "sales-service", true);
+                                foreach (var detailItem in detail.DOReturnDetailItems)
+                                {
+                                    EntityExtension.FlagForDelete(detailItem, IdentityService.Username, "sales-service", true);
+                                    foreach (var item in detailItem.DOReturnItems)
+                                    {
+                                        EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
+                                    }
+                                }
+                            }
+                            EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service", true);
+                            DbSet.Update(model);
+                        }
                         else
                         {
                             doReturnDetailLogic.UpdateAsync(itemId, data);
@@ -88,20 +122,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
             }
         }
 
-        public override void Create(DOReturnModel model)
-        {
-            if (model.DOReturnDetails.Count > 0)
-            {
-                foreach (var detail in model.DOReturnDetails)
-                {
-                    doReturnDetailLogic.Create(detail);
-                }
-            }
-
-            EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
-            DbSet.Add(model);
-        }
-
         public override async Task DeleteAsync(long id)
         {
 
@@ -109,9 +129,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             foreach (var detail in model.DOReturnDetails)
             {
-                await doReturnDetailLogic.DeleteAsync(detail.Id);
+                EntityExtension.FlagForDelete(detail, IdentityService.Username, "sales-service", true);
+                foreach (var detailItem in detail.DOReturnDetailItems)
+                {
+                    EntityExtension.FlagForDelete(detailItem, IdentityService.Username, "sales-service", true);
+                    foreach (var item in detailItem.DOReturnItems)
+                    {
+                        EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
+                    }
+                }
             }
-
             EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service", true);
             DbSet.Update(model);
         }

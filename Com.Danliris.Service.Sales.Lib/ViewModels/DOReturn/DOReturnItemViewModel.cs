@@ -16,6 +16,5 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public double? Total { get; set; }
         public double? Price { get; set; }
         public double Amount { get; set; }
-        //public int? DOReturnDetailItemId { get; set; }
     }
 }

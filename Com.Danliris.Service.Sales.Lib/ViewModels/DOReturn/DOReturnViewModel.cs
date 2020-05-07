@@ -24,6 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string HeadOfStorage { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
+
         public virtual ICollection<DOReturnDetailViewModel> DOReturnDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
