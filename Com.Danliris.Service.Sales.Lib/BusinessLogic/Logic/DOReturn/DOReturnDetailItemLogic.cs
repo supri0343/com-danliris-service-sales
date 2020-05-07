@@ -2,11 +2,13 @@
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
+using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 {
@@ -14,6 +16,40 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
     {
         public DOReturnDetailItemLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
+        }
+
+        public override void Create(DOReturnDetailItemModel detailItem)
+        {
+            EntityExtension.FlagForCreate(detailItem, IdentityService.Username, "sales-service");
+            foreach (var item in detailItem.DOReturnItems)
+            {
+                EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
+
+            }
+            base.Create(detailItem);
+        }
+
+        public override void UpdateAsync(long id, DOReturnDetailItemModel detailItem)
+        {
+            EntityExtension.FlagForUpdate(detailItem, IdentityService.Username, "sales-service");
+            foreach (var item in detailItem.DOReturnItems)
+            {
+                EntityExtension.FlagForUpdate(item, IdentityService.Username, "sales-service");
+
+            }
+            base.UpdateAsync(id, detailItem);
+        }
+
+        public override async Task DeleteAsync(long id)
+        {
+            var detailItem = await ReadByIdAsync(id);
+            EntityExtension.FlagForDelete(detailItem, IdentityService.Username, "sales-service", true);
+            foreach (var item in detailItem.DOReturnItems)
+            {
+                EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
+
+            }
+            DbSet.Update(detailItem);
         }
 
         public override ReadResponse<DOReturnDetailItemModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
