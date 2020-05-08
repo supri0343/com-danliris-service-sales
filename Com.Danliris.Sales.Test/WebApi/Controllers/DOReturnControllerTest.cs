@@ -23,7 +23,36 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new DOReturnViewModel()
             {
-                //============================================
+                Type = "Type",
+                AutoIncreament = 1,
+                Date = DateTimeOffset.Now,
+                HeadOfStorage = "HeadOfStorage",
+                DOReturnDetails = new List<DOReturnDetailViewModel>()
+                {
+                    new DOReturnDetailViewModel()
+                    {
+                        SalesInvoice = new SalesInvoiceViewModel() { },
+                        DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
+                        {
+                            new DOReturnDetailItemViewModel()
+                            {
+                                ShipmentDocumentCode = "ShipmentDocumentCode",
+                                DOReturnItems = new List<DOReturnItemViewModel>()
+                                {
+                                    new DOReturnItemViewModel()
+                                    {
+                                        ProductName = "ProductName",
+                                        ProductCode = "ProductCode",
+                                        Quantity = "Quantity",
+                                        PackingUom = "PackingUom",
+                                        Uom = new UomViewModel() { },
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             };
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);

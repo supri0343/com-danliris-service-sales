@@ -12,6 +12,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
+        [MaxLength(255)]
+        public string PackingUom { get; set; }
         public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
         public double? Price { get; set; }

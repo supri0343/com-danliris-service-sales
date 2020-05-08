@@ -45,6 +45,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                                         ProductCode = "ProductCode",
                                         ProductName = "ProductName",
                                         Quantity = "Quantity",
+                                        PackingUom = "PackingUom",
                                         UomId = 1,
                                         UomUnit = "UomUnit",
                                         Total = 100,
