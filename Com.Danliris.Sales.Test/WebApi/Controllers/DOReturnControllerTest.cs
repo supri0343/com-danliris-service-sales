@@ -177,7 +177,51 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             },
                         },
                     },
-                }
+                },
+
+
+
+
+                new DOReturnViewModel() {},
+                new DOReturnViewModel()
+                {
+                    DOReturnDetails = new List<DOReturnDetailViewModel>()
+                    {
+                        new DOReturnDetailViewModel() { },
+                    },
+                },
+                new DOReturnViewModel()
+                {
+                    DOReturnDetails = new List<DOReturnDetailViewModel>()
+                    {
+                        new DOReturnDetailViewModel()
+                        {
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
+                            {
+                                new DOReturnDetailItemViewModel() { },
+                            },
+                        },
+                    },
+                },
+                new DOReturnViewModel()
+                {
+                    DOReturnDetails = new List<DOReturnDetailViewModel>()
+                    {
+                        new DOReturnDetailViewModel()
+                        {
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
+                            {
+                                new DOReturnDetailItemViewModel()
+                                {
+                                   DOReturnItems = new List<DOReturnItemViewModel>()
+                                   {
+                                       new DOReturnItemViewModel(){ },
+                                   },
+                                },
+                            },
+                        },
+                    },
+                },
             };
             foreach (var viewModel in viewModels)
             {
