@@ -24,9 +24,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var vm = new DOReturnViewModel()
             {
                 Type = "Type",
+                DOReturnNo = "DOReturnNo",
                 AutoIncreament = 1,
                 Date = DateTimeOffset.Now,
                 HeadOfStorage = "HeadOfStorage",
+                ReturnFrom = "ReturnFrom",
+                LKTPNo = "LKTPNo",
+                Remark = "Remark",
                 DOReturnDetails = new List<DOReturnDetailViewModel>()
                 {
                     new DOReturnDetailViewModel()
@@ -36,6 +40,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             new DOReturnDetailItemViewModel()
                             {
+                                ShipmentDocumentId = 1,
                                 ShipmentDocumentCode = "ShipmentDocumentCode",
                                 DOReturnItems = new List<DOReturnItemViewModel>()
                                 {
@@ -46,7 +51,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                         Quantity = "Quantity",
                                         PackingUom = "PackingUom",
                                         Uom = new UomViewModel() { },
-
+                                        Total = 100,
+                                        Price = 100,
+                                        Amount = 100,
                                     }
                                 }
                             }
@@ -128,12 +135,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             List<DOReturnViewModel> viewModels = new List<DOReturnViewModel>
             {
-                new DOReturnViewModel{
+                new DOReturnViewModel()
+                {
                     DOReturnDetails = new List<DOReturnDetailViewModel>()
                     {
                         new DOReturnDetailViewModel()
                         {
-                            SalesInvoice = new SalesInvoiceViewModel() {},
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 1,
+                                SalesInvoiceNo ="SalesInvoiceNo",
+                            },
                             DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
                             {
                                 new DOReturnDetailItemViewModel()
@@ -146,13 +158,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                         },
                                     },
                                 },
-                            },
-                        },
-                        new DOReturnDetailViewModel() {
-                            SalesInvoice = new SalesInvoiceViewModel()
-                            {
-                                Id = 1,
-                                SalesInvoiceNo ="SalesInvoiceNo",
+                                new DOReturnDetailItemViewModel()
+                                {
+                                    DOReturnItems = new List<DOReturnItemViewModel>() { },
+                                },
                             },
                         },
                         new DOReturnDetailViewModel()
@@ -162,24 +171,30 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 Id = 1,
                                 SalesInvoiceNo ="SalesInvoiceNo",
                             },
-                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>() { },
+                        },
+
+
+
+                        new DOReturnDetailViewModel()
+                        {
+                            SalesInvoice = new SalesInvoiceViewModel()
+                            {
+                                Id = 1,
+                                SalesInvoiceNo ="SalesInvoiceNo",
+                            },
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>() 
                             {
                                 new DOReturnDetailItemViewModel()
                                 {
-                                    DOReturnItems = new List<DOReturnItemViewModel>()
-                                    {
-                                        new DOReturnItemViewModel()
-                                        {
-                                            Uom = new UomViewModel() {},
-                                        },
-                                    },
+                                    //DOReturnItems = new List<DOReturnItemViewModel>() { },
                                 },
                             },
                         },
+
+
                     },
                 },
-
-
 
 
                 new DOReturnViewModel() {},
@@ -222,20 +237,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                     },
                 },
-            };
-            foreach (var viewModel in viewModels)
-            {
-                var defaultValidationResult = viewModel.Validate(null);
-                Assert.True(defaultValidationResult.Count() > 0);
-            }
-        }
-
-        [Fact]
-        public void Validate_Null_Model_and_DetailViewModel()
-        {
-            List<DOReturnViewModel> viewModels = new List<DOReturnViewModel>
-            {
-                new DOReturnViewModel{}
             };
             foreach (var viewModel in viewModels)
             {

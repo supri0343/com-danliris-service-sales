@@ -88,49 +88,42 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                if (ErrorCount == 0)
+                                if (detailItem.DOReturnItems == null || detailItem.DOReturnItems.Count == 0)
                                 {
-                                    if (detailItem.DOReturnItems == null || detailItem.DOReturnItems.Count == 0)
-                                    {
-                                        Count++;
-                                        DetailErrors += "DOReturnItem : 'Item Kosong',";
-                                    }
-                                    else
-                                    {
-                                        DetailErrors += "DOReturnItems: [";
-
-                                        foreach (var item in detailItem.DOReturnItems)
-                                        {
-                                            DetailErrors += "{";
-
-                                            if (string.IsNullOrWhiteSpace(item.ProductCode))
-                                            {
-                                                Count++;
-                                                DetailErrors += "ProductCode : 'Kode produk harus diisi',";
-                                            }
-
-                                            if (!item.Price.HasValue || item.Price.Value <= 0)
-                                            {
-                                                Count++;
-                                                DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
-                                            }
-
-                                            if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
-                                            {
-                                                Count++;
-                                                DetailErrors += "UomUnit : 'Satuan harus diisi',";
-                                            }
-
-                                            DetailErrors += "}, ";
-
-                                        }
-
-                                        DetailErrors += "], ";
-                                    }
+                                    Count++;
+                                    DetailErrors += "DOReturnItem : 'Item Kosong',";
                                 }
                                 else
                                 {
-                                    yield return new ValidationResult("Item kosong", new List<string> { "DOReturnItem" });
+                                    DetailErrors += "DOReturnItems: [";
+
+                                    foreach (var item in detailItem.DOReturnItems)
+                                    {
+                                        DetailErrors += "{";
+
+                                        if (string.IsNullOrWhiteSpace(item.ProductCode))
+                                        {
+                                            Count++;
+                                            DetailErrors += "ProductCode : 'Kode produk harus diisi',";
+                                        }
+
+                                        if (!item.Price.HasValue || item.Price.Value <= 0)
+                                        {
+                                            Count++;
+                                            DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
+                                        }
+
+                                        if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
+                                        {
+                                            Count++;
+                                            DetailErrors += "UomUnit : 'Satuan harus diisi',";
+                                        }
+
+                                        DetailErrors += "}, ";
+
+                                    }
+
+                                    DetailErrors += "], ";
                                 }
 
                                 DetailErrors += "}, ";
@@ -144,7 +137,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                     {
                         yield return new ValidationResult("DetailItem kosong", new List<string> { "DOReturnDetailItem" });
                     }
-
 
                     DetailErrors += "}, ";
                 }
