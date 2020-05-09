@@ -63,7 +63,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             DOReturnItemLogic unitUnderTest = new DOReturnItemLogic(GetServiceProvider(testName).Object, identityService, dbContext);
             dbContext.DOReturnItems.Add(new DOReturnItemModel()
             {
-                Id=1,
                 ProductName= "ProductName",
                 Active = true,
                 CreatedBy = "someone",
@@ -72,7 +71,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
               
                 DOReturnDetailItemModel =new DOReturnDetailItemModel() { 
                     Active =true,
-                    Id =1,
                     ShipmentDocumentCode= "ShipmentDocumentCode"
                 },
                 UId="1",
@@ -98,8 +96,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             string keyword = null;
             string filter = @"{""ProductName"":""""}";
 
-            unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
-
+            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            Assert.NotEmpty(result.Data);
         }
 }
 }
