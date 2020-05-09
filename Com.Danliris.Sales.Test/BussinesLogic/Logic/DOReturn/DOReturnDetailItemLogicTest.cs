@@ -54,7 +54,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
         }
 
         [Fact]
-        public void Read_Return_Success()
+        public void Read_With_EmptyKeyword_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
@@ -84,8 +84,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             string keyword = null;
             string filter = @"{""ProductName"":""""}";
 
-            unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
-
+           var result= unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            Assert.NotEmpty(result.Data);
         }
 
 
