@@ -17,6 +17,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
         public SalesInvoiceDetailLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
         }
+
         public override void Create(SalesInvoiceDetailModel model)
         {
             EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");

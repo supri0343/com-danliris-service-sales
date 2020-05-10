@@ -18,6 +18,7 @@ using Com.Danliris.Service.Sales.Lib.Models.GarmentOmzetTargetModel;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
+using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
 
 namespace Com.Danliris.Service.Sales.Lib
 {
@@ -73,6 +74,10 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<SalesInvoiceModel> SalesInvoices { get; set; }
         public DbSet<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
         public DbSet<SalesInvoiceItemModel> SalesInvoiceItems { get; set; }
+        public DbSet<DOReturnModel> DOReturns { get; set; }
+        public DbSet<DOReturnDetailModel> DOReturnDetails { get; set; }
+        public DbSet<DOReturnDetailItemModel> DOReturnDetailItems { get; set; }
+        public DbSet<DOReturnItemModel> DOReturnItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

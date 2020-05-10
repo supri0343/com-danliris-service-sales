@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200508080447_AddPackingUomInDOReturn")]
+    partial class AddPackingUomInDOReturn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3540,10 +3542,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<double>("Amount");
 
-                    b.Property<string>("ConvertUnit");
-
-                    b.Property<double>("ConvertValue");
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -3691,9 +3689,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
 
-                    b.Property<string>("Sales")
-                        .HasMaxLength(256);
-
                     b.Property<DateTimeOffset>("SalesInvoiceDate");
 
                     b.Property<string>("SalesInvoiceNo")
@@ -3708,15 +3703,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
-
-                    b.Property<string>("UnitCode")
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("UnitId")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("UnitName")
-                        .HasMaxLength(1000);
 
                     b.Property<string>("VatType")
                         .HasMaxLength(255);

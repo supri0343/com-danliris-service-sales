@@ -116,5 +116,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
             DbSet.Update(model);
         }
 
+        public override async Task<DOReturnModel> ReadByIdAsync(long id)
+        {
+            var SalesInvoice = await DbSet.Include(s => s.DOReturnDetails).ThenInclude(s => s.DOReturnDetailItems).ThenInclude(s => s.DOReturnItems).FirstOrDefaultAsync(s => s.Id == id);
+            return SalesInvoice;
+        }
+
     }
 }
