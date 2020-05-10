@@ -21,6 +21,11 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesInvoiceProfiles
                 .ForPath(d => d.Currency.Symbol, opt => opt.MapFrom(s => s.CurrencySymbol))
                 .ForPath(d => d.Currency.Rate, opt => opt.MapFrom(s => s.CurrencyRate))
 
+                .ForPath(d => d.Sales, opt => opt.MapFrom(s => s.Sales))
+                .ForPath(d => d.Unit.Code, opt => opt.MapFrom(s => s.UnitCode))
+                .ForPath(d => d.Unit.Id, opt => opt.MapFrom(s => s.UnitId))
+                .ForPath(d => d.Unit.Name, opt => opt.MapFrom(s => s.UnitName))
+
                 .ReverseMap();
         }
     }

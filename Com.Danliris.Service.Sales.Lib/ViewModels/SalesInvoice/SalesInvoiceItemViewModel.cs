@@ -19,5 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public double? Price { get; set; }
         public double Amount { get; set; }
         //public int? SalesInvoiceDetailId { get; set; }
+        public double ConvertValue { get; set; }
+        public string ConvertUnit { get; set; }
     }
 }
