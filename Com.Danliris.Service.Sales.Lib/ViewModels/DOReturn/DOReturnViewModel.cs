@@ -61,17 +61,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                         ErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan kosong / tidak ditemukan',";
                     }
-                    //else
-                    //{
 
-                    //    var duplicate = DOReturnDetails.Where(w => w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
+                    var duplicate = DOReturnDetails.Where(w => w.SalesInvoice != null && detail.SalesInvoice != null && w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
 
-                    //    if (duplicate.Count > 1)
-                    //    {
-                    //        Count++;
-                    //        DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
-                    //    }
-                    //}
+                    if (duplicate.Count > 1)
+                    {
+                        Count++;
+                        DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
+                    }
 
                     if (ErrorCount == 0)
                     {
