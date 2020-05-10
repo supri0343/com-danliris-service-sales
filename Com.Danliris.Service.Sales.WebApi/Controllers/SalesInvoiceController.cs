@@ -154,9 +154,9 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("reports")]
-        public async Task<IActionResult> GetReportAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        public async Task<IActionResult> GetReportAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, [FromHeader(Name = "x-timezone-offset")] string timezone)
         {
-            int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+            int offset = Convert.ToInt32(timezone);
 
             try
             {
@@ -181,14 +181,14 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("reports/xls")]
-        public async Task<IActionResult> GetXlsAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        public async Task<IActionResult> GetXlsAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, [FromHeader(Name = "x-timezone-offset")] string timezone)
         {
 
             try
             {
                 ValidateUser();
                 byte[] xlsInBytes;
-                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                int offset = Convert.ToInt32(timezone);
 
                 var xls = await _facade.GenerateExcel(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offset);
 
