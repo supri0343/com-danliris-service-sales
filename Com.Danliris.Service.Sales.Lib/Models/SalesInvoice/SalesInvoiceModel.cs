@@ -55,6 +55,17 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(1000)]
         public string Remark { get; set; }
 
+        [MaxLength(256)]
+        public string Sales { get; set; }
+
+        [MaxLength(100)]
+        public string UnitId { get; set; }
+
+        [MaxLength(1000)]
+        public string UnitCode { get; set; }
+
+        [MaxLength(1000)]
+        public string UnitName { get; set; }
 
         public virtual ICollection<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
     }

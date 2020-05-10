@@ -29,6 +29,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         //Amount => total yang harus dibayarkan
         public double Amount { get; set; }
         //public int SalesInvoiceDetailId { get; set; }
+        public string ConvertUnit { get; set; }
+        public double ConvertValue { get; set; }
 
         public virtual SalesInvoiceDetailModel SalesInvoiceDetailModel { get; set; }
     }
