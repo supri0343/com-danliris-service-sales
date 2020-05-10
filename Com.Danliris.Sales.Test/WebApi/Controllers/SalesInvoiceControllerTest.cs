@@ -464,5 +464,56 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
+
+        [Fact]
+        public async void Should_Success_GetReportAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GetReport(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .ReturnsAsync(new List<SalesInvoiceReportViewModel>());
+            
+            var controller = GetController(mocks);
+            var response = await controller.GetReportAll(0, 0, null, null, null);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public async void Should_Fail_GetReportAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GetReport(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .Throws(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetReportAll(0, 0, null, null, null);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async void Should_Success_GetXlsAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .ReturnsAsync(new System.IO.MemoryStream());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll(0, 0, null, null, null);
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async void Should_Fail_GetXlsAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+               .Throws(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll(0, 0, null, null, null);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
     }
 }

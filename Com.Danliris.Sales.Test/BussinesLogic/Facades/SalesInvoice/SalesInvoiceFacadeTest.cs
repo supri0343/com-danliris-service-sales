@@ -47,6 +47,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
                 .Setup(x => x.GetService(typeof(SalesInvoiceLogic)))
                 .Returns(salesInvoiceLogic);
 
+
             return serviceProviderMock;
         }
 
@@ -82,6 +83,63 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
             var Response = facade.ReadByBuyerId((int)data.BuyerId);
 
             Assert.NotEqual(Response.Count, 0);
+        }
+
+        [Fact]
+        public async void GetReport_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod()+ "GetReport_Success");
+            var serviceProvider = GetServiceProviderMock(dbContext);
+            SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new SalesInvoiceHttpClientTestService(data));
+
+            SalesInvoiceFacade facade2 = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
+
+            var Response = await facade2.GetReport(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-1), data.DueDate.AddDays(1), 7);
+
+            Assert.NotEqual(Response.Count, 0);
+
+            Response = await facade2.GetReport(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-1), null, 7);
+
+            Assert.NotEqual(Response.Count, 0);
+
+            Response = await facade2.GetReport(data.BuyerId, data.Id, data.IsPaidOff, null, data.DueDate.AddDays(1), 7);
+
+            Assert.NotEqual(Response.Count, 0);
+
+            Response = await facade2.GetReport(data.BuyerId, data.Id, data.IsPaidOff, null, null, 7);
+
+            Assert.NotEqual(Response.Count, 0);
+        }
+
+        [Fact]
+        public async void GenerateExcel_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod()+ "GenerateExcel_Success");
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new SalesInvoiceHttpClientTestService(data));
+            var facade2 = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
+
+
+            var Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-1), data.DueDate.AddDays(1), 7);
+
+            Assert.NotNull(Response);
+
+            Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-3), data.DueDate.AddDays(-2), 7);
+
+            Assert.NotNull(Response);
+
+
         }
     }
 }
