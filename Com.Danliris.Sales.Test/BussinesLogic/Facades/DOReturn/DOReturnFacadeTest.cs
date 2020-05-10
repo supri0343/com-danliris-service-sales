@@ -27,11 +27,23 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
 
-            var doReturnLocalLogic = new DOReturnDetailLogic(serviceProviderMock.Object, identityService, dbContext);
+            var doReturnItemLogic = new DOReturnItemLogic(serviceProviderMock.Object, identityService, dbContext);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(DOReturnItemLogic)))
+                .Returns(doReturnItemLogic);
+
+            var doReturnDetailItemLogic = new DOReturnDetailItemLogic(serviceProviderMock.Object, identityService, dbContext);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(DOReturnDetailItemLogic)))
+                .Returns(doReturnDetailItemLogic);
+
+            var doReturnDetailLogic = new DOReturnDetailLogic(serviceProviderMock.Object, identityService, dbContext);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(DOReturnDetailLogic)))
-                .Returns(doReturnLocalLogic);
+                .Returns(doReturnDetailLogic);
 
             var doReturnLogic = new DOReturnLogic(serviceProviderMock.Object, identityService, dbContext);
 

@@ -24,6 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string HeadOfStorage { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
+
         public virtual ICollection<DOReturnDetailViewModel> DOReturnDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -60,13 +61,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                         ErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan kosong / tidak ditemukan',";
                     }
-
-                    //var duplicate = DOReturnDetails.Where(w => w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
-
-                    //if (duplicate.Count > 1)
+                    //else
                     //{
-                    //    Count++;
-                    //    DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
+
+                    //    var duplicate = DOReturnDetails.Where(w => w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
+
+                    //    if (duplicate.Count > 1)
+                    //    {
+                    //        Count++;
+                    //        DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan duplikat',";
+                    //    }
                     //}
 
                     if (ErrorCount == 0)
@@ -84,45 +88,42 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                if (ErrorCount == 0)
+                                if (detailItem.DOReturnItems == null || detailItem.DOReturnItems.Count == 0)
                                 {
-                                    if (detail.DOReturnDetailItems == null || detail.DOReturnDetailItems.Count == 0)
-                                    {
-                                        Count++;
-                                        DetailErrors += "DOReturnDetailItem : 'Detail Item Kosong',";
-                                    }
-                                    else
-                                    {
-                                        DetailErrors += "DOReturnDetailItems: [";
+                                    Count++;
+                                    DetailErrors += "DOReturnItem : 'Item Kosong',";
+                                }
+                                else
+                                {
+                                    DetailErrors += "DOReturnItems: [";
 
-                                        foreach (var item in detailItem.DOReturnItems)
+                                    foreach (var item in detailItem.DOReturnItems)
+                                    {
+                                        DetailErrors += "{";
+
+                                        if (string.IsNullOrWhiteSpace(item.ProductCode))
                                         {
-                                            DetailErrors += "{";
-
-                                            if (string.IsNullOrWhiteSpace(item.ProductCode))
-                                            {
-                                                Count++;
-                                                DetailErrors += "ProductCode : 'Kode produk harus diisi',";
-                                            }
-
-                                            if (!item.Price.HasValue || item.Price.Value <= 0)
-                                            {
-                                                Count++;
-                                                DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
-                                            }
-
-                                            if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
-                                            {
-                                                Count++;
-                                                DetailErrors += "UomUnit : 'Satuan harus diisi',";
-                                            }
-
-                                            DetailErrors += "}, ";
-
+                                            Count++;
+                                            DetailErrors += "ProductCode : 'Kode produk harus diisi',";
                                         }
 
-                                        DetailErrors += "], ";
+                                        if (!item.Price.HasValue || item.Price.Value <= 0)
+                                        {
+                                            Count++;
+                                            DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
+                                        }
+
+                                        if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
+                                        {
+                                            Count++;
+                                            DetailErrors += "UomUnit : 'Satuan harus diisi',";
+                                        }
+
+                                        DetailErrors += "}, ";
+
                                     }
+
+                                    DetailErrors += "], ";
                                 }
 
                                 DetailErrors += "}, ";
@@ -136,7 +137,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                     {
                         yield return new ValidationResult("DetailItem kosong", new List<string> { "DOReturnDetailItem" });
                     }
-
 
                     DetailErrors += "}, ";
                 }

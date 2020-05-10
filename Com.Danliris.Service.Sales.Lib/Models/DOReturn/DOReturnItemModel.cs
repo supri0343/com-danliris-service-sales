@@ -11,6 +11,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
         public string ProductName { get; set; }
         [MaxLength(255)]
         public string Quantity { get; set; }
+        [MaxLength(255)]
+        public string PackingUom { get; set; }
 
         #region Uom
         public int UomId { get; set; }
@@ -21,7 +23,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
         public double Total { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
-        //public int DOReturnDetailItemId { get; set; }
 
         public virtual DOReturnDetailItemModel DOReturnDetailItemModel { get; set; }
     }
