@@ -12,6 +12,8 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.SalesInvoiceProfiles
 
                 .ForPath(d => d.Uom.Id, opt => opt.MapFrom(s => s.UomId))
                 .ForPath(d => d.Uom.Unit, opt => opt.MapFrom(s => s.UomUnit))
+                .ForPath(d => d.ConvertUnit,opt=>opt.MapFrom(s=>s.ConvertUnit))
+                .ForPath(d => d.ConvertValue, opt => opt.MapFrom(s => s.ConvertValue))
 
                 .ReverseMap();
         }

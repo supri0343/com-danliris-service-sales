@@ -31,6 +31,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public bool IsPaidOff { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
+        public string Sales { get; set; }
+        public UnitViewModel Unit { get; set; }
 
 
         public ICollection<SalesInvoiceDetailViewModel> SalesInvoiceDetails { get; set; }
@@ -149,6 +151,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (Count > 0)
                 yield return new ValidationResult(DetailErrors, new List<string> { "SalesInvoiceDetails" });
+
+            if (string.IsNullOrEmpty(Sales))
+                yield return new ValidationResult("Sales Harus Diisi", new List<string> { "Sales" });
+
+            if (Unit == null)
+                yield return new ValidationResult("Unit Harus Diisi", new List<string> { "Unit" });
 
         }
     }
