@@ -152,5 +152,60 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        [HttpGet("reports")]
+        public async Task<IActionResult> GetReportAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+            int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+
+            try
+            {
+                ValidateUser();
+                var data = await _facade.GetReport(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offset);
+
+                return Ok(new
+                {
+                    apiVersion = ApiVersion,
+                    data,
+                    message = Common.OK_MESSAGE,
+                    statusCode = Common.OK_STATUS_CODE
+                });
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("reports/xls")]
+        public async Task<IActionResult> GetXlsAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo)
+        {
+
+            try
+            {
+                ValidateUser();
+                byte[] xlsInBytes;
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+
+                var xls = await _facade.GenerateExcel(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offset);
+
+                string filename = "Laporan Bukti Pembayaran Faktur.xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }
