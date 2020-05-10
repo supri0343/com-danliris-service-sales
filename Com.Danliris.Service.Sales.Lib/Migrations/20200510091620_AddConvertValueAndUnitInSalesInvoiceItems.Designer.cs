@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200510091620_AddConvertValueAndUnitInSalesInvoiceItems")]
+    partial class AddConvertValueAndUnitInSalesInvoiceItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -607,7 +609,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasIndex("DOReturnDetailModelId");
 
-                    b.ToTable("DOReturnDetailItems");
+                    b.ToTable("DOReturnDetailItemModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnDetailModel", b =>
@@ -664,7 +666,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasIndex("DOReturnModelId");
 
-                    b.ToTable("DOReturnDetails");
+                    b.ToTable("DOReturnDetailModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnItemModel", b =>
@@ -711,9 +713,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("PackingUom")
-                        .HasMaxLength(255);
-
                     b.Property<double>("Price");
 
                     b.Property<string>("ProductCode")
@@ -739,7 +738,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasIndex("DOReturnDetailItemModelId");
 
-                    b.ToTable("DOReturnItems");
+                    b.ToTable("DOReturnItemModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnModel", b =>
@@ -812,7 +811,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DOReturns");
+                    b.ToTable("DOReturnModel");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOSales.DOSalesDetailModel", b =>
