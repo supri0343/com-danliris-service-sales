@@ -473,7 +473,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 .ReturnsAsync(new List<SalesInvoiceReportViewModel>());
             
             var controller = GetController(mocks);
-            var response = await controller.GetReportAll(0, 0, null, null, null);
+            var response = await controller.GetReportAll(0, 0, null, null, null, "7");
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.OK, statusCode);
         }
@@ -486,7 +486,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 .Throws(new Exception());
 
             var controller = GetController(mocks);
-            var response = await controller.GetReportAll(0, 0, null, null, null);
+            var response = await controller.GetReportAll(0, 0, null, null, null, "7");
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
@@ -499,7 +499,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 .ReturnsAsync(new System.IO.MemoryStream());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll(0, 0, null, null, null);
+            var response = await controller.GetXlsAll(0, 0, null, null, null, "7");
             Assert.NotNull(response);
         }
 
@@ -511,7 +511,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                .Throws(new Exception());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll(0, 0, null, null, null);
+            var response = await controller.GetXlsAll(0, 0, null, null, null, "7");
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }

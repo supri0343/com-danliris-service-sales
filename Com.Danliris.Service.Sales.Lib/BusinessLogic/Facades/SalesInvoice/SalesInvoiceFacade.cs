@@ -286,15 +286,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
             if (dateFrom.HasValue && dateTo.HasValue)
             {
-                query = query.Where(s => dateFrom <= s.DueDate && s.DueDate <= dateTo);
+                query = query.Where(s => dateFrom.Value.Date <= s.DueDate.AddHours(offSet).Date && s.DueDate.AddHours(offSet).Date <= dateTo.Value.Date);
             }
             else if (dateFrom.HasValue && !dateTo.HasValue)
             {
-                query = query.Where(s => dateFrom <= s.DueDate);
+                query = query.Where(s => dateFrom.Value.Date <= s.DueDate.AddHours(offSet).Date);
             }
             else if (!dateFrom.HasValue && dateTo.HasValue)
             {
-                query = query.Where(s => s.DueDate <= dateTo);
+                query = query.Where(s => s.DueDate.AddHours(offSet).Date <= dateTo.Value.Date);
             }
 
             var stringContent = JsonConvert.SerializeObject(new
