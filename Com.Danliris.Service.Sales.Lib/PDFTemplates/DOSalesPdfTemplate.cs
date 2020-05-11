@@ -78,7 +78,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                cellHeaderBody.Phrase = new Phrase("RETUR. PENJUALAN", bold_font);
+                cellHeaderBody.Phrase = new Phrase("D.O. PENJUALAN", bold_font);
                 headerTable2.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase("", normal_font);
                 headerTable2.AddCell(cellHeaderBody);

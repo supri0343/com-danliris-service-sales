@@ -29,7 +29,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 BuyerCode = "BuyerCode",
                 BuyerAddress = "BuyerAddress",
                 BuyerNPWP = "BuyerNPWP",
-                IDNo = "IDNo",
+                BuyerNIK = "BuyerNIK",
                 CurrencyId = 1,
                 CurrencyCode = "IDR",
                 CurrencySymbol = "Rp",

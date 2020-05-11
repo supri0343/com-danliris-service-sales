@@ -21,8 +21,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
         public BuyerViewModel Buyer { get; set; }
-        [MaxLength(255)]
-        public string IDNo { get; set; }
         public CurrencyViewModel Currency { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }
@@ -52,6 +50,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NPWP))
                 yield return new ValidationResult("NPWP Buyer harus diisi", new List<string> { "BuyerNPWP" });
+
+            if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NIK))
+                yield return new ValidationResult("NIK Buyer harus diisi", new List<string> { "BuyerNIK" });
 
             if (string.IsNullOrWhiteSpace(DeliveryOrderNo))
                 yield return new ValidationResult("No. Surat Jalan harus diisi", new List<string> { "DeliveryOrderNo" });

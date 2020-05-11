@@ -127,7 +127,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("NIK", normal_font);
             headerTable4.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.IDNo, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.NIK, normal_font);
             headerTable4.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("NPWP Buyer", normal_font);
