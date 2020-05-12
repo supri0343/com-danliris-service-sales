@@ -64,7 +64,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                 yield return new ValidationResult("Kurs harus diisi", new List<string> { "CurrencyCode" });
 
             if (!DueDate.HasValue || Id == 0 && DueDate.Value < DateTimeOffset.Now.AddDays(-1))
-                yield return new ValidationResult("Tanggal jatuh tempo harus diisi & lebih besar dari hari ini", new List<string> { "DueDate" });
+                yield return new ValidationResult("Tanggal jatuh tempo kosong, Tempo belum diisi", new List<string> { "DueDate" });
 
             if (string.IsNullOrWhiteSpace(VatType) || VatType == "")
                 yield return new ValidationResult("Jenis PPN harus diisi", new List<string> { "VatType" });
