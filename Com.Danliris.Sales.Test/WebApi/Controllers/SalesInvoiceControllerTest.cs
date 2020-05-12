@@ -103,11 +103,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
                 },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                IDNo = "IDNo",
                 Currency = new CurrencyViewModel()
                 {
                     Symbol = "Rp",
@@ -160,11 +160,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
                 },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                IDNo = "IDNo",
                 Currency = new CurrencyViewModel()
                 {
                     Symbol = "$",

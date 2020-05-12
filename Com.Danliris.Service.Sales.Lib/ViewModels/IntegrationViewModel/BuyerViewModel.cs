@@ -24,5 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
         public string Contact { get; set; }
         [MaxLength(255)]
         public string NPWP { get; set; }
+        [MaxLength(255)]
+        public string NIK { get; set; }
     }
 }

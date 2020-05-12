@@ -30,10 +30,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string BuyerAddress { get; set; }
         [MaxLength(255)]
         public string BuyerNPWP { get; set; }
-        #endregion
-
         [MaxLength(255)]
-        public string IDNo { get; set; }
+        public string BuyerNIK { get; set; }
+        #endregion
 
         #region Currency
         public int CurrencyId { get; set; }

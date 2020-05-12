@@ -21,8 +21,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
         public BuyerViewModel Buyer { get; set; }
-        [MaxLength(255)]
-        public string IDNo { get; set; }
         public CurrencyViewModel Currency { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }
@@ -53,6 +51,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NPWP))
                 yield return new ValidationResult("NPWP Buyer harus diisi", new List<string> { "BuyerNPWP" });
 
+            if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NIK))
+                yield return new ValidationResult("NIK Buyer harus diisi", new List<string> { "BuyerNIK" });
+
             if (string.IsNullOrWhiteSpace(DeliveryOrderNo))
                 yield return new ValidationResult("No. Surat Jalan harus diisi", new List<string> { "DeliveryOrderNo" });
 
@@ -63,7 +64,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                 yield return new ValidationResult("Kurs harus diisi", new List<string> { "CurrencyCode" });
 
             if (!DueDate.HasValue || Id == 0 && DueDate.Value < DateTimeOffset.Now.AddDays(-1))
-                yield return new ValidationResult("Tanggal jatuh tempo harus diisi & lebih besar dari hari ini", new List<string> { "DueDate" });
+                yield return new ValidationResult("Tanggal jatuh tempo kosong, Tempo belum diisi", new List<string> { "DueDate" });
 
             if (string.IsNullOrWhiteSpace(VatType) || VatType == "")
                 yield return new ValidationResult("Jenis PPN harus diisi", new List<string> { "VatType" });
