@@ -331,7 +331,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     Tempo = (s.DueDate - s.SalesInvoiceDate).Days + 1,
                     TotalPayment = s.TotalPayment,
                     TotalPaid = s.TotalPaid,
-                    Unpaid = s.TotalPayment - s.TotalPaid,
+                    Unpaid = (s.TotalPayment - s.TotalPaid < 0) ? 0 : s.TotalPayment - s.TotalPaid,
                     CurrencySymbol = s.CurrencySymbol,
                     SalesReceipts = salesReceiptData.Where(d => d.SalesInvoiceId == s.Id).ToList()
                 });
