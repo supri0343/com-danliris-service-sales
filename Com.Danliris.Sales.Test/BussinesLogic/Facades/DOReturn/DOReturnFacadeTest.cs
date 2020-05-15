@@ -53,12 +53,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
                 .Returns(doReturnLogic);
 
             return serviceProviderMock;
-        }
-
-
-      
-
-
-
+        } 
     }
 }

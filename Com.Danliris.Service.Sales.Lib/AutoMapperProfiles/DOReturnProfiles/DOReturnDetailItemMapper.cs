@@ -8,7 +8,10 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOReturnProfiles
     {
         public DOReturnDetailItemMapper()
         {
+
             CreateMap<DOReturnDetailItemModel, DOReturnDetailItemViewModel>()
+                .ForPath(d => d.DOSales.Id, opt => opt.MapFrom(s => s.DOSalesId))
+                .ForPath(d => d.DOSales.DOSalesNo, opt => opt.MapFrom(s => s.DOSalesNo))
 
                 .ReverseMap();
         }

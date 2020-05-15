@@ -66,15 +66,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
                 ProductName= "ProductName",
                 Active = true,
                 CreatedBy = "someone",
-                Amount =1,
                 ProductCode = "ProductCode",
               
                 DOReturnDetailItemModel =new DOReturnDetailItemModel() { 
                     Active =true,
-                    ShipmentDocumentCode= "ShipmentDocumentCode"
+                    DOSalesNo = "DOSalesNo",
                 },
                 UId="1",
-                Price =1000,
+                ShipmentDocumentId = 1,
+                ShipmentDocumentCode = "ShipmentDocumentCode",
                 UomUnit = "UomUnit",
                 UomId=1,
                 CreatedUtc =DateTime.UtcNow,

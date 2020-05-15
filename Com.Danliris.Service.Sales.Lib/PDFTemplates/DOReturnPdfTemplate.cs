@@ -140,7 +140,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                         bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
                         bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase(detailItem.ShipmentDocumentCode, normal_font);
+                        bodyCell.Phrase = new Phrase(item.ShipmentDocumentCode, normal_font);
                         bodyTable.AddCell(bodyCell);
 
                         bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
