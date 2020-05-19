@@ -68,9 +68,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn
                     DOReturnModel model = await doReturnLogic.ReadByIdAsync(id);
                     if (model != null)
                     {
-                        DOReturnModel doReturnModel = new DOReturnModel();
-
-                        doReturnModel = model;
                         await doReturnLogic.DeleteAsync(id);
                     }
                 }
@@ -119,24 +116,24 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn
             int YearNow = DateTime.Now.Year;
             var YearNowString = DateTime.Now.ToString("yy");
 
-            DOReturnModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.Type.Equals(model.Type)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            DOReturnModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.DOReturnType.Equals(model.DOReturnType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             if (lastLocalData == null)
             {
                 model.AutoIncreament = 1 + index;
-                model.DOReturnNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.DOReturnNo = $"{YearNowString}{model.DOReturnType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
             }
             else
             {
                 if (YearNow > lastLocalData.CreatedUtc.Year)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.DOReturnNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.DOReturnNo = $"{YearNowString}{model.DOReturnType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
                 else
                 {
                     model.AutoIncreament = lastLocalData.AutoIncreament + (1 + index);
-                    model.DOReturnNo = $"{YearNowString}{model.Type}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.DOReturnNo = $"{YearNowString}{model.DOReturnType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
         }

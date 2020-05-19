@@ -12,7 +12,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string ShipmentDocumentCode { get; set; }
         #endregion
 
-        //public int SalesInvoiceId { get; set; }
         public virtual SalesInvoiceModel SalesInvoiceModel { get; set; }
         public virtual ICollection<SalesInvoiceItemModel> SalesInvoiceItems { get; set; }
     }

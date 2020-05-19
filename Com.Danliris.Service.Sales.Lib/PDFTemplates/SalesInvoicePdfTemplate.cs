@@ -232,7 +232,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #endregion Body
 
-            #region Footerda
+            #region Footer
 
             var dueDate = viewModel.DueDate.Value.Date;
             var salesInvoiceDate = viewModel.SalesInvoiceDate.Value.Date;
@@ -343,6 +343,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + result.ToString("N2"), bold_font);
                 footerTable3.AddCell(cellHeaderFooter);
             }
+            else if (viewModel.VatType.Equals("PPN Retail"))
+            {
+                cellHeaderFooter.Phrase = new Phrase("PPN 10%", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + totalTax.ToString("N2"), normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+
+                cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + totalPay.ToString("N2"), bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+            }
             else
             {
                 cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
@@ -377,6 +389,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             else if (viewModel.VatType.Equals("PPN BUMN"))
             {
                 cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, normal_font);
+                footerTable1.AddCell(cellFooterLeft1);
+            }
+            else if (viewModel.VatType.Equals("PPN Retail"))
+            {
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else

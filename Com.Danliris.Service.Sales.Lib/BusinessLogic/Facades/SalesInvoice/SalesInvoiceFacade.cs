@@ -17,7 +17,6 @@ using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 {
@@ -52,6 +51,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     while (DbSet.Any(d => d.Code.Equals(model.Code)));
 
                     SalesInvoiceNumberGenerator(model, index);
+                    DeliveryOrderNumberGenerator(model);
                     salesInvoiceLogic.Create(model);
                     index++;
 
@@ -77,9 +77,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     SalesInvoiceModel model = await salesInvoiceLogic.ReadByIdAsync(id);
                     if (model != null)
                     {
-                        SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
-
-                        salesInvoiceModel = model;
                         await salesInvoiceLogic.DeleteAsync(id);
                     }
                 }
@@ -240,6 +237,42 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
                 }
             }
+        }
+
+        private void DeliveryOrderNumberGenerator(SalesInvoiceModel model)
+        {
+            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.DeliveryOrderType.Equals(model.DeliveryOrderType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+
+            int YearNow = DateTime.Now.Year;
+            int MonthNow = DateTime.Now.Month;
+            var YearNowString = DateTime.Now.ToString("yy");
+            var MonthNowString = DateTime.Now.ToString("MM");
+
+            if (model.DeliveryOrderType == "BAV")
+            {
+                model.DeliveryOrderNo = $"V.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BLL")
+            {
+                model.DeliveryOrderNo = $"L.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BON")
+            {
+                model.DeliveryOrderNo = $"O.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BGM")
+            {
+                model.DeliveryOrderNo = $"M.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BPF")
+            {
+                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BPR")
+            {
+                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+
         }
 
         public async Task<int> UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)

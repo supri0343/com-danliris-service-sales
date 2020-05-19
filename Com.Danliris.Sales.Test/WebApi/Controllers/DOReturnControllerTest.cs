@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
+using iTextSharp.text;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new DOReturnViewModel()
             {
-                Type = "Type",
+                DOReturnType = "Type",
                 DOReturnNo = "DOReturnNo",
                 AutoIncreament = 1,
-                Date = DateTimeOffset.Now,
+                DOReturnDate = DateTimeOffset.Now,
                 HeadOfStorage = "HeadOfStorage",
                 ReturnFrom = "ReturnFrom",
-                LKTPNo = "LKTPNo",
+                LTKPNo = "LKTPNo",
                 Remark = "Remark",
                 DOReturnDetails = new List<DOReturnDetailViewModel>()
                 {
@@ -40,24 +41,23 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             new DOReturnDetailItemViewModel()
                             {
+                                DOSales = new Service.Sales.Lib.ViewModels.DOSales.DOSalesViewModel() { },
+                            }
+                        },
+                        DOReturnItems = new List<DOReturnItemViewModel>()
+                        {
+                            new DOReturnItemViewModel()
+                            {
                                 ShipmentDocumentId = 1,
                                 ShipmentDocumentCode = "ShipmentDocumentCode",
-                                DOReturnItems = new List<DOReturnItemViewModel>()
-                                {
-                                    new DOReturnItemViewModel()
-                                    {
-                                        ProductName = "ProductName",
-                                        ProductCode = "ProductCode",
-                                        Quantity = "Quantity",
-                                        PackingUom = "PackingUom",
-                                        Uom = new UomViewModel() { },
-                                        Total = 100,
-                                        Price = 100,
-                                        Amount = 100,
-                                    }
-                                }
+                                ProductName = "ProductName",
+                                ProductCode = "ProductCode",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                Uom = new UomViewModel() { },
+                                Total = 100,
                             }
-                        }
+                        },
                     }
                 }
             };
@@ -150,19 +150,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                                 new DOReturnDetailItemViewModel()
                                 {
-                                    DOReturnItems = new List<DOReturnItemViewModel>()
-                                    {
-                                        new DOReturnItemViewModel()
-                                        {
-                                            Uom = new UomViewModel() {},
-                                        },
-                                    },
+                                    DOSales = new Service.Sales.Lib.ViewModels.DOSales.DOSalesViewModel() {},
                                 },
-                                new DOReturnDetailItemViewModel()
-                                {
-                                    DOReturnItems = new List<DOReturnItemViewModel>() { },
-                                },
+                                new DOReturnDetailItemViewModel() {},
                             },
+                            DOReturnItems = new List<DOReturnItemViewModel>()
+                            {
+                                new DOReturnItemViewModel()
+                                {
+                                    Uom = new UomViewModel() {},
+                                },
+                                 new DOReturnItemViewModel() {},
+                            }
                         },
                         new DOReturnDetailViewModel()
                         {
@@ -183,7 +182,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 Id = 1,
                                 SalesInvoiceNo ="SalesInvoiceNo",
                             },
-                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>() 
+                            DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
                             {
                                 new DOReturnDetailItemViewModel()
                                 {
@@ -226,13 +225,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             DOReturnDetailItems = new List<DOReturnDetailItemViewModel>()
                             {
-                                new DOReturnDetailItemViewModel()
-                                {
-                                   DOReturnItems = new List<DOReturnItemViewModel>()
-                                   {
-                                       new DOReturnItemViewModel(){ },
-                                   },
-                                },
+                                new DOReturnDetailItemViewModel() {},
+                            },
+                            DOReturnItems = new List<DOReturnItemViewModel>()
+                            {
+                                new DOReturnItemViewModel() {},
                             },
                         },
                     },

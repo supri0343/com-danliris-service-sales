@@ -40,7 +40,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderBody.Phrase = new Phrase("", header_font);
             headerTable1.AddCell(cellHeaderBody);
 
-            cellHeaderBody.Phrase = new Phrase($"No. {viewModel.Type}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", bold_font);
+            cellHeaderBody.Phrase = new Phrase($"No. {viewModel.DOReturnType}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", bold_font);
             headerTable1.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("", header_font);
@@ -56,7 +56,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable2.AddCell(cellHeaderBody);
 
             cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-            cellHeaderBody.Phrase = new Phrase("Sukoharjo, " + viewModel.Date?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
+            cellHeaderBody.Phrase = new Phrase("Sukoharjo, " + viewModel.DOReturnDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
             headerTable2.AddCell(cellHeaderBody);
 
             cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -93,11 +93,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #endregion Header
 
-            #region Custom
-            int index = 1;
-            #endregion
-
             #region Body
+
+            int index = 1;
 
             PdfPTable bodyTable = new PdfPTable(7);
             PdfPCell bodyCell = new PdfPCell();
@@ -132,32 +130,31 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             {
                 foreach (DOReturnDetailItemViewModel detailItem in detail.DOReturnDetailItems)
                 {
-                    foreach (DOReturnItemViewModel item in detailItem.DOReturnItems)
-                    {
-                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
 
-                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
-                        bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase(detailItem.ShipmentDocumentCode, normal_font);
-                        bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase(detailItem.DOSales.DOSalesNo, normal_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                foreach (DOReturnItemViewModel item in detail.DOReturnItems)
+                {
+                    bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
-                        bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
-                        bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Quantity) + " " + item.PackingUom, normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Quantity) + " " + item.PackingUom, normal_font);
-                        bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("0", normal_font);
+                    bodyTable.AddCell(bodyCell);
 
-                        bodyCell.Phrase = new Phrase("0", normal_font);
-                        bodyTable.AddCell(bodyCell);
-
-                        bodyCell.Phrase = new Phrase("0", normal_font);
-                        bodyTable.AddCell(bodyCell);
-                    }
+                    bodyCell.Phrase = new Phrase("0", normal_font);
+                    bodyTable.AddCell(bodyCell);
                 }
             }
 
@@ -179,7 +176,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellFooterLeft.Phrase = new Phrase("", normal_font);
             footerTable.AddCell(cellFooterLeft);
 
-            cellFooterLeft.Phrase = new Phrase("No LKTP : " + viewModel.LKTPNo, normal_font);
+            cellFooterLeft.Phrase = new Phrase("No LKTP : " + viewModel.LTKPNo, normal_font);
             footerTable.AddCell(cellFooterLeft);
 
             cellFooterLeft.Colspan = 3;

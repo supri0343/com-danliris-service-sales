@@ -12,5 +12,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 
         public virtual DOReturnModel DOReturnModel { get; set; }
         public virtual ICollection<DOReturnDetailItemModel> DOReturnDetailItems { get; set; }
+        public virtual ICollection<DOReturnItemModel> DOReturnItems { get; set; }
     }
 }

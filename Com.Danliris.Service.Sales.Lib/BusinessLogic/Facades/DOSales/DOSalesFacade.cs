@@ -68,9 +68,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales
                     DOSalesModel model = await doSalesLogic.ReadByIdAsync(id);
                     if (model != null)
                     {
-                        DOSalesModel doSalesModel = new DOSalesModel();
-
-                        doSalesModel = model;
                         await doSalesLogic.DeleteAsync(id);
                     }
                 }

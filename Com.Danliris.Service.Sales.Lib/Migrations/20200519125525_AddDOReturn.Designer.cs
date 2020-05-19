@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200519125525_AddDOReturn")]
+    partial class AddDOReturn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -685,8 +687,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
-                    b.Property<long?>("DOReturnDetailModelId");
-
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -737,8 +737,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DOReturnDetailModelId");
 
                     b.ToTable("DOReturnItems");
                 });
@@ -4127,14 +4125,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.HasOne("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnModel", "DOReturnModel")
                         .WithMany("DOReturnDetails")
                         .HasForeignKey("DOReturnModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnItemModel", b =>
-                {
-                    b.HasOne("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnDetailModel", "DOReturnDetailModel")
-                        .WithMany("DOReturnItems")
-                        .HasForeignKey("DOReturnDetailModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

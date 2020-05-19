@@ -31,7 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             List<string> SearchAttributes = new List<string>()
             {
-                "DOReturnNo","Type",
+                "DOReturnNo","DOReturnType",
             };
 
             Query = QueryHelper<DOReturnModel>.Search(Query, SearchAttributes, keyword);
@@ -41,7 +41,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","DOReturnNo","Type","Date","ReturnFrom","LKTPNo","HeadOfStorage","Remark",
+                "Id","Code","DOReturnNo","DOReturnType","DOReturnDate","ReturnFrom","LTKPNo","HeadOfStorage","Remark",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -118,8 +118,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
         public override async Task<DOReturnModel> ReadByIdAsync(long id)
         {
-            var SalesInvoice = await DbSet.Include(s => s.DOReturnDetails).ThenInclude(s => s.DOReturnDetailItems).ThenInclude(s => s.DOReturnItems).FirstOrDefaultAsync(s => s.Id == id);
-            return SalesInvoice;
+            var Result = await DbSet.Include(s => s.DOReturnDetails)
+                                            .ThenInclude(s => s.DOReturnDetailItems)
+                                     .Include(s => s.DOReturnDetails)
+                                            .ThenInclude(s => s.DOReturnItems)
+                                    .FirstOrDefaultAsync(d => d.Id.Equals(id) && !d.IsDeleted);
+
+            return Result;
         }
 
     }
