@@ -1,27 +1,22 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
-using iTextSharp.text;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
 {
-    public class DOReturnSalesInvoiceViewModel : BaseViewModel
+    public class DOReturnItemViewModel : BaseViewModel
     {
-        public SalesInvoice SalesInvoice { get; set; }
-        public List<DOSalesInvoiceViewModel> Items {get;set ;}
-        //public int? ShipmentDocumentId { get; set; }
-        //[MaxLength(255)]
-        //public string ShipmentDocumentCode { get; set; }
-        //[MaxLength(255)]
-        //public string ProductCode { get; set; }
-        //[MaxLength(255)]
-        //public string ProductName { get; set; }
-        //[MaxLength(255)]
-        //public string Quantity { get; set; }
-        //[MaxLength(255)]
-        //public string PackingUom { get; set; }
-        //public UomViewModel Uom { get; set; }
-        //public double? Total { get; set; }
+        [MaxLength(255)]
+        public string ProductCode { get; set; }
+        [MaxLength(255)]
+        public string ProductName { get; set; }
+        [MaxLength(255)]
+        public string Quantity { get; set; }
+        [MaxLength(255)]
+        public string PackingUom { get; set; }
+        public UomViewModel Uom { get; set; }
+        public double? Total { get; set; }
+        public double? Price { get; set; }
+        public double Amount { get; set; }
     }
 }

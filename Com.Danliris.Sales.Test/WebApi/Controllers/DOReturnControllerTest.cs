@@ -4,7 +4,6 @@ using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOReturnProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOReturn;
 using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
 using Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn;
-using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Com.Danliris.Service.Sales.WebApi.Controllers;
@@ -41,22 +40,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             new DOReturnDetailItemViewModel()
                             {
-                                DOSales = new DOSalesViewModel()
-                                {
-                                    DOSalesNo = "DOSalesNo",
-                                },
+                                ShipmentDocumentId = 1,
+                                ShipmentDocumentCode = "ShipmentDocumentCode",
                                 DOReturnItems = new List<DOReturnItemViewModel>()
                                 {
                                     new DOReturnItemViewModel()
                                     {
-                                        ShipmentDocumentId = 1,
-                                        ShipmentDocumentCode = "ShipmentDocumentCode",
                                         ProductName = "ProductName",
                                         ProductCode = "ProductCode",
                                         Quantity = "Quantity",
                                         PackingUom = "PackingUom",
                                         Uom = new UomViewModel() { },
                                         Total = 100,
+                                        Price = 100,
+                                        Amount = 100,
                                     }
                                 }
                             }
@@ -153,11 +150,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                                 new DOReturnDetailItemViewModel()
                                 {
-                                    DOSales = new DOSalesViewModel()
-                                    {
-                                        Id = 1,
-                                        DOSalesNo = "DOSalesNo",
-                                    },
                                     DOReturnItems = new List<DOReturnItemViewModel>()
                                     {
                                         new DOReturnItemViewModel()

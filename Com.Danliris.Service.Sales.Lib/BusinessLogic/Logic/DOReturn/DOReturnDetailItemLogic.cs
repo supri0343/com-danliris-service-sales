@@ -68,7 +68,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             List<string> SelectedFields = new List<string>()
             {
-                "DOSalesId", "DOSalesNo",
+                "ShipmentDocumentId","ShipmentDocumentCode",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

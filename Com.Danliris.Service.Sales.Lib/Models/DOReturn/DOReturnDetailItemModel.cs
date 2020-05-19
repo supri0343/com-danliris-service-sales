@@ -6,10 +6,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 {
     public class DOReturnDetailItemModel : BaseModel
     {
-        public int DOSalesId { get; set; }
+        public int ShipmentDocumentId { get; set; }
         [MaxLength(255)]
-        public string DOSalesNo { get; set; }
+        public string ShipmentDocumentCode { get; set; }
 
         public virtual DOReturnDetailModel DOReturnDetailModel { get; set; }
+        public virtual ICollection<DOReturnItemModel> DOReturnItems { get; set; }
     }
 }

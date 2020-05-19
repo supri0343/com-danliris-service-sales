@@ -36,14 +36,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                         {
                             new DOReturnDetailItemModel()
                             {
-                                DOSalesId = 1,
-                                DOSalesNo = "DOSAalesNo",
+                                ShipmentDocumentId = 1,
+                                ShipmentDocumentCode = "ShipmentDocumentCode",
                                 DOReturnItems = new List<DOReturnItemModel>()
                                 {
                                     new DOReturnItemModel()
                                     {
-                                        ShipmentDocumentId = 1,
-                                        ShipmentDocumentCode = "ShipmentDocumentCode",
                                         ProductCode = "ProductCode",
                                         ProductName = "ProductName",
                                         Quantity = "Quantity",
@@ -51,6 +49,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                                         UomId = 1,
                                         UomUnit = "UomUnit",
                                         Total = 100,
+                                        Price = 100,
+                                        Amount = 100,
                                     },
                                 },
                             },
