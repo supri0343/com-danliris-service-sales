@@ -24,7 +24,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
-                DeliveryOrderType = "BGM",
+                DeliveryOrderType = "BAV",
                 BuyerId = 1,
                 BuyerName = "BuyerName",
                 BuyerCode = "BuyerCode",
@@ -48,7 +48,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                         ShipmentDocumentId = 1,
                         ShipmentDocumentCode = "ShipmentDocumentCode",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
-                        { 
+                        {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
@@ -60,6 +60,120 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                                 Total = 1,
                                 Price = 1,
                                 Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BLL()
+        {
+            return new SalesInvoiceModel()
+            {
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "SalesInvoiceType",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BON()
+        {
+            return new SalesInvoiceModel()
+            {
+                AutoIncreament = 1,
+                SalesInvoiceType = "SalesInvoiceType",
+                DeliveryOrderType = "BON",
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BGM()
+        {
+            return new SalesInvoiceModel()
+            {
+                AutoIncreament = 1,
+                SalesInvoiceType = "SalesInvoiceType",
+                DeliveryOrderType = "BGM",
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BPF()
+        {
+            return new SalesInvoiceModel()
+            {
+                AutoIncreament = 1,
+                SalesInvoiceType = "SalesInvoiceType",
+                DeliveryOrderType = "BPF",
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BPR()
+        {
+            return new SalesInvoiceModel()
+            {
+                AutoIncreament = 1,
+                SalesInvoiceType = "SalesInvoiceType",
+                DeliveryOrderType = "BPR",
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
                             },
                         }
                     }

@@ -28,7 +28,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
-            
+
             var salesInvoiceItemLogic = new SalesInvoiceItemLogic(serviceProviderMock.Object, identityService, dbContext);
 
             serviceProviderMock
@@ -88,7 +88,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         [Fact]
         public async void GetReport_Success()
         {
-            var dbContext = DbContext(GetCurrentMethod()+ "GetReport_Success");
+            var dbContext = DbContext(GetCurrentMethod() + "GetReport_Success");
             var serviceProvider = GetServiceProviderMock(dbContext);
             SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
 
@@ -119,7 +119,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         [Fact]
         public async void GenerateExcel_Success()
         {
-            var dbContext = DbContext(GetCurrentMethod()+ "GenerateExcel_Success");
+            var dbContext = DbContext(GetCurrentMethod() + "GenerateExcel_Success");
             var serviceProvider = GetServiceProviderMock(dbContext);
 
             SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
@@ -138,8 +138,81 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
             Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-3), data.DueDate.AddDays(-2), 7);
 
             Assert.NotNull(Response);
+        }
 
+        [Fact]
+        public virtual async void Create_Success_DeliveryOrderType_Is_BLL()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BLL();
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_DeliveryOrderType_Is_BON()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BON();
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_DeliveryOrderType_Is_BGM()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BGM();
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_DeliveryOrderType_Is_BPF()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BPF();
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_DeliveryOrderType_Is_BPR()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BPR();
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
         }
     }
 }

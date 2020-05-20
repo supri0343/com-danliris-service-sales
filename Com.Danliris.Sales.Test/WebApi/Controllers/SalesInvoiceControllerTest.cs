@@ -193,8 +193,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 Price = 1,
                                 Amount = 1,
                             }
-                        } 
-                    } 
+                        }
+                    }
                 }
 
             };
@@ -249,9 +249,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 Total = 1,
                                 Price = 1,
                                 Amount = 1,
-                            }     
-                        } 
-                    } 
+                            }
+                        }
+                    }
                 }
 
             };
