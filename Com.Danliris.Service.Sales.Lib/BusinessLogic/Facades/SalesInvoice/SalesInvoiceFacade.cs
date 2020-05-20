@@ -77,6 +77,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     SalesInvoiceModel model = await salesInvoiceLogic.ReadByIdAsync(id);
                     if (model != null)
                     {
+                        SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
+                        salesInvoiceModel = model;
                         await salesInvoiceLogic.DeleteAsync(id);
                     }
                 }

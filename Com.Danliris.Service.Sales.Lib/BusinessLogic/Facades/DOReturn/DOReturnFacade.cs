@@ -68,6 +68,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn
                     DOReturnModel model = await doReturnLogic.ReadByIdAsync(id);
                     if (model != null)
                     {
+                        DOReturnModel doReturnModel = new DOReturnModel();
+                        doReturnModel = model;
                         await doReturnLogic.DeleteAsync(id);
                     }
                 }
