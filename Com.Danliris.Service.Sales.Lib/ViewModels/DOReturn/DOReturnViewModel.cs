@@ -9,7 +9,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
     public class DOReturnViewModel : BaseViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public long AutoIncreament { get; set; }
+        public long? AutoIncreament { get; set; }
         public string DOReturnNo { get; set; }
         public string DOReturnType { get; set; }
         public DateTimeOffset? DOReturnDate { get; set; }

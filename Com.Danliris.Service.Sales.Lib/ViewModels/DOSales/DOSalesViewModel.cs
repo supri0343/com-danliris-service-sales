@@ -10,12 +10,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
     public class DOSalesViewModel : BaseViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public long AutoIncreament { get; set; }
+        public long? AutoIncreament { get; set; }
         public string DOSalesNo { get; set; }
         public string DOSalesType { get; set; }
+        public string DOSalesCategory { get; set; }
         public string Status { get; set; }
-        public bool Accepted { get; set; }
-        public bool Declined { get; set; }
+        public bool? Accepted { get; set; }
+        public bool? Declined { get; set; }
         public string Type { get; set; }
         public DateTimeOffset? Date { get; set; }
         public FinishingPrintingSalesContractViewModel SalesContract { get; set; }
@@ -27,6 +28,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public string DestinationBuyerAddress { get; set; }
         public string SalesName { get; set; }
         public string HeadOfStorage { get; set; }
+
+        public StorageViewModel Storage { get; set; }
+        
         public string PackingUom { get; set; }
         public string LengthUom { get; set; }
         public string WeightUom { get; set; }
@@ -70,6 +74,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if (string.IsNullOrWhiteSpace(HeadOfStorage))
                     yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
+
+                if (Storage == null || Storage._id == 0)
+                {
+                    yield return new ValidationResult("Nama Gudang harus diisi", new List<string> { "Storage" });
+                }
 
                 if (string.IsNullOrWhiteSpace(SalesName))
                     yield return new ValidationResult("Nama Sales harus diisi", new List<string> { "SalesName" });
