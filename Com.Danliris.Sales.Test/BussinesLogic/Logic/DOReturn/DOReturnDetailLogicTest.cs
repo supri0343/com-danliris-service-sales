@@ -64,16 +64,16 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-           
+
             dbContext.DOReturnDetails.Add(new DOReturnDetailModel()
             {
-                Active =true,
+                Active = true,
                 CreatedAgent = "",
                 CreatedBy = "someone",
-                CreatedUtc =DateTime.UtcNow,
+                CreatedUtc = DateTime.UtcNow,
                 DeletedAgent = "someone",
                 DeletedBy = "someone",
-                DeletedUtc=DateTime.UtcNow,
+                DeletedUtc = DateTime.UtcNow,
                 DOReturnDetailItems = new List<DOReturnDetailItemModel>()
                 {
                     new DOReturnDetailItemModel()
@@ -83,15 +83,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
                         CreatedBy ="CreatedBy"
                     }
                 },
-               
-                DOReturnModel =new DOReturnModel()
+
+                DOReturnModel = new DOReturnModel()
                 {
-                    Active=true
+                    Active = true
                 },
-                IsDeleted=false,
+                IsDeleted = false,
                 LastModifiedAgent = "LastModifiedAgent"
 
-            }) ;
+            });
             dbContext.SaveChanges();
             DOReturnDetailLogic unitUnderTest = new DOReturnDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
@@ -100,9 +100,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             int size = 1;
             string order = "{}";
             string keyword = null;
-            string filter = @"{""ProductName"":""""}";
+            //string filter = @"{""ProductName"":""""}";
 
-           var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
             Assert.NotEmpty(result.Data);
         }
     }

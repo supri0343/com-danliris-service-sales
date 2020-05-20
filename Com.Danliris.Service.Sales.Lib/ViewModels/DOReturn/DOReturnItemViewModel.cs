@@ -6,6 +6,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
 {
     public class DOReturnItemViewModel : BaseViewModel
     {
+        public int? ShipmentDocumentId { get; set; }
+        [MaxLength(255)]
+        public string ShipmentDocumentCode { get; set; }
         [MaxLength(255)]
         public string ProductCode { get; set; }
         [MaxLength(255)]
@@ -16,7 +19,5 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string PackingUom { get; set; }
         public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
-        public double? Price { get; set; }
-        public double Amount { get; set; }
     }
 }

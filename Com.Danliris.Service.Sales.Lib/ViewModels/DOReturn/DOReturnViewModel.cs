@@ -8,38 +8,31 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
 {
     public class DOReturnViewModel : BaseViewModel, IValidatableObject
     {
-        [MaxLength(255)]
         public string Code { get; set; }
         public long AutoIncreament { get; set; }
-        [MaxLength(255)]
         public string DOReturnNo { get; set; }
-        [MaxLength(255)]
-        public string Type { get; set; }
-        public DateTimeOffset? Date { get; set; }
-        [MaxLength(255)]
+        public string DOReturnType { get; set; }
+        public DateTimeOffset? DOReturnDate { get; set; }
         public string ReturnFrom { get; set; }
-        [MaxLength(255)]
-        public string LKTPNo { get; set; }
-        [MaxLength(255)]
+        public string LTKPNo { get; set; }
         public string HeadOfStorage { get; set; }
-        [MaxLength(1000)]
         public string Remark { get; set; }
 
         public virtual ICollection<DOReturnDetailViewModel> DOReturnDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrWhiteSpace(Type) || Type == "")
-                yield return new ValidationResult("Kode Retur harus diisi", new List<string> { "Type" });
+            if (string.IsNullOrWhiteSpace(DOReturnType) || DOReturnType == "")
+                yield return new ValidationResult("Kode Retur harus diisi", new List<string> { "DOReturnType" });
 
-            if (!Date.HasValue || Date.Value > DateTimeOffset.Now)
-                yield return new ValidationResult("Tgl Retur harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "Date" });
+            if (!DOReturnDate.HasValue || DOReturnDate.Value > DateTimeOffset.Now)
+                yield return new ValidationResult("Tgl Retur harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "DOReturnDate" });
 
             if (string.IsNullOrWhiteSpace(ReturnFrom))
                 yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "ReturnFrom" });
 
-            if (string.IsNullOrWhiteSpace(LKTPNo))
-                yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "LKTPNo" });
+            if (string.IsNullOrWhiteSpace(LTKPNo))
+                yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "LTKPNo" });
 
             if (string.IsNullOrWhiteSpace(HeadOfStorage))
                 yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
@@ -85,48 +78,36 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                if (detailItem.DOReturnItems == null || detailItem.DOReturnItems.Count == 0)
+                                if (detailItem.DOSales == null || string.IsNullOrWhiteSpace(detailItem.DOSales.DOSalesNo))
                                 {
                                     Count++;
                                     DetailErrors += "DOReturnItem : 'Item Kosong',";
                                 }
-                                else
-                                {
-                                    DetailErrors += "DOReturnItems: [";
-
-                                    foreach (var item in detailItem.DOReturnItems)
-                                    {
-                                        DetailErrors += "{";
-
-                                        if (string.IsNullOrWhiteSpace(item.ProductCode))
-                                        {
-                                            Count++;
-                                            DetailErrors += "ProductCode : 'Kode produk harus diisi',";
-                                        }
-
-                                        if (!item.Price.HasValue || item.Price.Value <= 0)
-                                        {
-                                            Count++;
-                                            DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
-                                        }
-
-                                        if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
-                                        {
-                                            Count++;
-                                            DetailErrors += "UomUnit : 'Satuan harus diisi',";
-                                        }
-
-                                        DetailErrors += "}, ";
-
-                                    }
-
-                                    DetailErrors += "], ";
-                                }
-
                                 DetailErrors += "}, ";
-
                             }
+                            DetailErrors += "], ";
+                        }
 
+                        if (detail.DOReturnItems == null || detail.DOReturnItems.Count == 0)
+                        {
+                            Count++;
+                            DetailErrors += "DOReturnItem : 'Item Kosong',";
+                        }
+                        else
+                        {
+                            DetailErrors += "DOReturnItems: [";
+
+                            foreach (var item in detail.DOReturnItems)
+                            {
+                                DetailErrors += "{";
+
+                                if (!item.ShipmentDocumentId.HasValue || string.IsNullOrWhiteSpace(item.ShipmentDocumentCode))
+                                {
+                                    Count++;
+                                    DetailErrors += "ShipmentDocumentId : 'No. Bon Pengiriman Kosong',";
+                                }
+                                DetailErrors += "}, ";
+                            }
                             DetailErrors += "], ";
                         }
                     }
