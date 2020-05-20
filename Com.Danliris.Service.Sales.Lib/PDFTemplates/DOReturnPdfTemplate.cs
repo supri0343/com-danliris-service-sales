@@ -150,7 +150,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Quantity) + " " + item.PackingUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase("0", normal_font);
+                    bodyCell.Phrase = new Phrase(item.Total + " " + item.Uom.Unit, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.Phrase = new Phrase("0", normal_font);
