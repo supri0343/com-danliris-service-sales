@@ -242,6 +242,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Storage = new StorageViewModel()
                     {
                         _id = 0,
+                        name = "",
+                        code = "",
                         unit = new UnitViewModel() {},
                     },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
