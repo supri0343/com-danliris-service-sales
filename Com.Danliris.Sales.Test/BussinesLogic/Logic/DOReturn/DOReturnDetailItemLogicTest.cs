@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 {
- public   class DOReturnDetailItemLogicTest
+    public class DOReturnDetailItemLogicTest
     {
         private const string ENTITY = "DOReturnDetailItem";
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -69,7 +69,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
                 DeletedAgent = "",
                 DeletedBy = "",
                 DeletedUtc = DateTime.UtcNow,
-               
+
                 IsDeleted = false,
                 LastModifiedAgent = "LastModifiedAgent"
 
@@ -82,9 +82,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             int size = 1;
             string order = "{}";
             string keyword = null;
-            string filter = @"{""ProductName"":""""}";
+            //string filter = @"{""ProductName"":""""}";
 
-           var result= unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
             Assert.NotEmpty(result.Data);
         }
 

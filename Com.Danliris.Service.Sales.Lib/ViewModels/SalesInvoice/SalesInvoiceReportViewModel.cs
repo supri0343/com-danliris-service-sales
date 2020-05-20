@@ -19,7 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public double TotalPaid { get; set; }
         public string Status { get; set; }
         public string CurrencySymbol { get; set; }
-        
+
         public ICollection<SalesInvoiceReportSalesReceiptViewModel> SalesReceipts { get; set; }
     }
 }

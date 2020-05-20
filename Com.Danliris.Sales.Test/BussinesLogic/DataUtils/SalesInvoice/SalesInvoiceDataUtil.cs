@@ -24,6 +24,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BAV",
                 BuyerId = 1,
                 BuyerName = "BuyerName",
                 BuyerCode = "BuyerCode",
@@ -34,6 +35,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 CurrencyCode = "IDR",
                 CurrencySymbol = "Rp",
                 CurrencyRate = 14000,
+                PaymentType = "Meter",
                 VatType = "PPN Kawasan Berikat",
                 Remark = "Remark",
                 TotalPayment = 100,
@@ -46,7 +48,277 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                         ShipmentDocumentId = 1,
                         ShipmentDocumentCode = "ShipmentDocumentCode",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
-                        { 
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BLL()
+        {
+            return new SalesInvoiceModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "SalesInvoiceType",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                DueDate = DateTimeOffset.UtcNow.AddDays(-2),
+                DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BLL",
+                BuyerId = 1,
+                BuyerName = "BuyerName",
+                BuyerCode = "BuyerCode",
+                BuyerAddress = "BuyerAddress",
+                BuyerNPWP = "BuyerNPWP",
+                BuyerNIK = "BuyerNIK",
+                CurrencyId = 1,
+                CurrencyCode = "IDR",
+                CurrencySymbol = "Rp",
+                CurrencyRate = 14000,
+                PaymentType = "Meter",
+                VatType = "PPN Kawasan Berikat",
+                Remark = "Remark",
+                TotalPayment = 100,
+                TotalPaid = 0,
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BON()
+        {
+            return new SalesInvoiceModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "SalesInvoiceType",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                DueDate = DateTimeOffset.UtcNow.AddDays(-2),
+                DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BON",
+                BuyerId = 1,
+                BuyerName = "BuyerName",
+                BuyerCode = "BuyerCode",
+                BuyerAddress = "BuyerAddress",
+                BuyerNPWP = "BuyerNPWP",
+                BuyerNIK = "BuyerNIK",
+                CurrencyId = 1,
+                CurrencyCode = "IDR",
+                CurrencySymbol = "Rp",
+                CurrencyRate = 14000,
+                PaymentType = "Meter",
+                VatType = "PPN Kawasan Berikat",
+                Remark = "Remark",
+                TotalPayment = 100,
+                TotalPaid = 0,
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BGM()
+        {
+            return new SalesInvoiceModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "BPF",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                DueDate = DateTimeOffset.UtcNow.AddDays(-2),
+                DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BGM",
+                BuyerId = 1,
+                BuyerName = "BuyerName",
+                BuyerCode = "BuyerCode",
+                BuyerAddress = "BuyerAddress",
+                BuyerNPWP = "BuyerNPWP",
+                BuyerNIK = "BuyerNIK",
+                CurrencyId = 1,
+                CurrencyCode = "IDR",
+                CurrencySymbol = "Rp",
+                CurrencyRate = 14000,
+                PaymentType = "Meter",
+                VatType = "PPN Kawasan Berikat",
+                Remark = "Remark",
+                TotalPayment = 100,
+                TotalPaid = 0,
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BPF()
+        {
+            return new SalesInvoiceModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "BPF",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                DueDate = DateTimeOffset.UtcNow.AddDays(-2),
+                DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BPF",
+                BuyerId = 1,
+                BuyerName = "BuyerName",
+                BuyerCode = "BuyerCode",
+                BuyerAddress = "BuyerAddress",
+                BuyerNPWP = "BuyerNPWP",
+                BuyerNIK = "BuyerNIK",
+                CurrencyId = 1,
+                CurrencyCode = "IDR",
+                CurrencySymbol = "Rp",
+                CurrencyRate = 14000,
+                PaymentType = "Meter",
+                VatType = "PPN Kawasan Berikat",
+                Remark = "Remark",
+                TotalPayment = 100,
+                TotalPaid = 0,
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
+                            new SalesInvoiceItemModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "PCS",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        public async Task<SalesInvoiceModel> GetNewData_DeliveryOrderType_Is_BPR()
+        {
+            return new SalesInvoiceModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceType = "SalesInvoiceType",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                DueDate = DateTimeOffset.UtcNow.AddDays(-2),
+                DeliveryOrderNo = "DeliveryOrderNo",
+                DeliveryOrderType = "BPR",
+                BuyerId = 1,
+                BuyerName = "BuyerName",
+                BuyerCode = "BuyerCode",
+                BuyerAddress = "BuyerAddress",
+                BuyerNPWP = "BuyerNPWP",
+                BuyerNIK = "BuyerNIK",
+                CurrencyId = 1,
+                CurrencyCode = "IDR",
+                CurrencySymbol = "Rp",
+                CurrencyRate = 14000,
+                PaymentType = "Meter",
+                VatType = "PPN Kawasan Berikat",
+                Remark = "Remark",
+                TotalPayment = 100,
+                TotalPaid = 0,
+
+                SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
+                {
+                    new SalesInvoiceDetailModel()
+                    {
+                        ShipmentDocumentId = 1,
+                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        SalesInvoiceItems = new List<SalesInvoiceItemModel>()
+                        {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",

@@ -19,6 +19,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
+        [MaxLength(255)]
+        public string DeliveryOrderType { get; set; }
 
         #region Buyer
         public int BuyerId { get; set; }
@@ -43,6 +45,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public double CurrencyRate { get; set; }
         #endregion
 
+        [MaxLength(255)]
+        public string PaymentType { get; set; }
         [MaxLength(255)]
         public string VatType { get; set; }
         //TotalPayment => jumlah yang ditangguhkan

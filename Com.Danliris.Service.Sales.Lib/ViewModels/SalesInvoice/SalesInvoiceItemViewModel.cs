@@ -6,19 +6,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 {
     public class SalesInvoiceItemViewModel : BaseViewModel
     {
-        [MaxLength(255)]
         public string ProductCode { get; set; }
-        [MaxLength(255)]
         public string ProductName { get; set; }
-        [MaxLength(255)]
         public string Quantity { get; set; }
-        [MaxLength(255)]
         public string PackingUom { get; set; }
         public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
         public double? Price { get; set; }
         public double Amount { get; set; }
-        //public int? SalesInvoiceDetailId { get; set; }
         public double ConvertValue { get; set; }
         public string ConvertUnit { get; set; }
     }

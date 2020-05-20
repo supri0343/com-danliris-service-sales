@@ -17,11 +17,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
     public class DOReturnDetailLogic : BaseLogic<DOReturnDetailModel>
     {
         private DOReturnDetailItemLogic doReturnDetailItemLogic;
+        private DOReturnItemLogic doReturnItemLogic;
         private SalesDbContext _dbContext;
 
         public DOReturnDetailLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
             this.doReturnDetailItemLogic = serviceProvider.GetService<DOReturnDetailItemLogic>();
+            this.doReturnItemLogic = serviceProvider.GetService<DOReturnItemLogic>();
             _dbContext = dbContext;
         }
 
@@ -34,30 +36,29 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
                 doReturnDetailItemLogic.Create(detailItem);
 
             }
+            foreach (var item in detail.DOReturnItems)
+            {
+                EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
+                doReturnItemLogic.Create(item);
+
+            }
             base.Create(detail);
         }
 
-        public override async void UpdateAsync(long id, DOReturnDetailModel detail)
+        public override void UpdateAsync(long id, DOReturnDetailModel detail)
         {
             EntityExtension.FlagForUpdate(detail, IdentityService.Username, "sales-service");
-
-            HashSet<long> detailIds = doReturnDetailItemLogic.GetIds(id);
-            foreach (var itemId in detailIds)
-            {
-                DOReturnDetailItemModel data = detail.DOReturnDetailItems.FirstOrDefault(prop => prop.Id.Equals(itemId));
-                if (data == null)
-                    await doReturnDetailItemLogic.DeleteAsync(itemId);
-                else
-                {
-                    doReturnDetailItemLogic.UpdateAsync(itemId, data);
-                }
-            }
-
-            foreach (DOReturnDetailItemModel detailItem in detail.DOReturnDetailItems)
+            foreach (var detailItem in detail.DOReturnDetailItems)
             {
                 EntityExtension.FlagForUpdate(detailItem, IdentityService.Username, "sales-service");
                 if (detailItem.Id == 0)
                     doReturnDetailItemLogic.Create(detailItem);
+            }
+            foreach (var item in detail.DOReturnItems)
+            {
+                EntityExtension.FlagForUpdate(item, IdentityService.Username, "sales-service");
+                if (item.Id == 0)
+                    doReturnItemLogic.Create(item);
             }
             base.UpdateAsync(id, detail);
         }
@@ -71,6 +72,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
                 await doReturnDetailItemLogic.DeleteAsync(detailItem.Id);
 
             }
+            foreach (var item in detail.DOReturnItems)
+            {
+                await doReturnItemLogic.DeleteAsync(item.Id);
+
+            }
+
             DbSet.Update(detail);
         }
 
@@ -105,12 +112,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
         public HashSet<long> GetIds(long id)
         {
             return new HashSet<long>(DbSet.Where(d => d.DOReturnModel.Id == id).Select(d => d.Id));
-        }
-
-        public override async Task<DOReturnDetailModel> ReadByIdAsync(long id)
-        {
-            var SalesInvoice = await DbSet.Include(s => s.DOReturnDetailItems).ThenInclude(s => s.DOReturnItems).FirstOrDefaultAsync(s => s.Id == id);
-            return SalesInvoice;
         }
     }
 }
