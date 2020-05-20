@@ -10,7 +10,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
     public class SalesInvoiceViewModel : BaseViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public long AutoIncreament { get; set; }
+        public long? AutoIncreament { get; set; }
         public string SalesInvoiceNo { get; set; }
         public string SalesInvoiceType { get; set; }
         public DateTimeOffset? SalesInvoiceDate { get; set; }
@@ -23,7 +23,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string VatType { get; set; }
         public double? TotalPayment { get; set; }
         public double? TotalPaid { get; set; }
-        public bool IsPaidOff { get; set; }
+        public bool? IsPaidOff { get; set; }
         public string Remark { get; set; }
         public string Sales { get; set; }
         public UnitViewModel Unit { get; set; }

@@ -10,12 +10,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
     public class DOSalesViewModel : BaseViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public long AutoIncreament { get; set; }
+        public long? AutoIncreament { get; set; }
         public string DOSalesNo { get; set; }
         public string DOSalesType { get; set; }
         public string Status { get; set; }
-        public bool Accepted { get; set; }
-        public bool Declined { get; set; }
+        public bool? Accepted { get; set; }
+        public bool? Declined { get; set; }
         public string Type { get; set; }
         public DateTimeOffset? Date { get; set; }
         public FinishingPrintingSalesContractViewModel SalesContract { get; set; }
