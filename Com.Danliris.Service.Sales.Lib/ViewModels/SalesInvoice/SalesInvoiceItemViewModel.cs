@@ -13,8 +13,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public UomViewModel Uom { get; set; }
         public double? Total { get; set; }
         public double? Price { get; set; }
-        public double Amount { get; set; }
-        public double ConvertValue { get; set; }
+        public double? Amount { get; set; }
+        public double? ConvertValue { get; set; }
         public string ConvertUnit { get; set; }
     }
 }

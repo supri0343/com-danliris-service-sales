@@ -213,7 +213,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Amount.ToString("N2"), normal_font);
+                    bodyCell.Phrase = new Phrase(item.Amount.GetValueOrDefault().ToString("N2"), normal_font);
                     bodyTable.AddCell(bodyCell);
                 }
             }
@@ -222,7 +222,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             {
                 foreach (var amount in item.SalesInvoiceItems)
                 {
-                    result += amount.Amount;
+                    result += amount.Amount.GetValueOrDefault();
                 }
             }
             totalTax = result * 0.1;
