@@ -246,6 +246,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         code = "",
                         unit = new UnitViewModel() {},
                     },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                        Type = "",
+                    },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                     {
                         new DOSalesDetailViewModel()
