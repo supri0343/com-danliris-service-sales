@@ -103,15 +103,16 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
                 },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                IDNo = "IDNo",
                 Currency = new CurrencyViewModel()
                 {
                     Symbol = "Rp",
                 },
+                PaymentType = "Meter",
                 Remark = "Remark",
                 VatType = "PPN Umum",
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
@@ -122,19 +123,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             new SalesInvoiceItemViewModel()
                             {
-                        ProductCode = "ProductCode",
-                        Quantity = "Quantity",
-                        PackingUom = "PackingUom",
-                        Uom = new UomViewModel()
-                        {
-                            Unit = "PACKS",
-                        },
-                        ProductName = "ProductName",
-                        Total = 1,
-                        Price = 1,
-                        Amount = 1,
-                    }
-                }
+                                ProductCode = "ProductCode",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                Uom = new UomViewModel()
+                                {
+                                    Unit = "PACKS",
+                                },
+                                ProductName = "ProductName",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
                     }
                 }
 
@@ -147,8 +148,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = controller.GetSalesInvoicePDF(1).Result;
 
             Assert.NotNull(response);
-
         }
+
         [Fact]
         public void Get_Sales_Invoice_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
         {
@@ -160,16 +161,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Code = "BuyerCode",
                     Address = "BuyerAddress",
                     NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
                 },
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
-                IDNo = "IDNo",
                 Currency = new CurrencyViewModel()
                 {
                     Symbol = "$",
                 },
                 Remark = "Remark",
+                PaymentType = "Yard",
                 VatType = "PPN BUMN",
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                 {
@@ -179,19 +181,21 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         {
                             new SalesInvoiceItemViewModel()
                             {
-                        ProductCode = "ProductCode",
-                        Quantity = "Quantity",
-                        PackingUom = "PackingUom",
-                        Uom = new UomViewModel()
-                        {
-                            Unit = "PACKS",
-                        },
-                        ProductName = "ProductName",
-                        Total = 1,
-                        Price = 1,
-                        Amount = 1,
+                                ProductCode = "ProductCode",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                Uom = new UomViewModel()
+                                {
+                                    Unit = "PACKS",
+                                },
+                                ProductName = "ProductName",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
                     }
-                } } }
+                }
 
             };
             var mocks = GetMocks();
@@ -202,18 +206,54 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = controller.GetSalesInvoicePDF(1).Result;
 
             Assert.NotNull(response);
-
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF__Other_CurrencySymbol()
+        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
         {
             var vm = new SalesInvoiceViewModel()
             {
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Code = "BuyerCode",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
                 Currency = new CurrencyViewModel()
                 {
-                    Symbol = "Rp",
+                    Symbol = "€",
                 },
+                Remark = "Remark",
+                VatType = "PPN Retail",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                Uom = new UomViewModel()
+                                {
+                                    Unit = "PACKS",
+                                },
+                                ProductName = "ProductName",
+                                Total = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
             };
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
@@ -223,9 +263,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = controller.GetSalesInvoicePDF(1).Result;
 
             Assert.NotNull(response);
-
         }
-
 
         [Fact]
         public void Get_Sales_Invoice_PDF_NotFound()
@@ -302,7 +340,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new SalesInvoiceViewModel{
                     SalesInvoiceType = "",
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
-                    DeliveryOrderNo = "",
+                    DeliveryOrderType = "",
                     Currency = new CurrencyViewModel()
                     {
                         Id = 0,
@@ -462,6 +500,57 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var controller = GetController(mocks);
             var response = await controller.UpdateFromSalesReceiptAsync(It.IsAny<int>(), It.IsAny<SalesInvoiceUpdateModel>());
             int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async void Should_Success_GetReportAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GetReport(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .ReturnsAsync(new List<SalesInvoiceReportViewModel>());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetReportAll(0, 0, null, null, null, "7");
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public async void Should_Fail_GetReportAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GetReport(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .Throws(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetReportAll(0, 0, null, null, null, "7");
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async void Should_Success_GetXlsAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+                .ReturnsAsync(new System.IO.MemoryStream());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll(0, 0, null, null, null, "7");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async void Should_Fail_GetXlsAll()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<int>(), It.IsAny<long>(), It.IsAny<bool?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>(), It.IsAny<int>()))
+               .Throws(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll(0, 0, null, null, null, "7");
+            int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
     }

@@ -20,10 +20,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                 Code = "code",
                 AutoIncreament = 1,
                 DOReturnNo = "DOReturnNo",
-                Type = "Type",
-                Date = DateTimeOffset.UtcNow,
+                DOReturnType = "Type",
+                DOReturnDate = DateTimeOffset.UtcNow,
                 ReturnFrom = "ReturnFrom",
-                LKTPNo = "LKTPNo",
+                LTKPNo = "LKTPNo",
                 HeadOfStorage = "HeadOfStorage",
                 Remark = "Remark",
                 DOReturnDetails = new List<DOReturnDetailModel>()
@@ -36,23 +36,23 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                         {
                             new DOReturnDetailItemModel()
                             {
+                                DOSalesId = 1,
+                                DOSalesNo = "DOSalesNo",
+                            },
+                        },
+                        DOReturnItems = new List<DOReturnItemModel>()
+                        {
+                            new DOReturnItemModel()
+                            {
                                 ShipmentDocumentId = 1,
                                 ShipmentDocumentCode = "ShipmentDocumentCode",
-                                DOReturnItems = new List<DOReturnItemModel>()
-                                {
-                                    new DOReturnItemModel()
-                                    {
-                                        ProductCode = "ProductCode",
-                                        ProductName = "ProductName",
-                                        Quantity = "Quantity",
-                                        PackingUom = "PackingUom",
-                                        UomId = 1,
-                                        UomUnit = "UomUnit",
-                                        Total = 100,
-                                        Price = 100,
-                                        Amount = 100,
-                                    },
-                                },
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                Quantity = "Quantity",
+                                PackingUom = "PackingUom",
+                                UomId = 1,
+                                UomUnit = "UomUnit",
+                                Total = 100,
                             },
                         },
                     },

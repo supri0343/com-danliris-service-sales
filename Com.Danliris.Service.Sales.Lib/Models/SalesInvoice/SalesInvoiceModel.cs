@@ -19,6 +19,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
+        [MaxLength(255)]
+        public string DeliveryOrderType { get; set; }
 
         #region Buyer
         public int BuyerId { get; set; }
@@ -30,10 +32,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string BuyerAddress { get; set; }
         [MaxLength(255)]
         public string BuyerNPWP { get; set; }
-        #endregion
-
         [MaxLength(255)]
-        public string IDNo { get; set; }
+        public string BuyerNIK { get; set; }
+        #endregion
 
         #region Currency
         public int CurrencyId { get; set; }
@@ -45,6 +46,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         #endregion
 
         [MaxLength(255)]
+        public string PaymentType { get; set; }
+        [MaxLength(255)]
         public string VatType { get; set; }
         //TotalPayment => jumlah yang ditangguhkan
         public double TotalPayment { get; set; }
@@ -55,6 +58,17 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(1000)]
         public string Remark { get; set; }
 
+        [MaxLength(256)]
+        public string Sales { get; set; }
+
+        [MaxLength(100)]
+        public string UnitId { get; set; }
+
+        [MaxLength(1000)]
+        public string UnitCode { get; set; }
+
+        [MaxLength(1000)]
+        public string UnitName { get; set; }
 
         public virtual ICollection<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
     }

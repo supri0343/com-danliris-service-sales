@@ -573,6 +573,11 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long?>("DOReturnDetailModelId");
 
+                    b.Property<int>("DOSalesId");
+
+                    b.Property<string>("DOSalesNo")
+                        .HasMaxLength(255);
+
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -594,11 +599,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("ShipmentDocumentCode")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("ShipmentDocumentId");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
@@ -675,8 +675,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<double>("Amount");
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -687,7 +685,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
-                    b.Property<long?>("DOReturnDetailItemModelId");
+                    b.Property<long?>("DOReturnDetailModelId");
 
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
@@ -714,8 +712,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("PackingUom")
                         .HasMaxLength(255);
 
-                    b.Property<double>("Price");
-
                     b.Property<string>("ProductCode")
                         .HasMaxLength(255);
 
@@ -725,7 +721,12 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Quantity")
                         .HasMaxLength(255);
 
-                    b.Property<double>("Total");
+                    b.Property<string>("ShipmentDocumentCode")
+                        .HasMaxLength(255);
+
+                    b.Property<int?>("ShipmentDocumentId");
+
+                    b.Property<double?>("Total");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
@@ -737,7 +738,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DOReturnDetailItemModelId");
+                    b.HasIndex("DOReturnDetailModelId");
 
                     b.ToTable("DOReturnItems");
                 });
@@ -765,10 +766,13 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
+                    b.Property<DateTimeOffset>("DOReturnDate");
+
                     b.Property<string>("DOReturnNo")
                         .HasMaxLength(255);
 
-                    b.Property<DateTimeOffset>("Date");
+                    b.Property<string>("DOReturnType")
+                        .HasMaxLength(255);
 
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
@@ -785,7 +789,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<string>("LKTPNo")
+                    b.Property<string>("LTKPNo")
                         .HasMaxLength(255);
 
                     b.Property<string>("LastModifiedAgent")
@@ -802,9 +806,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<string>("ReturnFrom")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Type")
                         .HasMaxLength(255);
 
                     b.Property<string>("UId")
@@ -974,6 +975,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
+                    b.Property<string>("DOSalesCategory")
+                        .HasMaxLength(255);
+
                     b.Property<string>("DOSalesNo")
                         .HasMaxLength(255);
 
@@ -1076,6 +1080,17 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<int>("Sc");
 
                     b.Property<string>("Status")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("StorageCode")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("StorageId");
+
+                    b.Property<string>("StorageName")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("StorageUnit")
                         .HasMaxLength(255);
 
                     b.Property<string>("Type")
@@ -3540,6 +3555,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<double>("Amount");
 
+                    b.Property<string>("ConvertUnit");
+
+                    b.Property<double>("ConvertValue");
+
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -3623,6 +3642,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<int>("BuyerId");
 
+                    b.Property<string>("BuyerNIK")
+                        .HasMaxLength(255);
+
                     b.Property<string>("BuyerNPWP")
                         .HasMaxLength(255);
 
@@ -3665,10 +3687,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("DeliveryOrderNo")
                         .HasMaxLength(255);
 
-                    b.Property<DateTimeOffset>("DueDate");
-
-                    b.Property<string>("IDNo")
+                    b.Property<string>("DeliveryOrderType")
                         .HasMaxLength(255);
+
+                    b.Property<DateTimeOffset>("DueDate");
 
                     b.Property<bool>("IsDeleted");
 
@@ -3684,8 +3706,14 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
+                    b.Property<string>("PaymentType")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
+
+                    b.Property<string>("Sales")
+                        .HasMaxLength(256);
 
                     b.Property<DateTimeOffset>("SalesInvoiceDate");
 
@@ -3701,6 +3729,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
+
+                    b.Property<string>("UnitCode")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("UnitId")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("VatType")
                         .HasMaxLength(255);
@@ -4112,9 +4149,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnItemModel", b =>
                 {
-                    b.HasOne("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnDetailItemModel", "DOReturnDetailItemModel")
+                    b.HasOne("Com.Danliris.Service.Sales.Lib.Models.DOReturn.DOReturnDetailModel", "DOReturnDetailModel")
                         .WithMany("DOReturnItems")
-                        .HasForeignKey("DOReturnDetailItemModelId")
+                        .HasForeignKey("DOReturnDetailModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

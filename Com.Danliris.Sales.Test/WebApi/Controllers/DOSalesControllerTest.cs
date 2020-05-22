@@ -239,6 +239,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Disp = -1,
                     Op = -1,
                     Sc = -1,
+                    Storage = new StorageViewModel()
+                    {
+                        _id = 0,
+                        name = "",
+                        code = "",
+                        unit = new UnitViewModel() {},
+                    },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                        Type = "",
+                    },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                     {
                         new DOSalesDetailViewModel()
@@ -271,6 +285,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new DOSalesViewModel{
                     DOSalesType = "Ekspor",
                     FillEachBale = -1,
+                    Storage = new StorageViewModel(){ },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
                     {
                         new DOSalesDetailViewModel()

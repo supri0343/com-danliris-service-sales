@@ -47,7 +47,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double Weight { get; set; }
         public double ConvertionValue { get; set; }
 
-        //public int DOSalesId { get; set; }
         public virtual DOSalesModel DOSalesModel { get; set; }
     }
 }

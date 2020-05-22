@@ -63,6 +63,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                 Sc = 1,
                 DoneBy = "DoneBy",
                 FillEachBale = 1,
+                DOSalesCategory= "DOSalesCategory",
+                StorageId=1,
+                StorageCode= "StorageCode",
+                StorageUnit= "StorageUnit",
+                StorageName= "StorageName",
+
 
                 DOSalesDetailItems = new List<DOSalesDetailModel>()
                 {

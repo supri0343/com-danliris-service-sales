@@ -7,7 +7,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
 {
     public class BuyerViewModel
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         [MaxLength(255)]
         public string Code { get; set; }
         [MaxLength(1000)]
@@ -24,5 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
         public string Contact { get; set; }
         [MaxLength(255)]
         public string NPWP { get; set; }
+        [MaxLength(255)]
+        public string NIK { get; set; }
     }
 }

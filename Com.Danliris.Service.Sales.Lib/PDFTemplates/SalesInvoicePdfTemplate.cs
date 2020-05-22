@@ -127,7 +127,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("NIK", normal_font);
             headerTable4.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase(": " + viewModel.IDNo, normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.Buyer.NIK, normal_font);
             headerTable4.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("NPWP Buyer", normal_font);
@@ -213,7 +213,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Amount.ToString("N2"), normal_font);
+                    bodyCell.Phrase = new Phrase(item.Amount.GetValueOrDefault().ToString("N2"), normal_font);
                     bodyTable.AddCell(bodyCell);
                 }
             }
@@ -222,7 +222,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             {
                 foreach (var amount in item.SalesInvoiceItems)
                 {
-                    result += amount.Amount;
+                    result += amount.Amount.GetValueOrDefault();
                 }
             }
             totalTax = result * 0.1;
@@ -232,7 +232,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #endregion Body
 
-            #region Footerda
+            #region Footer
 
             var dueDate = viewModel.DueDate.Value.Date;
             var salesInvoiceDate = viewModel.SalesInvoiceDate.Value.Date;
@@ -343,6 +343,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + result.ToString("N2"), bold_font);
                 footerTable3.AddCell(cellHeaderFooter);
             }
+            else if (viewModel.VatType.Equals("PPN Retail"))
+            {
+                cellHeaderFooter.Phrase = new Phrase("PPN 10%", normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + totalTax.ToString("N2"), normal_font);
+                footerTable3.AddCell(cellHeaderFooter);
+
+                cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+                cellHeaderFooter.Phrase = new Phrase(": " + viewModel.Currency.Symbol + " " + totalPay.ToString("N2"), bold_font);
+                footerTable3.AddCell(cellHeaderFooter);
+            }
             else
             {
                 cellHeaderFooter.Phrase = new Phrase("Jumlah", bold_font);
@@ -377,6 +389,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             else if (viewModel.VatType.Equals("PPN BUMN"))
             {
                 cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithoutVat + " " + currencyLocal, normal_font);
+                footerTable1.AddCell(cellFooterLeft1);
+            }
+            else if (viewModel.VatType.Equals("PPN Retail"))
+            {
+                cellFooterLeft1.Phrase = new Phrase("Terbilang : " + TotalPayWithVat + " " + currencyLocal, normal_font);
                 footerTable1.AddCell(cellFooterLeft1);
             }
             else

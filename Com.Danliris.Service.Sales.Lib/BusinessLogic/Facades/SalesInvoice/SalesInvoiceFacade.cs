@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.Helpers;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 {
@@ -43,6 +51,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     while (DbSet.Any(d => d.Code.Equals(model.Code)));
 
                     SalesInvoiceNumberGenerator(model, index);
+                    DeliveryOrderNumberGenerator(model);
                     salesInvoiceLogic.Create(model);
                     index++;
 
@@ -69,7 +78,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                     if (model != null)
                     {
                         SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
-
                         salesInvoiceModel = model;
                         await salesInvoiceLogic.DeleteAsync(id);
                     }
@@ -233,6 +241,42 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             }
         }
 
+        private void DeliveryOrderNumberGenerator(SalesInvoiceModel model)
+        {
+            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.DeliveryOrderType.Equals(model.DeliveryOrderType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+
+            int YearNow = DateTime.Now.Year;
+            int MonthNow = DateTime.Now.Month;
+            var YearNowString = DateTime.Now.ToString("yy");
+            var MonthNowString = DateTime.Now.ToString("MM");
+
+            if (model.DeliveryOrderType == "BAV")
+            {
+                model.DeliveryOrderNo = $"V.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BLL")
+            {
+                model.DeliveryOrderNo = $"L.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BON")
+            {
+                model.DeliveryOrderNo = $"O.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BGM")
+            {
+                model.DeliveryOrderNo = $"M.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BPF")
+            {
+                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+            else if (model.DeliveryOrderType == "BPR")
+            {
+                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            }
+
+        }
+
         public async Task<int> UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)
 
         {
@@ -252,6 +296,123 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                 }
             }
             return Updated;
+        }
+
+        private async Task<List<SalesInvoiceReportViewModel>> GetReportQuery(int buyerId, long salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, int offSet)
+        {
+            var httpClientService = (IHttpClientService)_serviceProvider.GetService(typeof(IHttpClientService));
+            string uri = APIEndpoint.Finance + "/sales-receipts/sales-invoice-report";
+
+            var query = DbSet.AsQueryable();
+            if (buyerId != 0)
+            {
+                query = query.Where(s => s.BuyerId == buyerId);
+            }
+
+            if (salesInvoiceId != 0)
+            {
+                query = query.Where(s => s.Id == salesInvoiceId);
+            }
+
+            if (isPaidOff.HasValue)
+            {
+                query = query.Where(s => s.IsPaidOff == isPaidOff.GetValueOrDefault());
+            }
+
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                query = query.Where(s => dateFrom.Value.Date <= s.DueDate.AddHours(offSet).Date && s.DueDate.AddHours(offSet).Date <= dateTo.Value.Date);
+            }
+            else if (dateFrom.HasValue && !dateTo.HasValue)
+            {
+                query = query.Where(s => dateFrom.Value.Date <= s.DueDate.AddHours(offSet).Date);
+            }
+            else if (!dateFrom.HasValue && dateTo.HasValue)
+            {
+                query = query.Where(s => s.DueDate.AddHours(offSet).Date <= dateTo.Value.Date);
+            }
+
+            var stringContent = JsonConvert.SerializeObject(new
+            {
+                SalesInvoiceIds = query.Select(s => s.Id)
+            });
+            var httpContent = new StringContent(stringContent, Encoding.UTF8, General.JsonMediaType);
+
+            var httpResponseMessage = await httpClientService.PostAsync(uri, httpContent);
+            httpResponseMessage.EnsureSuccessStatusCode();
+
+            var salesReceiptStringData = await httpResponseMessage.Content.ReadAsStringAsync();
+            var salesReceiptData = JsonConvert.DeserializeObject<List<SalesInvoiceReportSalesReceiptViewModel>>(salesReceiptStringData);
+
+            var result = query
+                .OrderByDescending(s => s.LastModifiedUtc)
+                .Select(s => new SalesInvoiceModel()
+                {
+                    Id = s.Id,
+                    SalesInvoiceNo = s.SalesInvoiceNo,
+                    IsPaidOff = s.IsPaidOff,
+                    DueDate = s.DueDate,
+                    SalesInvoiceDate = s.SalesInvoiceDate,
+                    TotalPaid = s.TotalPaid,
+                    TotalPayment = s.TotalPayment,
+                    CurrencySymbol = s.CurrencySymbol,
+                })
+                .ToList()
+                .Select(s => new SalesInvoiceReportViewModel()
+                {
+                    Id = s.Id,
+                    SalesInvoiceNo = s.SalesInvoiceNo,
+                    Status = s.IsPaidOff ? "Lunas" : "Belum Lunas",
+                    Tempo = (s.DueDate - s.SalesInvoiceDate).Days + 1,
+                    TotalPayment = s.TotalPayment,
+                    TotalPaid = s.TotalPaid,
+                    Unpaid = (s.TotalPayment - s.TotalPaid < 0) ? 0 : s.TotalPayment - s.TotalPaid,
+                    CurrencySymbol = s.CurrencySymbol,
+                    SalesReceipts = salesReceiptData.Where(d => d.SalesInvoiceId == s.Id).ToList()
+                });
+
+            return result.ToList();
+        }
+
+        public async Task<List<SalesInvoiceReportViewModel>> GetReport(int buyerId, long salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, int offSet)
+        {
+            var data = await GetReportQuery(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offSet);
+
+            return data;
+        }
+
+        public async Task<MemoryStream> GenerateExcel(int buyerId, long salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, int offSet)
+        {
+            var data = await GetReportQuery(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offSet);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn() { ColumnName = "No Faktur", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Total Harga", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Pembayaran Sebelumnya", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Jumlah Pembayaran", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Sisa Pembayaran", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pembayaran", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No Kuitansi", DataType = typeof(string) });
+
+            if (data.Count == 0)
+            {
+                dt.Rows.Add("", "", "", "", "", "", "");
+            }
+            else
+            {
+                data = data.OrderBy(s => s.Id).ToList();
+                foreach (var item in data)
+                {
+                    foreach (var detail in item.SalesReceipts.OrderBy(s => s.SalesReceiptDate))
+                    {
+                        dt.Rows.Add(item.SalesInvoiceNo, string.Format("{0} {1}", item.CurrencySymbol, item.TotalPayment),
+                            string.Format("{0} {1}", detail.CurrencySymbol, detail.TotalPaid), string.Format("{0} {1}", detail.CurrencySymbol, detail.Nominal),
+                            string.Format("{0} {1}", detail.CurrencySymbol, detail.UnPaid), detail.SalesReceiptDate.ToOffset(new TimeSpan(offSet, 0, 0)).ToString("d/M/yyyy", new CultureInfo("id-ID")), detail.SalesReceiptNo);
+                    }
+                }
+            }
+
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
         }
     }
 }

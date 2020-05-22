@@ -9,12 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 {
-  public  class DOReturnItemLogicTest
+    public class DOReturnItemLogicTest
     {
         private const string ENTITY = "DOReturnItemLogic";
 
@@ -47,7 +46,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             serviceProvider
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
-            
+
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
@@ -63,25 +62,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             DOReturnItemLogic unitUnderTest = new DOReturnItemLogic(GetServiceProvider(testName).Object, identityService, dbContext);
             dbContext.DOReturnItems.Add(new DOReturnItemModel()
             {
-                ProductName= "ProductName",
+                ProductName = "ProductName",
                 Active = true,
                 CreatedBy = "someone",
-                Amount =1,
                 ProductCode = "ProductCode",
-              
-                DOReturnDetailItemModel =new DOReturnDetailItemModel() { 
-                    Active =true,
-                    ShipmentDocumentCode= "ShipmentDocumentCode"
-                },
-                UId="1",
-                Price =1000,
+                ShipmentDocumentCode = "ShipmentDocumentCode",
+                UId = "1",
                 UomUnit = "UomUnit",
-                UomId=1,
-                CreatedUtc =DateTime.UtcNow,
+                UomId = 1,
+                CreatedUtc = DateTime.UtcNow,
                 LastModifiedBy = "someone",
-                Total=10000,
-                Quantity="",
-                PackingUom ="",
+                Total = 10000,
+                Quantity = "",
+                PackingUom = "",
                 CreatedAgent = "CreatedAgent",
                 DeletedAgent = "DeletedAgent",
                 IsDeleted = false,
@@ -94,10 +87,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             int size = 1;
             string order = "{}";
             string keyword = null;
-            string filter = @"{""ProductName"":""""}";
+            //string filter = @"{""ProductName"":""""}";
 
             var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
             Assert.NotEmpty(result.Data);
         }
-}
+    }
 }

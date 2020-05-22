@@ -13,12 +13,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
         [MaxLength(255)]
         public string DOReturnNo { get; set; }
         [MaxLength(255)]
-        public string Type { get; set; }
-        public DateTimeOffset Date { get; set; }
+        public string DOReturnType { get; set; }
+        public DateTimeOffset DOReturnDate { get; set; }
         [MaxLength(255)]
         public string ReturnFrom { get; set; }
         [MaxLength(255)]
-        public string LKTPNo { get; set; }
+        public string LTKPNo { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }
         [MaxLength(1000)]
