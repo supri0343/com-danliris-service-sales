@@ -15,6 +15,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         [MaxLength(255)]
         public string DOSalesType { get; set; }
         [MaxLength(255)]
+        public string DOSalesCategory { get; set; }
+        [MaxLength(255)]
         public string Status { get; set; }
         public bool Accepted { get; set; }
         public bool Declined { get; set; }
@@ -82,6 +84,19 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string SalesName { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }
+
+        
+        public int StorageId { get; set; }
+
+        [MaxLength(255)]
+        public string StorageName { get; set; }
+
+        [MaxLength(255)]
+        public string StorageCode { get; set; }
+
+        [MaxLength(255)]
+        public string StorageUnit { get; set; }
+
         [MaxLength(255)]
         public string PackingUom { get; set; }
         [MaxLength(255)]
