@@ -13,8 +13,29 @@ namespace Com.Danliris.Sales.Test.ViewModels.FinishingPrinting
         [Fact]
         public void Should_Success_Instantiate_FinishingPrintingSalesContractViewModel()
         {
-            FinishingPrintingSalesContractViewModel viewModel = new FinishingPrintingSalesContractViewModel();
+            FinishingPrintingSalesContractViewModel viewModel = new FinishingPrintingSalesContractViewModel()
+            {
+                AutoIncrementNumber = 1,
+                Code = "Code",
+                CommodityDescription = "CommodityDescription",
+                Condition = "Condition",
+                DeliveredTo = "DeliveredTo",
+                DispositionNumber = "DispositionNumber",
+                FromStock = true,
+                OrderType =new OrderTypeViewModel()
+                {
+                    Code ="Code"
+                },
+                Packing = "Packing",
+                ShipmentDescription = "ShipmentDescription",
+                ShippingQuantityTolerance =1,
+                TermOfShipment = "TermOfShipment",
+                TransportFee = "TransportFee",
+                RemainingQuantity =1
 
+            };
+            Assert.NotNull(viewModel);
+           
         }
 
         [Fact]
@@ -33,6 +54,7 @@ namespace Com.Danliris.Sales.Test.ViewModels.FinishingPrinting
         {
             FinishingPrintingSalesContractViewModel viewModel = new FinishingPrintingSalesContractViewModel();
             viewModel.Amount = 0;
+          
             viewModel.Agent = new AgentViewModel()
             {
                 Id = 1
