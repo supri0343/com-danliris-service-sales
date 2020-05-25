@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200520195326_UpdateDoSalesStorageCategory")]
+    partial class UpdateDoSalesStorageCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -573,7 +575,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long?>("DOReturnDetailModelId");
 
-                    b.Property<int?>("DOSalesId");
+                    b.Property<int>("DOSalesId");
 
                     b.Property<string>("DOSalesNo")
                         .HasMaxLength(255);
@@ -652,7 +654,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<int?>("SalesInvoiceId");
+                    b.Property<int>("SalesInvoiceId");
 
                     b.Property<string>("SalesInvoiceNo")
                         .HasMaxLength(255);
@@ -751,7 +753,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<long?>("AutoIncreament");
+                    b.Property<long>("AutoIncreament");
 
                     b.Property<string>("Code")
                         .HasMaxLength(255);
@@ -805,9 +807,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
 
-                    b.Property<int?>("ReturnFromId");
-
-                    b.Property<string>("ReturnFromName")
+                    b.Property<string>("ReturnFrom")
                         .HasMaxLength(255);
 
                     b.Property<string>("UId")
