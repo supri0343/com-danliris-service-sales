@@ -6,7 +6,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 {
     public class DOReturnDetailModel : BaseModel
     {
-        public int SalesInvoiceId { get; set; }
+        public int? SalesInvoiceId { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceNo { get; set; }
 

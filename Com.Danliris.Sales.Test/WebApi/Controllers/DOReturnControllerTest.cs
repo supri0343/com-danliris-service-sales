@@ -29,7 +29,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 AutoIncreament = 1,
                 DOReturnDate = DateTimeOffset.Now,
                 HeadOfStorage = "HeadOfStorage",
-                ReturnFrom = "ReturnFrom",
+                ReturnFrom = new BuyerViewModel()
+                {
+                    Id = 1,
+                    Name = "ReturnFromName",
+                },
                 LTKPNo = "LKTPNo",
                 Remark = "Remark",
                 DOReturnDetails = new List<DOReturnDetailViewModel>()
@@ -131,12 +135,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Validate_Validation_ViewModei()
+        public void Validate_Validation_ViewModel()
         {
             List<DOReturnViewModel> viewModels = new List<DOReturnViewModel>
             {
                 new DOReturnViewModel()
                 {
+                    ReturnFrom = new BuyerViewModel() {},
                     DOReturnDetails = new List<DOReturnDetailViewModel>()
                     {
                         new DOReturnDetailViewModel()
@@ -158,6 +163,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                                 new DOReturnItemViewModel()
                                 {
+                                    Quantity = "10",
                                     Uom = new UomViewModel() {},
                                 },
                                  new DOReturnItemViewModel() {},
@@ -171,6 +177,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 SalesInvoiceNo ="SalesInvoiceNo",
                             },
                             DOReturnDetailItems = new List<DOReturnDetailItemViewModel>() { },
+                            DOReturnItems = new List<DOReturnItemViewModel>() { },
                         },
 
 
@@ -197,8 +204,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
 
                 new DOReturnViewModel() {},
+                new DOReturnViewModel() 
+                {
+                    ReturnFrom = new BuyerViewModel() {},
+                },
                 new DOReturnViewModel()
                 {
+                    ReturnFrom = new BuyerViewModel() {},
                     DOReturnDetails = new List<DOReturnDetailViewModel>()
                     {
                         new DOReturnDetailViewModel() { },
@@ -206,6 +218,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 },
                 new DOReturnViewModel()
                 {
+                    ReturnFrom = new BuyerViewModel() {},
                     DOReturnDetails = new List<DOReturnDetailViewModel>()
                     {
                         new DOReturnDetailViewModel()
@@ -219,6 +232,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 },
                 new DOReturnViewModel()
                 {
+                    ReturnFrom = new BuyerViewModel() {},
                     DOReturnDetails = new List<DOReturnDetailViewModel>()
                     {
                         new DOReturnDetailViewModel()

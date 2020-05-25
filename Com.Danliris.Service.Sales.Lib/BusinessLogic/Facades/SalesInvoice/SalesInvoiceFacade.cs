@@ -249,30 +249,31 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             int MonthNow = DateTime.Now.Month;
             var YearNowString = DateTime.Now.ToString("yy");
             var MonthNowString = DateTime.Now.ToString("MM");
+            var formatNo = $"{ model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
 
             if (model.DeliveryOrderType == "BAV")
             {
-                model.DeliveryOrderNo = $"V.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"V.{formatNo}";
             }
             else if (model.DeliveryOrderType == "BLL")
             {
-                model.DeliveryOrderNo = $"L.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"L.{formatNo}";
             }
             else if (model.DeliveryOrderType == "BON")
             {
-                model.DeliveryOrderNo = $"O.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"O.{formatNo}";
             }
             else if (model.DeliveryOrderType == "BGM")
             {
-                model.DeliveryOrderNo = $"M.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"M.{formatNo}";
             }
             else if (model.DeliveryOrderType == "BPF")
             {
-                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"F.{formatNo}";
             }
             else if (model.DeliveryOrderType == "BPR")
             {
-                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"F.{formatNo}";
             }
 
         }

@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
         public string DOReturnNo { get; set; }
         public string DOReturnType { get; set; }
         public DateTimeOffset? DOReturnDate { get; set; }
-        public string ReturnFrom { get; set; }
+        public BuyerViewModel ReturnFrom { get; set; }
         public string LTKPNo { get; set; }
         public string HeadOfStorage { get; set; }
         public string Remark { get; set; }
@@ -28,8 +29,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
             if (!DOReturnDate.HasValue || DOReturnDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Retur harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "DOReturnDate" });
 
-            if (string.IsNullOrWhiteSpace(ReturnFrom))
-                yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "ReturnFrom" });
+            if (ReturnFrom == null || string.IsNullOrWhiteSpace(ReturnFrom.Name))
+                yield return new ValidationResult("Return dari harus diisi", new List<string> { "ReturnFrom" });
 
             if (string.IsNullOrWhiteSpace(LTKPNo))
                 yield return new ValidationResult("No. LTKP harus diisi", new List<string> { "LTKPNo" });
@@ -53,6 +54,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                         Count++;
                         ErrorCount++;
                         DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan kosong / tidak ditemukan',";
+                    }
+
+                    if (detail.DOReturnItems != null && detail.DOReturnItems.Count > 0 && detail.DOReturnItems.All(s => s.Total <= 0))
+                    {
+                        Count++;
+                        ErrorCount++;
+                        DetailErrors += "TotalNotNull : 'Total tidak boleh kosong',";
                     }
 
                     var duplicate = DOReturnDetails.Where(w => w.SalesInvoice != null && detail.SalesInvoice != null && w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
@@ -101,11 +109,19 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                if (!item.ShipmentDocumentId.HasValue || string.IsNullOrWhiteSpace(item.ShipmentDocumentCode))
+                                //int quantity = Int32.Parse(item.Quantity);
+                                //if (quantity <= 0)
+                                //{
+                                //    Count++;
+                                //    DetailErrors += "Quantity : 'Jumlah Packing tidak boleh lebih kecil atau sama dengan 0',";
+                                //}
+
+                                if (!item.Total.HasValue || item.Total <= 0)
                                 {
                                     Count++;
-                                    DetailErrors += "ShipmentDocumentId : 'No. Bon Pengiriman Kosong',";
+                                    DetailErrors += "Total : 'Total Panjang tidak boleh lebih kecil atau sama dengan 0',";
                                 }
+
                                 DetailErrors += "}, ";
                             }
                             DetailErrors += "], ";

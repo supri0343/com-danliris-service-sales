@@ -3,6 +3,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 {
@@ -97,10 +98,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             int index = 1;
 
-            PdfPTable bodyTable = new PdfPTable(7);
+            PdfPTable bodyTable = new PdfPTable(6);
             PdfPCell bodyCell = new PdfPCell();
 
-            float[] widthsBody = new float[] { 3f, 7f, 13f, 7f, 7f, 7f, 7f };
+            float[] widthsBody = new float[] { 3f, 13f, 7f, 7f, 7f, 7f };
             bodyTable.SetWidths(widthsBody);
             bodyTable.WidthPercentage = 100;
 
@@ -108,13 +109,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("No.", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            bodyCell.Phrase = new Phrase("No. Bon", bold_font);
-            bodyTable.AddCell(bodyCell);
-
             bodyCell.Phrase = new Phrase("Nama", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
+            bodyCell.Phrase = new Phrase("Jenis/Code", bold_font);
             bodyTable.AddCell(bodyCell);
 
             bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
@@ -126,21 +124,36 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            foreach(DOReturnDetailViewModel detail in viewModel.DOReturnDetails)
+            foreach (DOReturnDetailViewModel detail in viewModel.DOReturnDetails)
             {
+                var noBon = detail.DOReturnItems.FirstOrDefault().ShipmentDocumentCode;
+
                 foreach (DOReturnDetailItemViewModel detailItem in detail.DOReturnDetailItems)
                 {
-                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    bodyCell.Phrase = new Phrase("", normal_font);
+                    bodyTable.AddCell(bodyCell);
 
+                    bodyCell.Phrase = new Phrase("Ex. Faktur : " + detail.SalesInvoice.SalesInvoiceNo + " \nEx. DO : " + detailItem.DOSales.DOSalesNo + "\nEx. Bon : " + noBon, bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("", normal_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("", normal_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("", normal_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("", normal_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+
+                foreach (DOReturnItemViewModel item in detail.DOReturnItems)
+                {
                     bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(detailItem.DOSales.DOSalesNo, normal_font);
-                    bodyTable.AddCell(bodyCell);
-                }
-                foreach (DOReturnItemViewModel item in detail.DOReturnItems)
-                {
                     bodyCell.Phrase = new Phrase(item.ProductName, normal_font);
                     bodyTable.AddCell(bodyCell);
 
@@ -176,7 +189,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellFooterLeft.Phrase = new Phrase("", normal_font);
             footerTable.AddCell(cellFooterLeft);
 
-            cellFooterLeft.Phrase = new Phrase("No LKTP : " + viewModel.LTKPNo, normal_font);
+            cellFooterLeft.Phrase = new Phrase("No LTKP : " + viewModel.LTKPNo, normal_font);
             footerTable.AddCell(cellFooterLeft);
 
             cellFooterLeft.Colspan = 3;
