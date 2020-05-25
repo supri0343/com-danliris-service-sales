@@ -16,7 +16,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public DateTimeOffset? SalesInvoiceDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         public string DeliveryOrderNo { get; set; }
-        public string DeliveryOrderType { get; set; }
         public BuyerViewModel Buyer { get; set; }
         public CurrencyViewModel Currency { get; set; }
         public string PaymentType { get; set; }
@@ -49,12 +48,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NIK))
                 yield return new ValidationResult("NIK Buyer harus diisi", new List<string> { "BuyerNIK" });
-
-            //if (string.IsNullOrWhiteSpace(DeliveryOrderNo))
-            //    yield return new ValidationResult("No. Surat Jalan harus diisi", new List<string> { "DeliveryOrderNo" });
-
-            if (string.IsNullOrWhiteSpace(DeliveryOrderType) || DeliveryOrderType == "")
-                yield return new ValidationResult("Kode Surat Jalan harus diisi", new List<string> { "DeliveryOrderType" });
 
             if (Currency == null || string.IsNullOrWhiteSpace(Currency.Code))
                 yield return new ValidationResult("Kurs harus diisi", new List<string> { "CurrencyCode" });

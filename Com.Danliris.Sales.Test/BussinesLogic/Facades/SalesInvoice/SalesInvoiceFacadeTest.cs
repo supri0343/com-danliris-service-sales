@@ -141,14 +141,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
-        public virtual async void Create_Success_DeliveryOrderType_Is_BLL()
+        public virtual async void Create_Success_SalesInvoiceType_Is_BLL()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
 
-            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BLL();
+            var data = await DataUtil(facade, dbContext).GetNewData_SalesInvoiceType_Is_BLL();
 
             var response = await facade.CreateAsync(data);
 
@@ -156,14 +156,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
-        public virtual async void Create_Success_DeliveryOrderType_Is_BON()
+        public virtual async void Create_Success_SalesInvoiceType_Is_BON()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
 
-            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BON();
+            var data = await DataUtil(facade, dbContext).GetNewData_SalesInvoiceType_Is_BON();
 
             var response = await facade.CreateAsync(data);
 
@@ -171,14 +171,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
-        public virtual async void Create_Success_DeliveryOrderType_Is_BGM()
+        public virtual async void Create_Success_SalesInvoiceType_Is_BGM()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
 
-            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BGM();
+            var data = await DataUtil(facade, dbContext).GetNewData_SalesInvoiceType_Is_BGM();
 
             var response = await facade.CreateAsync(data);
 
@@ -186,14 +186,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
-        public virtual async void Create_Success_DeliveryOrderType_Is_BPF()
+        public virtual async void Create_Success_SalesInvoiceType_Is_BPF()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
 
-            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BPF();
+            var data = await DataUtil(facade, dbContext).GetNewData_SalesInvoiceType_Is_BPF();
 
             var response = await facade.CreateAsync(data);
 
@@ -201,14 +201,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
-        public virtual async void Create_Success_DeliveryOrderType_Is_BPR()
+        public virtual async void Create_Success_SalesInvoiceType_Is_BPR()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider, dbContext) as SalesInvoiceFacade;
 
-            var data = await DataUtil(facade, dbContext).GetNewData_DeliveryOrderType_Is_BPR();
+            var data = await DataUtil(facade, dbContext).GetNewData_SalesInvoiceType_Is_BPR();
 
             var response = await facade.CreateAsync(data);
 

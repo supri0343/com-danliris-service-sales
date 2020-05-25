@@ -9,14 +9,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
     {
         [MaxLength(255)]
         public string Code { get; set; }
-        public long? AutoIncreament { get; set; }
+        public long AutoIncreament { get; set; }
         [MaxLength(255)]
         public string DOReturnNo { get; set; }
         [MaxLength(255)]
         public string DOReturnType { get; set; }
         public DateTimeOffset DOReturnDate { get; set; }
         #region ReturnFrom
-        public int? ReturnFromId { get; set; }
+        public int ReturnFromId { get; set; }
         [MaxLength(255)]
         public string ReturnFromName { get; set; }
         #endregion

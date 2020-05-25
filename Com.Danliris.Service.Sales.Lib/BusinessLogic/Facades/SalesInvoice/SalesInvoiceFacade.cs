@@ -243,7 +243,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
         private void DeliveryOrderNumberGenerator(SalesInvoiceModel model)
         {
-            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.DeliveryOrderType.Equals(model.DeliveryOrderType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             int YearNow = DateTime.Now.Year;
             int MonthNow = DateTime.Now.Month;
@@ -251,31 +251,82 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             var MonthNowString = DateTime.Now.ToString("MM");
             var formatNo = $"{ model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
 
-            if (model.DeliveryOrderType == "BAV")
+            if (model.SalesInvoiceType == "BNG")
             {
-                model.DeliveryOrderNo = $"V.{formatNo}";
+                model.DeliveryOrderNo = $"B.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BLL")
+            else if (model.SalesInvoiceType == "BAB")
+            {
+                model.DeliveryOrderNo = $"BB.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BNS")
+            {
+                model.DeliveryOrderNo = $"BS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BRG")
+            {
+                model.DeliveryOrderNo = $"G.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BAG")
+            {
+                model.DeliveryOrderNo = $"GG.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BGS")
+            {
+                model.DeliveryOrderNo = $"GS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BLL")
             {
                 model.DeliveryOrderNo = $"L.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BON")
+            else if (model.SalesInvoiceType == "BPF")
+            {
+                model.DeliveryOrderNo = $"F.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BSF")
+            {
+                model.DeliveryOrderNo = $"FS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BPR")
+            {
+                model.DeliveryOrderNo = $"P.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BSR")
+            {
+                model.DeliveryOrderNo = $"PS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BAV")
+            {
+                model.DeliveryOrderNo = $"V.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BON")
             {
                 model.DeliveryOrderNo = $"O.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BGM")
+            else if (model.SalesInvoiceType == "BGM")
             {
                 model.DeliveryOrderNo = $"M.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BPF")
+            else if (model.SalesInvoiceType == "GPF")
             {
                 model.DeliveryOrderNo = $"F.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BPR")
+            else if (model.SalesInvoiceType == "GPR")
             {
-                model.DeliveryOrderNo = $"F.{formatNo}";
+                model.DeliveryOrderNo = $"P.{formatNo}";
             }
-
+            else if (model.SalesInvoiceType == "RON")
+            {
+                model.DeliveryOrderNo = $"O.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BMK")
+            {
+                model.DeliveryOrderNo = $"BM.{formatNo}";
+            }
+            else
+            {
+                model.DeliveryOrderNo = "";
+            }
         }
 
         public async Task<int> UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)

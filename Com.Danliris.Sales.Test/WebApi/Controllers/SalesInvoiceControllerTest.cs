@@ -340,7 +340,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new SalesInvoiceViewModel{
                     SalesInvoiceType = "",
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
-                    DeliveryOrderType = "",
                     Currency = new CurrencyViewModel()
                     {
                         Id = 0,

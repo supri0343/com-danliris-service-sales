@@ -16,11 +16,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string SalesInvoiceType { get; set; }
         public DateTimeOffset SalesInvoiceDate { get; set; }
         public DateTimeOffset DueDate { get; set; }
-
         [MaxLength(255)]
         public string DeliveryOrderNo { get; set; }
-        [MaxLength(255)]
-        public string DeliveryOrderType { get; set; }
 
         #region Buyer
         public int BuyerId { get; set; }
