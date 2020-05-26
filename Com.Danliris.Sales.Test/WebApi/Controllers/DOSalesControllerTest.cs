@@ -246,13 +246,14 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Op = -1,
                     DOSalesCategory = "DYEINGPRINTING",
                     Sc = -1,
-                    Storage = new StorageViewModel()
-                    {
-                        _id = 0,
-                        name = "",
-                        code = "",
-                        unit = new UnitViewModel() {},
-                    },
+                    Storage = new StorageViewModel(){ },
+                    //Storage = new StorageViewModel()
+                    //{
+                    //    _id = 0,
+                    //    name = "",
+                    //    code = "",
+                    //    unit = new UnitViewModel() {},
+                    //},
                     Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
                     {
                         Id = 0,
