@@ -75,7 +75,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (string.IsNullOrWhiteSpace(HeadOfStorage))
                     yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
 
-                if (Storage == null || Storage._id == 0)
+                if (DOSalesCategory != "DYEINGPRINTING" && (Storage == null || Storage._id == 0))
                 {
                     yield return new ValidationResult("Nama Gudang harus diisi", new List<string> { "Storage" });
                 }

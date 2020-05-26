@@ -27,6 +27,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 DOSalesNo = "DOSalesNo",
                 Date = DateTimeOffset.Now,
                 HeadOfStorage = "HeadOfStorage",
+                DOSalesCategory = "WEAVING",
+                Storage = new StorageViewModel() 
+                { 
+                    name = "name",
+                },
                 Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
                 {
                     Name = "BuyerName",
@@ -97,6 +102,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 DoneBy = "DoneBy",
                 PackingUom = "PT",
                 WeightUom = "BALE",
+                Storage = new StorageViewModel() { },
                 SalesContract = new FinishingPrintingSalesContractViewModel()
                 {
                     SalesContractNo = "SalesContractNo",
@@ -238,6 +244,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Type = null,
                     Disp = -1,
                     Op = -1,
+                    DOSalesCategory = "DYEINGPRINTING",
                     Sc = -1,
                     Storage = new StorageViewModel()
                     {
