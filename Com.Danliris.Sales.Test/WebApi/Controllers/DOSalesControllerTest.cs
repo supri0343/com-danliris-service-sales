@@ -27,7 +27,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 DOSalesNo = "DOSalesNo",
                 Date = DateTimeOffset.Now,
                 HeadOfStorage = "HeadOfStorage",
-                DOSalesCategory = "WEAVING",
+                DOSalesCategory = "SPINNING",
                 Storage = new StorageViewModel() 
                 { 
                     name = "name",
@@ -92,7 +92,82 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_DO_Sales_Export_PDF_Dyeing_Success()
+        public void Get_DO_Sales_Local_PDF_Weaving_Success()
+        {
+
+            var vm = new DOSalesViewModel()
+            {
+                DOSalesType = "Lokal",
+                DOSalesNo = "DOSalesNo",
+                Date = DateTimeOffset.Now,
+                HeadOfStorage = "HeadOfStorage",
+                DOSalesCategory = "WEAVING",
+                Storage = new StorageViewModel()
+                {
+                    name = "name",
+                },
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                },
+                //DestinationBuyerName = "DestinationBuyerName",
+                PackingUom = "PCS",
+                LengthUom = "MTR",
+                Disp = 1,
+                Op = 1,
+                Sc = 1,
+                SalesContract = new FinishingPrintingSalesContractViewModel()
+                {
+                    SalesContractNo = "SalesContractNo",
+                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                    {
+                        Name = "BuyerName",
+                    },
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
+                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                    {
+                        Name = "MaterialConstructionName",
+                    },
+                },
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                {
+                    new DOSalesDetailViewModel()
+                    {
+                        ProductionOrder = new ProductionOrderViewModel()
+                        {
+                            OrderNo = "OrderNo",
+                            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
+                            {
+                                Name = "MaterialName",
+                            },
+                            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                            {
+                                Name = "MaterialConstructionName",
+                            },
+                        },
+                        UnitOrCode = "UnitCode",
+                        Packing = 1,
+                        Length = 1,
+                        ConvertionValue = 1,
+                    }
+                }
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            Assert.NotNull(response);
+
+        }
+
+        [Fact]
+        public void Get_DO_Sales_Local_PDF_Dyeing_Success()
         {
             var vm = new DOSalesViewModel()
             {
