@@ -73,14 +73,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.HeadOfStorage, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
-                if (viewModel.DOSalesCategory == "SPINNING" || viewModel.DOSalesCategory == "WEAVING")
+                if (viewModel.DOSalesCategory.Equals("SPINNING") || viewModel.DOSalesCategory.Equals("WEAVING"))
                 {
                     cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                     cellHeaderBody.Phrase = new Phrase("Bag. " + viewModel.Storage.name, normal_font);
                     headerTable2.AddCell(cellHeaderBody);
                 }
 
-                if(viewModel.DOSalesCategory == "DYEINGPRINTING")
+                if (viewModel.DOSalesCategory.Equals("DYEINGPRINTING"))
                 {
                     cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                     cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
@@ -593,7 +593,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.HeadOfStorage, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
-                if (viewModel.DOSalesCategory == "SPINNING" || viewModel.DOSalesCategory == "WEAVING")
+                if (viewModel.DOSalesCategory.Equals("SPINNING") || viewModel.DOSalesCategory.Equals("WEAVING"))
                 {
                     cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                     cellHeaderBody.Phrase = new Phrase("Bag. " + viewModel.Storage.name, normal_font);
@@ -604,7 +604,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                     cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
                     headerTable2.AddCell(cellHeaderBody);
-                }                
+                }
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                 cellHeaderBody.Phrase = new Phrase("D.O. PENJUALAN", bold_font);
