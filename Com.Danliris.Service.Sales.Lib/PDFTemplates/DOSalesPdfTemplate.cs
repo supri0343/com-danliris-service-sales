@@ -79,7 +79,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     cellHeaderBody.Phrase = new Phrase("Bag. " + viewModel.Storage.name, normal_font);
                     headerTable2.AddCell(cellHeaderBody);
                 }
-                else
+
+                if(viewModel.DOSalesCategory == "DYEINGPRINTING")
                 {
                     cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                     cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);

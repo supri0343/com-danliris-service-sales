@@ -92,6 +92,76 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Get_DO_Sales_Export_PDF_Dyeing_Success()
+        {
+            var vm = new DOSalesViewModel()
+            {
+                DOSalesType = "Lokal",
+                DOSalesNo = "DOSalesNo",
+                Date = DateTimeOffset.Now,
+                HeadOfStorage = "HeadOfStorage",
+                DOSalesCategory = "DYEINGPRINTING",
+                Storage = new StorageViewModel(){ },
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                },
+                //DestinationBuyerName = "DestinationBuyerName",
+                PackingUom = "PCS",
+                LengthUom = "MTR",
+                Disp = 1,
+                Op = 1,
+                Sc = 1,
+                SalesContract = new FinishingPrintingSalesContractViewModel()
+                {
+                    SalesContractNo = "SalesContractNo",
+                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                    {
+                        Name = "BuyerName",
+                    },
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
+                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                    {
+                        Name = "MaterialConstructionName",
+                    },
+                },
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                {
+                    new DOSalesDetailViewModel()
+                    {
+                        ProductionOrder = new ProductionOrderViewModel()
+                        {
+                            OrderNo = "OrderNo",
+                            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
+                            {
+                                Name = "MaterialName",
+                            },
+                            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                            {
+                                Name = "MaterialConstructionName",
+                            },
+                        },
+                        UnitOrCode = "UnitCode",
+                        Packing = 1,
+                        Length = 1,
+                        ConvertionValue = 1,
+                    }
+                }
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
         public void Get_DO_Sales_Export_PDF_Success()
         {
             var vm = new DOSalesViewModel()
@@ -246,14 +316,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Op = -1,
                     DOSalesCategory = "DYEINGPRINTING",
                     Sc = -1,
-                    Storage = new StorageViewModel(){ },
-                    //Storage = new StorageViewModel()
-                    //{
-                    //    _id = 0,
-                    //    name = "",
-                    //    code = "",
-                    //    unit = new UnitViewModel() {},
-                    //},
+                    Storage = new StorageViewModel()
+                    {
+                        _id = 0,
+                        name = "",
+                        code = "",
+                        unit = new UnitViewModel() {},
+                    },
                     Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
                     {
                         Id = 0,
