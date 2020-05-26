@@ -73,9 +73,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.HeadOfStorage, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
-                cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
-                headerTable2.AddCell(cellHeaderBody);
+                if (viewModel.DOSalesCategory == "SPINNING" || viewModel.DOSalesCategory == "WEAVING")
+                {
+                    cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cellHeaderBody.Phrase = new Phrase("Bag. " + viewModel.Storage.name, normal_font);
+                    headerTable2.AddCell(cellHeaderBody);
+                }
+                else
+                {
+                    cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
+                    headerTable2.AddCell(cellHeaderBody);
+                }
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                 cellHeaderBody.Phrase = new Phrase("D.O. PENJUALAN", bold_font);
@@ -583,9 +592,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase("Yth. Bpk./Ibu. " + viewModel.HeadOfStorage, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
-                cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
-                cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
-                headerTable2.AddCell(cellHeaderBody);
+                if (viewModel.DOSalesCategory == "SPINNING" || viewModel.DOSalesCategory == "WEAVING")
+                {
+                    cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cellHeaderBody.Phrase = new Phrase("Bag. " + viewModel.Storage.name, normal_font);
+                    headerTable2.AddCell(cellHeaderBody);
+                }
+                else
+                {
+                    cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cellHeaderBody.Phrase = new Phrase("Bag. Gudang Packing Finishing/Printing", normal_font);
+                    headerTable2.AddCell(cellHeaderBody);
+                }                
 
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                 cellHeaderBody.Phrase = new Phrase("D.O. PENJUALAN", bold_font);
