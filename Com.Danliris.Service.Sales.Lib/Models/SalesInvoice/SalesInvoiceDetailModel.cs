@@ -6,11 +6,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 {
     public class SalesInvoiceDetailModel : BaseModel
     {
-        #region Shipment Document
-        public int ShipmentDocumentId { get; set; }
+        public int ShippingOutId { get; set; }
         [MaxLength(255)]
-        public string ShipmentDocumentCode { get; set; }
-        #endregion
+        public string BonNo { get; set; }
 
         public virtual SalesInvoiceModel SalesInvoiceModel { get; set; }
         public virtual ICollection<SalesInvoiceItemModel> SalesInvoiceItems { get; set; }

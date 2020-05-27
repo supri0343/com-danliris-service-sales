@@ -181,7 +181,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell.Phrase = new Phrase("Harga", bold_font);
             bodyTable.AddCell(bodyCell);
 
-            bodyCell.Phrase = new Phrase("Total", bold_font);
+            bodyCell.Phrase = new Phrase("QuantityItem", bold_font);
             bodyTable.AddCell(bodyCell);
 
             foreach (var detail in viewModel.SalesInvoiceDetails)
@@ -197,15 +197,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Quantity + " " + item.PackingUom, normal_font);
+                    bodyCell.Phrase = new Phrase(item.QuantityPacking + " " + item.PackingUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2"), normal_font);
+                    bodyCell.Phrase = new Phrase(item.QuantityItem.GetValueOrDefault().ToString("N2"), normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Uom.Unit, normal_font);
+                    bodyCell.Phrase = new Phrase(item.ItemUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;

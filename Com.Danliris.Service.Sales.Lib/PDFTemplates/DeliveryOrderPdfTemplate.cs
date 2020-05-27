@@ -153,11 +153,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
+                    bodyCell.Phrase = new Phrase(item.QuantityItem.GetValueOrDefault().ToString("N2") + " " + item.ItemUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
+                    bodyCell.Phrase = new Phrase(item.QuantityPacking.GetValueOrDefault().ToString("N2"), normal_font);
                     bodyTable.AddCell(bodyCell);
                 }
             }

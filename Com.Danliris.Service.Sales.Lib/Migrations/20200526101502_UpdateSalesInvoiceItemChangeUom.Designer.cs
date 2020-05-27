@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200526101502_UpdateSalesInvoiceItemChangeUom")]
+    partial class UpdateSalesInvoiceItemChangeUom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3498,9 +3500,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("BonNo")
-                        .HasMaxLength(255);
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -3535,7 +3534,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long?>("SalesInvoiceModelId");
 
-                    b.Property<int>("ShippingOutId");
+                    b.Property<string>("ShipmentDocumentCode")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("ShipmentDocumentId");
 
                     b.Property<string>("UId")
                         .HasMaxLength(255);
@@ -3583,9 +3585,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<string>("ItemUom")
-                        .HasMaxLength(255);
-
                     b.Property<string>("LastModifiedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -3604,19 +3603,20 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("ProductCode")
                         .HasMaxLength(255);
 
-                    b.Property<int>("ProductId");
-
                     b.Property<string>("ProductName")
                         .HasMaxLength(255);
 
-                    b.Property<double>("QuantityItem");
-
-                    b.Property<double>("QuantityPacking")
+                    b.Property<double>("Quantity")
                         .HasMaxLength(255);
 
                     b.Property<long?>("SalesInvoiceDetailModelId");
 
+                    b.Property<double>("Total");
+
                     b.Property<string>("UId")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Uom")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");

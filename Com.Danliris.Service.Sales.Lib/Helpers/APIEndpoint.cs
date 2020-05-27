@@ -15,5 +15,6 @@ namespace Com.Danliris.Service.Sales.Lib.Helpers
         public static string ConnectionString { get; set; }
         public static string Production { get; set; }
         public static string Finance { get; set; }
+        public static string PackingInventory { get; set; }
     }
 }

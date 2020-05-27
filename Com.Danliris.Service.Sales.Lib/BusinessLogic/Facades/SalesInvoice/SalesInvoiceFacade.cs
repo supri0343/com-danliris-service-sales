@@ -52,10 +52,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
                     SalesInvoiceNumberGenerator(model, index);
                     DeliveryOrderNumberGenerator(model);
+
                     salesInvoiceLogic.Create(model);
                     index++;
 
                     result = await DbContext.SaveChangesAsync();
+
+                    foreach (var detail in model.SalesInvoiceDetails)
+                    {
+                        var ItemIds = detail.SalesInvoiceItems.Select(s => s.ProductId).ToList();
+                        UpdateToShippingOut(detail.ShippingOutId, ItemIds);
+                    }
+
                     transaction.Commit();
                 }
                 catch (Exception e)
@@ -243,38 +251,90 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
         private void DeliveryOrderNumberGenerator(SalesInvoiceModel model)
         {
-            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.DeliveryOrderType.Equals(model.DeliveryOrderType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            SalesInvoiceModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             int YearNow = DateTime.Now.Year;
             int MonthNow = DateTime.Now.Month;
             var YearNowString = DateTime.Now.ToString("yy");
             var MonthNowString = DateTime.Now.ToString("MM");
+            var formatNo = $"{ model.AutoIncreament}/4.1.0/{MonthNowString}.{YearNowString}";
 
-            if (model.DeliveryOrderType == "BAV")
+            if (model.SalesInvoiceType == "BNG")
             {
-                model.DeliveryOrderNo = $"V.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"B.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BLL")
+            else if (model.SalesInvoiceType == "BAB")
             {
-                model.DeliveryOrderNo = $"L.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"BB.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BON")
+            else if (model.SalesInvoiceType == "BNS")
             {
-                model.DeliveryOrderNo = $"O.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"BS.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BGM")
+            else if (model.SalesInvoiceType == "BRG")
             {
-                model.DeliveryOrderNo = $"M.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"G.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BPF")
+            else if (model.SalesInvoiceType == "BAG")
             {
-                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"GG.{formatNo}";
             }
-            else if (model.DeliveryOrderType == "BPR")
+            else if (model.SalesInvoiceType == "BGS")
             {
-                model.DeliveryOrderNo = $"F.{model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+                model.DeliveryOrderNo = $"GS.{formatNo}";
             }
-
+            else if (model.SalesInvoiceType == "BLL")
+            {
+                model.DeliveryOrderNo = $"L.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BPF")
+            {
+                model.DeliveryOrderNo = $"F.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BSF")
+            {
+                model.DeliveryOrderNo = $"FS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BPR")
+            {
+                model.DeliveryOrderNo = $"P.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BSR")
+            {
+                model.DeliveryOrderNo = $"PS.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BAV")
+            {
+                model.DeliveryOrderNo = $"V.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BON")
+            {
+                model.DeliveryOrderNo = $"O.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BGM")
+            {
+                model.DeliveryOrderNo = $"M.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "GPF")
+            {
+                model.DeliveryOrderNo = $"F.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "GPR")
+            {
+                model.DeliveryOrderNo = $"P.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "RON")
+            {
+                model.DeliveryOrderNo = $"O.{formatNo}";
+            }
+            else if (model.SalesInvoiceType == "BMK")
+            {
+                model.DeliveryOrderNo = $"BM.{formatNo}";
+            }
+            else
+            {
+                model.DeliveryOrderNo = "";
+            }
         }
 
         public async Task<int> UpdateFromSalesReceiptAsync(int id, SalesInvoiceUpdateModel model)
@@ -413,6 +473,27 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             }
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
+        }
+
+        private void UpdateToShippingOut(long id, List<int> ItemIds)
+        {
+            //var httpClientService = (IHttpClientService)_serviceProvider.GetService(typeof(IHttpClientService));
+            string salesInvoiceUri = APIEndpoint.PackingInventory + "output-shipping/sales-invoice/";
+
+            string Uri = $"{salesInvoiceUri}{id}";
+
+            var data = new 
+            { 
+                HasSalesInvoice = true,
+                ItemIds = ItemIds,
+            };
+
+            IHttpClientService httpClient = (IHttpClientService)this._serviceProvider.GetService(typeof(IHttpClientService));
+            var response = httpClient.PutAsync(Uri, new StringContent(JsonConvert.SerializeObject(data).ToString(), Encoding.UTF8, General.JsonMediaType)).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(string.Format("{0}, {1}", response.StatusCode, response.Content));
+            }
         }
     }
 }
