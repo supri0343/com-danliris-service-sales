@@ -6,6 +6,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 {
     public class SalesInvoiceItemViewModel : BaseViewModel
     {
+        public int? ProductId { get; set; }
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public double? QuantityPacking { get; set; }

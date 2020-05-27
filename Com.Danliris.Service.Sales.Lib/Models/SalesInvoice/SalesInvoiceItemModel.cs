@@ -5,6 +5,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 {
     public class SalesInvoiceItemModel : BaseModel
     {
+        public int ProductId { get; set; }
         [MaxLength(255)]
         public string ProductCode { get; set; }
         [MaxLength(255)]

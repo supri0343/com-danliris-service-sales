@@ -60,8 +60,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
                     foreach (var detail in model.SalesInvoiceDetails)
                     {
-
-                        UpdateToShippingOut(detail.ShippingOutId);
+                        var ItemIds = detail.SalesInvoiceItems.Select(s => s.ProductId).ToList();
+                        UpdateToShippingOut(detail.ShippingOutId, ItemIds);
                     }
 
                     transaction.Commit();
@@ -475,14 +475,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
         }
 
-        private void UpdateToShippingOut(long id)
+        private void UpdateToShippingOut(long id, List<int> ItemIds)
         {
+            //var httpClientService = (IHttpClientService)_serviceProvider.GetService(typeof(IHttpClientService));
             string salesInvoiceUri = APIEndpoint.PackingInventory + "output-shipping/sales-invoice/";
 
             string Uri = $"{salesInvoiceUri}{id}";
 
+            var data = new 
+            { 
+                HasSalesInvoice = true,
+                ItemIds = ItemIds,
+            };
+
             IHttpClientService httpClient = (IHttpClientService)this._serviceProvider.GetService(typeof(IHttpClientService));
-            var response = httpClient.PutAsync(Uri, new StringContent(JsonConvert.SerializeObject(true).ToString(), Encoding.UTF8, General.JsonMediaType)).Result; if (!response.IsSuccessStatusCode)
+            var response = httpClient.PutAsync(Uri, new StringContent(JsonConvert.SerializeObject(data).ToString(), Encoding.UTF8, General.JsonMediaType)).Result;
+            if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(string.Format("{0}, {1}", response.StatusCode, response.Content));
             }
