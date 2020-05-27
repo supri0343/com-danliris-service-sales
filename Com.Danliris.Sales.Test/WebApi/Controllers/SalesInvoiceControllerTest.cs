@@ -33,6 +33,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Address = "BuyerAddress",
                 },
                 Remark = "Remark",
+
                 SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                 {
                     new SalesInvoiceDetailViewModel()
@@ -42,13 +43,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             new SalesInvoiceItemViewModel()
                             {
                                 ProductName = "ProductName",
-                                Uom = new UomViewModel()
-                                {
-                                    Unit = "PACKS",
-                                },
-                                Quantity = "Quantity",
+                                ItemUom = "MTR",
+                                QuantityPacking = 1,
                                 PackingUom = "PackingUom",
-                                Total = 1,
+                                QuantityItem = 1,
                             }
                         }
                     }
@@ -124,14 +122,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             new SalesInvoiceItemViewModel()
                             {
                                 ProductCode = "ProductCode",
-                                Quantity = "Quantity",
+                                QuantityPacking = 1,
                                 PackingUom = "PackingUom",
-                                Uom = new UomViewModel()
-                                {
-                                    Unit = "PACKS",
-                                },
+                                ItemUom = "ItemUom",
                                 ProductName = "ProductName",
-                                Total = 1,
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             }
@@ -182,14 +177,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             new SalesInvoiceItemViewModel()
                             {
                                 ProductCode = "ProductCode",
-                                Quantity = "Quantity",
+                                QuantityPacking = 1,
                                 PackingUom = "PackingUom",
-                                Uom = new UomViewModel()
-                                {
-                                    Unit = "PACKS",
-                                },
+                                ItemUom = "ItemUom",
                                 ProductName = "ProductName",
-                                Total = 1,
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             }
@@ -239,14 +231,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             new SalesInvoiceItemViewModel()
                             {
                                 ProductCode = "ProductCode",
-                                Quantity = "Quantity",
+                                QuantityPacking = 1,
                                 PackingUom = "PackingUom",
-                                Uom = new UomViewModel()
-                                {
-                                    Unit = "PACKS",
-                                },
+                                ItemUom = "ItemUom",
                                 ProductName = "ProductName",
-                                Total = 1,
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             }
@@ -359,19 +348,14 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         new SalesInvoiceDetailViewModel()
                         {
-                        ShipmentDocumentId = 0,
-                        ShipmentDocumentCode = "",
+                        ShippingOutId = 0,
+                        BonNo = "",
                             SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
                                 new SalesInvoiceItemViewModel()
                                 {
                                     ProductCode = "",
-                                    Quantity = "",
-                                    Uom = new UomViewModel()
-                                    {
-                                        Id = 0,
-                                        Unit = "",
-                                    },
+                                    ItemUom = "",
                                     ProductName = "",
                                     Amount = 0,
                                 }
@@ -399,22 +383,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         new SalesInvoiceDetailViewModel()
                         {
-                            ShipmentDocumentId = 1,
-                            ShipmentDocumentCode ="ShipmentDocumentCode",
+                            ShippingOutId = 1,
+                            BonNo ="BonNo",
                             SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
                                 new SalesInvoiceItemViewModel()
                                 {
                                     Id = 2,
                                     ProductCode = "ProductCode",
-                                    Quantity = "Quantity",
+                                    QuantityPacking = 100,
                                     PackingUom = "PackingUom",
-                                    Total = 10,
-                                    Uom = new UomViewModel()
-                                    {
-                                        Id = 10,
-                                        Unit = "PCS",
-                                    },
+                                    QuantityItem = 10,
+                                    ItemUom = "MTR",
                                     ProductName = "ProductName",
                                     Price = 100,
                                     Amount = 100,
@@ -423,14 +403,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 {
                                     Id = 2,
                                     ProductCode = "ProductCode",
-                                    Quantity = "Quantity",
+                                    QuantityPacking = 100,
                                     PackingUom = "PackingUom",
-                                    Total = 10,
-                                    Uom = new UomViewModel()
-                                    {
-                                        Id = 10,
-                                        Unit = "PCS",
-                                    },
+                                    QuantityItem = 10,
+                                    ItemUom = "MTR",
                                     ProductName = "ProductName",
                                     Price = 100,
                                     Amount = 100,
@@ -439,8 +415,8 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                         new SalesInvoiceDetailViewModel()
                         {
-                            ShipmentDocumentId = 1,
-                            ShipmentDocumentCode ="ShipmentDocumentCode",
+                            ShippingOutId = 1,
+                            BonNo ="BonNo",
                         }
                     }
                 }

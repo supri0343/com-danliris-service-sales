@@ -8,13 +8,15 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
     {
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
-        public string Quantity { get; set; }
+        public double? QuantityPacking { get; set; }
         public string PackingUom { get; set; }
-        public UomViewModel Uom { get; set; }
-        public double? Total { get; set; }
+        public string ItemUom { get; set; }
+        public double? QuantityItem { get; set; }
+        //Price => harga satuan item
         public double? Price { get; set; }
+        //Amount => total yang harus dibayarkan
         public double? Amount { get; set; }
-        public double? ConvertValue { get; set; }
         public string ConvertUnit { get; set; }
+        public double? ConvertValue { get; set; }
     }
 }

@@ -44,19 +44,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
+                                QuantityPacking = 100,
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "MTR",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },
@@ -97,19 +96,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "YARD",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },
@@ -150,19 +147,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
+                                QuantityPacking = 100,
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "YRD",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },
@@ -203,19 +199,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "ItemUom",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },
@@ -256,19 +250,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
+                                QuantityPacking = 100,
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "ItemUom",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },
@@ -309,19 +302,17 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 {
                     new SalesInvoiceDetailModel()
                     {
-                        ShipmentDocumentId = 1,
-                        ShipmentDocumentCode = "ShipmentDocumentCode",
+                        ShippingOutId = 1,
+                        BonNo = "BonNo",
                         SalesInvoiceItems = new List<SalesInvoiceItemModel>()
                         {
                             new SalesInvoiceItemModel()
                             {
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "PCS",
-                                Total = 1,
+                                ItemUom = "ItemUom",
+                                QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
                             },

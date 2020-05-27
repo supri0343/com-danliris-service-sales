@@ -52,10 +52,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
                     SalesInvoiceNumberGenerator(model, index);
                     DeliveryOrderNumberGenerator(model);
+
                     salesInvoiceLogic.Create(model);
                     index++;
 
                     result = await DbContext.SaveChangesAsync();
+
+                    foreach (var detail in model.SalesInvoiceDetails)
+                    {
+
+                        UpdateToShippingOut(detail.ShippingOutId);
+                    }
+
                     transaction.Commit();
                 }
                 catch (Exception e)
@@ -249,7 +257,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             int MonthNow = DateTime.Now.Month;
             var YearNowString = DateTime.Now.ToString("yy");
             var MonthNowString = DateTime.Now.ToString("MM");
-            var formatNo = $"{ model.SalesInvoiceNo}/4.1.0/{MonthNowString}.{YearNowString}";
+            var formatNo = $"{ model.AutoIncreament}/4.1.0/{MonthNowString}.{YearNowString}";
 
             if (model.SalesInvoiceType == "BNG")
             {
@@ -465,6 +473,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             }
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
+        }
+
+        private void UpdateToShippingOut(long id)
+        {
+            string salesInvoiceUri = APIEndpoint.PackingInventory + "output-shipping/sales-invoice/";
+
+            string Uri = $"{salesInvoiceUri}{id}";
+
+            IHttpClientService httpClient = (IHttpClientService)this._serviceProvider.GetService(typeof(IHttpClientService));
+            var response = httpClient.PutAsync(Uri, new StringContent(JsonConvert.SerializeObject(true).ToString(), Encoding.UTF8, General.JsonMediaType)).Result; if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(string.Format("{0}, {1}", response.StatusCode, response.Content));
+            }
         }
     }
 }

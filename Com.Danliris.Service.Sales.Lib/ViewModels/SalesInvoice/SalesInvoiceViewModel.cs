@@ -77,19 +77,19 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                     int ErrorCount = 0;
                     DetailErrors += "{";
 
-                    if (!detail.ShipmentDocumentId.HasValue || string.IsNullOrWhiteSpace(detail.ShipmentDocumentCode))
+                    if (!detail.ShippingOutId.HasValue || string.IsNullOrWhiteSpace(detail.BonNo))
                     {
                         Count++;
                         ErrorCount++;
-                        DetailErrors += "ShipmentDocumentCode : 'No. Bon Pengiriman kosong / tidak ditemukan',";
+                        DetailErrors += "BonNo : 'No. Bon Pengiriman kosong / tidak ditemukan',";
                     }
 
-                    var duplicate = SalesInvoiceDetails.Where(w => w.ShipmentDocumentId.Equals(detail.ShipmentDocumentId.GetValueOrDefault()) && w.ShipmentDocumentCode.Equals(detail.ShipmentDocumentCode)).ToList();
+                    var duplicate = SalesInvoiceDetails.Where(w => w.ShippingOutId.Equals(detail.ShippingOutId.GetValueOrDefault()) && w.BonNo.Equals(detail.BonNo)).ToList();
 
                     if (duplicate.Count > 1)
                     {
                         Count++;
-                        DetailErrors += "ShipmentDocumentCode : 'No. Bon Pengiriman duplikat',";
+                        DetailErrors += "BonNo : 'No. Bon Pengiriman duplikat',";
                     }
 
                     if (ErrorCount == 0)
@@ -117,12 +117,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                                 {
                                     Count++;
                                     DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
-                                }
-
-                                if (item.Uom == null || string.IsNullOrWhiteSpace(item.Uom.Unit))
-                                {
-                                    Count++;
-                                    DetailErrors += "UomUnit : 'Satuan harus diisi',";
                                 }
 
                                 DetailErrors += "}, ";

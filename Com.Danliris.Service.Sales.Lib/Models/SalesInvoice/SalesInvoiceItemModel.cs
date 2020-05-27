@@ -5,25 +5,17 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 {
     public class SalesInvoiceItemModel : BaseModel
     {
-        #region Product
         [MaxLength(255)]
         public string ProductCode { get; set; }
         [MaxLength(255)]
         public string ProductName { get; set; }
         [MaxLength(255)]
-        public string Quantity { get; set; }
+        public double QuantityPacking { get; set; }
         [MaxLength(255)]
         public string PackingUom { get; set; }
-
-        #region Uom
-        public int UomId { get; set; }
         [MaxLength(255)]
-        public string UomUnit { get; set; }
-        #endregion
-
-        public double Total { get; set; }
-        #endregion
-
+        public string ItemUom { get; set; }
+        public double QuantityItem { get; set; }
         //Price => harga satuan item
         public double Price { get; set; }
         //Amount => total yang harus dibayarkan

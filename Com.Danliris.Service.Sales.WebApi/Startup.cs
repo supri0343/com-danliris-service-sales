@@ -247,6 +247,7 @@ namespace Com.Danliris.Service.Sales.WebApi
             Com.Danliris.Service.Sales.Lib.Helpers.APIEndpoint.Core = Configuration.GetValue<string>("CoreEndpoint") ?? Configuration["CoreEndpoint"];
             Lib.Helpers.APIEndpoint.Production = Configuration.GetValue<string>("ProductionEndpoint") ?? Configuration["ProductionEndpoint"];
             Lib.Helpers.APIEndpoint.Finance = Configuration.GetValue<string>("FinanceEndpoint") ?? Configuration["FinanceEndpoint"];
+            Lib.Helpers.APIEndpoint.PackingInventory = Configuration.GetValue<string>("PackingInventoryEndpoint") ?? Configuration["PackingInventoryEndpoint"];
 
         }
 
