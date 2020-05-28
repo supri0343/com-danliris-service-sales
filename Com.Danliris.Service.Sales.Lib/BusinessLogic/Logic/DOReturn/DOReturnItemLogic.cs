@@ -45,5 +45,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             return new ReadResponse<DOReturnItemModel>(data, totalData, OrderDictionary, SelectedFields);
         }
+
+        public HashSet<long> GetIds(long id)
+        {
+            return new HashSet<long>(DbSet.Where(d => d.DOReturnDetailModel.Id == id).Select(d => d.Id));
+        }
     }
 }
