@@ -140,7 +140,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Faktur_Penjualan - " + viewModel.SalesInvoiceNo + ".pdf"
+                        FileDownloadName = "Faktur_Penjualan/" + viewModel.SalesInvoiceNo + ".pdf"
                     };
                 }
             }

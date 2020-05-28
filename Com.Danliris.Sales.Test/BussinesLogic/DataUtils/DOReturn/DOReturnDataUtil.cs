@@ -45,15 +45,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOReturn
                         {
                             new DOReturnItemModel()
                             {
-                                ShipmentDocumentId = 1,
-                                ShipmentDocumentCode = "ShipmentDocumentCode",
+                                ShippingOutId = 1,
+                                BonNo = "BonNo",
+                                ProductId = 1,
                                 ProductCode = "ProductCode",
                                 ProductName = "ProductName",
-                                Quantity = "Quantity",
+                                QuantityPacking = 1,
                                 PackingUom = "PackingUom",
-                                UomId = 1,
-                                UomUnit = "UomUnit",
-                                Total = 100,
+                                ItemUom = "ItemUom",
+                                QuantityItem = 1,
                             },
                         },
                     },
