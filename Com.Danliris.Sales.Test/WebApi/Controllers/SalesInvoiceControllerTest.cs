@@ -326,8 +326,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                     }
                 },
-                new SalesInvoiceViewModel{
+                new SalesInvoiceViewModel
+                { 
+                    SalesInvoiceType = null,
+                    PaymentType = null,
+                    VatType = null,
+                    DueDate = null,
+                },
+                new SalesInvoiceViewModel
+                {
                     SalesInvoiceType = "",
+                    PaymentType = "",
+                    VatType = "",
+                    DueDate = DateTimeOffset.Now.AddDays(-1),
                     SalesInvoiceDate = DateTimeOffset.UtcNow.AddDays(1),
                     Currency = new CurrencyViewModel()
                     {
@@ -341,7 +352,6 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Name = "",
                         Code = "",
                     },
-                    DueDate = DateTimeOffset.UtcNow.AddDays(-1),
                     TotalPayment = 0,
                     TotalPaid = -1,
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
@@ -354,10 +364,23 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             {
                                 new SalesInvoiceItemViewModel()
                                 {
-                                    ProductCode = "",
-                                    ItemUom = "",
-                                    ProductName = "",
-                                    Amount = 0,
+                                }
+                            }
+                        },
+                        new SalesInvoiceDetailViewModel()
+                        {
+                        ShippingOutId = 10,
+                        BonNo = "NewBonNo",
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                            {
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    ProductCode = null,
+                                    Price = -1,
+                                },
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    Price = null,
                                 }
                             }
                         }

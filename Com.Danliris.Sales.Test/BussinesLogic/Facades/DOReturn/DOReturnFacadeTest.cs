@@ -71,7 +71,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
         }
 
         [Fact]
-        public async void Add_New_And_Delete_DoReturn_Detail()
+        public async void Update_DoReturn_Detail()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
@@ -84,31 +84,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
             {
                 new DOReturnDetailModel()
                 {
-                        SalesInvoiceId = 1,
-                        SalesInvoiceNo = "SalesInvoiceNo",
-                        DOReturnDetailItems = new List<DOReturnDetailItemModel>()
-                        {
-                            new DOReturnDetailItemModel()
-                            {
-                                DOSalesId = 1,
-                                DOSalesNo = "DOSalesNo",
-                            },
-                        },
-                        DOReturnItems = new List<DOReturnItemModel>()
-                        {
-                            new DOReturnItemModel()
-                            {
-                                ShippingOutId = 1,
-                                BonNo = "BonNo",
-                                ProductId = 1,
-                                ProductCode = "ProductCode",
-                                ProductName = "ProductName",
-                                QuantityPacking = 1,
-                                PackingUom = "PackingUom",
-                                ItemUom = "ItemUom",
-                                QuantityItem = 1,
-                            },
-                        },
+                    DOReturnDetailItems = new List<DOReturnDetailItemModel>()
+                    {
+                        new DOReturnDetailItemModel(){ },
+                    },
+                    DOReturnItems = new List<DOReturnItemModel>()
+                    {
+                        new DOReturnItemModel(){ },
+                    },
                 }
             };
 
@@ -116,7 +99,5 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
 
             Assert.NotEqual(response, 0);
         }
-
-
     }
 }
