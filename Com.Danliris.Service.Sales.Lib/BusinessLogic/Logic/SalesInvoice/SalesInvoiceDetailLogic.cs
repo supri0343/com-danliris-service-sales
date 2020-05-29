@@ -8,6 +8,7 @@ using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
 using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
@@ -17,13 +18,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
         public SalesInvoiceDetailLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
         }
+
         public override void Create(SalesInvoiceDetailModel model)
         {
             EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
-            foreach(var item in model.SalesInvoiceItems)
+            foreach (var item in model.SalesInvoiceItems)
             {
                 EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
-                
+
             }
             base.Create(model);
         }
@@ -82,6 +84,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
         public HashSet<long> GetIds(long id)
         {
             return new HashSet<long>(DbSet.Where(d => d.SalesInvoiceModel.Id == id).Select(d => d.Id));
+        }
+
+        public  Task<SalesInvoiceDetailModel> ReadByIdAsync(long id)
+        {
+            var result = DbSet.Include(x => x.SalesInvoiceItems).FirstOrDefaultAsync(s => s.Id == id);
+            return result;
         }
     }
 }

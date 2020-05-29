@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200519123808_EnhanceDO.cs" />
+    <Compile Remove="Migrations\20200519123808_EnhanceDO.Designer.cs" />
+    <Compile Remove="Migrations\20200519124945_TestDOReturn.cs" />
+    <Compile Remove="Migrations\20200519124945_TestDOReturn.Designer.cs" />
+    <Compile Remove="Migrations\20200519125227_AddDOReturn.cs" />
+    <Compile Remove="Migrations\20200519125227_AddDOReturn.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.0-alpha-0001" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Com.Moonlay.Data.EntityFrameworkCore" Version="1.0.2" />

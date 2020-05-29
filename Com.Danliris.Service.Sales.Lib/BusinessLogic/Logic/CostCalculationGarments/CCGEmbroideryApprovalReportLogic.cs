@@ -35,8 +35,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 var dateFrom = (DateTime)(FilterDictionary["dateFrom"]);
                 var dateTo = (DateTime)(FilterDictionary["dateTo"]);
 
-                Query = dbSet.Where(d => d.ApprovedKadivMDDate >= dateFrom &&
-                                         d.ApprovedKadivMDDate <= dateTo
+                Query = dbSet.Where(d => d.DeliveryDate >= dateFrom &&
+                                         d.DeliveryDate <= dateTo
                 );
             }
             catch (KeyNotFoundException e)
@@ -48,7 +48,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
 
             var newQ = (from a in Query
                         join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId 
-                        where b.CategoryCode == "EMB" && a.IsApprovedKadivMD == true
+                        where (b.CategoryCode == "EMB" || b.CategoryCode == "WSH") && a.IsApprovedKadivMD == true
 
                         select new CCGEmbroideryApprovalReportViewModel
                         {
