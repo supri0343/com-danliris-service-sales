@@ -116,8 +116,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {      
-              dateFrom = data.DeliveryDate,
-              dateTo = data.DeliveryDate,
+              dateFrom = data.ApprovedKadivMDDate,
+              dateTo = data.ApprovedKadivMDDate,
             };
 
             var Response = ccgEmbroideryApprovalReportLogic.Read(filter: JsonConvert.SerializeObject(filter));
@@ -139,8 +139,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
-                dateFrom = data.DeliveryDate.AddDays(30),
-                dateTo = data.DeliveryDate.AddDays(30),
+                dateFrom = data.ApprovedKadivMDDate.AddDays(30),
+                dateTo = data.ApprovedKadivMDDate.AddDays(30),
             };
 
             var Response = ccgEmbroideryApprovalReportLogic.Read(filter: JsonConvert.SerializeObject(filter));
@@ -162,8 +162,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {
-                dateFrom = data.DeliveryDate.AddDays(-30),
-                dateTo = data.DeliveryDate.AddDays(30)
+                dateFrom = data.ApprovedKadivMDDate.AddDays(-30),
+                dateTo = data.ApprovedKadivMDDate.AddDays(30)
             };
 
             var Response = ccgEmbroideryApprovalReportLogic.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
@@ -184,8 +184,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
 
             var filter = new
             {  
-                dateFrom = data.DeliveryDate.AddDays(30),
-                dateTo = data.DeliveryDate.AddDays(30)
+                dateFrom = data.ApprovedKadivMDDate.AddDays(30),
+                dateTo = data.ApprovedKadivMDDate.AddDays(30)
             };
 
             var Response = ccgEmbroideryApprovalReportLogic.GenerateExcel(filter: JsonConvert.SerializeObject(filter));

@@ -68,14 +68,14 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrintingCostCalculation;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesReceipt;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesReceipt;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.LocalMerchandiserInterfaces;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.LocalMerchandiserFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOReturn;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -148,8 +148,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IGarmentPurchasingQualityObjectiveReportFacade, GarmentPurchasingQualityObjectiveReportFacade>()
                 .AddTransient<IGarmentOmzetTarget, GarmentOmzetTargetFacade>()
                 .AddTransient<IDOSalesContract, DOSalesFacade>()
-                .AddTransient<IDOReturnContract, DOReturnFacade>()
                 .AddTransient<ISalesInvoiceContract, SalesInvoiceFacade>()
+                .AddTransient<ISalesReceiptContract, SalesReceiptFacade>()
                 .AddTransient<IFinishingPrintingPreSalesContractFacade, FinishingPrintingPreSalesContractFacade>()
                 .AddTransient<IFinishingPrintingCostCalculationService, FinishingPrintingCostCalculationFacade>()
                 .AddTransient<IShinFinishingPrintingSalesContractFacade, ShinFinishingPrintingSalesContractFacade>()
@@ -216,13 +216,11 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<GarmentPurchasingQualityObjectiveReportLogic>()
                 .AddTransient<GarmentOmzetTargetLogic>()
                 .AddTransient<DOSalesLogic>()
-                .AddTransient<DOReturnLogic>()
-                .AddTransient<DOReturnDetailLogic>()
-                .AddTransient<DOReturnDetailItemLogic>()
-                .AddTransient<DOReturnItemLogic>()
                 .AddTransient<DOSalesDetailLogic>()
                 .AddTransient<SalesInvoiceLogic>()
                 .AddTransient<SalesInvoiceDetailLogic>()
+                .AddTransient<SalesReceiptLogic>()
+                .AddTransient<SalesReceiptDetailLogic>()
                 .AddTransient<FinishingPrintingPreSalesContractLogic>()
                 .AddTransient<FinishingPrintingCostCalculationLogic>()
                 .AddTransient<ShinFinishingPrintingSalesContractLogic>()
@@ -246,8 +244,6 @@ namespace Com.Danliris.Service.Sales.WebApi
             Com.Danliris.Service.Sales.Lib.Helpers.APIEndpoint.AzurePurchasing = Configuration.GetValue<string>("AzurePurchasingEndpoint") ?? Configuration["PurchasingEndpoint"];
             Com.Danliris.Service.Sales.Lib.Helpers.APIEndpoint.Core = Configuration.GetValue<string>("CoreEndpoint") ?? Configuration["CoreEndpoint"];
             Lib.Helpers.APIEndpoint.Production = Configuration.GetValue<string>("ProductionEndpoint") ?? Configuration["ProductionEndpoint"];
-            Lib.Helpers.APIEndpoint.Finance = Configuration.GetValue<string>("FinanceEndpoint") ?? Configuration["FinanceEndpoint"];
-            Lib.Helpers.APIEndpoint.PackingInventory = Configuration.GetValue<string>("PackingInventoryEndpoint") ?? Configuration["PackingInventoryEndpoint"];
 
         }
 

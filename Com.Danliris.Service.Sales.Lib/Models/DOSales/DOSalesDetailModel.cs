@@ -36,6 +36,13 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string MaterialWidth { get; set; }
         [MaxLength(1000)]
         public string ConstructionName { get; set; }
+        //#region Unit
+        //public int UnitId { get; set; }
+        //[MaxLength(128)]
+        //public string UnitCode { get; set; }
+        //[MaxLength(512)]
+        //public string UnitName { get; set; }
+        //#endregion
         [MaxLength(255)]
         public string ColorRequest { get; set; }
         [MaxLength(255)]
@@ -47,6 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double Weight { get; set; }
         public double ConvertionValue { get; set; }
 
+        public int DOSalesId { get; set; }
         public virtual DOSalesModel DOSalesModel { get; set; }
     }
 }

@@ -32,6 +32,11 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         [HttpGet("filter-by-buyer/{buyerId}")]
         public virtual IActionResult ReadByBuyerId([FromRoute] int buyerId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 List<SalesInvoiceModel> model = Facade.ReadByBuyerId(buyerId);
@@ -40,25 +45,6 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
                     .Ok(Mapper, viewModel, 100, viewModel.Count, viewModel.Count, viewModel.Count, new Dictionary<string, string>(), new List<string>());
                 return Ok(Result);
-            }
-            catch (Exception e)
-            {
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
-                    .Fail();
-                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
-            }
-        }
-
-        [HttpPut("update-from-sales-receipt/{id}")]
-        public async Task<IActionResult> UpdateFromSalesReceiptAsync([FromRoute] int id, [FromBody] SalesInvoiceUpdateModel model)
-        {
-            try
-            {
-                ValidateUser();
-
-                await Facade.UpdateFromSalesReceiptAsync(id, model);
-                return NoContent();
             }
             catch (Exception e)
             {
@@ -143,61 +129,6 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                         FileDownloadName = "Faktur_Penjualan - " + viewModel.SalesInvoiceNo + ".pdf"
                     };
                 }
-            }
-            catch (Exception e)
-            {
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
-                    .Fail();
-                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
-            }
-        }
-
-        [HttpGet("reports")]
-        public async Task<IActionResult> GetReportAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, [FromHeader(Name = "x-timezone-offset")] string timezone)
-        {
-            int offset = Convert.ToInt32(timezone);
-
-            try
-            {
-                ValidateUser();
-                var data = await _facade.GetReport(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offset);
-
-                return Ok(new
-                {
-                    apiVersion = ApiVersion,
-                    data,
-                    message = Common.OK_MESSAGE,
-                    statusCode = Common.OK_STATUS_CODE
-                });
-            }
-            catch (Exception e)
-            {
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
-                    .Fail();
-                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
-            }
-        }
-
-        [HttpGet("reports/xls")]
-        public async Task<IActionResult> GetXlsAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, [FromHeader(Name = "x-timezone-offset")] string timezone)
-        {
-
-            try
-            {
-                ValidateUser();
-                byte[] xlsInBytes;
-                int offset = Convert.ToInt32(timezone);
-
-                var xls = await _facade.GenerateExcel(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offset);
-
-                string filename = "Laporan Bukti Pembayaran Faktur.xlsx";
-
-                xlsInBytes = xls.ToArray();
-                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
-                return file;
-
             }
             catch (Exception e)
             {

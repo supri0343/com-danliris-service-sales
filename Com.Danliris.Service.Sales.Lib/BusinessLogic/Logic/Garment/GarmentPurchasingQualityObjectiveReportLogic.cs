@@ -32,7 +32,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
             {
                 var min = new DateTimeOffset(filter.year, filter.month, 1, 0, 0, 0, TimeSpan.FromHours(identityService.TimezoneOffset)).UtcDateTime;
                 var max = new DateTimeOffset(filter.month < 12 ? filter.year : filter.year + 1, filter.month % 12 + 1, 1, 0, 0, 0, TimeSpan.FromHours(identityService.TimezoneOffset)).UtcDateTime;
-                Query = Query.Where(w => w.DeliveryDate >= min && w.DeliveryDate < max);
+                Query = Query.Where(w => w.CreatedUtc >= min && w.CreatedUtc < max);
             }
             else
             {
