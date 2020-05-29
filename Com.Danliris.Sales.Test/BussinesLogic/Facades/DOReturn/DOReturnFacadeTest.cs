@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
@@ -56,7 +57,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
         }
 
         [Fact]
-        public virtual async void Update_Success()
+        public async void Delete_DoReturn_Detail()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
@@ -68,6 +69,54 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
 
             Assert.NotEqual(response, 0);
         }
+
+        [Fact]
+        public async void Add_New_And_Delete_DoReturn_Detail()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOReturnFacade facade = Activator.CreateInstance(typeof(DOReturnFacade), serviceProvider, dbContext) as DOReturnFacade;
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            data.DOReturnDetails = new List<DOReturnDetailModel>()
+            {
+                new DOReturnDetailModel()
+                {
+                        SalesInvoiceId = 1,
+                        SalesInvoiceNo = "SalesInvoiceNo",
+                        DOReturnDetailItems = new List<DOReturnDetailItemModel>()
+                        {
+                            new DOReturnDetailItemModel()
+                            {
+                                DOSalesId = 1,
+                                DOSalesNo = "DOSalesNo",
+                            },
+                        },
+                        DOReturnItems = new List<DOReturnItemModel>()
+                        {
+                            new DOReturnItemModel()
+                            {
+                                ShippingOutId = 1,
+                                BonNo = "BonNo",
+                                ProductId = 1,
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                QuantityPacking = 1,
+                                PackingUom = "PackingUom",
+                                ItemUom = "ItemUom",
+                                QuantityItem = 1,
+                            },
+                        },
+                }
+            };
+
+            var response = await facade.UpdateAsync((int)data.Id, data);
+
+            Assert.NotEqual(response, 0);
+        }
+
 
     }
 }
