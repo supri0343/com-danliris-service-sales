@@ -9,14 +9,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 {
     public class DOSalesViewModel : BaseViewModel, IValidatableObject
     {
+        [MaxLength(255)]
         public string Code { get; set; }
-        public long? AutoIncreament { get; set; }
+        public long AutoIncreament { get; set; }
+        [MaxLength(255)]
         public string DOSalesNo { get; set; }
+        [MaxLength(255)]
         public string DOSalesType { get; set; }
-        public string DOSalesCategory { get; set; }
+        [MaxLength(255)]
         public string Status { get; set; }
-        public bool? Accepted { get; set; }
-        public bool? Declined { get; set; }
+        public bool Accepted { get; set; }
+        public bool Declined { get; set; }
+        [MaxLength(255)]
         public string Type { get; set; }
         public DateTimeOffset? Date { get; set; }
         public FinishingPrintingSalesContractViewModel SalesContract { get; set; }
@@ -24,21 +28,26 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public MaterialConstructionViewModel MaterialConstruction { get; set; }
         public CommodityViewModel Commodity { get; set; }
         public BuyerViewModel Buyer { get; set; }
+        [MaxLength(255)]
         public string DestinationBuyerName { get; set; }
+        [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
+        //public AccountViewModel Sales { get; set; }[MaxLength(255)]
         public string SalesName { get; set; }
+        [MaxLength(255)]
         public string HeadOfStorage { get; set; }
-
-        public StorageViewModel Storage { get; set; }
-        
+        [MaxLength(255)]
         public string PackingUom { get; set; }
+        [MaxLength(255)]
         public string LengthUom { get; set; }
+        [MaxLength(255)]
         public string WeightUom { get; set; }
         public int? Disp { get; set; }
         public int? Op { get; set; }
         public int? Sc { get; set; }
         public string DoneBy { get; set; }
         public double? FillEachBale { get; set; }
+        [MaxLength(1000)]
         public string Remark { get; set; }
 
         public ICollection<DOSalesDetailViewModel> DOSalesDetailItems { get; set; }
@@ -74,11 +83,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if (string.IsNullOrWhiteSpace(HeadOfStorage))
                     yield return new ValidationResult("Nama Kepala Gudang harus diisi", new List<string> { "HeadOfStorage" });
-
-                if (DOSalesCategory != "DYEINGPRINTING" && (Storage == null || Storage._id == 0))
-                {
-                    yield return new ValidationResult("Nama Gudang harus diisi", new List<string> { "Storage" });
-                }
 
                 if (string.IsNullOrWhiteSpace(SalesName))
                     yield return new ValidationResult("Nama Sales harus diisi", new List<string> { "SalesName" });

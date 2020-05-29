@@ -92,7 +92,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellHeaderBody.Phrase = new Phrase("No. Fakt./Inv.", normal_font);
             headerTable4.AddCell(cellHeaderBody);
-            cellHeaderBody.Phrase = new Phrase($": {viewModel.SalesInvoiceType}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", normal_font);
+            cellHeaderBody.Phrase = new Phrase(": " + viewModel.SalesInvoiceNo, normal_font);
             headerTable4.AddCell(cellHeaderBody);
 
             cellHeaderBody.Phrase = new Phrase("Tgl. Fakt./Inv.", normal_font);
@@ -153,11 +153,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.QuantityItem.GetValueOrDefault().ToString("N2") + " " + item.ItemUom, normal_font);
+                    bodyCell.Phrase = new Phrase(item.Total.GetValueOrDefault().ToString("N2") + " " + item.Uom.Unit, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.Phrase = new Phrase(item.QuantityPacking.GetValueOrDefault().ToString("N2"), normal_font);
+                    bodyCell.Phrase = new Phrase(item.Quantity, normal_font);
                     bodyTable.AddCell(bodyCell);
                 }
             }

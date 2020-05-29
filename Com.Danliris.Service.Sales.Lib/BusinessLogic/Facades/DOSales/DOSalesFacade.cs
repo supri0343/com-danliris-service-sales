@@ -69,6 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales
                     if (model != null)
                     {
                         DOSalesModel doSalesModel = new DOSalesModel();
+
                         doSalesModel = model;
                         await doSalesLogic.DeleteAsync(id);
                     }

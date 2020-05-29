@@ -6,8 +6,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 {
     public class SalesInvoiceDetailViewModel : BaseViewModel
     {
-        public int? ShippingOutId { get; set; }
-        public string BonNo { get; set; }
+        /*Shipment Document*/
+        public int? ShipmentDocumentId { get; set; }
+        [MaxLength(255)]
+        public string ShipmentDocumentCode { get; set; }
+        public int? SalesInvoiceId { get; set; }
 
         public ICollection<SalesInvoiceItemViewModel> SalesInvoiceItems { get; set; }
     }

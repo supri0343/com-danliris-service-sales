@@ -37,10 +37,9 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.DOSalesProfiles
                 .ForPath(d => d.SalesContract.Buyer.Type, opt => opt.MapFrom(s => s.BuyerType))
                 .ForPath(d => d.SalesContract.Buyer.Address, opt => opt.MapFrom(s => s.BuyerAddress))
 
-                .ForPath(d => d.Storage._id, opt => opt.MapFrom(s => s.StorageId))
-                .ForPath(d => d.Storage.name, opt => opt.MapFrom(s => s.StorageName))
-                .ForPath(d => d.Storage.code, opt => opt.MapFrom(s => s.StorageCode))
-                .ForPath(d => d.Storage.unit.name, opt => opt.MapFrom(s => s.StorageUnit))
+                //.ForPath(d => d.SalesContract.Sales._id, opt => opt.MapFrom(s => s.SalesId))
+                //.ForPath(d => d.SalesContract.Sales.FirstName, opt => opt.MapFrom(s => s.SalesFirstName))
+                //.ForPath(d => d.SalesContract.Sales.LastName, opt => opt.MapFrom(s => s.SalesLastName))
 
                 .ReverseMap();
         }
