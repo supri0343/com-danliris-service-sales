@@ -54,5 +54,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
 
             return serviceProviderMock;
         }
+
+        [Fact]
+        public virtual async void Update_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOReturnFacade facade = Activator.CreateInstance(typeof(DOReturnFacade), serviceProvider, dbContext) as DOReturnFacade;
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+            var response = await facade.UpdateAsync((int)data.Id, data);
+
+            Assert.NotEqual(response, 0);
+        }
+
     }
 }
