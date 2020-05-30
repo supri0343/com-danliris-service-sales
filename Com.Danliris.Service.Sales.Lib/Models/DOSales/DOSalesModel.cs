@@ -15,6 +15,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         [MaxLength(255)]
         public string DOSalesType { get; set; }
         [MaxLength(255)]
+        public string DOSalesCategory { get; set; }
+        [MaxLength(255)]
         public string Status { get; set; }
         public bool Accepted { get; set; }
         public bool Declined { get; set; }
@@ -78,17 +80,23 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string DestinationBuyerName { get; set; }
         [MaxLength(1000)]
         public string DestinationBuyerAddress { get; set; }
-        //#region Sales
-        //public string SalesId { get; set; }
-        //[MaxLength(255)]
-        //public string SalesFirstName { get; set; }
-        //[MaxLength(255)]
-        //public string SalesLastName { get; set; }
-        //#endregion
         [MaxLength(255)]
         public string SalesName { get; set; }
         [MaxLength(255)]
         public string HeadOfStorage { get; set; }
+
+        
+        public int StorageId { get; set; }
+
+        [MaxLength(255)]
+        public string StorageName { get; set; }
+
+        [MaxLength(255)]
+        public string StorageCode { get; set; }
+
+        [MaxLength(255)]
+        public string StorageUnit { get; set; }
+
         [MaxLength(255)]
         public string PackingUom { get; set; }
         [MaxLength(255)]
@@ -103,7 +111,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double FillEachBale { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
- 
+
         public virtual ICollection<DOSalesDetailModel> DOSalesDetailItems { get; set; }
     }
 }

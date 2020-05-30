@@ -61,7 +61,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
             return await DbContext.SaveChangesAsync();
         }
 
-        public async Task<int> BOCancel(int id, GarmentBookingOrder model)
+        public async Task<int> BOCancel(int id, GarmentBookingOrder model)  
         {
             garmentBookingOrderLogic.BOCancel(id, model);
             return await DbContext.SaveChangesAsync();
