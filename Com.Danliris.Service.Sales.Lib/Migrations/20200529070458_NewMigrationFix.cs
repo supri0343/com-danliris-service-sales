@@ -32,27 +32,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 name: "Quantity",
                 table: "SalesInvoiceDetails");
 
-            migrationBuilder.DropColumn(
-                name: "SalesInvoiceId",
-                table: "SalesInvoiceDetails");
 
             migrationBuilder.DropColumn(
                 name: "Total",
                 table: "SalesInvoiceDetails");
-
-            migrationBuilder.DropColumn(
-                name: "DOSalesId",
-                table: "DOSalesLocalItems");
-
-            migrationBuilder.RenameColumn(
-                name: "ShipmentDocumentCode",
-                table: "SalesInvoices",
-                newName: "PaymentType");
-
-            migrationBuilder.RenameColumn(
-                name: "IDNo",
-                table: "SalesInvoices",
-                newName: "BuyerNIK");
 
             migrationBuilder.RenameColumn(
                 name: "UomUnit",
@@ -64,35 +47,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 table: "SalesInvoiceDetails",
                 newName: "ShippingOutId");
 
-            migrationBuilder.AddColumn<string>(
-                name: "BuyerCode",
-                table: "SalesInvoices",
-                maxLength: 255,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Sales",
-                table: "SalesInvoices",
-                maxLength: 256,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UnitCode",
-                table: "SalesInvoices",
-                maxLength: 1000,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UnitId",
-                table: "SalesInvoices",
-                maxLength: 100,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UnitName",
-                table: "SalesInvoices",
-                maxLength: 1000,
-                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "SizeBreakdownIndex",
@@ -105,36 +59,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 table: "RO_Garment_SizeBreakdown_Details",
                 nullable: false,
                 defaultValue: 0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "DOSalesCategory",
-                table: "DOSales",
-                maxLength: 255,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "StorageCode",
-                table: "DOSales",
-                maxLength: 255,
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "StorageId",
-                table: "DOSales",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "StorageName",
-                table: "DOSales",
-                maxLength: 255,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "StorageUnit",
-                table: "DOSales",
-                maxLength: 255,
-                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "MaterialIndex",
@@ -366,21 +290,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 name: "BuyerCode",
                 table: "SalesInvoices");
 
-            migrationBuilder.DropColumn(
-                name: "Sales",
-                table: "SalesInvoices");
-
-            migrationBuilder.DropColumn(
-                name: "UnitCode",
-                table: "SalesInvoices");
-
-            migrationBuilder.DropColumn(
-                name: "UnitId",
-                table: "SalesInvoices");
-
-            migrationBuilder.DropColumn(
-                name: "UnitName",
-                table: "SalesInvoices");
 
             migrationBuilder.DropColumn(
                 name: "SizeBreakdownIndex",
@@ -395,34 +304,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 table: "DOSales");
 
             migrationBuilder.DropColumn(
-                name: "StorageCode",
-                table: "DOSales");
-
-            migrationBuilder.DropColumn(
-                name: "StorageId",
-                table: "DOSales");
-
-            migrationBuilder.DropColumn(
-                name: "StorageName",
-                table: "DOSales");
-
-            migrationBuilder.DropColumn(
-                name: "StorageUnit",
-                table: "DOSales");
-
-            migrationBuilder.DropColumn(
                 name: "MaterialIndex",
                 table: "CostCalculationGarment_Materials");
-
-            migrationBuilder.RenameColumn(
-                name: "PaymentType",
-                table: "SalesInvoices",
-                newName: "ShipmentDocumentCode");
-
-            migrationBuilder.RenameColumn(
-                name: "BuyerNIK",
-                table: "SalesInvoices",
-                newName: "IDNo");
 
             migrationBuilder.RenameColumn(
                 name: "ShippingOutId",
@@ -470,23 +353,12 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "SalesInvoiceId",
-                table: "SalesInvoiceDetails",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<double>(
                 name: "Total",
                 table: "SalesInvoiceDetails",
                 nullable: false,
                 defaultValue: 0.0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "DOSalesId",
-                table: "DOSalesLocalItems",
-                nullable: false,
-                defaultValue: 0);
         }
     }
 }
