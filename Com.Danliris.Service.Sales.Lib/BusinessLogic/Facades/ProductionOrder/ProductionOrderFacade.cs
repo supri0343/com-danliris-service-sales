@@ -564,6 +564,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                              colorRequest = b.ColorRequest,
                              orderQuantity = b.Quantity,
                              NoSalesContract = a.SalesContractNo,
+                             colorType = b.ColorType,
                              Price = d.Price,
                              CurrCode = d.CurrencyCode,
                              colorTemplate = b.ColorTemplate,
@@ -645,6 +646,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Detail", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nomor SPP", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nomor Sales Kontrak", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Warna", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Harga", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Panjang SPP (M)", DataType = typeof(double) });
@@ -661,7 +663,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Permintaan Pengiriman", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", 0, "", 0, "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "","", 0, "", 0, "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -670,7 +672,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                     index++;
                     string deliverySchedule = item.deliveryDate == null ? "-" : item.deliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     string createdDate = item._createdDate == null ? "-" : item._createdDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
-                    result.Rows.Add(index, item.status, item.detail, item.orderNo, item.NoSalesContract, item.Price, item.CurrCode, item.orderQuantity, item.orderType, item.processType, item.construction,
+                    result.Rows.Add(index, item.status, item.detail, item.orderNo, item.NoSalesContract,item.colorType, item.Price, item.CurrCode, item.orderQuantity, item.orderType, item.processType, item.construction,
                         item.designCode, item.colorTemplate, item.colorRequest, item.buyer, item.buyerType, item.staffName, createdDate, deliverySchedule);
                 }
             }
