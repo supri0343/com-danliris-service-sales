@@ -95,6 +95,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var vm = new SalesInvoiceViewModel()
             {
+                AutoIncreament = 1,
                 Buyer = new BuyerViewModel()
                 {
                     Name = "BuyerName",
@@ -352,6 +353,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Name = "",
                         Code = "",
                     },
+                    Unit = new UnitViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                    },
                     TotalPayment = 0,
                     TotalPaid = -1,
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
@@ -362,6 +369,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         BonNo = "",
                             SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
+                                new SalesInvoiceItemViewModel()
+                                {
+                                    ProductId = null,
+                                    ProductCode = "",
+                                    ProductName = "",
+                                    Amount = 0,
+                                    PackingUom = "",
+                                    ItemUom = "",
+                                    QuantityPacking = -1,
+                                    QuantityItem = -1,
+                                    ConvertUnit = "",
+                                    ConvertValue = -1,
+                                },
                                 new SalesInvoiceItemViewModel()
                                 {
                                 }
