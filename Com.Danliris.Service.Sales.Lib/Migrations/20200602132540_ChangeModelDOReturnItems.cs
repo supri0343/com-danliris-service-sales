@@ -2,7 +2,7 @@
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
-    public partial class ChangeDOReturnItemModel : Migration
+    public partial class ChangeModelDOReturnItems : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
