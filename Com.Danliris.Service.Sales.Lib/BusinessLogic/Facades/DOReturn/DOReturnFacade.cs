@@ -95,19 +95,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn
 
         public async Task<int> UpdateAsync(int id, DOReturnModel model)
         {
-            using (var transaction = DbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    doReturnLogic.UpdateAsync(id, model);
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    throw new Exception(e.Message);
-                }
-            }
-
+            doReturnLogic.UpdateAsync(id, model);
             return await DbContext.SaveChangesAsync();
         }
 

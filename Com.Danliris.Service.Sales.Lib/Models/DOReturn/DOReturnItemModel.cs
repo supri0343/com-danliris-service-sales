@@ -5,21 +5,21 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOReturn
 {
     public class DOReturnItemModel : BaseModel
     {
-        public int ShipmentDocumentId { get; set; }
+        public int ShippingOutId { get; set; }
         [MaxLength(255)]
-        public string ShipmentDocumentCode { get; set; }
+        public string BonNo { get; set; }
+        public int ProductId { get; set; }
         [MaxLength(255)]
         public string ProductCode { get; set; }
         [MaxLength(255)]
         public string ProductName { get; set; }
         [MaxLength(255)]
-        public string Quantity { get; set; }
+        public double QuantityPacking { get; set; }
         [MaxLength(255)]
         public string PackingUom { get; set; }
-        public int UomId { get; set; }
         [MaxLength(255)]
-        public string UomUnit { get; set; }
-        public double? Total { get; set; }
+        public string ItemUom { get; set; }
+        public double QuantityItem { get; set; }
 
         public virtual DOReturnDetailModel DOReturnDetailModel { get; set; }
     }

@@ -126,14 +126,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             foreach (DOReturnDetailViewModel detail in viewModel.DOReturnDetails)
             {
-                var noBon = detail.DOReturnItems.FirstOrDefault().ShipmentDocumentCode;
+                var noBon = detail.DOReturnItems.FirstOrDefault().BonNo;
 
                 foreach (DOReturnDetailItemViewModel detailItem in detail.DOReturnDetailItems)
                 {
                     bodyCell.Phrase = new Phrase("", normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase("Ex. Faktur : " + detail.SalesInvoice.SalesInvoiceNo + " \nEx. DO : " + detailItem.DOSales.DOSalesNo + "\nEx. Bon : " + noBon, bold_font);
+                    bodyCell.Phrase = new Phrase("Ex. Faktur : " + detail.SalesInvoice.SalesInvoiceNo + " \nEx. DO : " + detailItem.DOSalesNo + "\nEx. Bon : " + noBon, bold_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.Phrase = new Phrase("", normal_font);
@@ -160,10 +160,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyCell.Phrase = new Phrase(item.ProductCode, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Quantity) + " " + item.PackingUom, normal_font);
+                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.QuantityPacking) + " " + item.PackingUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(item.Total + " " + item.Uom.Unit, normal_font);
+                    bodyCell.Phrase = new Phrase(item.QuantityItem + " " + item.ItemUom, normal_font);
                     bodyTable.AddCell(bodyCell);
 
                     bodyCell.Phrase = new Phrase("0", normal_font);

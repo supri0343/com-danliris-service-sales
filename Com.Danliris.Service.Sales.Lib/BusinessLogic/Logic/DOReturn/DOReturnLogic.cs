@@ -54,7 +54,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
             return new ReadResponse<DOReturnModel>(data, totalData, OrderDictionary, SelectedFields);
         }
 
-        public override async void UpdateAsync(long id, DOReturnModel model)
+        public override void UpdateAsync(long id, DOReturnModel model)
         {
             try
             {
@@ -65,7 +65,21 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
                     {
                         DOReturnDetailModel data = model.DOReturnDetails.FirstOrDefault(prop => prop.Id.Equals(itemId));
                         if (data == null)
-                            await doReturnDetailLogic.DeleteAsync(itemId);
+                        {
+                            var deletedDetail = _dbContext.DOReturnDetails.Include(s => s.DOReturnDetailItems).Include(s => s.DOReturnItems).FirstOrDefault(s => s.Id == itemId);
+                            EntityExtension.FlagForDelete(deletedDetail, IdentityService.Username, "sales-service", true);
+                            foreach (var detailItem in deletedDetail.DOReturnDetailItems)
+                            {
+                                EntityExtension.FlagForDelete(detailItem, IdentityService.Username, "sales-service", true);
+
+                            }
+                            foreach (var item in deletedDetail.DOReturnItems)
+                            {
+                                EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
+
+                            }
+                        }
+
                         else
                         {
                             doReturnDetailLogic.UpdateAsync(itemId, data);
@@ -122,7 +136,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
                                             .ThenInclude(s => s.DOReturnDetailItems)
                                      .Include(s => s.DOReturnDetails)
                                             .ThenInclude(s => s.DOReturnItems)
-                                    .FirstOrDefaultAsync(d => d.Id.Equals(id) && !d.IsDeleted);
+                                    .FirstOrDefaultAsync(s => s.Id == id);
 
             return Result;
         }
