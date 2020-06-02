@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20200528110211_ChangeDOReturnItemModel")]
-    partial class ChangeDOReturnItemModel
+    [Migration("20200602132540_ChangeModelDOReturnItems")]
+    partial class ChangeModelDOReturnItems
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
