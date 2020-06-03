@@ -56,11 +56,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                         DetailErrors += "SalesInvoiceNo : 'No. Ex. Faktur Penjualan kosong / tidak ditemukan',";
                     }
 
-                    if (detail.DOReturnItems != null && detail.DOReturnItems.Count > 0 && detail.DOReturnItems.All(s => s.Total <= 0))
+                    //if (detail.DOReturnItems != null && detail.DOReturnItems.Count > 0 && detail.DOReturnItems.All(s => s.SalesInvoiceItem != null) && detail.DOReturnItems.All(s => s.SalesInvoiceItem.QuantityItem <= 0))
+                    if (detail.DOReturnItems != null && detail.DOReturnItems.Count > 0 && detail.DOReturnItems.All(s => s.QuantityItem <= 0))
                     {
                         Count++;
                         ErrorCount++;
-                        DetailErrors += "TotalNotNull : 'Total tidak boleh kosong',";
+                        DetailErrors += "TotalNotNull : 'Quantity Item tidak boleh kosong',";
                     }
 
                     var duplicate = DOReturnDetails.Where(w => w.SalesInvoice != null && detail.SalesInvoice != null && w.SalesInvoice.Id.Equals(detail.SalesInvoice.Id) && w.SalesInvoice.SalesInvoiceNo.Equals(detail.SalesInvoice.SalesInvoiceNo)).ToList();
@@ -86,10 +87,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                if (detailItem.DOSales == null || string.IsNullOrWhiteSpace(detailItem.DOSales.DOSalesNo))
+                                //if (detailItem.DOSales == null || string.IsNullOrWhiteSpace(detailItem.DOSales.DOSalesNo))
+                                if (string.IsNullOrWhiteSpace(detailItem.DOSalesNo))
                                 {
                                     Count++;
-                                    DetailErrors += "DOReturnItem : 'Item Kosong',";
+                                    DetailErrors += "DOSales : 'DO Kosong',";
                                 }
                                 DetailErrors += "}, ";
                             }
@@ -109,17 +111,17 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
                             {
                                 DetailErrors += "{";
 
-                                //int quantity = Int32.Parse(item.Quantity);
-                                //if (quantity <= 0)
-                                //{
-                                //    Count++;
-                                //    DetailErrors += "Quantity : 'Jumlah Packing tidak boleh lebih kecil atau sama dengan 0',";
-                                //}
-
-                                if (!item.Total.HasValue || item.Total <= 0)
+                                //if (item.SalesInvoiceItem == null || item.SalesInvoiceItem.QuantityPacking <= 0)
+                                if (!item.QuantityPacking.HasValue || item.QuantityPacking <= 0)
+                                    {
+                                    Count++;
+                                    DetailErrors += "QuantityPacking : 'Quantity Packing Panjang tidak boleh lebih kecil atau sama dengan 0',";
+                                }
+                                //if (item.SalesInvoiceItem == null || item.SalesInvoiceItem.QuantityItem <= 0)
+                                if (!item.QuantityItem.HasValue || item.QuantityItem <= 0)
                                 {
                                     Count++;
-                                    DetailErrors += "Total : 'Total Panjang tidak boleh lebih kecil atau sama dengan 0',";
+                                    DetailErrors += "QuantityItem : 'Quantity Item Panjang tidak boleh lebih kecil atau sama dengan 0',";
                                 }
 
                                 DetailErrors += "}, ";

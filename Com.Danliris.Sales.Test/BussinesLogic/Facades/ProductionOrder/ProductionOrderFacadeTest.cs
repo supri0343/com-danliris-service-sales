@@ -473,6 +473,67 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
         }
 
         [Fact]
+        public async void Shoould_Success_Get_Excel_Null_Result()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProviderMock = GetServiceProviderMock(dbContext);
+            var httpClientService = new Mock<IHttpClientService>();
+            DailyAPiResult dailyAPiResult = new DailyAPiResult
+            {
+                data = new List<DailyOperationViewModel> {
+                    new DailyOperationViewModel {
+                        area = "Test",
+                        color = "Color Test",
+                        machine = "Machine Test",
+                        orderNo = "a",
+                        orderQuantity = 1,
+                        step = "Test"
+                    }
+                }
+            };
+
+            FabricAPiResult fabricAPiResult = new FabricAPiResult
+            {
+                data = new List<FabricQualityControlViewModel> {
+                    new FabricQualityControlViewModel {
+                        grade = "Test",
+                        orderNo = "a",
+                        orderQuantity = 1
+                    }
+                }
+            };
+
+            httpClientService.Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("finishing-printing/daily-operations/production-order-report"))))
+                .ReturnsAsync(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(dailyAPiResult)) });
+            httpClientService.Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("finishing-printing/quality-control/defect"))))
+                .ReturnsAsync(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(fabricAPiResult)) });
+
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IdentityService)))
+                .Returns(new IdentityService { Username = "Username", TimezoneOffset = 7 });
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IHttpClientService)))
+                .Returns(httpClientService.Object);
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProviderMock.Object, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade facadeSC = new FinishingPrintingSalesContractFacade(serviceProviderMock.Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil dataUtilSC = new FinisihingPrintingSalesContractDataUtil(facadeSC);
+            var data2 = await dataUtilSC.GetNewData();
+            data2.SalesContractNo = "a";
+            await facadeSC.CreateAsync(data2);
+
+            var data = await DataUtil(facade).GetNewData();
+            data.SalesContractId = data2.Id;
+            data.SalesContractNo = data2.SalesContractNo;
+            var model = await facade.CreateAsync(data);
+
+            var tuple = await facade.GenerateExcel("ab", null, null, null, null, null, null, null, 7);
+            Assert.IsType<System.IO.MemoryStream>(tuple);
+
+
+        }
+
+        [Fact]
         public void Mapping_With_AutoMapper_Profiles()
         {
             var configuration = new MapperConfiguration(cfg =>

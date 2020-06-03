@@ -69,7 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
 
             List<string> SelectedFields = new List<string>()
             {
-                "ShipmentDocumentId","ShipmentDocumentCode",
+                "DOSalesId","DOSalesNo",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -86,7 +86,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             return new HashSet<long>(DbSet.Where(d => d.SalesInvoiceModel.Id == id).Select(d => d.Id));
         }
 
-        public  Task<SalesInvoiceDetailModel> ReadByIdAsync(long id)
+        public Task<SalesInvoiceDetailModel> ReadByIdAsync(long id)
         {
             var result = DbSet.Include(x => x.SalesInvoiceItems).FirstOrDefaultAsync(s => s.Id == id);
             return result;

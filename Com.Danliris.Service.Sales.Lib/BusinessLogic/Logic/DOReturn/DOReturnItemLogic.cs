@@ -32,7 +32,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","ShipmentDocumentId","ShipmentDocumentCode","ProductName","ProductCode","Quantity","PackingUom","Uom","Total"
+                "ShippingOutId","BonNo",
+                "Id","ProductId","ProductCode","ProductName","QuantityPacking","PackingUom","ItemUom","QuantityItem",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -43,6 +44,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn
             int totalData = pageable.TotalCount;
 
             return new ReadResponse<DOReturnItemModel>(data, totalData, OrderDictionary, SelectedFields);
+        }
+
+        public HashSet<long> GetIds(long id)
+        {
+            return new HashSet<long>(DbSet.Where(d => d.DOReturnDetailModel.Id == id).Select(d => d.Id));
         }
     }
 }

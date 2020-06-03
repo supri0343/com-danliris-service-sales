@@ -7,6 +7,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOReturn
 {
     public class DOReturnDetailItemViewModel : BaseViewModel
     {
-        public DOSalesViewModel DOSales { get; set; }
+        //public DOSalesViewModel DOSales { get; set; }
+        public int? DOSalesId { get; set; }
+        public string DOSalesNo { get; set; }
     }
 }
