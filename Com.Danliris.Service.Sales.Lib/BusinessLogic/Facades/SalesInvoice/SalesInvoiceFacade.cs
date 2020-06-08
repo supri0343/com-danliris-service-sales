@@ -58,10 +58,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
                     result = await DbContext.SaveChangesAsync();
 
-                    foreach (var detail in model.SalesInvoiceDetails)
+                    if(model.SalesInvoiceCategory == "DYEINGPRINTING")
                     {
-                        var ItemIds = detail.SalesInvoiceItems.Select(s => s.ProductId).ToList();
-                        UpdateToShippingOut(detail.ShippingOutId, ItemIds);
+                        foreach (var detail in model.SalesInvoiceDetails)
+                        {
+                            var ItemIds = detail.SalesInvoiceItems.Select(s => s.ProductId).ToList();
+                            UpdateTrueToShippingOut(detail.ShippingOutId, ItemIds);
+                        }
                     }
 
                     transaction.Commit();
@@ -89,6 +92,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                         salesInvoiceModel = model;
                         await salesInvoiceLogic.DeleteAsync(id);
                     }
+
+                    if (model.SalesInvoiceCategory == "DYEINGPRINTING")
+                    {
+                        foreach (var detail in model.SalesInvoiceDetails)
+                        {
+                            var ItemIds = detail.SalesInvoiceItems.Select(s => s.ProductId).ToList();
+                            UpdateFalseToShippingOut(detail.ShippingOutId, ItemIds);
+                        }
+                    }
+                        
+
+                    transaction.Commit();
                 }
                 catch (Exception e)
                 {
@@ -475,15 +490,34 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
         }
 
-        private void UpdateToShippingOut(long id, List<int> ItemIds)
+        private void UpdateTrueToShippingOut(long id, List<int> ItemIds)
         {
-            //var httpClientService = (IHttpClientService)_serviceProvider.GetService(typeof(IHttpClientService));
             string salesInvoiceUri = APIEndpoint.PackingInventory + "output-shipping/sales-invoice/";
 
             string Uri = $"{salesInvoiceUri}{id}";
 
             var data = new 
             { 
+                HasSalesInvoice = true,
+                ItemIds = ItemIds,
+            };
+
+            IHttpClientService httpClient = (IHttpClientService)this._serviceProvider.GetService(typeof(IHttpClientService));
+            var response = httpClient.PutAsync(Uri, new StringContent(JsonConvert.SerializeObject(data).ToString(), Encoding.UTF8, General.JsonMediaType)).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(string.Format("{0}, {1}", response.StatusCode, response.Content));
+            }
+        }
+
+        private void UpdateFalseToShippingOut(long id, List<int> ItemIds)
+        {
+            string salesInvoiceUri = APIEndpoint.PackingInventory + "output-shipping/sales-invoice/";
+
+            string Uri = $"{salesInvoiceUri}{id}";
+
+            var data = new
+            {
                 HasSalesInvoice = true,
                 ItemIds = ItemIds,
             };

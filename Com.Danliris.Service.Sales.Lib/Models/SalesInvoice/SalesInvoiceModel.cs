@@ -14,6 +14,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string SalesInvoiceNo { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceType { get; set; }
+        [MaxLength(255)]
+        public string SalesInvoiceCategory { get; set; }
         public DateTimeOffset SalesInvoiceDate { get; set; }
         public DateTimeOffset DueDate { get; set; }
         [MaxLength(255)]

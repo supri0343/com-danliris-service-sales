@@ -21,6 +21,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 AutoIncreament = 1,
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceType = "BNG",
+                SalesInvoiceCategory = "DYEINGPRINTING",
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
