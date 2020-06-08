@@ -13,6 +13,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public long? AutoIncreament { get; set; }
         public string SalesInvoiceNo { get; set; }
         public string SalesInvoiceType { get; set; }
+        public string SalesInvoiceCategory { get; set; }
         public DateTimeOffset? SalesInvoiceDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         public string DeliveryOrderNo { get; set; }
@@ -63,9 +64,15 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (!TotalPayment.HasValue || TotalPayment <= 0)
                 yield return new ValidationResult("Total termasuk PPN kosong", new List<string> { "TotalPayment" });
-
+           
             if (TotalPaid < 0)
                 yield return new ValidationResult("Total Paid harus lebih besar atau sama dengan 0", new List<string> { "TotalPayment" });
+
+            if (string.IsNullOrEmpty(Sales))
+                yield return new ValidationResult("Sales Harus Diisi", new List<string> { "Sales" });
+
+            if (Unit == null || string.IsNullOrWhiteSpace(Unit.Name))
+                yield return new ValidationResult("Unit Harus Diisi", new List<string> { "Unit" });
 
             int Count = 0;
             string DetailErrors = "[";
@@ -77,19 +84,38 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                     int ErrorCount = 0;
                     DetailErrors += "{";
 
-                    if (!detail.ShippingOutId.HasValue || string.IsNullOrWhiteSpace(detail.BonNo))
+                    if (SalesInvoiceCategory == "DYEINGPRINTING" && (!detail.ShippingOutId.HasValue || string.IsNullOrWhiteSpace(detail.BonNo)))
                     {
                         Count++;
                         ErrorCount++;
                         DetailErrors += "BonNo : 'No. Bon Pengiriman kosong / tidak ditemukan',";
                     }
 
-                    var duplicate = SalesInvoiceDetails.Where(w => w.ShippingOutId.Equals(detail.ShippingOutId.GetValueOrDefault()) && w.BonNo.Equals(detail.BonNo)).ToList();
-
-                    if (duplicate.Count > 1)
+                    if (SalesInvoiceCategory != "DYEINGPRINTING" && string.IsNullOrWhiteSpace(detail.BonNo))
                     {
                         Count++;
-                        DetailErrors += "BonNo : 'No. Bon Pengiriman duplikat',";
+                        ErrorCount++;
+                        DetailErrors += "BonNo : 'No. Bon Pengiriman kosong',";
+                    }
+
+                    if(SalesInvoiceCategory == "DYEINGPRINTING")
+                    {
+                        var duplicate = SalesInvoiceDetails.Where(w => w.ShippingOutId.Equals(detail.ShippingOutId.GetValueOrDefault()) && w.BonNo.Equals(detail.BonNo)).ToList();
+
+                        if (duplicate.Count > 1)
+                        {
+                            Count++;
+                            DetailErrors += "BonNo : 'No. Bon Pengiriman duplikat',";
+                        }
+                    } else
+                    {
+                        var duplicate = SalesInvoiceDetails.Where(w => w.BonNo != null && detail.BonNo != null && w.BonNo.Equals(detail.BonNo)).ToList();
+
+                        if (duplicate.Count > 1)
+                        {
+                            Count++;
+                            DetailErrors += "BonNo : 'No. Bon Pengiriman duplikat',";
+                        }
                     }
 
                     if (ErrorCount == 0)
@@ -111,6 +137,36 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                                 {
                                     Count++;
                                     DetailErrors += "ProductCode : 'Kode produk harus diisi',";
+                                }
+
+                                if (string.IsNullOrWhiteSpace(item.ProductName))
+                                {
+                                    Count++;
+                                    DetailErrors += "ProductName : 'Nama produk harus diisi',";
+                                }
+
+                                if (!item.QuantityPacking.HasValue || item.QuantityPacking.Value <= 0)
+                                {
+                                    Count++;
+                                    DetailErrors += "QuantityPacking : 'Jumlah Packing harus diisi dan lebih besar dari 0',";
+                                }
+
+                                if (!item.QuantityItem.HasValue || item.QuantityItem.Value <= 0)
+                                {
+                                    Count++;
+                                    DetailErrors += "QuantityItem : 'Jumlah Item harus diisi dan lebih besar dari 0',";
+                                }
+
+                                if (string.IsNullOrWhiteSpace(item.PackingUom))
+                                {
+                                    Count++;
+                                    DetailErrors += "PackingUom : 'Satuan Packing harus diisi',";
+                                }
+
+                                if (string.IsNullOrWhiteSpace(item.ItemUom))
+                                {
+                                    Count++;
+                                    DetailErrors += "ItemUom : 'Satuan Item harus diisi',";
                                 }
 
                                 if (!item.Price.HasValue || item.Price.Value <= 0)
@@ -138,13 +194,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (Count > 0)
                 yield return new ValidationResult(DetailErrors, new List<string> { "SalesInvoiceDetails" });
-
-            if (string.IsNullOrEmpty(Sales))
-                yield return new ValidationResult("Sales Harus Diisi", new List<string> { "Sales" });
-
-            if (Unit == null)
-                yield return new ValidationResult("Unit Harus Diisi", new List<string> { "Unit" });
-
         }
     }
 }
