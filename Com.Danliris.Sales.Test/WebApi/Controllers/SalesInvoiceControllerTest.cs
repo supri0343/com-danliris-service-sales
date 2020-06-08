@@ -374,6 +374,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     TotalPayment = 0,
                     TotalPaid = -1,
+                    SalesType = "",
+                    SailingDate = null,
+                    ShippedPer = "",
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                     {
                         new SalesInvoiceDetailViewModel()
