@@ -89,7 +89,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
             int Count = 0;
             string DetailErrors = "[";
 
-            if (SalesType != "" && SalesInvoiceDetails != null && SalesInvoiceDetails.Count > 0)
+            if (SalesInvoiceDetails != null && SalesInvoiceDetails.Count > 0)
             {
                 foreach (var detail in SalesInvoiceDetails)
                 {
