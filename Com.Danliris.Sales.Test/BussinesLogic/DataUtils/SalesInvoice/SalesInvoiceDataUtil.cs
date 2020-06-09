@@ -40,6 +40,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Remark = "Remark",
                 TotalPayment = 100,
                 TotalPaid = 0,
+                SalesType = "SalesType",
+                SailingDate = DateTimeOffset.UtcNow,
+                ShippedPer = "ShippedPer",
 
                 SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
                 {
@@ -74,6 +77,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 AutoIncreament = 1,
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceType = "SalesInvoiceType",
+                SalesInvoiceCategory = "SPINNING",
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
                 DeliveryOrderNo = "DeliveryOrderNo",
@@ -92,6 +96,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Remark = "Remark",
                 TotalPayment = 100,
                 TotalPaid = 0,
+                SalesType = "SalesType",
+                SailingDate = DateTimeOffset.UtcNow,
+                ShippedPer = "ShippedPer",
 
                 SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
                 {

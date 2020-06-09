@@ -27,8 +27,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string Remark { get; set; }
         public string Sales { get; set; }
         public UnitViewModel Unit { get; set; }
-
-
+        public string SalesType { get; set; }
+        public DateTimeOffset? SailingDate { get; set; }
+        public string ShippedPer { get; set; }
+        
         public ICollection<SalesInvoiceDetailViewModel> SalesInvoiceDetails { get; set; }
 
 
@@ -73,6 +75,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (Unit == null || string.IsNullOrWhiteSpace(Unit.Name))
                 yield return new ValidationResult("Unit Harus Diisi", new List<string> { "Unit" });
+
+            if (string.IsNullOrWhiteSpace(SalesType) || SalesType == "")
+                yield return new ValidationResult("Tipe Penjualan harus dipilih", new List<string> { "SalesType" });
+
+            if (!SailingDate.HasValue)
+                yield return new ValidationResult("Tgl Sailing harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SailingDate" });
+
+            if (string.IsNullOrEmpty(ShippedPer))
+                yield return new ValidationResult("Shipped Per Harus Diisi", new List<string> { "ShippedPer" });
+
 
             int Count = 0;
             string DetailErrors = "[";
