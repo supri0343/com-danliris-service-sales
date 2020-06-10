@@ -40,9 +40,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Remark = "Remark",
                 TotalPayment = 100,
                 TotalPaid = 0,
-                SalesType = "SalesType",
+                SalesType = "Ekspor",
+                //export
                 SailingDate = DateTimeOffset.UtcNow,
                 ShippedPer = "ShippedPer",
+                Color = "Color",
+                OrderNo = "OrderNo",
+                Indent = "Indent",
+                CartonNo = "CartonNo",
+                WeightUom = "KG",
+                TotalUom = "CBM",
+                QuantityLength = 100,
+                GrossWeight = 100,
+                NetWeight = 100,
+                TotalMeas = 100,
 
                 SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
                 {

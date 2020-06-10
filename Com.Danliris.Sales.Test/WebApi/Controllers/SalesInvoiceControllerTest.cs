@@ -328,7 +328,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     }
                 },
                 new SalesInvoiceViewModel
-                { 
+                {
                     SalesInvoiceType = null,
                     PaymentType = null,
                     VatType = null,
@@ -337,6 +337,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new SalesInvoiceViewModel
                 {
                     SalesInvoiceType = "",
+                    SalesType = "",
                     SalesInvoiceCategory = "DYEINGPRINTING",
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                     {
@@ -374,9 +375,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     TotalPayment = 0,
                     TotalPaid = -1,
-                    SalesType = "",
+                    SalesType = "Ekspor",
                     SailingDate = null,
                     ShippedPer = "",
+                    Color = "",
+                    OrderNo = "",
+                    Indent = "",
+                    CartonNo = "",
+                    WeightUom = "",
+                    TotalUom = "",
+                    QuantityLength = 0,
+                    GrossWeight = 0,
+                    NetWeight = 0,
+                    TotalMeas = 0,
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                     {
                         new SalesInvoiceDetailViewModel()
