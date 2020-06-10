@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200604085458_AddSalesInvoiceCategoryInSalesInvoiceModel")]
+    partial class AddSalesInvoiceCategoryInSalesInvoiceModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3711,8 +3713,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Remark")
                         .HasMaxLength(1000);
 
-                    b.Property<DateTimeOffset>("SailingDate");
-
                     b.Property<string>("Sales")
                         .HasMaxLength(256);
 
@@ -3726,12 +3726,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("SalesInvoiceType")
                         .HasMaxLength(255);
-
-                    b.Property<string>("SalesType")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ShippedPer")
-                        .HasMaxLength(1000);
 
                     b.Property<double>("TotalPaid");
 

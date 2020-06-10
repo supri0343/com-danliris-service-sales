@@ -337,6 +337,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 new SalesInvoiceViewModel
                 {
                     SalesInvoiceType = "",
+                    SalesInvoiceCategory = "DYEINGPRINTING",
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel()
+                        {
+                        ShippingOutId = null,
+                        BonNo = null,
+                        }
+                    }
+                },
+                new SalesInvoiceViewModel
+                {
+                    SalesInvoiceType = "",
                     PaymentType = "",
                     VatType = "",
                     DueDate = DateTimeOffset.Now.AddDays(-1),
@@ -361,12 +374,15 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     },
                     TotalPayment = 0,
                     TotalPaid = -1,
+                    SalesType = "",
+                    SailingDate = null,
+                    ShippedPer = "",
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                     {
                         new SalesInvoiceDetailViewModel()
                         {
                         ShippingOutId = 0,
-                        BonNo = "",
+                        BonNo = "NewBonNo",
                             SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
                             {
                                 new SalesInvoiceItemViewModel()
@@ -405,7 +421,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             }
                         }
                     }
-                }
+                },
             };
             foreach (var viewModel in viewModels)
             {
@@ -421,6 +437,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 new SalesInvoiceViewModel {
                     DueDate = DateTimeOffset.Now,
+                    SalesInvoiceCategory = "DYEINGPRINTING",
                     Currency = new CurrencyViewModel() {},
                     SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
                     {

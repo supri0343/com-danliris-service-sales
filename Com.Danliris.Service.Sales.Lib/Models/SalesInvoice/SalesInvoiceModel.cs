@@ -14,6 +14,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         public string SalesInvoiceNo { get; set; }
         [MaxLength(255)]
         public string SalesInvoiceType { get; set; }
+        [MaxLength(255)]
+        public string SalesInvoiceCategory { get; set; }
         public DateTimeOffset SalesInvoiceDate { get; set; }
         public DateTimeOffset DueDate { get; set; }
         [MaxLength(255)]
@@ -66,6 +68,14 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
 
         [MaxLength(1000)]
         public string UnitName { get; set; }
+
+        [MaxLength(255)]
+        public string SalesType { get; set; }
+
+        public DateTimeOffset SailingDate { get; set; }
+
+        [MaxLength(1000)]
+        public string ShippedPer { get; set; }
 
         public virtual ICollection<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
     }
