@@ -16,9 +16,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
         {
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 18);
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
+            Font extra_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 9);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
 
-            Document document = new Document(PageSize.A4, 40, 40, 40, 40);
+            Document document = new Document(PageSize.A4, 40, 40, 25, 25);
+            //Document document = new Document(PageSize.A4, 40, 40, 40, 40);
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
@@ -40,12 +42,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             string codeNoString = "FM-PJ-00-03-021/R1";
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
-            codeNo.SpacingAfter = 20f;
+            codeNo.SpacingAfter = 10f;
             document.Add(codeNo);
 
             string titleString = "SURAT PERINTAH PRODUKSI";
             Paragraph title = new Paragraph(titleString, bold_font) { Alignment = Element.ALIGN_CENTER };
-            title.SpacingAfter = 20f;
+            title.SpacingAfter = 10f;
             document.Add(title);
             bold_font.SetStyle(Font.NORMAL);
 
@@ -174,8 +176,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Tulisan Pinggir Kain", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.ArticleFabricEdge, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.ArticleFabricEdge, extra_font);
+            //cellIdentityContentLeft.Colspan = 2;
             tableIdentity1.AddCell(cellIdentityContentLeft);
+
 
 
             if (!string.IsNullOrWhiteSpace(viewModel.Run) && viewModel.RunWidth != null  && (viewModel.RunWidth.Count > 0))
@@ -226,7 +230,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Keterangan", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Remark, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Remark, extra_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nama Staff Penjualan", normal_font);
@@ -307,7 +311,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #region signature
 
             PdfPTable tableSignatureRegion = new PdfPTable(4);
-            tableSignatureRegion.SpacingBefore = 30f;
+            tableSignatureRegion.SpacingBefore = 15f;
 
             cellIdentityContentCenterWithBorder.Phrase = new Phrase("DIBUAT OLEH", normal_font);
             tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
