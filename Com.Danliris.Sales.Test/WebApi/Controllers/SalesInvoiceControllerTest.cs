@@ -442,6 +442,50 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Validate_Validation_For_Export()
+        {
+            List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>
+            {
+                new SalesInvoiceViewModel
+                {
+                    SalesType = "Ekspor",
+                    SailingDate = null,
+                    ShippedPer = null,
+                    Color = null,
+                    OrderNo = null,
+                    Indent = null,
+                    CartonNo = null,
+                    //WeightUom = null,
+                    //TotalUom = null,
+                    QuantityLength = null,
+                    GrossWeight = null,
+                    NetWeight = null,
+                    TotalMeas = null,
+                    SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                    {
+                        new SalesInvoiceDetailViewModel()
+                        {
+                            SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                            {
+                                new SalesInvoiceItemViewModel()
+                                {
+                                },
+                                new SalesInvoiceItemViewModel()
+                                {
+                                }
+                            },
+                        },
+                    },
+                },
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
         public void Validate_Duplicate_DetailViewModel()
         {
             List<SalesInvoiceViewModel> viewModels = new List<SalesInvoiceViewModel>

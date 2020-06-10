@@ -113,10 +113,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
                 if (string.IsNullOrEmpty(CartonNo))
                     yield return new ValidationResult("No.Karton Harus Diisi", new List<string> { "CartonNo" });
 
-                if (string.IsNullOrWhiteSpace(WeightUom) || WeightUom == "")
+                if (WeightUom == "")
                     yield return new ValidationResult("Satuan berat harus dipilih", new List<string> { "WeightUom" });
 
-                if (string.IsNullOrWhiteSpace(TotalUom) || TotalUom == "")
+                if (TotalUom == "")
                     yield return new ValidationResult("Satuan total harus dipilih", new List<string> { "TotalUom" });
 
                 if (!QuantityLength.HasValue || QuantityLength <= 0)
