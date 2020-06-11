@@ -91,7 +91,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
+        public void Get_Sales_Invoice_PDF_SalesType_Is_Local_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -104,6 +104,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     NPWP = "BuyerNPWP",
                     NIK = "BuyerNIK",
                 },
+                SalesType = "Lokal",
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
@@ -147,7 +148,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
+        public void Get_Sales_Invoice_PDF_SalesType_Is_Local_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -159,6 +160,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     NPWP = "BuyerNPWP",
                     NIK = "BuyerNIK",
                 },
+                SalesType = "Lokal",
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
@@ -202,7 +204,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
+        public void Get_Sales_Invoice_PDF_SalesType_Is_Local_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -214,6 +216,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     NPWP = "BuyerNPWP",
                     NIK = "BuyerNIK",
                 },
+                SalesType = "Lokal",
                 SalesInvoiceNo = "SalesInvoiceNo",
                 SalesInvoiceDate = DateTimeOffset.Now,
                 DueDate = DateTimeOffset.Now,
@@ -239,6 +242,59 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                                 QuantityItem = 1,
                                 Price = 1,
                                 Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoicePDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_PDF_SalesType_Is_Export()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                SalesType = "Ekspor",
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                ShippedPer = "ShippedPer",
+                SailingDate = DateTimeOffset.Now,
+                Color = "Color",
+                OrderNo = "OrderNo",
+                Indent = "Indent",
+                QuantityLength = 100,
+                PaymentType = "USD",
+                CartonNo = "CartonNo",
+                GrossWeight = 100,
+                NetWeight = 100,
+                WeightUom = "KG",
+                TotalMeas = 100,
+                TotalUom = "CBM",
+                Sales = "Sales",
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "$",
+                },
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                                QuantityItem = 10,
+                                Price = 10,
+                                ProductName = "ProductName",
                             }
                         }
                     }

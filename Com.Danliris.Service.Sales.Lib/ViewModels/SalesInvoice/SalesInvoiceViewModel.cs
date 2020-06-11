@@ -57,7 +57,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Buyer harus diisi", new List<string> { "BuyerName" });
 
-
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.NPWP))
                 yield return new ValidationResult("NPWP Buyer harus diisi", new List<string> { "BuyerNPWP" });
 
