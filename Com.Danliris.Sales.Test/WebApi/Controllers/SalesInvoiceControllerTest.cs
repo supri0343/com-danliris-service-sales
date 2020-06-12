@@ -280,6 +280,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 TotalMeas = 100,
                 TotalUom = "CBM",
                 Sales = "Sales",
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Address = "BuyerAddress",
+                },
                 Currency = new CurrencyViewModel()
                 {
                     Symbol = "$",

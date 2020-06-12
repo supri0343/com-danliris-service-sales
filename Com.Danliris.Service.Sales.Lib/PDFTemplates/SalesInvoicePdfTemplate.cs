@@ -535,7 +535,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 PdfPCell cellHeader_B1 = new PdfPCell();
                 PdfPCell cellHeader_B2 = new PdfPCell();
 
-                cellHeaderBody_B.Phrase = new Phrase("SOLD BY ORDERS AND FOR ACCOUNT AND RISK OF MESSRS : " + "?????", normal_font);
+                cellHeaderBody_B.Phrase = new Phrase("SOLD BY ORDERS AND FOR ACCOUNT AND RISK OF MESSRS : " + viewModel.Buyer.Name + "\n" + viewModel.Buyer.Address, normal_font);
                 headerTable_B1.AddCell(cellHeaderBody_B);
 
                 cellHeader_B1.AddElement(headerTable_B1);
@@ -550,10 +550,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody_B.Phrase = new Phrase("SAILING ON OR ABOUT : " + viewModel.SailingDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
                 headerTable_B2.AddCell(cellHeaderBody_B);
 
-                cellHeaderBody_B.Phrase = new Phrase("FROM : " + "?????", normal_font);
+                cellHeaderBody_B.Phrase = new Phrase("FROM : SEMARANG, INDONESIA", normal_font);
                 headerTable_B2.AddCell(cellHeaderBody_B);
 
-                cellHeaderBody_B.Phrase = new Phrase("TO : " + "?????", normal_font);
+                cellHeaderBody_B.Phrase = new Phrase("TO : " + viewModel.Buyer.Address, normal_font);
                 headerTable_B2.AddCell(cellHeaderBody_B);
 
                 cellHeader_B2.AddElement(headerTable_B2);
@@ -699,7 +699,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellBody_B.Phrase = new Phrase("", normal_font);
                 bodyTable_B2.AddCell(cellBody_B);
 
-                cellBody_B.Phrase = new Phrase("FOR : " + "?????", normal_font);
+                cellBody_B.Phrase = new Phrase("FOR SEMARANG", normal_font);
                 bodyTable_B2.AddCell(cellBody_B);
 
                 cellBody_B.Phrase = new Phrase("REMARKS : " + "?????", normal_font);
