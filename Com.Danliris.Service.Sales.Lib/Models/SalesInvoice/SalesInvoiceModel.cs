@@ -72,10 +72,26 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoice
         [MaxLength(255)]
         public string SalesType { get; set; }
 
+        //Export
         public DateTimeOffset SailingDate { get; set; }
-
         [MaxLength(1000)]
         public string ShippedPer { get; set; }
+        [MaxLength(255)]
+        public string Color { get; set; }
+        [MaxLength(255)]
+        public string OrderNo { get; set; }
+        [MaxLength(255)]
+        public string Indent { get; set; }
+        [MaxLength(255)]
+        public string CartonNo { get; set; }
+        [MaxLength(255)]
+        public string WeightUom { get; set; }
+        [MaxLength(255)]
+        public string TotalUom { get; set; }
+        public double QuantityLength { get; set; }
+        public double GrossWeight { get; set; }
+        public double NetWeight { get; set; }
+        public double TotalMeas { get; set; }
 
         public virtual ICollection<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
     }
