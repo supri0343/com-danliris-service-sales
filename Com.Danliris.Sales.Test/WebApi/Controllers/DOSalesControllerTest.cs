@@ -441,14 +441,175 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             }
         }
 
+        [Fact]
+        public void Validate_Validation_For_Local_Spinning()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Type = null,
+                    Disp = -1,
+                    Op = -1,
+                    DOSalesCategory = "SPINNING",
+                    Sc = -1,
+                    Storage = new StorageViewModel()
+                    {
+                        _id = 0,
+                        name = "",
+                        code = "",
+                        unit = new UnitViewModel() {},
+                    },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                        Type = "",
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Length = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Disp = null,
+                    Op = null,
+                    Sc = null,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
 
         [Fact]
-        public void Validate_Validation_For_Export()
+        public void Validate_Validation_For_Local_Weaving()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Type = null,
+                    Disp = -1,
+                    Op = -1,
+                    DOSalesCategory = "WEAVING",
+                    Sc = -1,
+                    Storage = new StorageViewModel()
+                    {
+                        _id = 0,
+                        name = "",
+                        code = "",
+                        unit = new UnitViewModel() {},
+                    },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                        Type = "",
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Length = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Disp = null,
+                    Op = null,
+                    Sc = null,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+
+        [Fact]
+        public void Validate_Validation_For_Export_Spinning()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
             {
                 new DOSalesViewModel{
                     DOSalesType = "Ekspor",
+                    DOSalesCategory="SPINNING",
+                    FillEachBale = -1,
+                    Storage = new StorageViewModel(){ },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Weight = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    FillEachBale = null,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_For_Export_Weaving()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    DOSalesCategory="WEAVING",
+                    FillEachBale = -1,
+                    Storage = new StorageViewModel(){ },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Weight = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    FillEachBale = null,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_For_Export_Dyeing()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Ekspor",
+                    DOSalesCategory="DYEINGPRINTING",
                     FillEachBale = -1,
                     Storage = new StorageViewModel(){ },
                     DOSalesDetailItems = new List<DOSalesDetailViewModel>()
