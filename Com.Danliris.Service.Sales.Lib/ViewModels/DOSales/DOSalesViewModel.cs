@@ -92,8 +92,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (!Op.HasValue || Op <= 0)
                     yield return new ValidationResult("Op harus diisi", new List<string> { "Op" });
 
-                if (!Sc.HasValue || Sc <= 0)
-                    yield return new ValidationResult("Sc harus diisi", new List<string> { "Sc" });
+                if(DOSalesCategory == "DYEINGPRINTING")
+                {
+                    if (!Sc.HasValue || Sc <= 0)
+                        yield return new ValidationResult("Sc harus diisi", new List<string> { "Sc" });
+                }
+                
             }
             else if (DOSalesType == "Ekspor")
             {
@@ -118,36 +122,137 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                     var rowErrorCount = 0;
 
-                    if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
+                    if(DOSalesCategory == "SPINNING")
                     {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "UnitOrCode : 'Unit/Kode harus diisi',";
+
+                        if (string.IsNullOrWhiteSpace(detail.NoSOP))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "NoSOP : 'No SOP harus diisi',";
+                        }
+
+                        if (string.IsNullOrWhiteSpace(detail.ThreadNumber))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ThreadNumber : 'Jenis dan No Benang harus diisi',";
+                        }
+
+                        if (detail.Packing <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
+                        }
+                        if (DOSalesType == "Lokal" && detail.Length <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                        }
+                        if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
+                        }
+                        if (detail.ConvertionValue < 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ConvertionValue : 'Nilai Berat/Panjang gagal dikonversi ke bentuk satuan lain',";
+                        }
+
                     }
-                    if (detail.Packing <= 0)
+                    else if (DOSalesCategory == "WEAVING")
                     {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
+
+                        if (string.IsNullOrWhiteSpace(detail.NoSOP))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "NoSOP : 'No SOP harus diisi',";
+                        }
+
+                        if (string.IsNullOrWhiteSpace(detail.ThreadNumber))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ThreadNumber : 'Jenis dan No Benang harus diisi',";
+                        }
+
+                        if (string.IsNullOrWhiteSpace(detail.Grade))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Grade : 'Grade harus dipilih',";
+                        }
+
+                        if (detail.Packing <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
+                        }
+
+                        if (DOSalesType == "Lokal" && detail.Length <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                        }
+
+                        if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
+                        }
+
+                        if (detail.ConvertionValue < 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ConvertionValue : 'Nilai Berat/Panjang gagal dikonversi ke bentuk satuan lain',";
+                        }
+
                     }
-                    if (DOSalesType == "Lokal" && detail.Length <= 0)
+                    else
                     {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                        if (string.IsNullOrWhiteSpace(detail.UnitOrCode))
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "UnitOrCode : 'Unit/Kode harus diisi',";
+                        }
+                        if (detail.Packing <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
+                        }
+                        if (DOSalesType == "Lokal" && detail.Length <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                        }
+                        if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
+                        }
+                        if (detail.ConvertionValue < 0)
+                        {
+                            Count++;
+                            rowErrorCount++;
+                            DetailErrors += "ConvertionValue : 'Nilai Berat/Panjang gagal dikonversi ke bentuk satuan lain',";
+                        }
                     }
-                    if (DOSalesType == "Ekspor" && detail.Weight <= 0)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
-                    }
-                    if (detail.ConvertionValue < 0)
-                    {
-                        Count++;
-                        rowErrorCount++;
-                        DetailErrors += "ConvertionValue : 'Nilai Berat/Panjang gagal dikonversi ke bentuk satuan lain',";
-                    }
+
+                    
                     DetailErrors += "}, ";
                 }
             }
