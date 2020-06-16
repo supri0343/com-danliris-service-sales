@@ -78,6 +78,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Packing = 1,
                         Length = 1,
                         ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
                     }
                 }
             };
@@ -152,6 +155,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Packing = 1,
                         Length = 1,
                         ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
                     }
                 }
             };
@@ -223,6 +229,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Packing = 1,
                         Length = 1,
                         ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
                     }
                 }
             };
@@ -293,6 +302,10 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         Packing = 1,
                         Weight = 1,
                         ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
+
                     }
                 }
             };

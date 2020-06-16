@@ -94,6 +94,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                         Length = 1,
                         Weight = 1,
                         ConvertionValue = 10,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
                     }
                 }
             };
