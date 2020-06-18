@@ -43,8 +43,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice
             {
                 "Id","Code","SalesInvoiceNo","SalesInvoiceType","SalesInvoiceCategory","SalesInvoiceDate","DueDate","DeliveryOrderNo",
                 "Buyer","Currency","PaymentType","VatType","TotalPayment","TotalPaid","Remark","IsPaidOff","SalesInvoiceDetails",
-                //Export
-                "SalesType","SailingDate","ShippedPer","Color","OrderNo","Indent","CartonNo","WeightUom","TotalUom","QuantityLength","GrossWeight","NetWeight","TotalMeas"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
