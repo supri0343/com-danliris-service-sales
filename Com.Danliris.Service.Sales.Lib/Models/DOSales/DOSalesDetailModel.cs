@@ -46,6 +46,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double Length { get; set; }
         public double Weight { get; set; }
         public double ConvertionValue { get; set; }
+        [MaxLength(255)]
+        public string NoSOP { get; set; }
+        [MaxLength(255)]
+        public string ThreadNumber { get; set; }
+        [MaxLength(255)]
+        public string Grade { get; set; }
 
         public virtual DOSalesModel DOSalesModel { get; set; }
     }

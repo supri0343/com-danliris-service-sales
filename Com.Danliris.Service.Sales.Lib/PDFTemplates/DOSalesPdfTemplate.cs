@@ -125,27 +125,80 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.SetWidths(widthsBody);
                 bodyTable.WidthPercentage = 100;
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase("No.", bold_font);
-                bodyTable.AddCell(bodyCell);
+                if (viewModel.DOSalesCategory.Equals("SPINNING"))
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("No. SPP", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("No. SOP", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Material Konstruksi", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Jenis dan Nomor Benang", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                else if(viewModel.DOSalesCategory.Equals("WEAVING"))
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("No. SOP", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Jenis dan Nomor Benang", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Grade", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                else
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("No. SPP", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Material Konstruksi", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+
+
 
                 //bodyCell.Phrase = new Phrase("Total Packing\n(" + viewModel.PackingUom + ")", bold_font);
                 //bodyTable.AddCell(bodyCell);
@@ -155,33 +208,98 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 //bodyCell.Phrase = new Phrase("Total Berat\n(" + viewModel.WeightUom + ")", bold_font);
                 //bodyTable.AddCell(bodyCell);
-
-                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                if (viewModel.DOSalesCategory.Equals("SPINNING"))
                 {
-                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
 
-                    bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
-                    bodyTable.AddCell(bodyCell);
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
 
-                    bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(item.ConstructionName, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(item.NoSOP, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(item.UnitOrCode, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(item.ThreadNumber, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
                 }
+                else if (viewModel.DOSalesCategory.Equals("WEAVING"))
+                {
+
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.NoSOP, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ThreadNumber, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.Grade, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
+                }
+                else
+                {
+
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ConstructionName, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.UnitOrCode, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
+                }
+
+                
 
                 foreach (DOSalesDetailViewModel total in viewModel.DOSalesDetailItems)
                 {
@@ -644,27 +762,80 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 bodyTable.SetWidths(widthsBody);
                 bodyTable.WidthPercentage = 100;
 
-                bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                bodyCell.Phrase = new Phrase("No.", bold_font);
-                bodyTable.AddCell(bodyCell);
+                if (viewModel.DOSalesCategory.Equals("SPINNING"))
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("No. SPP", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("No. SOP", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Material Konstruksi", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Jenis dan Nomor Benang", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
 
-                bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
-                bodyTable.AddCell(bodyCell);
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                else if (viewModel.DOSalesCategory.Equals("WEAVING"))
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("No. SOP", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Jenis dan Nomor Benang", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Grade", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+                else
+                {
+                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    bodyCell.Phrase = new Phrase("No.", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("No. SPP", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Material Konstruksi", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Jenis / Code", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Pcs/Roll/Pt", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Mtr/Yds", bold_font);
+                    bodyTable.AddCell(bodyCell);
+
+                    bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
+                    bodyTable.AddCell(bodyCell);
+                }
+
+
 
                 //bodyCell.Phrase = new Phrase("Total Packing\n(" + viewModel.PackingUom + ")", bold_font);
                 //bodyTable.AddCell(bodyCell);
@@ -674,32 +845,95 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 //bodyCell.Phrase = new Phrase("Total Berat\n(" + viewModel.WeightUom + ")", bold_font);
                 //bodyTable.AddCell(bodyCell);
-
-                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                if (viewModel.DOSalesCategory.Equals("SPINNING"))
                 {
-                    bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
 
-                    bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
-                    bodyTable.AddCell(bodyCell);
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
 
-                    bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(item.ConstructionName, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(item.NoSOP, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(item.UnitOrCode, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(item.ThreadNumber, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
 
-                    bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
-                    bodyTable.AddCell(bodyCell);
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
+                }
+                else if (viewModel.DOSalesCategory.Equals("WEAVING"))
+                {
+
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.NoSOP, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ThreadNumber, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.Grade, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
+                }
+                else
+                {
+
+                    foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                    {
+                        bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        bodyCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+                        bodyCell.Phrase = new Phrase((index++).ToString(), normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ProductionOrder.OrderNo, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.ConstructionName, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(item.UnitOrCode, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Packing) + " " + viewModel.PackingUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Length) + " " + viewModel.LengthUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+
+                        bodyCell.Phrase = new Phrase(string.Format("{0:n0}", item.Weight) + " " + viewModel.WeightUom, normal_font);
+                        bodyTable.AddCell(bodyCell);
+                    }
                 }
 
                 foreach (DOSalesDetailViewModel total in viewModel.DOSalesDetailItems)
