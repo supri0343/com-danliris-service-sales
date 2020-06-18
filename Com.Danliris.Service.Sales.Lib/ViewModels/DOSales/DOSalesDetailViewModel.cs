@@ -18,5 +18,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public double Length { get; set; }
         public double Weight { get; set; }
         public double ConvertionValue { get; set; }
+        public string NoSOP { get; set; }
+        public string ThreadNumber { get; set; }
+        public string Grade { get; set; }
     }
 }
