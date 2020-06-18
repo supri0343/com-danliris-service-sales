@@ -110,26 +110,46 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoiceExpor
         {
             SalesInvoiceExportModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
+            int MonthNow = DateTime.Now.Month;
             int YearNow = DateTime.Now.Year;
+            var MonthNowString = DateTime.Now.ToString("MM");
             var YearNowString = DateTime.Now.ToString("yy");
+            var formatCode = "";
+
+            if (model.SalesInvoiceCategory == "SPINNING")
+            {
+                formatCode = "B";
+            }
+            else if (model.SalesInvoiceCategory == "DYEINGPRINTING" && model.FPType == "Dyeing/Finishing")
+            {
+                formatCode = "F";
+            }
+            else if (model.SalesInvoiceCategory == "DYEINGPRINTING" && model.FPType == "Printing")
+            {
+                formatCode = "P";
+            }
+            else
+            {
+                formatCode = "";
+            }
 
             if (lastData == null)
             {
                 index = 0;
                 model.AutoIncreament = 1 + index;
-                model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
             }
             else
             {
                 if (YearNow > lastData.CreatedUtc.Year)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesInvoiceNo = $"{YearNowString}{model.SalesInvoiceType}{model.AutoIncreament.ToString().PadLeft(6, '0')}";
+                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
                 }
             }
         }

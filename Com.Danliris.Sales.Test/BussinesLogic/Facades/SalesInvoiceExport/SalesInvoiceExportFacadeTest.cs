@@ -54,5 +54,83 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoiceExport
 
             return serviceProviderMock;
         }
+
+        [Fact]
+        public virtual async void Create_Success_SalesInvoiceNo_Category_Spinning()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceExportFacade facade = Activator.CreateInstance(typeof(SalesInvoiceExportFacade), serviceProvider.Object, dbContext) as SalesInvoiceExportFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceCategory = "SPINNING";
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_SalesInvoiceNo_Category_DyeingPrinting_FPType_DyeingFinishing()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceExportFacade facade = Activator.CreateInstance(typeof(SalesInvoiceExportFacade), serviceProvider.Object, dbContext) as SalesInvoiceExportFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceCategory = "DYEINGPRINTING";
+            data.FPType = "Dyeing/Finishing";
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_SalesInvoiceNo_Category_DyeingPrinting_FPType_Printing()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceExportFacade facade = Activator.CreateInstance(typeof(SalesInvoiceExportFacade), serviceProvider.Object, dbContext) as SalesInvoiceExportFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceCategory = "DYEINGPRINTING";
+            data.FPType = "Printing";
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_SalesInvoiceNo_Category_Weaving()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceExportFacade facade = Activator.CreateInstance(typeof(SalesInvoiceExportFacade), serviceProvider.Object, dbContext) as SalesInvoiceExportFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceCategory = "WEAVING";
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
     }
 }
