@@ -33,7 +33,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "SalesContractNo","Buyer","DeliverySchedule"
+                "Id", "SalesContractNo","Buyer","DeliverySchedule","Comodity","ComodityDescription","OrderQuantity","UomUnit","DeliveredTo"
             };
 
             Query = Query
@@ -47,7 +47,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning
                     BuyerName = field.BuyerName,
                     BuyerType = field.BuyerType,
                     DeliverySchedule = field.DeliverySchedule,
-                    LastModifiedUtc = field.LastModifiedUtc
+                    LastModifiedUtc = field.LastModifiedUtc,
+                    ComodityName = field.ComodityName,
+                    ComodityDescription = field.ComodityDescription,
+                    OrderQuantity = field.OrderQuantity,
+                    UomUnit = field.UomUnit,
+                    DeliveredTo = field.DeliveredTo
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
