@@ -13,7 +13,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DeliveryNoteProduction
     public class DeliveryNoteProductionFacadeTest : BaseFacadeTest<SalesDbContext, DeliveryNoteProductionFacade, DeliveryNoteProductionLogic, DeliveryNoteProductionModel, DeliveryNoteProductionDataUtil>
     {
 
-        private const string ENTITY = "DOSales";
+        private const string ENTITY = "DeliveryNoteProduction";
         public DeliveryNoteProductionFacadeTest() : base(ENTITY)
         {
         }

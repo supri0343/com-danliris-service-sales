@@ -26,7 +26,7 @@ namespace Com.Danliris.Service.Sales.Lib
 
             List<string> SearchAttributes = new List<string>()
             {
-                "Code", "Date","Buyer", "UnitName","MonthandYear"
+                "Unit","MonthandYear"
             };
             query = QueryHelper<DeliveryNoteProductionModel>.Search(query, SearchAttributes, keyword);
             List<string> SelectedFields = new List<string>()
