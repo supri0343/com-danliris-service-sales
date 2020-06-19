@@ -50,7 +50,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 },
 
                 //DestinationBuyerName = "DestinationBuyerName",
-                Unit = "Unit",
+                Unit = "UnitBp.Unit",
                 Subject = "Lainnya",
                 OtherSubject = "OtherSubject",
                 Month = "Month",
@@ -99,7 +99,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
                 },
 
-                Unit = "Unit",
+                Unit = "UnitBp.Unit",
                 Subject = "Order Jual",
                 OtherSubject = "",
                 Month = "Month",
