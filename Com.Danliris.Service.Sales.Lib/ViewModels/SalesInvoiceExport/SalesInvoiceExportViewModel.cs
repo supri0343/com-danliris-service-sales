@@ -61,7 +61,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
                 yield return new ValidationResult("Alamat Buyer harus diisi", new List<string> { "BuyerAddress" });
 
             if (string.IsNullOrWhiteSpace(Authorized) || Authorized == "")
-                yield return new ValidationResult("Authorized harus dipilih", new List<string> { "Authorized" });
+                yield return new ValidationResult("Penanggungjawab harus dipilih", new List<string> { "Authorized" });
 
             if (string.IsNullOrEmpty(ShippedPer))
                 yield return new ValidationResult("Shipped Per harus diisi", new List<string> { "ShippedPer" });
@@ -112,7 +112,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
                 yield return new ValidationResult("No.Karton harus diisi", new List<string> { "CartonNo" });
 
             if (string.IsNullOrEmpty(ShippingRemark))
-                yield return new ValidationResult("Shipping Remark harus diisi", new List<string> { "ShippingRemark	" });
+                yield return new ValidationResult("Shipping Remark harus diisi", new List<string> { "ShippingRemark" });
 
             int Count = 0;
             string DetailErrors = "[";
@@ -157,6 +157,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
                         Count++;
                         ErrorCount++;
                         DetailErrors += "TotalMeas : 'Total Meas harus lebih besar dari 0',";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(detail.WeightUom))
+                    {
+                        Count++;
+                        DetailErrors += "WeightUom : 'Satuan Berat harus diisi',";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(detail.TotalUom))
+                    {
+                        Count++;
+                        DetailErrors += "TotalUom : 'Satuan Total harus diisi',";
                     }
 
                     if (ErrorCount == 0)

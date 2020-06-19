@@ -89,7 +89,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeader_B1.AddElement(headerTable_B1);
             headerTable_B.AddCell(cellHeader_B1);
 
-            cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + "?????", normal_font);
+            //TAMBAHIN CONTRACT NO
+            cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + "viewModel.ContractNo", normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
 
             cellHeaderBody_B.Phrase = new Phrase("SHIPPED PER : " + viewModel.ShippedPer, normal_font);
@@ -98,10 +99,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderBody_B.Phrase = new Phrase("SAILING ON OR ABOUT : " + viewModel.SailingDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
 
-            cellHeaderBody_B.Phrase = new Phrase("FROM : SEMARANG, INDONESIA", normal_font);
+            cellHeaderBody_B.Phrase = new Phrase("FROM : " + viewModel.From, normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
 
-            cellHeaderBody_B.Phrase = new Phrase("TO : " + viewModel.BuyerAddress, normal_font);
+            cellHeaderBody_B.Phrase = new Phrase("TO : " + viewModel.To, normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
 
             cellHeader_B2.AddElement(headerTable_B2);
@@ -124,10 +125,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderBody_C.Phrase = new Phrase("\n", normal_font);
             headerTable_C1.AddCell(cellHeaderBody_C);
 
-            cellHeaderBody_C.Phrase = new Phrase("LETTER OF CREDIT NUMBER  : " + "?????", normal_font);
+            cellHeaderBody_C.Phrase = new Phrase("LETTER OF CREDIT NUMBER  : " + viewModel.LetterOfCreditNumber, normal_font);
             headerTable_C1.AddCell(cellHeaderBody_C);
 
-            cellHeaderBody_C.Phrase = new Phrase("ISSUED BY  : " + "?????", normal_font);
+            cellHeaderBody_C.Phrase = new Phrase("ISSUED BY  : " + viewModel.BankName, normal_font);
             headerTable_C1.AddCell(cellHeaderBody_C);
 
             cellHeader_C1.AddElement(headerTable_C1);
@@ -136,7 +137,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderBody_C.Phrase = new Phrase("\n", normal_font);
             headerTable_C2.AddCell(cellHeaderBody_C);
 
-            cellHeaderBody_C.Phrase = new Phrase("DATE : " + "?????", normal_font);
+            cellHeaderBody_C.Phrase = new Phrase("DATE : " + viewModel.LCDate?.AddHours(clientTimeZoneOffset).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
             headerTable_C2.AddCell(cellHeaderBody_C);
 
             cellHeaderBody_C.Phrase = new Phrase("", normal_font);
@@ -180,6 +181,23 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             foreach (var detail in viewModel.SalesInvoiceExportDetails)
             {
+                //TAMBAHIN DESCRIPTION
+                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
+                bodyCell_A.Phrase = new Phrase("detail.Description", normal_font);
+                bodyTable_A.AddCell(bodyCell_A);
+
+                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
+                bodyCell_A.Phrase = new Phrase("", normal_font);
+                bodyTable_A.AddCell(bodyCell_A);
+
+                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
+                bodyCell_A.Phrase = new Phrase("", normal_font);
+                bodyTable_A.AddCell(bodyCell_A);
+
+                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
+                bodyCell_A.Phrase = new Phrase("", normal_font);
+                bodyTable_A.AddCell(bodyCell_A);
+
                 foreach (var item in detail.SalesInvoiceExportItems)
                 {
                     totalPrice = item.QuantityItem.GetValueOrDefault() * item.Price.GetValueOrDefault();
@@ -221,6 +239,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             document.Add(bodyTable_A);
             #endregion Body_A
 
+            double convert = ((double)grandTotalPrice);
+            string ENText = NumberToTextEN.toWords(convert);
+
             #region Body_B
             PdfPTable bodyTable_B = new PdfPTable(2);
             PdfPTable bodyTable_B1 = new PdfPTable(1);
@@ -235,10 +256,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellBody_B.Phrase = new Phrase("", normal_font);
             bodyTable_B1.AddCell(cellBody_B);
 
-            cellBody_B.Phrase = new Phrase("SAY : " + "?????", normal_font);
+            cellBody_B.Phrase = new Phrase("SAY : " + ENText + "Dollar", normal_font);
             bodyTable_B1.AddCell(cellBody_B);
 
-            cellBody_B.Phrase = new Phrase("SHIPPING MARKS : " + "?????", normal_font);
+            cellBody_B.Phrase = new Phrase("SHIPPING MARKS : " + viewModel.ShippingRemark, normal_font);
             bodyTable_B1.AddCell(cellBody_B);
 
             bodyCell_A1.AddElement(bodyTable_B1);
@@ -247,10 +268,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellBody_B.Phrase = new Phrase("", normal_font);
             bodyTable_B2.AddCell(cellBody_B);
 
-            cellBody_B.Phrase = new Phrase("FOR SEMARANG", normal_font);
+            cellBody_B.Phrase = new Phrase(viewModel.TermOfPaymentType + " " + viewModel.TermOfPaymentRemark, normal_font);
             bodyTable_B2.AddCell(cellBody_B);
 
-            cellBody_B.Phrase = new Phrase("REMARKS : " + "?????", normal_font);
+            cellBody_B.Phrase = new Phrase("REMARKS : " + viewModel.Remark, normal_font);
             bodyTable_B2.AddCell(cellBody_B);
 
             bodyCell_A2.AddElement(bodyTable_B2);
@@ -292,12 +313,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellFooter_A.Phrase = new Phrase("INDENT", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.Indent, normal_font);
+            cellFooter_A.Phrase = new Phrase(" :    N " + viewModel.Indent, normal_font);
             footerTable_A1.AddCell(cellFooter_A);
 
             cellFooter_A.Phrase = new Phrase("QUANTITY", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.QuantityLength, normal_font);
+            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.QuantityLength + "METERS", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
 
             cellFooter_A.Phrase = new Phrase("CARTON NO.", normal_font);
