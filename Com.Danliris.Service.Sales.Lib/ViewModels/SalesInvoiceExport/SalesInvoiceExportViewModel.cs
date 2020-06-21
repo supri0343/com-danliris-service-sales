@@ -18,6 +18,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
         public string FPType { get; set; }
         public string BuyerName { get; set; }
         public string BuyerAddress { get; set; }
+        public string ContractNo { get; set; }
         public string Authorized { get; set; }
         public string ShippedPer { get; set; }
         public DateTimeOffset? SailingDate { get; set; }
@@ -59,6 +60,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
 
             if (string.IsNullOrEmpty(BuyerAddress))
                 yield return new ValidationResult("Alamat Buyer harus diisi", new List<string> { "BuyerAddress" });
+
+            if (string.IsNullOrEmpty(ContractNo))
+                yield return new ValidationResult("No. Kontrak harus diisi", new List<string> { "ContractNo" });
 
             if (string.IsNullOrWhiteSpace(Authorized) || Authorized == "")
                 yield return new ValidationResult("Penanggungjawab harus dipilih", new List<string> { "Authorized" });

@@ -18,7 +18,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
     public class SalesInvoiceExportControllerTest : BaseControllerTest<SalesInvoiceExportController, SalesInvoiceExportModel, SalesInvoiceExportViewModel, ISalesInvoiceExportContract>
     {
         [Fact]
-        public void Get_Sales_Invoice_Export_PDF_SalesInvoiceCategory_DyeingPrinting_And_SalesInvoiceType_LC()
+        public void Get_Sales_Invoice_Export_Valas_PDF_SalesInvoiceCategory_DyeingPrinting_And_SalesInvoiceType_LC()
         {
             var vm = new SalesInvoiceExportViewModel()
             {
@@ -31,6 +31,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 FPType = "Printing",
                 BuyerName = "BuyerName",
                 BuyerAddress = "BuyerAddress",
+                ContractNo = "ContractNo",
                 Authorized = "Amumpuni",
                 ShippedPer = "ShippedPer",
                 SailingDate = DateTimeOffset.UtcNow,
@@ -55,6 +56,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         ShippingOutId = 4,
                         BonNo = "BonNo",
+                        Description = "Description",
                         GrossWeight = 100,
                         NetWeight = 100,
                         TotalMeas = 100,
@@ -83,13 +85,86 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<SalesInvoiceExportViewModel>(It.IsAny<SalesInvoiceExportModel>()))
                 .Returns(vm);
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceExportValasPDF(1).Result;
 
             Assert.NotNull(response);
         }
 
         [Fact]
-        public void Get_Sales_Invoice_Export_PDF_SalesInvoiceCategory_SpinningWeaving_And_SalesInvoiceType_PP()
+        public void Get_Sales_Invoice_Export_IDR_PDF_SalesInvoiceCategory_DyeingPrinting_And_SalesInvoiceType_LC()
+        {
+            var vm = new SalesInvoiceExportViewModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceCategory = "DYEINGPRINTING",
+                SalesInvoiceType = "L/C",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                FPType = "Printing",
+                BuyerName = "BuyerName",
+                BuyerAddress = "BuyerAddress",
+                ContractNo = "ContractNo",
+                Authorized = "Amumpuni",
+                ShippedPer = "ShippedPer",
+                SailingDate = DateTimeOffset.UtcNow,
+                LetterOfCreditNumber = "LetterOfCreditNumber",
+                LCDate = DateTimeOffset.UtcNow,
+                BankName = "BankName",
+                From = "From",
+                To = "To",
+                HSCode = "HSCode",
+                TermOfPaymentType = "TermOfPaymentType",
+                TermOfPaymentRemark = "TermOfPaymentRemark",
+                Color = "Color",
+                OrderNo = "OrderNo",
+                Indent = "Indent",
+                QuantityLength = 100,
+                CartonNo = "CartonNo",
+                ShippingRemark = "ShippingRemark",
+                Remark = "Remark",
+                SalesInvoiceExportDetails = new List<SalesInvoiceExportDetailViewModel>()
+                {
+                    new SalesInvoiceExportDetailViewModel()
+                    {
+                        ShippingOutId = 4,
+                        BonNo = "BonNo",
+                        Description = "Description",
+                        GrossWeight = 100,
+                        NetWeight = 100,
+                        TotalMeas = 100,
+                        WeightUom = "KG",
+                        TotalUom = "CBM",
+                        SalesInvoiceExportItems = new List<SalesInvoiceExportItemViewModel>()
+                        {
+                            new SalesInvoiceExportItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                QuantityPacking = 100,
+                                PackingUom = "PackingUom",
+                                ItemUom = "MTR",
+                                QuantityItem = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceExportViewModel>(It.IsAny<SalesInvoiceExportModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceExportIDRPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_Export_Valas_PDF_SalesInvoiceCategory_SpinningWeaving_And_SalesInvoiceType_PP()
         {
             var vm = new SalesInvoiceExportViewModel()
             {
@@ -101,6 +176,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 BuyerName = "BuyerName",
                 BuyerAddress = "BuyerAddress",
+                ContractNo = "ContractNo",
                 Authorized = "Amumpuni",
                 ShippedPer = "ShippedPer",
                 SailingDate = DateTimeOffset.UtcNow,
@@ -149,18 +225,85 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<SalesInvoiceExportViewModel>(It.IsAny<SalesInvoiceExportModel>()))
                 .Returns(vm);
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceExportValasPDF(1).Result;
 
             Assert.NotNull(response);
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_NotFound()
+        public void Get_Sales_Invoice_Export_IDR_PDF_SalesInvoiceCategory_SpinningWeaving_And_SalesInvoiceType_PP()
+        {
+            var vm = new SalesInvoiceExportViewModel()
+            {
+                Code = "code",
+                AutoIncreament = 1,
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceCategory = "SPINNING",
+                SalesInvoiceType = "P.P",
+                SalesInvoiceDate = DateTimeOffset.UtcNow,
+                BuyerName = "BuyerName",
+                BuyerAddress = "BuyerAddress",
+                ContractNo = "ContractNo",
+                Authorized = "Amumpuni",
+                ShippedPer = "ShippedPer",
+                SailingDate = DateTimeOffset.UtcNow,
+                LetterOfCreditNumber = "LetterOfCreditNumber",
+                HSCode = "HSCode",
+                TermOfPaymentType = "TermOfPaymentType",
+                TermOfPaymentRemark = "TermOfPaymentRemark",
+                Color = "Color",
+                OrderNo = "OrderNo",
+                Indent = "Indent",
+                QuantityLength = 100,
+                CartonNo = "CartonNo",
+                ShippingRemark = "ShippingRemark",
+                Remark = "Remark",
+                SalesInvoiceExportDetails = new List<SalesInvoiceExportDetailViewModel>()
+                {
+                    new SalesInvoiceExportDetailViewModel()
+                    {
+                        ShippingOutId = 4,
+                        BonNo = "BonNo",
+                        GrossWeight = 100,
+                        NetWeight = 100,
+                        TotalMeas = 100,
+                        WeightUom = "KG",
+                        TotalUom = "CBM",
+                        SalesInvoiceExportItems = new List<SalesInvoiceExportItemViewModel>()
+                        {
+                            new SalesInvoiceExportItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                ProductName = "ProductName",
+                                QuantityPacking = 100,
+                                PackingUom = "PackingUom",
+                                ItemUom = "MTR",
+                                QuantityItem = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceExportViewModel>(It.IsAny<SalesInvoiceExportModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceExportIDRPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_Export_Valas_PDF_NotFound()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceExportModel));
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceExportValasPDF(1).Result;
 
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
@@ -168,12 +311,38 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_Exception()
+        public void Get_Sales_Invoice_Export_IDR_PDF_NotFound()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceExportModel));
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceExportIDRPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
+
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_Export_Valas_PDF_Exception()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceExportValasPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_Export_IDR_PDF_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceExportIDRPDF(1).Result;
 
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
@@ -264,6 +433,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     SalesInvoiceDate = null,
                     BuyerName = null,
                     BuyerAddress = null,
+                    ContractNo = null,
                     Authorized = null,
                     ShippedPer = null,
                     SailingDate = null,
@@ -283,6 +453,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         new SalesInvoiceExportDetailViewModel()
                         {
                             BonNo  = null,
+                            Description = null,
                             GrossWeight = null,
                             NetWeight = null,
                             TotalMeas = null,

@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 {
-    public class SalesInvoiceExportPdfTemplate
+    public class SalesInvoiceExportIDRPdfTemplate
     {
         public MemoryStream GeneratePdfTemplate(SalesInvoiceExportViewModel viewModel, int clientTimeZoneOffset)
         {
@@ -90,7 +90,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             headerTable_B.AddCell(cellHeader_B1);
 
             //TAMBAHIN CONTRACT NO
-            cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + "viewModel.ContractNo", normal_font);
+            cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + viewModel.ContractNo, normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
 
             cellHeaderBody_B.Phrase = new Phrase("SHIPPED PER : " + viewModel.ShippedPer, normal_font);
@@ -169,12 +169,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyCell_A.Phrase = new Phrase("QUANTITY IN METERS", bold_font);
             bodyTable_A.AddCell(bodyCell_A);
 
-            bodyCell_A.Phrase = new Phrase("UNIT PRICE USD", bold_font);
+            bodyCell_A.Phrase = new Phrase("UNIT PRICE IDR", bold_font);
             bodyTable_A.AddCell(bodyCell_A);
 
-            bodyCell_A.Phrase = new Phrase("TOTAL PRICE USD", bold_font);
+            bodyCell_A.Phrase = new Phrase("TOTAL PRICE IDR", bold_font);
             bodyTable_A.AddCell(bodyCell_A);
 
+            double price = 0;
             double totalPrice = 0;
             double grandTotalPrice = 0;
             double totalLength = 0;
@@ -183,24 +184,24 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             {
                 //TAMBAHIN DESCRIPTION
                 bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
-                bodyCell_A.Phrase = new Phrase("detail.Description", normal_font);
+
+                bodyCell_A.Phrase = new Phrase(detail.Description, normal_font);
                 bodyTable_A.AddCell(bodyCell_A);
 
-                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
                 bodyCell_A.Phrase = new Phrase("", normal_font);
                 bodyTable_A.AddCell(bodyCell_A);
 
-                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
                 bodyCell_A.Phrase = new Phrase("", normal_font);
                 bodyTable_A.AddCell(bodyCell_A);
 
-                bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
                 bodyCell_A.Phrase = new Phrase("", normal_font);
                 bodyTable_A.AddCell(bodyCell_A);
 
                 foreach (var item in detail.SalesInvoiceExportItems)
                 {
-                    totalPrice = item.QuantityItem.GetValueOrDefault() * item.Price.GetValueOrDefault();
+                    //14447 is rate to convert USD to IDR
+                    price = item.Price.GetValueOrDefault() * 14447;
+                    totalPrice = item.QuantityItem.GetValueOrDefault() * price;
                     grandTotalPrice += totalPrice;
                     totalLength += item.QuantityItem.GetValueOrDefault();
 
@@ -208,15 +209,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyCell_A.Phrase = new Phrase(item.ProductName, normal_font);
                     bodyTable_A.AddCell(bodyCell_A);
 
-                    bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
+                    bodyCell_A.HorizontalAlignment = Element.ALIGN_CENTER;
                     bodyCell_A.Phrase = new Phrase(string.Format("{0:n2}", item.QuantityItem), normal_font);
                     bodyTable_A.AddCell(bodyCell_A);
 
-                    bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
-                    bodyCell_A.Phrase = new Phrase(string.Format("{0:n0}", item.Price), normal_font);
+                    bodyCell_A.Phrase = new Phrase(price.ToString("N2"), normal_font);
                     bodyTable_A.AddCell(bodyCell_A);
 
-                    bodyCell_A.HorizontalAlignment = Element.ALIGN_LEFT;
                     bodyCell_A.Phrase = new Phrase(totalPrice.ToString("N2"), normal_font);
                     bodyTable_A.AddCell(bodyCell_A);
                 }
@@ -256,7 +255,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellBody_B.Phrase = new Phrase("", normal_font);
             bodyTable_B1.AddCell(cellBody_B);
 
-            cellBody_B.Phrase = new Phrase("SAY : " + ENText + "Dollar", normal_font);
+            cellBody_B.Phrase = new Phrase("SAY : " + ENText + "Rupiah", normal_font);
             bodyTable_B1.AddCell(cellBody_B);
 
             cellBody_B.Phrase = new Phrase("SHIPPING MARKS : " + viewModel.ShippingRemark, normal_font);
@@ -318,7 +317,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellFooter_A.Phrase = new Phrase("QUANTITY", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.QuantityLength + "METERS", normal_font);
+            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.QuantityLength + " METERS", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
 
             cellFooter_A.Phrase = new Phrase("CARTON NO.", normal_font);
@@ -362,14 +361,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell cellFooter_B = new PdfPCell() { Border = Rectangle.NO_BORDER };
             PdfPCell footerCell_B1 = new PdfPCell() { Border = Rectangle.NO_BORDER };
 
-            footerTable_B.HorizontalAlignment = Element.ALIGN_RIGHT;
+            footerTable_B.HorizontalAlignment = Element.ALIGN_CENTER;
             cellFooter_B.HorizontalAlignment = Element.ALIGN_RIGHT;
 
-            cellFooter_B.Phrase = new Phrase(" ( " + viewModel.Authorized + " ) \nAUTHORIZED SIGNATURE", normal_font);
+            cellFooter_B.Phrase = new Phrase("\n\n\n ( " + viewModel.Authorized + " )", normal_font);
             footerTable_B1.AddCell(cellFooter_B);
 
-            //cellFooter_B.Phrase = new Phrase("AUTHORIZED SIGNATURE", normal_font);
-            //footerTable_B1.AddCell(cellFooter_B);
+            cellFooter_B.Phrase = new Phrase("AUTHORIZED SIGNATURE", normal_font);
+            footerTable_B1.AddCell(cellFooter_B);
 
             footerCell_B1.AddElement(footerTable_B1);
             footerTable_B.AddCell(footerCell_B1);

@@ -91,7 +91,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
+        public void Get_Sales_Invoice_Valas_PDF_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -141,13 +141,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
                 .Returns(vm);
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
 
             Assert.NotNull(response);
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
+        public void Get_Sales_Invoice_Valas_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -196,13 +196,13 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
                 .Returns(vm);
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
 
             Assert.NotNull(response);
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
+        public void Get_Sales_Invoice_Valas_PDF_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
         {
             var vm = new SalesInvoiceViewModel()
             {
@@ -250,18 +250,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
                 .Returns(vm);
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
 
             Assert.NotNull(response);
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_NotFound()
+        public void Get_Sales_Invoice_Valas_PDF_NotFound()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceModel));
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
 
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
@@ -269,17 +269,222 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_PDF_Exception()
+        public void Get_Sales_Invoice_Valas_PDF_Exception()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
             var controller = GetController(mocks);
-            var response = controller.GetSalesInvoicePDF(1).Result;
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
 
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
 
         }
+
+
+
+        [Fact]
+        public void Get_Sales_Invoice_IDR_PDF_VatType_Is_PPN_Umum_And_CurrencySymbol_Is_IDR()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                AutoIncreament = 1,
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Code = "BuyerCode",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "Rp",
+                },
+                PaymentType = "Meter",
+                Remark = "Remark",
+                VatType = "PPN Umum",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                QuantityPacking = 1,
+                                PackingUom = "PackingUom",
+                                ItemUom = "ItemUom",
+                                ProductName = "ProductName",
+                                QuantityItem = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_IDR_PDF_VatType_Is_PPN_BUMN_And_CurrencySymbol_Is_USD()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Code = "BuyerCode",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "$",
+                },
+                Remark = "Remark",
+                PaymentType = "Yard",
+                VatType = "PPN BUMN",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                QuantityPacking = 1,
+                                PackingUom = "PackingUom",
+                                ItemUom = "ItemUom",
+                                ProductName = "ProductName",
+                                QuantityItem = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_IDR_PDF_VatType_Is_PPN_Retail_And_CurrencySymbol_Is_EUR()
+        {
+            var vm = new SalesInvoiceViewModel()
+            {
+                Buyer = new BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                    Code = "BuyerCode",
+                    Address = "BuyerAddress",
+                    NPWP = "BuyerNPWP",
+                    NIK = "BuyerNIK",
+                },
+                SalesInvoiceNo = "SalesInvoiceNo",
+                SalesInvoiceDate = DateTimeOffset.Now,
+                DueDate = DateTimeOffset.Now,
+                Currency = new CurrencyViewModel()
+                {
+                    Symbol = "€",
+                },
+                Remark = "Remark",
+                VatType = "PPN Retail",
+                SalesInvoiceDetails = new List<SalesInvoiceDetailViewModel>()
+                {
+                    new SalesInvoiceDetailViewModel()
+                    {
+                        SalesInvoiceItems = new List<SalesInvoiceItemViewModel>()
+                        {
+                            new SalesInvoiceItemViewModel()
+                            {
+                                ProductCode = "ProductCode",
+                                QuantityPacking = 1,
+                                PackingUom = "PackingUom",
+                                ItemUom = "ItemUom",
+                                ProductName = "ProductName",
+                                QuantityItem = 1,
+                                Price = 1,
+                                Amount = 1,
+                            }
+                        }
+                    }
+                }
+
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<SalesInvoiceViewModel>(It.IsAny<SalesInvoiceModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_IDR_PDF_NotFound()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceModel));
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
+
+        }
+
+        [Fact]
+        public void Get_Sales_Invoice_IDR_PDF_Exception()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));
+            var controller = GetController(mocks);
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         [Fact]
         public void Mapping_With_AutoMapper_Profiles()

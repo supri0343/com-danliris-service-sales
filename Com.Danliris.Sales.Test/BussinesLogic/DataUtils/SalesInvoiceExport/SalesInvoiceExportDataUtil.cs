@@ -27,6 +27,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoiceExport
                 FPType = "Printing",
                 BuyerName = "BuyerName",
                 BuyerAddress = "BuyerAddress",
+                ContractNo = "ContractNo",
                 Authorized = "Amumpuni",
                 ShippedPer = "ShippedPer",
                 SailingDate = DateTimeOffset.UtcNow,
@@ -51,6 +52,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoiceExport
                     {
                         ShippingOutId = 4,
                         BonNo = "BonNo",
+                        Description = "Description",
                         GrossWeight = 100,
                         NetWeight = 100,
                         TotalMeas = 100,

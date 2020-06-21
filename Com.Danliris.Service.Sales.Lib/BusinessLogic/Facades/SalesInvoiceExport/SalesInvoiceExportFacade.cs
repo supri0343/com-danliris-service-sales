@@ -137,19 +137,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoiceExpor
             {
                 index = 0;
                 model.AutoIncreament = 1 + index;
-                model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
+                model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(2, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
             }
             else
             {
                 if (YearNow > lastData.CreatedUtc.Year)
                 {
                     model.AutoIncreament = 1 + index;
-                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
+                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(2, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
                 }
                 else
                 {
                     model.AutoIncreament = lastData.AutoIncreament + (1 + index);
-                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(1, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
+                    model.SalesInvoiceNo = $"DL {model.AutoIncreament.ToString().PadLeft(2, '0')}{formatCode}/4.2.1/{MonthNowString}.{YearNowString}";
                 }
             }
         }

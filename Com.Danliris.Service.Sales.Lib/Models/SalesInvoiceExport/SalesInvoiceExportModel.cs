@@ -25,6 +25,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         [MaxLength(1000)]
         public string BuyerAddress { get; set; }
         [MaxLength(255)]
+        public string ContractNo { get; set; }
+        [MaxLength(255)]
         public string Authorized { get; set; }
         [MaxLength(1000)]
         public string ShippedPer { get; set; }
