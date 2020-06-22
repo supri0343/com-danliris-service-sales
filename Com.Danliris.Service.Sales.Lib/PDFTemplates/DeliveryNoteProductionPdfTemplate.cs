@@ -25,6 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
+            //================
 
             #region Header
 
