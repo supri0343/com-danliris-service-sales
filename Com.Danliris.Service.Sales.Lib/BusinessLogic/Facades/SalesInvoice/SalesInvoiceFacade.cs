@@ -58,7 +58,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
                     result = await DbContext.SaveChangesAsync();
 
-                    if(model.SalesInvoiceCategory == "DYEINGPRINTING")
+                    if (model.SalesInvoiceCategory == "DYEINGPRINTING")
                     {
                         foreach (var detail in model.SalesInvoiceDetails)
                         {
@@ -101,7 +101,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                             UpdateFalseToShippingOut(detail.ShippingOutId, ItemIds);
                         }
                     }
-                        
+
 
                     transaction.Commit();
                 }
@@ -496,8 +496,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
             string Uri = $"{salesInvoiceUri}{id}";
 
-            var data = new 
-            { 
+            var data = new
+            {
                 HasSalesInvoice = true,
                 ItemIds = ItemIds,
             };

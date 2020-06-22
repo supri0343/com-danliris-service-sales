@@ -27,21 +27,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
         public string Remark { get; set; }
         public string Sales { get; set; }
         public UnitViewModel Unit { get; set; }
-        public string SalesType { get; set; }
-
-        //Export
-        public DateTimeOffset? SailingDate { get; set; }
-        public string ShippedPer { get; set; }
-        public string Color { get; set; }
-        public string OrderNo { get; set; }
-        public string Indent { get; set; }
-        public string CartonNo { get; set; }
-        public string WeightUom { get; set; }
-        public string TotalUom { get; set; }
-        public double? QuantityLength { get; set; }
-        public double? GrossWeight { get; set; }
-        public double? NetWeight { get; set; }
-        public double? TotalMeas { get; set; }
 
         public ICollection<SalesInvoiceDetailViewModel> SalesInvoiceDetails { get; set; }
 
@@ -53,6 +38,15 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
 
             if (!SalesInvoiceDate.HasValue || SalesInvoiceDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Faktur Penjualan harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesInvoiceDate" });
+
+            if (!TotalPayment.HasValue || TotalPayment <= 0)
+                yield return new ValidationResult("Total termasuk PPN kosong", new List<string> { "TotalPayment" });
+
+            if (TotalPaid < 0)
+                yield return new ValidationResult("Total Paid harus lebih besar atau sama dengan 0", new List<string> { "TotalPayment" });
+
+            if (string.IsNullOrEmpty(Sales))
+                yield return new ValidationResult("Sales harus diisi", new List<string> { "Sales" });
 
             if (Buyer == null || string.IsNullOrWhiteSpace(Buyer.Name))
                 yield return new ValidationResult("Buyer harus diisi", new List<string> { "BuyerName" });
@@ -75,61 +69,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoice
             if (string.IsNullOrWhiteSpace(VatType) || VatType == "")
                 yield return new ValidationResult("Jenis PPN harus diisi", new List<string> { "VatType" });
 
-            if (!TotalPayment.HasValue || TotalPayment <= 0)
-                yield return new ValidationResult("Total termasuk PPN kosong", new List<string> { "TotalPayment" });
-
-            if (TotalPaid < 0)
-                yield return new ValidationResult("Total Paid harus lebih besar atau sama dengan 0", new List<string> { "TotalPayment" });
-
-            if (string.IsNullOrEmpty(Sales))
-                yield return new ValidationResult("Sales Harus Diisi", new List<string> { "Sales" });
-
             if (Unit == null || string.IsNullOrWhiteSpace(Unit.Name))
-                yield return new ValidationResult("Unit Harus Diisi", new List<string> { "Unit" });
-
-            if (string.IsNullOrWhiteSpace(SalesType) || SalesType == "")
-                yield return new ValidationResult("Tipe Penjualan harus dipilih", new List<string> { "SalesType" });
-
-            //Export
-
-            if (SalesType == "Ekspor")
-            {
-                if (!SailingDate.HasValue)
-                    yield return new ValidationResult("Tgl Sailing harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SailingDate" });
-
-                if (string.IsNullOrEmpty(ShippedPer))
-                    yield return new ValidationResult("Shipped Per Harus Diisi", new List<string> { "ShippedPer" });
-
-                if (string.IsNullOrEmpty(Color))
-                    yield return new ValidationResult("Warna Harus Diisi", new List<string> { "Color" });
-
-                if (string.IsNullOrEmpty(OrderNo))
-                    yield return new ValidationResult("No. Order Harus Diisi", new List<string> { "OrderNo" });
-
-                if (string.IsNullOrEmpty(Indent))
-                    yield return new ValidationResult("Indent Harus Diisi", new List<string> { "Indent" });
-
-                if (string.IsNullOrEmpty(CartonNo))
-                    yield return new ValidationResult("No.Karton Harus Diisi", new List<string> { "CartonNo" });
-
-                if (WeightUom == "")
-                    yield return new ValidationResult("Satuan berat harus dipilih", new List<string> { "WeightUom" });
-
-                if (TotalUom == "")
-                    yield return new ValidationResult("Satuan total harus dipilih", new List<string> { "TotalUom" });
-
-                if (!QuantityLength.HasValue || QuantityLength <= 0)
-                    yield return new ValidationResult("Total Panjang kosong", new List<string> { "QuantityLength" });
-
-                if (!GrossWeight.HasValue || GrossWeight <= 0)
-                    yield return new ValidationResult("Berat kotor kosong", new List<string> { "GrossWeight" });
-
-                if (!NetWeight.HasValue || NetWeight <= 0)
-                    yield return new ValidationResult("Berat bersih kosong", new List<string> { "NetWeight" });
-
-                if (!TotalMeas.HasValue || TotalMeas <= 0)
-                    yield return new ValidationResult("Ukuran total kosong", new List<string> { "TotalMeas" });
-            }
+                yield return new ValidationResult("Unit harus diisi", new List<string> { "Unit" });
 
             int Count = 0;
             string DetailErrors = "[";
