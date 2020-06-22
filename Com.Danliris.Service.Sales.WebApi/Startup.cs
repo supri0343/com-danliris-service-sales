@@ -76,6 +76,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOReturn;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOReturn;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DeliveryNoteProduction;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport;
@@ -158,7 +159,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IFinishingPrintingCostCalculationService, FinishingPrintingCostCalculationFacade>()
                 .AddTransient<IShinFinishingPrintingSalesContractFacade, ShinFinishingPrintingSalesContractFacade>()
                 .AddTransient<IShinProductionOrder, ShinProductionOrderFacade>()
-                .AddTransient<IHOrderFacade, HOrderFacade>();
+                .AddTransient<IHOrderFacade, HOrderFacade>()
+                .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>();
         }
 
         private void RegisterLogic(IServiceCollection services)
@@ -234,7 +236,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<FinishingPrintingPreSalesContractLogic>()
                 .AddTransient<FinishingPrintingCostCalculationLogic>()
                 .AddTransient<ShinFinishingPrintingSalesContractLogic>()
-                .AddTransient<ShinProductionOrderLogic>(); ;
+                .AddTransient<ShinProductionOrderLogic>()
+                .AddTransient<DeliveryNoteProductionLogic>(); ;
         }
 
         private void RegisterServices(IServiceCollection services)
