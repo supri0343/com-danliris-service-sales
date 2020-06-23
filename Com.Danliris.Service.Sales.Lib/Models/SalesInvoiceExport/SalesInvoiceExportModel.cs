@@ -16,7 +16,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         [MaxLength(255)]
         public string SalesInvoiceCategory { get; set; }
         [MaxLength(255)]
-        public string SalesInvoiceType { get; set; }
+        public string LetterOfCreditNumberType { get; set; }
         public DateTimeOffset SalesInvoiceDate { get; set; }
         [MaxLength(255)]
         public string FPType { get; set; }
@@ -24,8 +24,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         public string BuyerName { get; set; }
         [MaxLength(1000)]
         public string BuyerAddress { get; set; }
-        [MaxLength(255)]
-        public string ContractNo { get; set; }
         [MaxLength(255)]
         public string Authorized { get; set; }
         [MaxLength(1000)]
@@ -35,7 +33,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         public string LetterOfCreditNumber { get; set; }
         public DateTimeOffset LCDate { get; set; }
         [MaxLength(255)]
-        public string BankName { get; set; }
+        public string IssuedBy { get; set; }
         [MaxLength(255)]
         public string From { get; set; }
         [MaxLength(255)]
@@ -46,16 +44,6 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         public string TermOfPaymentType { get; set; }
         [MaxLength(255)]
         public string TermOfPaymentRemark { get; set; }
-        [MaxLength(255)]
-        public string Color { get; set; }
-        [MaxLength(255)]
-        public string OrderNo { get; set; }
-        [MaxLength(255)]
-        public string Indent { get; set; }
-        public double QuantityLength { get; set; }
-        [MaxLength(255)]
-        public string CartonNo { get; set; }
-        [MaxLength(1000)]
         public string ShippingRemark { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }

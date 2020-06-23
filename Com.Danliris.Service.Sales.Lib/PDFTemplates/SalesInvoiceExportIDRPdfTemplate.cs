@@ -89,9 +89,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeader_B1.AddElement(headerTable_B1);
             headerTable_B.AddCell(cellHeader_B1);
 
-            //TAMBAHIN CONTRACT NO
-            cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + viewModel.ContractNo, normal_font);
-            headerTable_B2.AddCell(cellHeaderBody_B);
+            foreach (var detail in viewModel.SalesInvoiceExportDetails)
+            {
+                cellHeaderBody_B.Phrase = new Phrase("CONTRACT NO : " + detail.ContractNo, normal_font);
+                headerTable_B2.AddCell(cellHeaderBody_B);
+            }
 
             cellHeaderBody_B.Phrase = new Phrase("SHIPPED PER : " + viewModel.ShippedPer, normal_font);
             headerTable_B2.AddCell(cellHeaderBody_B);
@@ -128,7 +130,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderBody_C.Phrase = new Phrase("LETTER OF CREDIT NUMBER  : " + viewModel.LetterOfCreditNumber, normal_font);
             headerTable_C1.AddCell(cellHeaderBody_C);
 
-            cellHeaderBody_C.Phrase = new Phrase("ISSUED BY  : " + viewModel.BankName, normal_font);
+            cellHeaderBody_C.Phrase = new Phrase("ISSUED BY  : " + viewModel.IssuedBy, normal_font);
             headerTable_C1.AddCell(cellHeaderBody_C);
 
             cellHeader_C1.AddElement(headerTable_C1);
@@ -298,31 +300,6 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellFooter_A.Phrase = new Phrase("", normal_font);
             footerTable_A1.AddCell(cellFooter_A);
             cellFooter_A.Phrase = new Phrase("", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-
-            cellFooter_A.Phrase = new Phrase("COLOR", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.Color, normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-
-            cellFooter_A.Phrase = new Phrase("ORDER NO.", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.OrderNo, normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-
-            cellFooter_A.Phrase = new Phrase("INDENT", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    N " + viewModel.Indent, normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-
-            cellFooter_A.Phrase = new Phrase("QUANTITY", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.QuantityLength + " METERS", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-
-            cellFooter_A.Phrase = new Phrase("CARTON NO.", normal_font);
-            footerTable_A1.AddCell(cellFooter_A);
-            cellFooter_A.Phrase = new Phrase(" :    " + viewModel.CartonNo, normal_font);
             footerTable_A1.AddCell(cellFooter_A);
 
             cellFooter_A.Phrase = new Phrase("", normal_font);

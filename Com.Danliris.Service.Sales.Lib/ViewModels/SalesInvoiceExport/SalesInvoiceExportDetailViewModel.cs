@@ -9,6 +9,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
     {
         public int? ShippingOutId { get; set; }
         public string BonNo { get; set; }
+        public string ContractNo { get; set; }
         public string Description { get; set; }
         public string WeightUom { get; set; }
         public string TotalUom { get; set; }

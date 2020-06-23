@@ -13,28 +13,22 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
         public long? AutoIncreament { get; set; }
         public string SalesInvoiceNo { get; set; }
         public string SalesInvoiceCategory { get; set; }
-        public string SalesInvoiceType { get; set; }
+        public string LetterOfCreditNumberType { get; set; }
         public DateTimeOffset? SalesInvoiceDate { get; set; }
         public string FPType { get; set; }
         public string BuyerName { get; set; }
         public string BuyerAddress { get; set; }
-        public string ContractNo { get; set; }
         public string Authorized { get; set; }
         public string ShippedPer { get; set; }
         public DateTimeOffset? SailingDate { get; set; }
         public string LetterOfCreditNumber { get; set; }
         public DateTimeOffset? LCDate { get; set; }
-        public string BankName { get; set; }
+        public string IssuedBy { get; set; }
         public string From { get; set; }
         public string To { get; set; }
         public string HSCode { get; set; }
         public string TermOfPaymentType { get; set; }
         public string TermOfPaymentRemark { get; set; }
-        public string Color { get; set; }
-        public string OrderNo { get; set; }
-        public string Indent { get; set; }
-        public double? QuantityLength { get; set; }
-        public string CartonNo { get; set; }
         public string ShippingRemark { get; set; }
         public string Remark { get; set; }
 
@@ -46,8 +40,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
             if (string.IsNullOrWhiteSpace(SalesInvoiceCategory) || SalesInvoiceCategory == "")
                 yield return new ValidationResult("Kategori Faktur kosong", new List<string> { "SalesInvoiceCategory" });
 
-            if (string.IsNullOrWhiteSpace(SalesInvoiceType) || SalesInvoiceType == "")
-                yield return new ValidationResult("Seri Faktur Penjualan harus dipilih", new List<string> { "SalesInvoiceType" });
+            if (string.IsNullOrWhiteSpace(LetterOfCreditNumberType) || LetterOfCreditNumberType == "")
+                yield return new ValidationResult("Seri Faktur Penjualan harus dipilih", new List<string> { "LetterOfCreditNumberType" });
 
             if (!SalesInvoiceDate.HasValue || SalesInvoiceDate.Value > DateTimeOffset.Now)
                 yield return new ValidationResult("Tgl Faktur Penjualan harus diisi & lebih kecil atau sama dengan hari ini", new List<string> { "SalesInvoiceDate" });
@@ -61,9 +55,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
             if (string.IsNullOrEmpty(BuyerAddress))
                 yield return new ValidationResult("Alamat Buyer harus diisi", new List<string> { "BuyerAddress" });
 
-            if (string.IsNullOrEmpty(ContractNo))
-                yield return new ValidationResult("No. Kontrak harus diisi", new List<string> { "ContractNo" });
-
             if (string.IsNullOrWhiteSpace(Authorized) || Authorized == "")
                 yield return new ValidationResult("Penanggungjawab harus dipilih", new List<string> { "Authorized" });
 
@@ -73,22 +64,22 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
             if (!SailingDate.HasValue)
                 yield return new ValidationResult("Tgl Sailing harus diisi", new List<string> { "SailingDate" });
 
-            if (string.IsNullOrEmpty(LetterOfCreditNumber))
-                yield return new ValidationResult("LetterOfCreditNumber harus diisi", new List<string> { "LetterOfCreditNumber" });
+            if (string.IsNullOrEmpty(From))
+                yield return new ValidationResult("Asal harus diisi", new List<string> { "From" });
 
-            if (SalesInvoiceType == "L/C")
+            if (string.IsNullOrEmpty(To))
+                yield return new ValidationResult("Tujuan harus diisi", new List<string> { "To" });
+
+            if (LetterOfCreditNumberType == "L/C")
             {
+                if (string.IsNullOrEmpty(LetterOfCreditNumber))
+                    yield return new ValidationResult("LetterOfCreditNumber harus diisi", new List<string> { "LetterOfCreditNumber" });
+
                 if (!LCDate.HasValue)
                     yield return new ValidationResult("Tgl LC harus diisi", new List<string> { "LCDate" });
 
-                if (string.IsNullOrEmpty(BankName))
-                    yield return new ValidationResult("Bank Penerbit harus diisi", new List<string> { "BankName" });
-
-                if (string.IsNullOrEmpty(From))
-                    yield return new ValidationResult("Asal harus diisi", new List<string> { "From" });
-
-                if (string.IsNullOrEmpty(To))
-                    yield return new ValidationResult("Tujuan harus diisi", new List<string> { "To" });
+                if (string.IsNullOrEmpty(IssuedBy))
+                    yield return new ValidationResult("Bank Penerbit harus diisi", new List<string> { "IssuedBy" });
             }
 
             if (string.IsNullOrEmpty(HSCode))
@@ -99,21 +90,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
 
             if (string.IsNullOrEmpty(TermOfPaymentRemark))
                 yield return new ValidationResult("TermOfPayment Remark harus diisi", new List<string> { "TermOfPaymentRemark" });
-
-            if (string.IsNullOrEmpty(Color))
-                yield return new ValidationResult("Warna harus diisi", new List<string> { "Color" });
-
-            if (string.IsNullOrEmpty(OrderNo))
-                yield return new ValidationResult("No. Order harus diisi", new List<string> { "OrderNo" });
-
-            if (string.IsNullOrEmpty(Indent))
-                yield return new ValidationResult("Indent harus diisi", new List<string> { "Indent" });
-
-            if (!QuantityLength.HasValue || QuantityLength <= 0)
-                yield return new ValidationResult("Total Panjang kosong", new List<string> { "QuantityLength" });
-
-            if (string.IsNullOrEmpty(CartonNo))
-                yield return new ValidationResult("No.Karton harus diisi", new List<string> { "CartonNo" });
 
             if (string.IsNullOrEmpty(ShippingRemark))
                 yield return new ValidationResult("Shipping Remark harus diisi", new List<string> { "ShippingRemark" });
@@ -127,6 +103,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
                 {
                     int ErrorCount = 0;
                     DetailErrors += "{";
+
+                    if (string.IsNullOrWhiteSpace(detail.ContractNo))
+                    {
+                        Count++;
+                        ErrorCount++;
+                        DetailErrors += "ContractNo : 'No. Kontrak kosong / tidak ditemukan',";
+                    }
 
                     if (string.IsNullOrWhiteSpace(detail.BonNo))
                     {

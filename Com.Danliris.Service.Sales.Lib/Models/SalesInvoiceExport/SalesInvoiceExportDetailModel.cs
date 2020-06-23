@@ -11,6 +11,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         public int ShippingOutId { get; set; }
         [MaxLength(255)]
         public string BonNo { get; set; }
+        [MaxLength(255)]
+        public string ContractNo { get; set; }
         [MaxLength(1000)]
         public string Description { get; set; }
         [MaxLength(255)]

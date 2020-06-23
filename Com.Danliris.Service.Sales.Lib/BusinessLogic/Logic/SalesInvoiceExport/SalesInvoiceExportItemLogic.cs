@@ -33,7 +33,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","ProductId","ProductCode","ProductName","QuantityPacking","PackingUom","ItemUom","QuantityItem","Price","Amount","ConvertUnit","ConvertValue","Description"
+                "Id","ProductId","ProductCode","ProductName","QuantityPacking","PackingUom","ItemUom","QuantityItem","Price","Amount","Description"
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

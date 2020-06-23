@@ -32,7 +32,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesInvoiceNo","BuyerName","OrderNo","ContractNo",
+                "SalesInvoiceNo","BuyerName"
             };
 
             Query = QueryHelper<SalesInvoiceExportModel>.Search(Query, SearchAttributes, keyword);
@@ -43,7 +43,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport
             List<string> SelectedFields = new List<string>()
             {
                 "Id","Code","SalesInvoiceNo","SalesInvoiceCategory","SalesInvoiceType","SalesInvoiceDate","FPType","BuyerName","BuyerAddress",
-                "ContractNo","Authorized","ShippedPer","SailingDate","LetterOfCreditNumber","LCDate","BankName","From","To","HSCode",
+                "Authorized","ShippedPer","SailingDate","LetterOfCreditNumber","LCDate","BankName","From","To","HSCode",
                 "TermOfPaymentType","TermOfPaymentRemark","Color","OrderNo","Indent","CartonNo","QuantityLength","ShippingRemark","Remark",
                 "SalesInvoiceExportDetails",
             };
