@@ -108,7 +108,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoiceExpor
 
         private void SalesInvoiceNumberGenerator(SalesInvoiceExportModel model, int index)
         {
-            SalesInvoiceExportModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.SalesInvoiceType.Equals(model.SalesInvoiceType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            SalesInvoiceExportModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.LetterOfCreditNumberType.Equals(model.LetterOfCreditNumberType)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
 
             int MonthNow = DateTime.Now.Month;
             int YearNow = DateTime.Now.Year;

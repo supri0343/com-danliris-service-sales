@@ -20,12 +20,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
         [MaxLength(255)]
         public string ItemUom { get; set; }
         public double QuantityItem { get; set; }
-        //Price => harga satuan item
         public double Price { get; set; }
-        //Amount => total yang harus dibayarkan
         public double Amount { get; set; }
-        public string ConvertUnit { get; set; }
-        public double ConvertValue { get; set; }
 
         public virtual SalesInvoiceExportDetailModel SalesInvoiceExportDetailModel { get; set; }
     }
