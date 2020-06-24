@@ -23,7 +23,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
 
-            if (viewModel.DOSalesType == "Lokal")
+            if (viewModel.DOSalesType == "Lokal" || viewModel.DOSalesCategory == "SPINNING")
             {
                 #region Header
 
@@ -46,8 +46,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 cellHeaderBody.Phrase = new Phrase($"No. {viewModel.Type}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", bold_font);
                 headerTable1.AddCell(cellHeaderBody);
-                //cellHeaderBody.Phrase = new Phrase("FM-PJ-00-03-005 / R2", bold_font);
-                //headerTable1.AddCell(cellHeaderBody);
+
+                if(viewModel.DOSalesType == "Lokal" && viewModel.DOSalesCategory == "SPINNING")
+                {
+                    cellHeaderBody.Phrase = new Phrase("FM-PJ-00-03-005 / R2", bold_font);
+                    headerTable1.AddCell(cellHeaderBody);
+                }                
 
                 cellHeaderBody.Phrase = new Phrase("", header_font);
                 headerTable1.AddCell(cellHeaderBody);
@@ -149,7 +153,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     bodyCell.Phrase = new Phrase("Kg/Bale", bold_font);
                     bodyTable.AddCell(bodyCell);
                 }
-                else if(viewModel.DOSalesCategory.Equals("WEAVING"))
+                else if (viewModel.DOSalesCategory.Equals("WEAVING"))
                 {
                     bodyCell.HorizontalAlignment = Element.ALIGN_CENTER;
                     bodyCell.Phrase = new Phrase("No.", bold_font);
@@ -299,7 +303,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     }
                 }
 
-                
+
 
                 foreach (DOSalesDetailViewModel total in viewModel.DOSalesDetailItems)
                 {
@@ -502,11 +506,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
+                double total_weight = 0;
+
+                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                {
+                    total_weight += item.Weight;
+                }
+
                 cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.OrderQuantity + " METER", normal_font);
+                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.WeightUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("4. Piece Length ", bold_font);
@@ -661,7 +672,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #endregion Divider
             //====================================
 
-            if (viewModel.DOSalesType == "Lokal")
+            if (viewModel.DOSalesType == "Lokal" || viewModel.DOSalesCategory == "SPINNING")
             {
                 #region Header
 
@@ -684,8 +695,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 cellHeaderBody.Phrase = new Phrase($"No. {viewModel.Type}{viewModel.AutoIncreament.ToString().PadLeft(6, '0')}", bold_font);
                 headerTable1.AddCell(cellHeaderBody);
-                //cellHeaderBody.Phrase = new Phrase("FM-PJ-00-03-005 / R2", bold_font);
-                //headerTable1.AddCell(cellHeaderBody);
+
+                if (viewModel.DOSalesType == "Lokal" && viewModel.DOSalesCategory == "SPINNING")
+                {
+                    cellHeaderBody.Phrase = new Phrase("FM-PJ-00-03-005 / R2", bold_font);
+                    headerTable1.AddCell(cellHeaderBody);
+                }
 
                 cellHeaderBody.Phrase = new Phrase("", header_font);
                 headerTable1.AddCell(cellHeaderBody);
@@ -1137,12 +1152,26 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
+                double total_weight = 0;
+
+                foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
+                {
+                    total_weight += item.Weight;
+                }
+
                 cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.OrderQuantity + " METER", normal_font);
+                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.WeightUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
+
+                //cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
+                //headerTable3.AddCell(cellHeaderBody);
+                //cellHeaderBody.Phrase = new Phrase(":", bold_font);
+                //headerTable3.AddCell(cellHeaderBody);
+                //cellHeaderBody.Phrase = new Phrase(viewModel.SalesContract.OrderQuantity + " METER", normal_font);
+                //headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("4. Piece Length ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);

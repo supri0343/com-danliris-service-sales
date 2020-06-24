@@ -86,6 +86,7 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<DOReturnDetailItemModel> DOReturnDetailItems { get; set; }
         public DbSet<DOReturnItemModel> DOReturnItems { get; set; }
 
+        public DbSet<DeliveryNoteProductionModel> DeliveryNoteProduction { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
