@@ -42,7 +42,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","DOSalesNo","DOSalesType","Type","Date","SalesContract","Material","MaterialConstruction","Commodity","Buyer",
+                "Id","Code","DOSalesNo","DOSalesType","Type","Date","SalesContract","Material","MaterialConstruction","Commodity","Buyer","DOSalesCategory","DOSalesDetailItems",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
