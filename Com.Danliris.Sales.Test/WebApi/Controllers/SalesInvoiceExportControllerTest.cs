@@ -48,7 +48,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceExportDetailViewModel()
                     {
-                        ShippingOutId = 4,
+                        BonId = 4,
                         BonNo = "BonNo",
                         ContractNo = "ContractNo",
                         Description = "Description",
@@ -116,7 +116,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceExportDetailViewModel()
                     {
-                        ShippingOutId = 4,
+                        BonId = 4,
                         BonNo = "BonNo",
                         ContractNo = "ContractNo",
                         Description = "Description",
@@ -179,7 +179,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceExportDetailViewModel()
                     {
-                        ShippingOutId = 4,
+                        BonId = 4,
                         BonNo = "BonNo",
                         ContractNo = "ContractNo",
                         GrossWeight = 100,
@@ -241,7 +241,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     new SalesInvoiceExportDetailViewModel()
                     {
-                        ShippingOutId = 4,
+                        BonId = 4,
                         BonNo = "BonNo",
                         ContractNo = "ContractNo",
                         GrossWeight = 100,
@@ -454,7 +454,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         new SalesInvoiceExportDetailViewModel()
                         {
-                            ShippingOutId = 4,
+                            BonId = 4,
                             BonNo = "BonNo",
                             GrossWeight = 100,
                             NetWeight = 100,
@@ -483,7 +483,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                         new SalesInvoiceExportDetailViewModel()
                         {
-                            ShippingOutId = 4,
+                            BonId = 4,
                             BonNo = "BonNo",
                             GrossWeight = 100,
                             NetWeight = 100,
@@ -513,7 +513,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     {
                         new SalesInvoiceExportDetailViewModel()
                         {
-                            ShippingOutId = 1,
+                            BonId = 1,
                             BonNo ="BonNo",
                             SalesInvoiceExportItems = new List<SalesInvoiceExportItemViewModel>()
                             {
@@ -545,7 +545,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                         },
                         new SalesInvoiceExportDetailViewModel()
                         {
-                            ShippingOutId = 1,
+                            BonId = 1,
                             BonNo ="BonNo",
                         }
                     }

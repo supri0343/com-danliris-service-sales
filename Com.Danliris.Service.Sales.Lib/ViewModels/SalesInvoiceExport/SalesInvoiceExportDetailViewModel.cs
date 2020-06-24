@@ -7,7 +7,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
 {
     public class SalesInvoiceExportDetailViewModel : BaseViewModel
     {
-        public int? ShippingOutId { get; set; }
+        public int? BonId { get; set; }
         public string BonNo { get; set; }
         public string ContractNo { get; set; }
         public string Description { get; set; }

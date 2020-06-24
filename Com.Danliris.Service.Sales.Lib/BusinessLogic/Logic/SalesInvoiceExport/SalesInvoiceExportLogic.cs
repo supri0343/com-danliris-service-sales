@@ -42,10 +42,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id","Code","SalesInvoiceNo","SalesInvoiceCategory","SalesInvoiceType","SalesInvoiceDate","FPType","BuyerName","BuyerAddress",
-                "Authorized","ShippedPer","SailingDate","LetterOfCreditNumber","LCDate","BankName","From","To","HSCode",
-                "TermOfPaymentType","TermOfPaymentRemark","Color","OrderNo","Indent","CartonNo","QuantityLength","ShippingRemark","Remark",
-                "SalesInvoiceExportDetails",
+                "Id","Code","SalesInvoiceNo","SalesInvoiceCategory","LetterOfCreditNumberType","SalesInvoiceDate","FPType","BuyerName","BuyerAddress","Authorized","ShippedPer",
+                "SailingDate","LetterOfCreditNumber","LCDate","IssuedBy","From","To","HSCode","TermOfPaymentType","TermOfPaymentRemark","Remark","SalesInvoiceExportDetails",
             };
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
