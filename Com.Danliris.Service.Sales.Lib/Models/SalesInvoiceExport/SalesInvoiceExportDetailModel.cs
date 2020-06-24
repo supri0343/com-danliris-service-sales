@@ -8,7 +8,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport
 {
     public class SalesInvoiceExportDetailModel : BaseModel
     {
-        public int ShippingOutId { get; set; }
+        public int BonId { get; set; }
         [MaxLength(255)]
         public string BonNo { get; set; }
         [MaxLength(255)]

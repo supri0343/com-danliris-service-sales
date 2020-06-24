@@ -44,7 +44,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoiceExport
                 {
                     new SalesInvoiceExportDetailModel()
                     {
-                        ShippingOutId = 4,
+                        BonId = 4,
                         BonNo = "BonNo",
                         ContractNo = "ContractNo",
                         Description = "Description",

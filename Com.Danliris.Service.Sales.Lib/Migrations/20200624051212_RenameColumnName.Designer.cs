@@ -4,126 +4,22 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200624051212_RenameColumnName")]
+    partial class RenameColumnName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.DeliveryNoteProductionModel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("BallMark")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Blended")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("BuyerName")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("BuyerType")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("CreatedUtc");
-
-                    b.Property<DateTimeOffset>("Date");
-
-                    b.Property<string>("DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("DeletedUtc");
-
-                    b.Property<string>("DeliveredTo")
-                        .HasMaxLength(255);
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("Month")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("MonthandYear")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("OtherSubject")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Remark")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("SalesContractNo")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Sample")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Subject")
-                        .HasMaxLength(255);
-
-                    b.Property<double>("Total");
-
-                    b.Property<string>("TypeandNumber")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("UId")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Unit")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Uom")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("YarnSales")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("Year")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeliveryNoteProduction");
-                });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.ArticleColor", b =>
                 {

@@ -157,69 +157,65 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.SalesInvoiceExport
                         Count++;
                         DetailErrors += "TotalUom : 'Satuan Total harus diisi',";
                     }
-
-                    if (ErrorCount == 0)
+                    if (detail.SalesInvoiceExportItems == null || detail.SalesInvoiceExportItems.Count == 0)
                     {
-                        if (detail.SalesInvoiceExportItems == null || detail.SalesInvoiceExportItems.Count == 0)
-                        {
-                            Count++;
-                            DetailErrors += "SalesInvoiceItem : 'Item Kosong',";
-                        }
-                        else
-                        {
-                            DetailErrors += "SalesInvoiceExportItems: [";
+                        Count++;
+                        DetailErrors += "SalesInvoiceItem : 'Item Kosong',";
+                    }
+                    else
+                    {
+                        DetailErrors += "SalesInvoiceExportItems: [";
 
-                            foreach (var item in detail.SalesInvoiceExportItems)
+                        foreach (var item in detail.SalesInvoiceExportItems)
+                        {
+                            DetailErrors += "{";
+
+                            if (string.IsNullOrWhiteSpace(item.ProductCode))
                             {
-                                DetailErrors += "{";
-
-                                if (string.IsNullOrWhiteSpace(item.ProductCode))
-                                {
-                                    Count++;
-                                    DetailErrors += "ProductCode : 'Kode produk harus diisi',";
-                                }
-
-                                if (string.IsNullOrWhiteSpace(item.ProductName))
-                                {
-                                    Count++;
-                                    DetailErrors += "ProductName : 'Nama produk harus diisi',";
-                                }
-
-                                if (!item.QuantityPacking.HasValue || item.QuantityPacking.Value <= 0)
-                                {
-                                    Count++;
-                                    DetailErrors += "QuantityPacking : 'Jumlah Packing harus diisi dan lebih besar dari 0',";
-                                }
-
-                                if (!item.QuantityItem.HasValue || item.QuantityItem.Value <= 0)
-                                {
-                                    Count++;
-                                    DetailErrors += "QuantityItem : 'Jumlah Item harus diisi dan lebih besar dari 0',";
-                                }
-
-                                if (string.IsNullOrWhiteSpace(item.PackingUom))
-                                {
-                                    Count++;
-                                    DetailErrors += "PackingUom : 'Satuan Packing harus diisi',";
-                                }
-
-                                if (string.IsNullOrWhiteSpace(item.ItemUom))
-                                {
-                                    Count++;
-                                    DetailErrors += "ItemUom : 'Satuan Item harus diisi',";
-                                }
-
-                                if (!item.Price.HasValue || item.Price.Value <= 0)
-                                {
-                                    Count++;
-                                    DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
-                                }
-
-                                DetailErrors += "}, ";
+                                Count++;
+                                DetailErrors += "ProductCode : 'Kode produk harus diisi',";
                             }
 
-                            DetailErrors += "], ";
+                            if (string.IsNullOrWhiteSpace(item.ProductName))
+                            {
+                                Count++;
+                                DetailErrors += "ProductName : 'Nama produk harus diisi',";
+                            }
+
+                            if (!item.QuantityPacking.HasValue || item.QuantityPacking.Value <= 0)
+                            {
+                                Count++;
+                                DetailErrors += "QuantityPacking : 'Jumlah Packing harus diisi dan lebih besar dari 0',";
+                            }
+
+                            if (!item.QuantityItem.HasValue || item.QuantityItem.Value <= 0)
+                            {
+                                Count++;
+                                DetailErrors += "QuantityItem : 'Jumlah Item harus diisi dan lebih besar dari 0',";
+                            }
+
+                            if (string.IsNullOrWhiteSpace(item.PackingUom))
+                            {
+                                Count++;
+                                DetailErrors += "PackingUom : 'Satuan Packing harus diisi',";
+                            }
+
+                            if (string.IsNullOrWhiteSpace(item.ItemUom))
+                            {
+                                Count++;
+                                DetailErrors += "ItemUom : 'Satuan Item harus diisi',";
+                            }
+
+                            if (!item.Price.HasValue || item.Price.Value <= 0)
+                            {
+                                Count++;
+                                DetailErrors += "Price : 'Harga barang harus diisi dan lebih besar dari 0',";
+                            }
+
+                            DetailErrors += "}, ";
                         }
+
+                        DetailErrors += "], ";
                     }
 
                     DetailErrors += "}, ";
