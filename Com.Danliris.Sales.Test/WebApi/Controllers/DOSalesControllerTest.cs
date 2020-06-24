@@ -395,6 +395,81 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Get_DO_Sales_Export_Spinning_PDF_Success()
+        {
+            var vm = new DOSalesViewModel()
+            {
+                DOSalesType = "Ekspor",
+                DOSalesNo = "DOSalesNo",
+                DOSalesCategory = "SPINNING",
+                Date = DateTimeOffset.Now,
+                DoneBy = "DoneBy",
+                PackingUom = "PT",
+                WeightUom = "BALE",
+                Storage = new StorageViewModel() { },
+                SalesContract = new FinishingPrintingSalesContractViewModel()
+                {
+                    SalesContractNo = "SalesContractNo",
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
+                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                    {
+                        Name = "MaterialConstructionName",
+                    },
+                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                    {
+                        Name = "BuyerName",
+                    },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Name = "CommodityName",
+                    },
+                    MaterialWidth = "MaterialWidth",
+                    OrderQuantity = 1,
+                    PieceLength = "PieceLength",
+                },
+                FillEachBale = 1,
+                Remark = "Remark",
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                {
+                    new DOSalesDetailViewModel()
+                    {
+                        ProductionOrder = new ProductionOrderViewModel()
+                        {
+                            OrderNo = "OrderNo",
+                            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
+                            {
+                                Name = "MaterialName",
+                            },
+                            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                            {
+                                Name = "MaterialConstructionName",
+                            },
+                        },
+                        UnitOrCode = "UnitCode",
+                        Packing = 1,
+                        Weight = 1,
+                        ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
+
+                    }
+                }
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
         public void Get_DO_Sales_PDF_NotFound()
         {
             var mocks = GetMocks();
