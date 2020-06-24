@@ -226,6 +226,81 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                             },
                         },
                         UnitOrCode = "UnitCode",
+                        ConstructionName ="ConstructionName    \n",
+                        Packing = 1,
+                        Length = 1,
+                        ConvertionValue = 1,
+                        NoSOP="NoSOP",
+                        ThreadNumber="ThreadNumber",
+                        Grade="Grade",
+                    }
+                }
+            };
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
+            mocks.Mapper.Setup(s => s.Map<DOSalesViewModel>(It.IsAny<DOSalesModel>()))
+                .Returns(vm);
+            var controller = GetController(mocks);
+            var response = controller.GetDOSalesPDF(1).Result;
+
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public void Get_DO_Sales_Local_PDF_Dyeing_Success_YDS()
+        {
+            var vm = new DOSalesViewModel()
+            {
+                DOSalesType = "Lokal",
+                DOSalesNo = "DOSalesNo",
+                Date = DateTimeOffset.Now,
+                HeadOfStorage = "HeadOfStorage",
+                DOSalesCategory = "DYEINGPRINTING",
+                Storage = new StorageViewModel() { },
+                Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                {
+                    Name = "BuyerName",
+                },
+                //DestinationBuyerName = "DestinationBuyerName",
+                PackingUom = "PCS",
+                LengthUom = "YDS",
+                Disp = 1,
+                Op = 1,
+                Sc = 1,
+                SalesContract = new FinishingPrintingSalesContractViewModel()
+                {
+                    SalesContractNo = "SalesContractNo",
+                    Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel()
+                    {
+                        Name = "BuyerName",
+                    },
+                    Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel()
+                    {
+                        Name = "MaterialName",
+                    },
+                    MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                    {
+                        Name = "MaterialConstructionName",
+                    },
+                },
+                DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                {
+                    new DOSalesDetailViewModel()
+                    {
+                        ProductionOrder = new ProductionOrderViewModel()
+                        {
+                            OrderNo = "OrderNo",
+                            Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
+                            {
+                                Name = "MaterialName",
+                            },
+                            MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                            {
+                                Name = "MaterialConstructionName",
+                            },
+                        },
+                        UnitOrCode = "UnitCode",
+                        ConstructionName ="ConstructionName    \n",
                         Packing = 1,
                         Length = 1,
                         ConvertionValue = 1,
