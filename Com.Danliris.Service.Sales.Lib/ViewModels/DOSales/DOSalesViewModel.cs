@@ -83,8 +83,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (string.IsNullOrWhiteSpace(SalesName))
                     yield return new ValidationResult("Nama Sales harus diisi", new List<string> { "SalesName" });
 
-                if (string.IsNullOrWhiteSpace(LengthUom))
-                    yield return new ValidationResult("Satuan Panjang harus dipilih", new List<string> { "LengthUom" });
+                if(DOSalesCategory == "SPINNING")
+                {
+                    if (string.IsNullOrWhiteSpace(WeightUom))
+                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(LengthUom))
+                        yield return new ValidationResult("Satuan Panjang harus dipilih", new List<string> { "LengthUom" });
+                }
+
+                
 
                 if (!Disp.HasValue || Disp <= 0)
                     yield return new ValidationResult("Disp harus diisi", new List<string> { "Disp" });
@@ -107,8 +117,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (!FillEachBale.HasValue || FillEachBale.Value <= 0)
                     yield return new ValidationResult("Isi tiap bale harus lebih besar dari 0", new List<string> { "FillEachBale" });
 
-                if (string.IsNullOrWhiteSpace(WeightUom))
-                    yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                if(DOSalesCategory == "DYEINGPRINTING")
+                {
+                    if (string.IsNullOrWhiteSpace(LengthUom))
+                        yield return new ValidationResult("Satuan Panjang harus dipilih", new List<string> { "LengthUom" });
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(WeightUom))
+                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                }
+
+                    
             }
 
             int Count = 0;
@@ -145,13 +165,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                             rowErrorCount++;
                             DetailErrors += "Packing : 'Jumlah Pack harus lebih besar dari 0',";
                         }
-                        if (DOSalesType == "Lokal" && detail.Length <= 0)
-                        {
-                            Count++;
-                            rowErrorCount++;
-                            DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
-                        }
-                        if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                        //if (DOSalesType == "Lokal" && detail.Length <= 0)
+                        //{
+                        //    Count++;
+                        //    rowErrorCount++;
+                        //    DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
+                        //}
+                        if (detail.Weight <= 0)
                         {
                             Count++;
                             rowErrorCount++;
