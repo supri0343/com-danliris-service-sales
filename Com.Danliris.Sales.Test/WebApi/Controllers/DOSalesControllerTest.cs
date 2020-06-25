@@ -543,6 +543,58 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Validate_Validation_2()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "",
+                    Type = "       ",
+                    FillEachBale = null,
+                    SalesContract = new FinishingPrintingSalesContractViewModel()
+                    {
+                        SalesContractNo = null,
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel() { },
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_3()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "",
+                    Type = "Type",
+                    FillEachBale = null,
+                    SalesContract = new FinishingPrintingSalesContractViewModel()
+                    {
+                        SalesContractNo = null,
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel() { },
+                    }
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
         public void Validate_Validation_For_Local()
         {
             List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
@@ -554,6 +606,55 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Op = -1,
                     DOSalesCategory = "DYEINGPRINTING",
                     Sc = -1,
+                    Storage = new StorageViewModel()
+                    {
+                        _id = 0,
+                        name = "",
+                        code = "",
+                        unit = new UnitViewModel() {},
+                    },
+                    Commodity = new Service.Sales.Lib.ViewModels.IntegrationViewModel.CommodityViewModel()
+                    {
+                        Id = 0,
+                        Code = "",
+                        Name = "",
+                        Type = "",
+                    },
+                    DOSalesDetailItems = new List<DOSalesDetailViewModel>()
+                    {
+                        new DOSalesDetailViewModel()
+                        {
+                            Length = -1,
+                            ConvertionValue = -1,
+                        }
+                    }
+                },
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Disp = null,
+                    Op = null,
+                    Sc = null,
+                }
+            };
+            foreach (var viewModel in viewModels)
+            {
+                var defaultValidationResult = viewModel.Validate(null);
+                Assert.True(defaultValidationResult.Count() > 0);
+            }
+        }
+
+        [Fact]
+        public void Validate_Validation_For_Local_2()
+        {
+            List<DOSalesViewModel> viewModels = new List<DOSalesViewModel>
+            {
+                new DOSalesViewModel{
+                    DOSalesType = "Lokal",
+                    Type = null,
+                    Disp = -1,
+                    Op = -1,
+                    DOSalesCategory = "DYEINGPRINTING",
+                    Sc = 2,
                     Storage = new StorageViewModel()
                     {
                         _id = 0,
