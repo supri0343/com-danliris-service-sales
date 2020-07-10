@@ -137,11 +137,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
         {
             var data = CostCalculationGarments.Select(cc => new AvailableROGarmentReportViewModel
             {
-                ApprovedSampleDate = cc.ValidationSampleDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
+                ApprovedSampleDate = cc.ValidationMDDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 DeliveryDate = cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date,
                 RONo = cc.RO_Number,
                 Article = cc.Article,
-                DateDiff = (cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date - cc.ValidationSampleDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date).Days,
+                DateDiff = (cc.DeliveryDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date - cc.ValidationMDDate.ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).Date).Days,
                 BuyerCode = cc.BuyerBrandCode,
                 Buyer = cc.BuyerBrandName,
                 Quantity = cc.Quantity,

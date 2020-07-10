@@ -24,7 +24,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
         {
             Filter filter = JsonConvert.DeserializeObject<Filter>(filterString);
 
-            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsValidatedROSample);
+            IQueryable<CostCalculationGarment> Query = dbContext.CostCalculationGarments.Where(cc => cc.IsValidatedROMD);
 
             if (!string.IsNullOrWhiteSpace(filter.section))
             {
@@ -62,7 +62,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
 
             var result = Query.Select(cc => new CostCalculationGarment
             {
-                ValidationSampleDate = cc.ValidationSampleDate,
+                ValidationMDDate = cc.ValidationMDDate,
                 DeliveryDate = cc.DeliveryDate,
                 RO_Number = cc.RO_Number,
                 Article = cc.Article,
