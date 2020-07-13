@@ -56,9 +56,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Deskripsi Garment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Fabric Allowance", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Acc Allowance", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Deskripsi Garment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Profit %", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Qty Order", DataType = typeof(String) });
