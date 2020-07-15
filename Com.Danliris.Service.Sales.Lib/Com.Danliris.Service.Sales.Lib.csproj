@@ -92,4 +92,8 @@
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessLogic\Logic\NewFolder\" />
+  </ItemGroup>
+
 </Project>
