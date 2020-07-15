@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
-using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder;
+using Com.Danliris.Service.Sales.Lib.Models.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -12,16 +12,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ProductionOrder
 {
-    public class DOReturnDetailLogicTest
+    public class ProductionOrder_RunWidthLogicTest
     {
-        private const string ENTITY = "DOReturnItemLogic";
-        public DOReturnDetailLogicTest()
-        {
-        }
-
-
+        private const string ENTITY = "ProductionOrder_RunWidth";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -45,7 +40,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 
         public Mock<IServiceProvider> GetServiceProvider(string testname)
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
+            IIdentityService identityService = new IdentityService { Username = "Username", Token = "Token Test" };
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider
@@ -59,44 +54,26 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public void Read_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-
-            dbContext.DOReturnDetails.Add(new DOReturnDetailModel()
+            var model = new ProductionOrder_RunWidthModel()
             {
-                Active = true,
-                CreatedAgent = "",
-                CreatedBy = "someone",
-                CreatedUtc = DateTime.UtcNow,
-                DeletedAgent = "someone",
-                DeletedBy = "someone",
-                DeletedUtc = DateTime.UtcNow,
-                DOReturnDetailItems = new List<DOReturnDetailItemModel>()
+                ProductionOrderModel = new ProductionOrderModel()
                 {
-                    new DOReturnDetailItemModel()
-                    {
-                        Active =true,
-                        CreatedAgent = "CreatedAgent",
-                        CreatedBy ="CreatedBy"
-                    }
+                    BuyerCode = "BuyerCode"
                 },
+               Value =1
+            };
 
-                DOReturnModel = new DOReturnModel()
-                {
-                    Active = true
-                },
-                IsDeleted = false,
-                LastModifiedAgent = "LastModifiedAgent"
-
-            });
+            dbContext.ProductionOrder_RunWidth.Add(model);
             dbContext.SaveChanges();
-            DOReturnDetailLogic unitUnderTest = new DOReturnDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-
+            ProductionOrder_RunWidthLogic unitUnderTest = new ProductionOrder_RunWidthLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
             var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
+            Assert.True(0 < result.Data.Count);
             Assert.NotEmpty(result.Data);
         }
     }

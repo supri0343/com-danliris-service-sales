@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Xunit;
 
@@ -76,16 +77,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
                 LastModifiedUtc = DateTime.UtcNow,
                 LastModifiedAgent = "LastModifiedAgent"
 
-            }); ;
-            dbContext.SaveChanges();
-            int page = 1;
-            int size = 1;
-            string order = "{}";
-            string keyword = null;
-            //string filter = @"{""ProductName"":""""}";
+            }); 
 
-            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
-            Assert.NotEmpty(result.Data);
+            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
+            Assert.NotNull(result);
         }
     }
 }

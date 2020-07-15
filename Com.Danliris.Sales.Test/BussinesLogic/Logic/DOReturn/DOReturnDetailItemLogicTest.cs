@@ -77,14 +77,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             dbContext.SaveChanges();
             DOReturnDetailItemLogic unitUnderTest = new DOReturnDetailItemLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-            dbContext.SaveChanges();
-            int page = 1;
-            int size = 1;
-            string order = "{}";
-            string keyword = null;
-            //string filter = @"{""ProductName"":""""}";
-
-            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
             Assert.NotEmpty(result.Data);
         }
 
