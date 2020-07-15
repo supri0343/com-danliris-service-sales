@@ -52,7 +52,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
 
         }
-        
+
+        [Fact]
+        public void GetPDF_When_Model_State_Invalid()
+        {
+            var mocks = GetMocks();
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+
+            var response = controller.GetPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+
+        }
 
         [Fact]
         public void Get_PDF_Exception()

@@ -22,6 +22,7 @@ using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
 {
-    public class ROGarmentFacadeTest 
+    public class ROGarmentFacadeTest
     {
         private const string ENTITY = "ROGarment";
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -52,9 +53,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         protected SalesDbContext DbContext(string testName)
         {
             DbContextOptionsBuilder<SalesDbContext> optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>();
+            var serviceProvider = new ServiceCollection()
+               .AddEntityFrameworkInMemoryDatabase()
+               .BuildServiceProvider();
+
             optionsBuilder
                 .UseInMemoryDatabase(testName)
-                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .UseInternalServiceProvider(serviceProvider);
 
             SalesDbContext dbContext = new SalesDbContext(optionsBuilder.Options);
 
@@ -82,14 +88,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
 
             IIdentityService identityService = new IdentityService { Username = "Username" };
 
-           
-
             //ROGarmentLogic roGarmentLogic = new ROGarmentLogic(serviceProviderMock.Object, identityService, dbContext);
-            
-            
 
             CostCalculationGarmentMaterialLogic costCalculationGarmentMaterialLogic = new CostCalculationGarmentMaterialLogic(serviceProviderMock.Object, identityService, dbContext);
-            
+
 
             GarmentPreSalesContractLogic garmentPreSalesContractLogic = new GarmentPreSalesContractLogic(identityService, dbContext);
 
@@ -221,8 +223,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         }
 
 
+
         //[Fact]
-        //public override async void Update_Success()
+        //public  async Task Update_Success()
         //{
         //    var dbContext = DbContext(GetCurrentMethod());
         //    var serviceProvider = GetServiceProviderMock(dbContext).Object;
@@ -230,49 +233,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         //    ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
 
         //    var data = await DataUtil(facade, dbContext).GetTestData();
-
-        //    //var dataTemp = new RO_Garment
-        //    //{
-        //    //    Id = data.Id,
-        //    //    CostCalculationGarmentId = data.CostCalculationGarmentId,
-        //    //    CostCalculationGarment = data.CostCalculationGarment,
-        //    //    Code = data.Code,
-        //    //    Instruction = data.Instruction,
-        //    //    RO_Garment_SizeBreakdowns = new List<RO_Garment_SizeBreakdown>(),
-        //    //    Total = data.Total,
-        //    //    ImagesFile = data.ImagesFile,
-        //    //    ImagesName = data.ImagesName,
-        //    //    ImagesPath = data.ImagesPath,
-        //    //};
-
-        //    //foreach (var item in data.RO_Garment_SizeBreakdowns)
-        //    //{
-        //    //    var itemTemp = new RO_Garment_SizeBreakdown
-        //    //    {
-        //    //        Id = item.Id,
-        //    //        RO_GarmentId = item.RO_GarmentId,
-        //    //        Code = item.Code,
-        //    //        ColorId = item.ColorId,
-        //    //        ColorName = item.ColorName,
-        //    //        Total = item.Total,
-        //    //        RO_Garment_SizeBreakdown_Details = new List<RO_Garment_SizeBreakdown_Detail>()
-        //    //    };
-
-        //    //    foreach (var detail in item.RO_Garment_SizeBreakdown_Details)
-        //    //    {
-        //    //        itemTemp.RO_Garment_SizeBreakdown_Details.Add(new RO_Garment_SizeBreakdown_Detail
-        //    //        {
-        //    //            Id = detail.Id,
-        //    //            RO_Garment_SizeBreakdownId = detail.RO_Garment_SizeBreakdownId,
-        //    //            Code = detail.Code,
-        //    //            Size = detail.Size,
-        //    //            Information = detail.Information,
-        //    //            Quantity = detail.Quantity,
-        //    //        });
-        //    //    }
-
-        //    //    dataTemp.RO_Garment_SizeBreakdowns.Add(itemTemp);
-        //    //}
 
         //    var response = await facade.UpdateAsync((int)data.Id, data);
 
@@ -293,6 +253,42 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
 
             var ResultData = await facade.ReadByIdAsync((int)data.Id);
             Assert.Equal(ResultData.IsPosted, true);
+        }
+
+        [Fact]
+        public async Task PostRO_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProviderMock = new Mock<IServiceProvider>();
+
+            Mock<IIdentityService> identityService = new Mock<IIdentityService>();
+            identityService.Setup(s => s.Username).Throws(new Exception());
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IIdentityService)))
+                .Returns(identityService.Object);
+
+            ROGarmentSizeBreakdownLogic roGarmentSizeBreakdownLogic = new ROGarmentSizeBreakdownLogic(serviceProviderMock.Object, identityService.Object, dbContext);
+            serviceProviderMock
+               .Setup(x => x.GetService(typeof(ROGarmentSizeBreakdownLogic)))
+               .Returns(roGarmentSizeBreakdownLogic);
+
+            ROGarmentLogic roGarmentLogic = new ROGarmentLogic(serviceProviderMock.Object, identityService.Object, dbContext);
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(ROGarmentLogic)))
+                .Returns(roGarmentLogic);
+
+            RO_Garment garment = new RO_Garment()
+            {
+                Id = 1
+            };
+
+            dbContext.RO_Garments.Add(garment);
+            dbContext.SaveChanges();
+
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProviderMock.Object, dbContext);
+
+            await Assert.ThrowsAsync<Exception>(() => facade.PostRO(new List<long> { 1 }));
         }
 
         [Fact]
