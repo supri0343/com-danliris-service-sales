@@ -63,6 +63,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     MaterialConstructionId = field.MaterialConstructionId,
                     MaterialConstructionCode = field.MaterialConstructionCode,
                     MaterialConstructionName = field.MaterialConstructionName,
+                    SalesContractId = field.SalesContractId,
                     SalesContractNo = field.SalesContractNo,
                     BuyerType = field.BuyerType,
                     BuyerName = field.BuyerName,
