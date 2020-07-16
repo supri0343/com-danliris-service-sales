@@ -101,6 +101,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void GetPDF_When_Model_State_Invalid()
+        {
+            var mocks = GetMocks();
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+
+            var response = controller.GetPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+
+        }
+
+        [Fact]
         public void Get_PDF_Exception()
         {
             var mocks = GetMocks();
@@ -182,6 +196,27 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public async Task PutRequestedTrue_Return_BadRequest()
+        {
+            var mocks = GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<ProductionOrderViewModel>())).Verifiable();
+            var id = 1;
+            var viewModel = new ProductionOrderViewModel()
+            {
+                Id = id
+            };
+            //mocks.Mapper.Setup(m => m.Map<ProductionOrderViewModel>(It.IsAny<ProductionOrderViewModel>())).Returns(viewModel);
+            //mocks.Facade.Setup(f => f.UpdateRequestedTrue(It.IsAny<List<int>>())).ThrowsAsync(new Exception());
+            List<int> ids = new List<int>((int)viewModel.Id);
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = await controller.PutRequestedTrue(ids);
+
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+
+        [Fact]
         public async Task Put_IsRequested_False_Success()
         {
             var mocks = GetMocks();
@@ -214,6 +249,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Facade.Setup(f => f.UpdateRequestedFalse(It.IsAny<List<int>>())).ReturnsAsync(1);
             List<int> ids = new List<int>((int)viewModel.Id);
             var controller = GetController(mocks);
+            var response = await controller.PutRequestedFalse(null);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+
+        [Fact]
+        public async Task PutRequestedFalse_When_ModelState_Invalid()
+        {
+            var mocks = GetMocks();
+            
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
             var response = await controller.PutRequestedFalse(null);
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
@@ -275,6 +322,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public async Task PutIsCompletedTrue_WHen_ModelStateInvalid()
+        {
+            var mocks = GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<ProductionOrderViewModel>())).Verifiable();
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = await controller.PutIsCompletedTrue(0);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+
+        [Fact]
         public async Task Put_IsCompleted_True_InternalServer()
         {
             var mocks = GetMocks();
@@ -323,6 +382,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             mocks.Mapper.Setup(m => m.Map<ProductionOrderViewModel>(It.IsAny<ProductionOrderViewModel>())).Returns(viewModel);
             mocks.Facade.Setup(f => f.UpdateIsCompletedFalse(It.IsAny<int>())).ReturnsAsync(1);
             var controller = GetController(mocks);
+            var response = await controller.PutIsCompletedFalse(0);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+
+        [Fact]
+        public async Task PutIsCompletedFalse_When_Model_State_Invalid()
+        {
+            var mocks = GetMocks();
+            
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
             var response = await controller.PutIsCompletedFalse(0);
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
@@ -447,6 +518,37 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = await controller.PutDistributedQuantity(data);
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async Task PutDistributedQuantity_When_Model_State_Invalid()
+        {
+            var mocks = GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<ProductionOrderViewModel>())).Verifiable();
+           
+            List<SppParams> data = new List<SppParams>()
+            {
+                new SppParams()
+                {
+                    id = "1",
+                    context= "cpmt",
+                    distributedQuantity = 1
+                }
+            };
+            List<int> ids = new List<int>();
+            List<double> distributedQuantity = new List<double>();
+            foreach (var item in data)
+            {
+                ids.Add(int.Parse(item.id));
+                distributedQuantity.Add((double)item.distributedQuantity);
+            };
+
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+
+            var response = await controller.PutDistributedQuantity(data);
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
         }
 
         [Fact]
@@ -584,6 +686,17 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = controller.ReadBySalesContractId(It.IsAny<long>());
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public void ReadBySalesContractId_BadRequest()
+        {
+            var mocks = GetMocks();
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = controller.ReadBySalesContractId(It.IsAny<long>());
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
         }
     }
 }

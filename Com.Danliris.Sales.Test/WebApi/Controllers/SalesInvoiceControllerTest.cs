@@ -269,6 +269,20 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void Get_Sales_Invoice_Valas_Return_BadRequest()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceModel));
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = controller.GetSalesInvoiceValasPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+
+        }
+
+        [Fact]
         public void Get_Sales_Invoice_Valas_PDF_Exception()
         {
             var mocks = GetMocks();
@@ -449,7 +463,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
-        public void Get_Sales_Invoice_IDR_PDF_NotFound()
+        public void GetSalesInvoiceIDRPDF_Return_NotFound()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceModel));
@@ -460,9 +474,22 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             Assert.Equal((int)HttpStatusCode.NotFound, statusCode);
 
         }
-
         [Fact]
-        public void Get_Sales_Invoice_IDR_PDF_Exception()
+        public void GetSalesInvoiceIDRPDFF_Return_BadRequest()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(default(SalesInvoiceModel));
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = controller.GetSalesInvoiceIDRPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+
+        }
+      
+        [Fact]
+        public void GetSalesInvoiceIDRPDF_Throws_Exception()
         {
             var mocks = GetMocks();
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ThrowsAsync(new Exception("error"));

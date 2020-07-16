@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
-using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarments;
+using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -12,16 +12,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.CostCalculationGarments
 {
-    public class DOReturnDetailLogicTest
+    public class CostCalculationGarmentMaterialLogicTest
     {
-        private const string ENTITY = "DOReturnItemLogic";
-        public DOReturnDetailLogicTest()
-        {
-        }
-
-
+        private const string ENTITY = "CostCalculationGarment_Materials";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -45,7 +40,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 
         public Mock<IServiceProvider> GetServiceProvider(string testname)
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
+            IIdentityService identityService = new IdentityService { Username = "Username" ,Token ="Token Test"};
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider
@@ -64,39 +59,27 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-
-            dbContext.DOReturnDetails.Add(new DOReturnDetailModel()
+            var model = new CostCalculationGarment_Material()
             {
-                Active = true,
-                CreatedAgent = "",
-                CreatedBy = "someone",
-                CreatedUtc = DateTime.UtcNow,
-                DeletedAgent = "someone",
-                DeletedBy = "someone",
-                DeletedUtc = DateTime.UtcNow,
-                DOReturnDetailItems = new List<DOReturnDetailItemModel>()
-                {
-                    new DOReturnDetailItemModel()
-                    {
-                        Active =true,
-                        CreatedAgent = "CreatedAgent",
-                        CreatedBy ="CreatedBy"
-                    }
-                },
+                Code = "Code",
+                AutoIncrementNumber =1,
+                BudgetQuantity =1,
+                CategoryCode = "CategoryCode",
+                Information = "Information"
+            };
 
-                DOReturnModel = new DOReturnModel()
-                {
-                    Active = true
-                },
-                IsDeleted = false,
-                LastModifiedAgent = "LastModifiedAgent"
-
-            });
+            dbContext.CostCalculationGarment_Materials.Add(model);
             dbContext.SaveChanges();
-            DOReturnDetailLogic unitUnderTest = new DOReturnDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
+            CostCalculationGarmentMaterialLogic unitUnderTest = new CostCalculationGarmentMaterialLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
+            dbContext.SaveChanges();
+            int page = 1;
+            int size = 1;
+            string order = "{}";
+            string keyword = null;
+          
+            var result = unitUnderTest.Read(page, size, order, new List<string>() { "" }, keyword, "{}");
+            Assert.True(0 < result.Data.Count);
             Assert.NotEmpty(result.Data);
         }
     }

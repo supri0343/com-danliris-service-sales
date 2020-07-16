@@ -120,6 +120,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public async Task Patch_When_Model_State_Invalid()
+        {
+            var mocks = GetMocks(); 
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+
+            var response = await controller.Patch(2, new JsonPatchDocument<GarmentOmzetTarget>());
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, GetStatusCode(response));
+        }
+
+        [Fact]
         public async Task Should_ValidateError_Patch()
         {
 

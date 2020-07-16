@@ -25,6 +25,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public async Task Should_Success_BadRequest()
+        {
+            var mocks = GetMocks();
+            mocks.Facade.Setup(x => x.ReadModelByQuantity(It.IsAny<int>()))
+                .ReturnsAsync(Model);
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "test");
+            var response = await controller.GetByQuantity(1);
+            Assert.Equal((int)HttpStatusCode.BadRequest, GetStatusCode(response));
+        }
+
+        [Fact]
         public async Task Should_NotFound_GetByQUantity()
         {
             var mocks = GetMocks();

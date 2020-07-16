@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
-using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
+using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -12,16 +12,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
 {
-    public class DOReturnDetailLogicTest
+    public class ROGarmentSizeBreakdownDetailLogicTest
     {
-        private const string ENTITY = "DOReturnItemLogic";
-        public DOReturnDetailLogicTest()
-        {
-        }
-
-
+        private const string ENTITY = "RO_Garment_SizeBreakdowns";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -45,7 +40,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 
         public Mock<IServiceProvider> GetServiceProvider(string testname)
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
+            IIdentityService identityService = new IdentityService { Username = "Username", Token = "Token Test" };
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider
@@ -64,39 +59,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-
-            dbContext.DOReturnDetails.Add(new DOReturnDetailModel()
+            var model = new RO_Garment_SizeBreakdown_Detail()
             {
-                Active = true,
-                CreatedAgent = "",
-                CreatedBy = "someone",
-                CreatedUtc = DateTime.UtcNow,
-                DeletedAgent = "someone",
-                DeletedBy = "someone",
-                DeletedUtc = DateTime.UtcNow,
-                DOReturnDetailItems = new List<DOReturnDetailItemModel>()
-                {
-                    new DOReturnDetailItemModel()
-                    {
-                        Active =true,
-                        CreatedAgent = "CreatedAgent",
-                        CreatedBy ="CreatedBy"
-                    }
-                },
+                Code = "Code",
+                SizeBreakdownDetailIndex =1
+            };
 
-                DOReturnModel = new DOReturnModel()
-                {
-                    Active = true
-                },
-                IsDeleted = false,
-                LastModifiedAgent = "LastModifiedAgent"
-
-            });
+            dbContext.RO_Garment_SizeBreakdown_Details.Add(model);
             dbContext.SaveChanges();
-            DOReturnDetailLogic unitUnderTest = new DOReturnDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-
+            ROGarmentSizeBreakdownDetailLogic unitUnderTest = new ROGarmentSizeBreakdownDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
             var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
+            Assert.True(0 < result.Data.Count);
             Assert.NotEmpty(result.Data);
         }
     }

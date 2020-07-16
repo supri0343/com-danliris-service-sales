@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOReturn;
-using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -12,16 +12,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.SalesInvoice
 {
-    public class DOReturnDetailLogicTest
+    public class SalesInvoiceItemLogicTest
     {
-        private const string ENTITY = "DOReturnItemLogic";
-        public DOReturnDetailLogicTest()
-        {
-        }
-
-
+        private const string ENTITY = "ProductionOrder_Details";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -45,7 +40,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
 
         public Mock<IServiceProvider> GetServiceProvider(string testname)
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
+            IIdentityService identityService = new IdentityService { Username = "Username", Token = "Token Test" };
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider
@@ -59,44 +54,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.DOReturn
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public void Read_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-
-            dbContext.DOReturnDetails.Add(new DOReturnDetailModel()
+            var model = new SalesInvoiceItemModel()
             {
-                Active = true,
-                CreatedAgent = "",
-                CreatedBy = "someone",
-                CreatedUtc = DateTime.UtcNow,
-                DeletedAgent = "someone",
-                DeletedBy = "someone",
-                DeletedUtc = DateTime.UtcNow,
-                DOReturnDetailItems = new List<DOReturnDetailItemModel>()
-                {
-                    new DOReturnDetailItemModel()
-                    {
-                        Active =true,
-                        CreatedAgent = "CreatedAgent",
-                        CreatedBy ="CreatedBy"
-                    }
-                },
+               Amount =1
+            };
 
-                DOReturnModel = new DOReturnModel()
-                {
-                    Active = true
-                },
-                IsDeleted = false,
-                LastModifiedAgent = "LastModifiedAgent"
-
-            });
+            dbContext.SalesInvoiceItems.Add(model);
             dbContext.SaveChanges();
-            DOReturnDetailLogic unitUnderTest = new DOReturnDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-
+            SalesInvoiceItemLogic unitUnderTest = new SalesInvoiceItemLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
             var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
+            Assert.True(0 < result.Data.Count);
             Assert.NotEmpty(result.Data);
         }
     }
