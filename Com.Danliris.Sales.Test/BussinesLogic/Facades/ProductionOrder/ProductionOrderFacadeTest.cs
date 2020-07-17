@@ -130,6 +130,55 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             Assert.NotEqual(response, 0);
         }
 
+        [Fact]
+        public async Task Update_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+            var data = await DataUtil(facade).GetNewData();
+            data.SalesContractId = salesData.Id;
+            var model = await facade.CreateAsync(data);
+            var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
+
+            await Assert.ThrowsAnyAsync<Exception>(() => facade.UpdateAsync((int)all.Data.FirstOrDefault().Id, null));
+            
+        }
+
+        [Fact]
+        public async void Update_Delete_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod()+ "Update_Delete_Success");
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            ProductionOrderFacade facade1 = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            ProductionOrderFacade facade2 = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+            var data = await DataUtil(facade1).GetNewData();
+            data.SalesContractId = salesData.Id;
+            var model = await facade1.CreateAsync(data);
+            var all = facade1.Read(1, 25, "{}", new List<string>(), null, "{}");
+
+            data.Details = new List<ProductionOrder_DetailModel>();
+            data.Details.Add(new ProductionOrder_DetailModel()
+            {
+                ColorRequest = "c",
+                Quantity = 10,
+                ColorTemplate = "ct",
+                ColorType = "type",
+                UomUnit = "unit"
+            });
+
+            var response = await facade2.UpdateAsync((int)all.Data.FirstOrDefault().Id, data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+
         protected override Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
@@ -409,6 +458,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var tuple = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, null, null, 1, 25, "{}", 7);
             Assert.NotNull(tuple.Item1);
 
+            var tuple2 = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
+            Assert.NotNull(tuple2.Item1);
+
 
         }
         [Fact]
@@ -550,6 +602,24 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
 
             Assert.Equal(vm.Id, model.Id);
 
+        }
+
+        [Fact]
+        public async void ReadSalesByContractId_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+            var data = await DataUtil(facade).GetNewData();
+            data.SalesContractId = salesData.Id;
+            var model = await facade.CreateAsync(data);
+            var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
+            var response = facade.ReadBySalesContractId(all.Data.FirstOrDefault().SalesContractId);
+
+            Assert.NotEmpty(response);
         }
     }
 }
