@@ -131,6 +131,24 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
         }
 
         [Fact]
+        public async Task Update_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+            var data = await DataUtil(facade).GetNewData();
+            data.SalesContractId = salesData.Id;
+            var model = await facade.CreateAsync(data);
+            var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
+
+            await Assert.ThrowsAnyAsync<Exception>(() => facade.UpdateAsync((int)all.Data.FirstOrDefault().Id, null));
+            
+        }
+
+        [Fact]
         public async void Update_Delete_Success()
         {
             var dbContext = DbContext(GetCurrentMethod()+ "Update_Delete_Success");
