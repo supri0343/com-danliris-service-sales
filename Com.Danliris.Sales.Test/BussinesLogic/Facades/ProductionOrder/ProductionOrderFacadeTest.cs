@@ -621,5 +621,25 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
 
             Assert.NotEmpty(response);
         }
+
+        [Fact]
+        public async void ReadConstruction_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+            var data = await DataUtil(facade).GetNewData();
+            data.SalesContractId = salesData.Id;
+            var model = await facade.CreateAsync(data);
+
+
+            var Response = facade.ReadConstruction(1, 25, data.MaterialName, "{}");
+
+            Assert.NotEqual(Response.Count, 0);
+        }
     }
 }

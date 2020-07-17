@@ -258,7 +258,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public async Task PutRequestedFalse_When_ModelState_Invalid()
         {
             var mocks = GetMocks();
-            
+
             var controller = GetController(mocks);
             controller.ModelState.AddModelError("key", "test");
             var response = await controller.PutRequestedFalse(null);
@@ -391,7 +391,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         public async Task PutIsCompletedFalse_When_Model_State_Invalid()
         {
             var mocks = GetMocks();
-            
+
             var controller = GetController(mocks);
             controller.ModelState.AddModelError("key", "test");
             var response = await controller.PutIsCompletedFalse(0);
@@ -525,7 +525,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = GetMocks();
             mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<ProductionOrderViewModel>())).Verifiable();
-           
+
             List<SppParams> data = new List<SppParams>()
             {
                 new SppParams()
@@ -697,6 +697,32 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var response = controller.ReadBySalesContractId(It.IsAny<long>());
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+        }
+
+        [Fact]
+        public void GetConstruction_WithoutException_ReturnOK()
+        {
+            var mocks = this.GetMocks();
+            mocks.Facade.Setup(f => f.ReadConstruction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new List<string>() { "s" });
+
+            var controller = GetController(mocks);
+            var response = controller.GetConstruction();
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void GetConstruction_Exception_InternalServer()
+        {
+            var mocks = this.GetMocks();
+            mocks.Facade.Setup(f => f.ReadConstruction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new Exception());
+
+            var controller = GetController(mocks);
+            var response = controller.GetConstruction();
+            int statusCode = GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
     }
 }

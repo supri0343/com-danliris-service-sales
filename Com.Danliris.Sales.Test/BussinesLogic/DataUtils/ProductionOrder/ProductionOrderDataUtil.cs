@@ -41,6 +41,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                 FinishWidth = "1",
                 HandlingStandard = "handling",
                 MaterialCode = "code",
+                MaterialName = "name",
+                MaterialConstructionName = "name",
+                MaterialWidth = "1",
                 MaterialConstructionCode = "code",
                 OrderQuantity = 100,
                 Details = new List<ProductionOrder_DetailModel>() {

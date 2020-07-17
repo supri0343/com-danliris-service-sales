@@ -25,5 +25,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
         List<YearlyOrderQuantity> GetMonthlyOrderQuantityByYearAndOrderType(int year, int orderTypeId, int timeoffset);
         List<MonthlyOrderQuantity> GetMonthlyOrderIdsByOrderType(int year, int month, int orderTypeId, int timeoffset);
         List<ProductionOrderModel> ReadBySalesContractId(long salesContractId);
+        List<string> ReadConstruction(int page, int size, string keyword, string filter);
     }
 }
