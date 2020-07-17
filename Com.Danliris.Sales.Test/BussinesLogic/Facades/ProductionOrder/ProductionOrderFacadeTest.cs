@@ -440,6 +440,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var tuple = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, null, null, 1, 25, "{}", 7);
             Assert.NotNull(tuple.Item1);
 
+            var tuple2 = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
+            Assert.NotNull(tuple2.Item1);
+
 
         }
         [Fact]
