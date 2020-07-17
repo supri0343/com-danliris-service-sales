@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
@@ -260,6 +261,26 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
         public List<ProductionOrderModel> ReadBySalesContractId(long salesContractId)
         {
             var result = DbSet.Where(p => p.SalesContractId == salesContractId).Include(p => p.Details);
+            return result.ToList();
+        }
+
+        public List<string> ReadConstruction(int page, int size, string keyword, string filter)
+        {
+            IQueryable<ProductionOrderModel> Query = DbSet;
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+            Query = QueryHelper<ProductionOrderModel>.Filter(Query, FilterDictionary);
+
+            var result = Query
+                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.MaterialWidth)
+                .Distinct();
+
+            if (keyword != null)
+                result = result.Where(s => s.Contains(keyword));
+
+            result = result.OrderBy(s => s)
+             .Skip((page - 1) * size).Take(size);
+
             return result.ToList();
         }
     }
