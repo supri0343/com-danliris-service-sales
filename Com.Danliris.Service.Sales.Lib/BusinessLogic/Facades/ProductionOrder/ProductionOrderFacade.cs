@@ -970,5 +970,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return productionOrderLogic.ReadBySalesContractId(salesContractId);
         }
 
+        public List<string> ReadConstruction(int page, int size, string keyword, string filter)
+        {
+            return productionOrderLogic.ReadConstruction(page, size, keyword, filter);
+        }
     }
 }

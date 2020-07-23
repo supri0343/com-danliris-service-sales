@@ -30,6 +30,19 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public void GetPDF_Return_BadRequest()
+        {
+            var mocks = GetMocks();
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "error");
+            var response = controller.GetPDF(1).Result;
+
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.BadRequest, statusCode);
+
+        }
+
+        [Fact]
         public void Get_PDF_Exception()
         {
             var mocks = GetMocks();

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
@@ -33,7 +34,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
 
             List<string> SearchAttributes = new List<string>()
             {
-              "OrderNo", "SalesContractNo", "BuyerType", "BuyerName", "ProcessTypeName"
+              "OrderNo", "SalesContractNo", "BuyerType", "BuyerName", "ProcessTypeName", "MaterialName","MaterialConstructionName","MaterialWidth"
             };
 
             Query = QueryHelper<ProductionOrderModel>.Search(Query, SearchAttributes, keyword);
@@ -63,6 +64,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     MaterialConstructionId = field.MaterialConstructionId,
                     MaterialConstructionCode = field.MaterialConstructionCode,
                     MaterialConstructionName = field.MaterialConstructionName,
+                    SalesContractId = field.SalesContractId,
                     SalesContractNo = field.SalesContractNo,
                     BuyerType = field.BuyerType,
                     BuyerName = field.BuyerName,
@@ -124,7 +126,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                             productionOrder_DetailLogic.UpdateAsync(itemId, data);
                         }
 
-                        
+
                     }
                     foreach (ProductionOrder_DetailModel item in model.Details)
                     {
@@ -143,8 +145,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                             productionOrder_LampStandardLogic.UpdateAsync(itemId, data);
                         }
                     }
-                    
-                    foreach(ProductionOrder_LampStandardModel item in model.LampStandards)
+
+                    foreach (ProductionOrder_LampStandardModel item in model.LampStandards)
                     {
                         if (item.Id == 0)
                             productionOrder_LampStandardLogic.Create(item);
@@ -157,13 +159,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                         {
                             ProductionOrder_RunWidthModel data = model.RunWidths.FirstOrDefault(prop => prop.Id.Equals(itemId));
                             if (data == null)
-                               await productionOrder_RunWidthLogic.DeleteAsync(itemId);
+                                await productionOrder_RunWidthLogic.DeleteAsync(itemId);
                             else
                             {
                                 productionOrder_RunWidthLogic.UpdateAsync(itemId, data);
                             }
 
-                            
+
                         }
                         foreach (ProductionOrder_RunWidthModel item in model.RunWidths)
                         {
@@ -177,11 +179,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
 
                 EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
                 DbSet.Update(model);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
-            
+
 
         }
 
@@ -247,7 +250,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
 
         public override async Task<ProductionOrderModel> ReadByIdAsync(long id)
         {
-            var ProductionOrder = await DbSet.Where(p=>p.Details.Select(d=>d.ProductionOrderModel.Id).Contains(p.Id)).Include(p => p.Details)
+            var ProductionOrder = await DbSet.Where(p => p.Details.Select(d => d.ProductionOrderModel.Id).Contains(p.Id)).Include(p => p.Details)
                 .Include(p => p.LampStandards).Include(p => p.RunWidths).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
             ProductionOrder.Details = ProductionOrder.Details.OrderBy(s => s.Id).ToArray();
             ProductionOrder.LampStandards = ProductionOrder.LampStandards.OrderBy(s => s.Id).ToArray();
@@ -258,6 +261,26 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
         public List<ProductionOrderModel> ReadBySalesContractId(long salesContractId)
         {
             var result = DbSet.Where(p => p.SalesContractId == salesContractId).Include(p => p.Details);
+            return result.ToList();
+        }
+
+        public List<string> ReadConstruction(int page, int size, string keyword, string filter)
+        {
+            IQueryable<ProductionOrderModel> Query = DbSet;
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+            Query = QueryHelper<ProductionOrderModel>.Filter(Query, FilterDictionary);
+
+            var result = Query
+                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.MaterialWidth)
+                .Distinct();
+
+            if (keyword != null)
+                result = result.Where(s => s.Contains(keyword));
+
+            result = result.OrderBy(s => s)
+             .Skip((page - 1) * size).Take(size);
+
             return result.ToList();
         }
     }

@@ -41,6 +41,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                 FinishWidth = "1",
                 HandlingStandard = "handling",
                 MaterialCode = "code",
+                MaterialName = "name",
+                MaterialConstructionName = "name",
+                MaterialWidth = "1",
                 MaterialConstructionCode = "code",
                 OrderQuantity = 100,
                 Details = new List<ProductionOrder_DetailModel>() {
@@ -54,8 +57,23 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                     }
                 },
                 OrderTypeName = "oname",
-                LampStandards = new List<ProductionOrder_LampStandardModel>(),
+                LampStandards = new List<ProductionOrder_LampStandardModel>()
+                {
+                    new ProductionOrder_LampStandardModel()
+                    {
+                        Name = "a",
+                        Description = "a",
+                        LampStandardId = 1,
+
+                    }
+                },
                 RunWidths = new List<ProductionOrder_RunWidthModel>()
+                {
+                    new ProductionOrder_RunWidthModel()
+                    {
+                        Value = 1
+                    }
+                }
 
             };
         }

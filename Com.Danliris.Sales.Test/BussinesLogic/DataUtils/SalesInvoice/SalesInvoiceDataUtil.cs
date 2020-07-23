@@ -20,7 +20,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Code = "code",
                 AutoIncreament = 1,
                 SalesInvoiceNo = "SalesInvoiceNo",
-                SalesInvoiceType = "BNG",
+                SalesInvoiceType = "L/C",
                 SalesInvoiceCategory = "DYEINGPRINTING",
                 SalesInvoiceDate = DateTimeOffset.UtcNow,
                 DueDate = DateTimeOffset.UtcNow.AddDays(-2),
@@ -40,21 +40,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Remark = "Remark",
                 TotalPayment = 100,
                 TotalPaid = 0,
-                SalesType = "Ekspor",
-                //export
-                SailingDate = DateTimeOffset.UtcNow,
-                ShippedPer = "ShippedPer",
-                Color = "Color",
-                OrderNo = "OrderNo",
-                Indent = "Indent",
-                CartonNo = "CartonNo",
-                WeightUom = "KG",
-                TotalUom = "CBM",
-                QuantityLength = 100,
-                GrossWeight = 100,
-                NetWeight = 100,
-                TotalMeas = 100,
-
                 SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
                 {
                     new SalesInvoiceDetailModel()
@@ -107,9 +92,6 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.SalesInvoice
                 Remark = "Remark",
                 TotalPayment = 100,
                 TotalPaid = 0,
-                SalesType = "SalesType",
-                SailingDate = DateTimeOffset.UtcNow,
-                ShippedPer = "ShippedPer",
 
                 SalesInvoiceDetails = new List<SalesInvoiceDetailModel>()
                 {

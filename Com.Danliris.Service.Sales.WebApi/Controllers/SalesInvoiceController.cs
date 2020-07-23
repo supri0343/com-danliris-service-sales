@@ -111,8 +111,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
-        [HttpGet("sales-invoice-pdf/{Id}")]
-        public async Task<IActionResult> GetSalesInvoicePDF([FromRoute] int Id)
+        [HttpGet("sales-invoice-valas-pdf/{Id}")]
+        public async Task<IActionResult> GetSalesInvoiceValasPDF([FromRoute] int Id)
         {
             if (!ModelState.IsValid)
             {
@@ -136,11 +136,11 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 {
                     SalesInvoiceViewModel viewModel = Mapper.Map<SalesInvoiceViewModel>(model);
 
-                    SalesInvoicePdfTemplate PdfTemplate = new SalesInvoicePdfTemplate();
+                    SalesInvoiceValasPdfTemplate PdfTemplate = new SalesInvoiceValasPdfTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "Faktur_Penjualan/" + viewModel.SalesInvoiceNo + ".pdf"
+                        FileDownloadName = "Faktur_Penjualan_Valas/" + viewModel.SalesInvoiceNo + ".pdf"
                     };
                 }
             }
@@ -153,6 +153,47 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+        [HttpGet("sales-invoice-idr-pdf/{Id}")]
+        public async Task<IActionResult> GetSalesInvoiceIDRPDF([FromRoute] int Id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
+                int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                SalesInvoiceModel model = await Facade.ReadByIdAsync(Id);
+
+                if (model == null)
+                {
+                    Dictionary<string, object> Result =
+                        new ResultFormatter(ApiVersion, Common.NOT_FOUND_STATUS_CODE, Common.NOT_FOUND_MESSAGE)
+                        .Fail();
+                    return NotFound(Result);
+                }
+                else
+                {
+                    SalesInvoiceViewModel viewModel = Mapper.Map<SalesInvoiceViewModel>(model);
+
+                    SalesInvoiceIDRPdfTemplate PdfTemplate = new SalesInvoiceIDRPdfTemplate();
+                    MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
+                    return new FileStreamResult(stream, "application/pdf")
+                    {
+                        FileDownloadName = "Faktur_Penjualan_IDR/" + viewModel.SalesInvoiceNo + ".pdf"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
         [HttpGet("reports")]
         public async Task<IActionResult> GetReportAll(int buyerId, int salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, [FromHeader(Name = "x-timezone-offset")] string timezone)
         {

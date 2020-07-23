@@ -177,6 +177,18 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         }
 
         [Fact]
+        public async Task GetById_RO_Garment_Validation_Return_BadRequest()
+        {
+            var mocks = this.GetMocks();
+           
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "value");
+            var response = await controller.GetById_RO_Garment_Validation(It.IsAny<int>());
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, GetStatusCode(response));
+        }
+
+        [Fact]
         public void Validate_ViewModel()
         {
             List<CostCalculationGarmentViewModel> viewModels = new List<CostCalculationGarmentViewModel>
