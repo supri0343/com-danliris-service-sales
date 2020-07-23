@@ -25,8 +25,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 		}
 
 		public MemoryStream GeneratePdfTemplate(CostCalculationGarmentViewModel viewModel, int timeoffset)
-		{
-			BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
+        {
+            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
 			BaseFont bf_bold = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
 			Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 6);
 			Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 6);
@@ -635,75 +635,134 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Draw Middle and Bottom
 
-           // table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
-            table_outer.WriteSelectedRows(0, -1, 10, row2Y, cb);
+            //        // table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
+            //         table_outer.WriteSelectedRows(0, -1, 10, row2Y, cb);
 
-            float row3Y = row2Y - table_outer.TotalHeight - 10;
-			float row3RemainingHeight = row3Y - printedOnHeight - margin;
-			if (row3RemainingHeight < row3Height)
-			{
-				this.DrawPrintedOn(now, bf, cb);
-				row3Y = startY;
-				document.NewPage();
-			}
+            //         float row3Y = row2Y - table_outer.TotalHeight - 10;
+            //float row3RemainingHeight = row3Y - printedOnHeight - margin;
+            //if (row3RemainingHeight < row3Height)
+            //{
+            //	this.DrawPrintedOn(now, bf, cb);
+            //	row3Y = startY;
+            //	document.NewPage();
+            //}
 
-			table_bottom_column1_1.WriteSelectedRows(0, -1, 10, row3Y, cb);
+            //table_bottom_column1_1.WriteSelectedRows(0, -1, 10, row3Y, cb);
 
-            table_bottom_column2_1.WriteSelectedRows(0, -1, 200, row3Y, cb);
+            //         table_bottom_column2_1.WriteSelectedRows(0, -1, 200, row3Y, cb);
 
-			float noteY = row3Y - table_bottom_column2_1.TotalHeight;
-			float table_bottom_column2_2Y;
-			if (isDollar)
-			{
-				noteY = noteY - 15;
-				table_bottom_column2_2Y = noteY - 5;
-				cb.BeginText();
-				cb.SetFontAndSize(bf, 6);
-				cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 200, noteY, 0);
-				cb.EndText();
-			}
-			else
-			{
-				table_bottom_column2_2Y = noteY - 10;
-			}
-            table_bottom_column2_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
+            //float noteY = row3Y - table_bottom_column2_1.TotalHeight;
+            //float table_bottom_column2_2Y;
+            //if (isDollar)
+            //{
+            //	noteY = noteY - 15;
+            //	table_bottom_column2_2Y = noteY - 5;
+            //	cb.BeginText();
+            //	cb.SetFontAndSize(bf, 6);
+            //	cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 200, noteY, 0);
+            //	cb.EndText();
+            //}
+            //else
+            //{
+            //	table_bottom_column2_2Y = noteY - 10;
+            //}
+            //         table_bottom_column2_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
 
-            float detail1_2Y = row3Y - table_bottom_column2_2.TotalHeight - 2;
-            table_bottom_column1_2.WriteSelectedRows(0, -1, 400, detail1_2Y, cb);
+            //         float detail1_2Y = row3Y - table_bottom_column2_2.TotalHeight - 2;
+            //         table_bottom_column1_2.WriteSelectedRows(0, -1, 400, detail1_2Y, cb);
 
-            float detail1_3Y = detail1_2Y - table_bottom_column1_2.TotalHeight - 2;
-            table_bottom_column1_3.WriteSelectedRows(0, -1, 400, detail1_3Y, cb);
+            //         float detail1_3Y = detail1_2Y - table_bottom_column1_2.TotalHeight - 2;
+            //         table_bottom_column1_3.WriteSelectedRows(0, -1, 400, detail1_3Y, cb);
 
 
-            //table_bottom_column1_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
-            table_bottom_column3_1.WriteSelectedRows(0, -1, 400, row3Y, cb);
+            //         //table_bottom_column1_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
+            //         table_bottom_column3_1.WriteSelectedRows(0, -1, 400, row3Y, cb);
 
-			float table_signatureX;
-			float table_signatureY;
-			if (signatureInsideRow3)
-			{
-				table_signatureX = margin + table_bottom_column2_2.TotalWidth + 10;
-				table_signatureY = row3Y - row3Height + table_signature.TotalHeight;
-				table_signature.TotalWidth = 390f;
-			}
-			else
-			{
-				table_signatureX = margin;
-				table_signatureY = row3Y - row3Height - 10;
-				float signatureRemainingHeight = table_signatureY - printedOnHeight - margin;
-				if (signatureRemainingHeight < table_signature.TotalHeight)
-				{
-					this.DrawPrintedOn(now, bf, cb);
-					table_signatureY = startY;
-					document.NewPage();
-				}
-			}
-			table_signature.WriteSelectedRows(0, -1, table_signatureX, table_signatureY, cb);
+            //float table_signatureX;
+            //float table_signatureY;
+            //if (signatureInsideRow3)
+            //{
+            //	table_signatureX = margin + table_bottom_column2_2.TotalWidth + 10;
+            //	table_signatureY = row3Y - row3Height + table_signature.TotalHeight;
+            //	table_signature.TotalWidth = 390f;
+            //}
+            //else
+            //{
+            //	table_signatureX = margin;
+            //	table_signatureY = row3Y - row3Height - 10;
+            //	float signatureRemainingHeight = table_signatureY - printedOnHeight - margin;
+            //	if (signatureRemainingHeight < table_signature.TotalHeight)
+            //	{
+            //		this.DrawPrintedOn(now, bf, cb);
+            //		table_signatureY = startY;
+            //		document.NewPage();
+            //	}
+            //}
+            //table_signature.WriteSelectedRows(0, -1, table_signatureX, table_signatureY, cb);
 
-			this.DrawPrintedOn(now, bf, cb);
-			#endregion
+            //this.DrawPrintedOn(now, bf, cb);
+            #endregion
 
-			document.Close();
+            #region Add Middle and Bottom
+
+            document.Add(new Paragraph("\n") { SpacingAfter = row1Height + 20 });
+            new PdfPCell(table_outer);
+            table_outer.ExtendLastRow = false;
+            table_outer.SplitLate = false;
+            table_outer.SpacingAfter = 10f;
+            document.Add(table_outer);
+
+            PdfPTable table_bottom = new PdfPTable(5);
+            table_bottom.SetWidths(new float[] { 1f, 0.05f, 1f, 0.05f, 1f });
+            table_bottom.DefaultCell.Border = Rectangle.NO_BORDER;
+            table_bottom.DefaultCell.Padding = 0;
+
+            var cell_bottom_left = new PdfPCell() { Border = Rectangle.NO_BORDER };
+            new PdfPCell(table_bottom_column1_1);
+            table_bottom_column1_1.ExtendLastRow = false;
+            cell_bottom_left.AddElement(table_bottom_column1_1);
+            table_bottom.AddCell(cell_bottom_left);
+
+            table_bottom.AddCell("\n");
+
+            var cell_bottom_center = new PdfPCell() { Border = Rectangle.NO_BORDER };
+            new PdfPCell(table_bottom_column2_1);
+            table_bottom_column2_1.ExtendLastRow = false;
+            cell_bottom_center.AddElement(table_bottom_column2_1);
+            if (isDollar)
+            {
+                cell_bottom_center.AddElement(new Paragraph($"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", normal_font));
+            }
+            table_bottom.AddCell(cell_bottom_center);
+
+            table_bottom.AddCell("\n");
+
+            var cell_bottom_right = new PdfPCell() { Border = Rectangle.NO_BORDER };
+
+            new PdfPCell(table_bottom_column2_2);
+            table_bottom_column2_2.ExtendLastRow = false;
+            cell_bottom_right.AddElement(table_bottom_column2_2);
+            new PdfPCell(table_bottom_column1_2);
+            table_bottom_column1_2.ExtendLastRow = false;
+            cell_bottom_right.AddElement(table_bottom_column1_2);
+            new PdfPCell(table_bottom_column1_3);
+            table_bottom_column1_3.ExtendLastRow = false;
+            cell_bottom_right.AddElement(table_bottom_column1_3);
+
+            table_bottom.AddCell(cell_bottom_right);
+
+            new PdfPCell(table_bottom);
+            table_bottom.ExtendLastRow = false;
+            table_bottom.SpacingAfter = 20f;
+            document.Add(table_bottom);
+
+            new PdfPCell(table_signature);
+            table_signature.ExtendLastRow = false;
+            document.Add(table_signature);
+
+            #endregion
+
+            document.Close();
 
 			byte[] byteInfo = stream.ToArray();
 			stream.Write(byteInfo, 0, byteInfo.Length);

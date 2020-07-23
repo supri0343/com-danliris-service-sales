@@ -56,7 +56,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             {
                 Comodity = new MasterPlanComodityViewModel(),
                 Unit = new UnitViewModel(),
-                Rate = new RateViewModel(),
+                Rate = new RateViewModel { Id = 1, Value = 1 },
                 CostCalculationGarment_Materials = new List<CostCalculationGarment_MaterialViewModel>()
                 {
                     new CostCalculationGarment_MaterialViewModel()
