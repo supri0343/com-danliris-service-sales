@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
-using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting;
+using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -10,13 +10,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.FinishingPrinting
 {
-    public class ROGarmentSizeBreakdownLogicTest
+    public class FinishingPrintingSalesContractDetailLogicTest
     {
-        private const string ENTITY = "RO_Garment_SizeBreakdowns";
+
+        private const string ENTITY = "FinishingPrintingSalesContractDetail";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -50,57 +52,51 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
-            ROGarmentSizeBreakdownDetailLogic ROGarmentSizeBreakdownDetail = new ROGarmentSizeBreakdownDetailLogic(serviceProvider.Object, identityService, _dbContext(testname));
-
-            serviceProvider.Setup(s => s.GetService(typeof(ROGarmentSizeBreakdownDetailLogic)))
-               .Returns(ROGarmentSizeBreakdownDetail);
 
             return serviceProvider;
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public async Task DeleteAsync_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
+            var model = new FinishingPrintingSalesContractDetailModel()
             {
-                Code ="Code"
-            };
-
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
-            dbContext.SaveChanges();
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
-            Assert.True(0 < result.Data.Count);
-            Assert.NotEmpty(result.Data);
-        }
-
-        [Fact]
-        public void UpdateAsync_Return_Success()
-        {
-            string testName = GetCurrentMethod();
-            var dbContext = _dbContext(testName);
-            IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
-            {
-                Code = "Code",
-                RO_Garment_SizeBreakdown_Details =new List<RO_Garment_SizeBreakdown_Detail>()
+                FinishingPrintingSalesContract =new FinishingPrintingSalesContractModel()
                 {
-                    new RO_Garment_SizeBreakdown_Detail()
-                    {
-                        Information ="Information"
-                    }
+                    AccountBankAccountName ="Fetih"
                 }
             };
 
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
+            dbContext.FinishingPrintingSalesContractDetails.Add(model);
             dbContext.SaveChanges();
 
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-            unitUnderTest.UpdateAsync(model.Id, model);
+            FinishingPrintingSalesContractDetailLogic unitUnderTest = new FinishingPrintingSalesContractDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
+            await unitUnderTest.DeleteAsync(model.Id);
         }
-    }
+
+        [Fact]
+        public async Task DeleteAsync_Throws_Exception()
+        {
+            string testName = GetCurrentMethod();
+            var dbContext = _dbContext(testName);
+            Mock<IIdentityService> identityService = new Mock<IIdentityService>();
+            identityService.Setup(s => s.Username).Throws(new Exception());
+            var model = new FinishingPrintingSalesContractDetailModel()
+            {
+                FinishingPrintingSalesContract = new FinishingPrintingSalesContractModel()
+                {
+                    AccountBankAccountName = "Fetih"
+                }
+            };
+
+            dbContext.FinishingPrintingSalesContractDetails.Add(model);
+            dbContext.SaveChanges();
+
+            FinishingPrintingSalesContractDetailLogic unitUnderTest = new FinishingPrintingSalesContractDetailLogic(GetServiceProvider(testName).Object, identityService.Object, dbContext);
+            await Assert.ThrowsAsync<Exception>(() => unitUnderTest.DeleteAsync(model.Id));
+        }
+    }      
 }

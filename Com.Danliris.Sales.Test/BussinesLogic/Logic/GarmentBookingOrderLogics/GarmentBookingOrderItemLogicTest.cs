@@ -1,6 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
-using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
+using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -10,13 +10,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.GarmentBookingOrderLogics
 {
-    public class ROGarmentSizeBreakdownLogicTest
+    public class GarmentBookingOrderItemLogicTest
     {
-        private const string ENTITY = "RO_Garment_SizeBreakdowns";
+        private const string ENTITY = "DOSalesLocalItems";
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -40,7 +42,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
 
         public Mock<IServiceProvider> GetServiceProvider(string testname)
         {
-            IIdentityService identityService = new IdentityService { Username = "Username", Token = "Token Test" };
+            IIdentityService identityService = new IdentityService { Username = "Username" };
             var serviceProvider = new Mock<IServiceProvider>();
 
             serviceProvider
@@ -50,57 +52,50 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
-            ROGarmentSizeBreakdownDetailLogic ROGarmentSizeBreakdownDetail = new ROGarmentSizeBreakdownDetailLogic(serviceProvider.Object, identityService, _dbContext(testname));
-
-            serviceProvider.Setup(s => s.GetService(typeof(ROGarmentSizeBreakdownDetailLogic)))
-               .Returns(ROGarmentSizeBreakdownDetail);
-
             return serviceProvider;
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public async Task Read_With_EmptyKeyword_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
+
+            var model = new GarmentBookingOrderItem()
             {
-                Code ="Code"
+                GarmentBookingOrder =new GarmentBookingOrder()
             };
 
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
+            dbContext.GarmentBookingOrderItems.Add(model);
             dbContext.SaveChanges();
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
-            Assert.True(0 < result.Data.Count);
-            Assert.NotEmpty(result.Data);
+            GarmentBookingOrderItemLogic unitUnderTest = new GarmentBookingOrderItemLogic( identityService, GetServiceProvider(testName).Object, dbContext);
+
+            await unitUnderTest.DeleteAsync(model.Id);
+           
         }
 
         [Fact]
-        public void UpdateAsync_Return_Success()
+        public void GetBookingOrderIds_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
+
+            var model = new GarmentBookingOrderItem()
             {
-                Code = "Code",
-                RO_Garment_SizeBreakdown_Details =new List<RO_Garment_SizeBreakdown_Detail>()
-                {
-                    new RO_Garment_SizeBreakdown_Detail()
-                    {
-                        Information ="Information"
-                    }
-                }
+                GarmentBookingOrder = new GarmentBookingOrder()
             };
 
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
+            dbContext.GarmentBookingOrderItems.Add(model);
             dbContext.SaveChanges();
 
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-            unitUnderTest.UpdateAsync(model.Id, model);
+            GarmentBookingOrderItemLogic unitUnderTest = new GarmentBookingOrderItemLogic(identityService, GetServiceProvider(testName).Object, dbContext);
+
+            HashSet<long> result = unitUnderTest.GetBookingOrderIds(model.Id);
+            Assert.NotNull(result);
+
         }
     }
 }

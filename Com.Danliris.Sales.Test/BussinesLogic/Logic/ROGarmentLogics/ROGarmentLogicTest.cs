@@ -1,5 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
+using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
 {
-    public class ROGarmentSizeBreakdownLogicTest
+    public class ROGarmentLogicTest
     {
         private const string ENTITY = "RO_Garment_SizeBreakdowns";
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -50,32 +52,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
-            ROGarmentSizeBreakdownDetailLogic ROGarmentSizeBreakdownDetail = new ROGarmentSizeBreakdownDetailLogic(serviceProvider.Object, identityService, _dbContext(testname));
-
-            serviceProvider.Setup(s => s.GetService(typeof(ROGarmentSizeBreakdownDetailLogic)))
-               .Returns(ROGarmentSizeBreakdownDetail);
+            ROGarmentSizeBreakdownLogic rOGarmentSizeBreakdown = new ROGarmentSizeBreakdownLogic(serviceProvider.Object, identityService, _dbContext(testname));
+           
+            serviceProvider.Setup(s => s.GetService(typeof(ROGarmentSizeBreakdownLogic)))
+               .Returns(rOGarmentSizeBreakdown);
 
             return serviceProvider;
-        }
-
-        [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
-        {
-            string testName = GetCurrentMethod();
-            var dbContext = _dbContext(testName);
-            IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
-            {
-                Code ="Code"
-            };
-
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
-            dbContext.SaveChanges();
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
-
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
-            Assert.True(0 < result.Data.Count);
-            Assert.NotEmpty(result.Data);
         }
 
         [Fact]
@@ -84,23 +66,30 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown()
+            var model = new RO_Garment()
             {
                 Code = "Code",
-                RO_Garment_SizeBreakdown_Details =new List<RO_Garment_SizeBreakdown_Detail>()
+                RO_Garment_SizeBreakdowns=new List<RO_Garment_SizeBreakdown>()
                 {
-                    new RO_Garment_SizeBreakdown_Detail()
+                    new RO_Garment_SizeBreakdown()
                     {
-                        Information ="Information"
-                    }
-                }
+                        Id=1,
+                        ColorName ="red"
+                    },
+                  
+                },
+                CostCalculationGarment =new CostCalculationGarment(),
             };
 
-            dbContext.RO_Garment_SizeBreakdowns.Add(model);
+            dbContext.RO_Garments.Add(model);
             dbContext.SaveChanges();
+            ROGarmentLogic unitUnderTest = new ROGarmentLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-            ROGarmentSizeBreakdownLogic unitUnderTest = new ROGarmentSizeBreakdownLogic(GetServiceProvider(testName).Object, identityService, dbContext);
             unitUnderTest.UpdateAsync(model.Id, model);
         }
+
+        
+
+
     }
 }
