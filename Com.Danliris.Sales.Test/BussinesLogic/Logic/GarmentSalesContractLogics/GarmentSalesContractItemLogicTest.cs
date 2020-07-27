@@ -1,23 +1,24 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
-using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentSalesContractLogics;
+using Com.Danliris.Service.Sales.Lib.Models.GarmentSalesContractModel;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
+namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.GarmentSalesContractLogics
 {
-    public class ROGarmentSizeBreakdownDetailLogicTest
+    public class GarmentSalesContractItemLogicTest
     {
-        private const string ENTITY = "RO_Garment_SizeBreakdowns";
+
+        private const string ENTITY = "GarmentSalesContractItem";
         [MethodImpl(MethodImplOptions.NoInlining)]
         public string GetCurrentMethod()
         {
@@ -29,15 +30,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
 
         private SalesDbContext _dbContext(string testName)
         {
-            var serviceProvider = new ServiceCollection()
-              .AddEntityFrameworkInMemoryDatabase()
-              .BuildServiceProvider();
-
             DbContextOptionsBuilder<SalesDbContext> optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>();
             optionsBuilder
                 .UseInMemoryDatabase(testName)
-                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-                .UseInternalServiceProvider(serviceProvider);
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
 
             SalesDbContext dbContext = new SalesDbContext(optionsBuilder.Options);
 
@@ -56,28 +52,28 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
+
             return serviceProvider;
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public async Task DeleteAsync_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown_Detail()
+            var model = new GarmentSalesContractItem()
             {
-                Code = "Code",
-                SizeBreakdownDetailIndex =1
+                GarmentSalesContract =new GarmentSalesContract()
             };
 
-            dbContext.RO_Garment_SizeBreakdown_Details.Add(model);
+            dbContext.GarmentSalesContractItems.Add(model);
             dbContext.SaveChanges();
-            ROGarmentSizeBreakdownDetailLogic unitUnderTest = new ROGarmentSizeBreakdownDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
-            Assert.True(0 < result.Data.Count);
-            Assert.NotEmpty(result.Data);
+            GarmentSalesContractItemLogic unitUnderTest = new GarmentSalesContractItemLogic(GetServiceProvider(testName).Object, identityService, dbContext);
+            await unitUnderTest.DeleteAsync(model.Id);
         }
+
+        
     }
 }

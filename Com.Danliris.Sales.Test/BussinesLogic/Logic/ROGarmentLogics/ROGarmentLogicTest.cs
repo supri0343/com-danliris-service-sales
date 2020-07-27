@@ -1,5 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
+using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
 {
-    public class ROGarmentSizeBreakdownDetailLogicTest
+    public class ROGarmentLogicTest
     {
         private const string ENTITY = "RO_Garment_SizeBreakdowns";
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -30,14 +32,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
         private SalesDbContext _dbContext(string testName)
         {
             var serviceProvider = new ServiceCollection()
-              .AddEntityFrameworkInMemoryDatabase()
-              .BuildServiceProvider();
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
 
             DbContextOptionsBuilder<SalesDbContext> optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>();
             optionsBuilder
                 .UseInMemoryDatabase(testName)
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .UseInternalServiceProvider(serviceProvider);
+
 
             SalesDbContext dbContext = new SalesDbContext(optionsBuilder.Options);
 
@@ -56,28 +59,44 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Logic.ROGarmentLogics
             serviceProvider.Setup(s => s.GetService(typeof(SalesDbContext)))
                 .Returns(_dbContext(testname));
 
+            ROGarmentSizeBreakdownLogic rOGarmentSizeBreakdown = new ROGarmentSizeBreakdownLogic(serviceProvider.Object, identityService, _dbContext(testname));
+           
+            serviceProvider.Setup(s => s.GetService(typeof(ROGarmentSizeBreakdownLogic)))
+               .Returns(rOGarmentSizeBreakdown);
+
             return serviceProvider;
         }
 
         [Fact]
-        public void Read_With_EmptyKeyword_Return_Success()
+        public void UpdateAsync_Return_Success()
         {
             string testName = GetCurrentMethod();
             var dbContext = _dbContext(testName);
             IIdentityService identityService = new IdentityService { Username = "Username" };
-            var model = new RO_Garment_SizeBreakdown_Detail()
+            var model = new RO_Garment()
             {
                 Code = "Code",
-                SizeBreakdownDetailIndex =1
+                RO_Garment_SizeBreakdowns=new List<RO_Garment_SizeBreakdown>()
+                {
+                    new RO_Garment_SizeBreakdown()
+                    {
+                        Id=1,
+                        ColorName ="red"
+                    },
+                  
+                },
+                CostCalculationGarment =new CostCalculationGarment(),
             };
 
-            dbContext.RO_Garment_SizeBreakdown_Details.Add(model);
+            dbContext.RO_Garments.Add(model);
             dbContext.SaveChanges();
-            ROGarmentSizeBreakdownDetailLogic unitUnderTest = new ROGarmentSizeBreakdownDetailLogic(GetServiceProvider(testName).Object, identityService, dbContext);
+            ROGarmentLogic unitUnderTest = new ROGarmentLogic(GetServiceProvider(testName).Object, identityService, dbContext);
 
-            var result = unitUnderTest.Read(1, 1, "{}", new List<string>() { "" }, null, "{}");
-            Assert.True(0 < result.Data.Count);
-            Assert.NotEmpty(result.Data);
+            unitUnderTest.UpdateAsync(model.Id, model);
         }
+
+        
+
+
     }
 }
