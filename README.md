@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/danliris/com-danliris-service-sales/branch/dev/graph/badge.svg)](https://codecov.io/gh/danliris/com-danliris-service-sales) [![Build Status](https://travis-ci.com/danliris/com-danliris-service-sales.svg?branch=dev)](https://travis-ci.com/danliris/com-danliris-service-sales) [![Maintainability](https://api.codeclimate.com/v1/badges/2e78634e11af086b1ec0/maintainability)](https://codeclimate.com/github/danliris/com-danliris-service-sales/maintainability)
 
 DanLiris Application is a enterprise project that aims to manage the business processes of a textile factory, PT. DanLiris.
-This application is a microservices application consisting of services based on .NET Core and Aurelia Js which part of  NodeJS Frontend Framework. This application show how to implement microservice architecture principles. com-danliris-service-sales repository is part of service that will serve sales business activity.
+This application is a microservices application consisting of services based on .NET Core and Aurelia Js which part of  javascript Frontend Framework. This application show how to implement microservice architecture principles. com-danliris-service-sales repository is part of service that will serve sales business activity.
 
 ## Prerequisites
 * Windows, Mac or Linux
@@ -107,13 +107,82 @@ file launchSettings.json look like this :
 - Download Visual Studio 2019 (any edition) from https://www.visualstudio.com/downloads/ .
 - Open `Com.Danliris.Service.Sales.sln` and wait for Visual Studio to restore all Nuget packages.
 - Create empty database.
-- Setting connection to database using ConnectionStrings in appsettings.json and appsettings.Developtment.json.
-- Make sure port application has no conflict, setting port application in launchSettings.json.
+- Setting connection to database using Connection Strings in appsettings.json. Your appsettings.json look like this:
+
+```
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "Debug": {
+      "LogLevel": {
+        "Default": "Warning"
+      }
+    },
+    "Console": {
+      "LogLevel": {
+        "Default": "Warning"
+      }
+    }
+  },
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=Your_database_server;Database=your_parent_database;Trusted_Connection=True;MultipleActiveResultSets=true",
+  },
+  "ClientId": "your ClientId",
+  "Secret": "Your Secret",
+  "ASPNETCORE_ENVIRONMENT": "Development"
+}
+```
+and  Your appsettings.Developtment.json look like this :
+```
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  }
+}
+```
+- Make sure port application has no conflict, setting port application in launchSettings.json
 ```
 com-danliris-service-sales
  ┣ Com.Danliris.Service.Sales.WebApi
     ┗ Properties
        ┗ launchSettings.json
+```
+
+file launchSettings.json look like this :
+```
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:11776/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Com.Danliris.Service.Sales.WebApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
 ```
 - Ensure `Com.Danliris.Service.Sales.WebApi` is the startup project and run it and the browser will launched in new tab http://localhost:11776/swagger/index.html
 
@@ -534,7 +603,7 @@ Travis CI (continuous integration) is configured by adding a file named .travis.
 
 This file is used to configure code coverage in unit tests.
 
-**Com.Danliris.Service.Sales**
+**Com.Danliris.Service.Sales.sln**
 
 File .sln is extention for *solution* aka file solution for .Net Core, this file is used to manage all project by code editor.
 
