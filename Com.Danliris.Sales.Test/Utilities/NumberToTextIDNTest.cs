@@ -47,6 +47,14 @@ namespace Com.Danliris.Sales.Test.Utilities
             Assert.NotEmpty(result);
             Assert.Equal("koma Satu Nol Nol Nol", result);
         }
-        
+
+        [Fact]
+        public void TerbilangKoma_MoreThan_4_Decimal()
+        {
+            float number = 10.00069f;
+            var terbilangKoma = NumberToTextIDN.terbilangKoma(number);
+            Assert.Equal("koma Nol Nol Nol Tujuh", terbilangKoma);
+        }
+
     }
 }
