@@ -87,7 +87,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Amount = 1,
                 Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductViewModel(),
                 MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel(),
-                YarnMaterial = new Service.Sales.Lib.ViewModels.IntegrationViewModel.YarnMaterialViewModel()
+                YarnMaterial = new Service.Sales.Lib.ViewModels.IntegrationViewModel.YarnMaterialViewModel(),
+                OrderType = new Service.Sales.Lib.ViewModels.IntegrationViewModel.OrderTypeViewModel()
+                {
+                    Name="SOLID"
+                }
+                
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
