@@ -25,7 +25,7 @@ namespace Com.Danliris.Sales.Test.ViewModels
         [Fact]
         public void ValidateDefault()
         {
-            EfficiencyViewModel viewModel = new EfficiencyViewModel();
+            ArticleColorViewModel viewModel = new ArticleColorViewModel();
             var result = viewModel.Validate(null);
             Assert.True(result.Count() > 0);
         }

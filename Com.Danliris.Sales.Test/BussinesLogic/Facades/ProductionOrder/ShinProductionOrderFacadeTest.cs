@@ -99,7 +99,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
                 IsCompleted = true,
                 IsRequested = true,
                 IsUsed = true,
-                AutoIncreament = 0
+                AutoIncreament = 0,
+                LampStandards=new List<ProductionOrder_LampStandardViewModel>()
+                {
+
+                },
+                Details =new List<ProductionOrder_DetailViewModel>()
+                {
+
+                }
             };
             var sp = GetServiceProviderMock(DbContext(GetCurrentMethod()));
 
@@ -110,6 +118,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(vm, sp.Object, null);
             var response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.FinishingPrintingSalesContract = new ShinFinishingPrintingSalesContractViewModel()
             {
@@ -124,10 +133,12 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.Run = "1 run";
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.RunWidth = new List<ProductionOrder_RunWidthViewModel>()
             {
@@ -139,6 +150,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
 
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.RunWidth = new List<ProductionOrder_RunWidthViewModel>()
             {
@@ -149,6 +161,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.StandardTests = new StandardTestsViewModel()
             {
@@ -156,22 +169,27 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.Account = new AccountViewModel();
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.MaterialOrigin = "a";
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.HandlingStandard = "e";
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.ShrinkageStandard = "e";
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             var data = await DataUtil(facade, dbContext).GetTestData();
             vm.OrderQuantity = 1;
@@ -180,27 +198,41 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             {
                 new ProductionOrder_DetailViewModel()
                 {
-                    Quantity = 1
+                    Quantity = 5,
+                    
                 }
             };
             vm.LampStandards = new List<ProductionOrder_LampStandardViewModel>();
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.LampStandards.Add(new ProductionOrder_LampStandardViewModel()
             {
 
             });
+
+            vm.Details = new List<ProductionOrder_DetailViewModel>()
+            {
+                new ProductionOrder_DetailViewModel()
+                {
+                    Quantity = -1,
+
+                }
+            };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.LampStandards.FirstOrDefault().Name = "a";
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.Details = new List<ProductionOrder_DetailViewModel>();
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
             vm.Details = new List<ProductionOrder_DetailViewModel>()
             {
@@ -208,6 +240,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             };
             response = vm.Validate(validationContext);
             Assert.NotEmpty(response);
+            Assert.True(0 < response.Count());
 
         }
 

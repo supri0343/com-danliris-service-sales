@@ -218,7 +218,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
             if (this.DeliveryDate == null)
                 yield return new ValidationResult("DeliveryDate harus di isi", new List<string> { "DeliveryDate" });
 
-            if (this.OrderQuantity.Equals(0))
+            if (this.OrderQuantity.Equals(0.0))
             {
                 yield return new ValidationResult("OrderQuantity harus di isi", new List<string> { "OrderQuantity" });
             }
