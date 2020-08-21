@@ -224,20 +224,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
 
 
 
-        //[Fact]
-        //public  async Task Update_Success()
-        //{
-        //    var dbContext = DbContext(GetCurrentMethod());
-        //    var serviceProvider = GetServiceProviderMock(dbContext).Object;
+        [Fact]
+        public async Task UpdateAsync_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
-        //    ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
 
-        //    var data = await DataUtil(facade, dbContext).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
+            var NewData = await DataUtil(facade, dbContext).GetNewData();
+            var response = await facade.UpdateAsync((int)data.Id, NewData);
 
-        //    var response = await facade.UpdateAsync((int)data.Id, data);
-
-        //    Assert.NotEqual(response, 0);
-        //}
+            Assert.NotEqual(response, 0);
+        }
 
         [Fact]
         public async Task PostRO_Success()

@@ -100,14 +100,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
                 IsRequested = true,
                 IsUsed = true,
                 AutoIncreament = 0,
-                LampStandards=new List<ProductionOrder_LampStandardViewModel>()
-                {
-
-                },
-                Details =new List<ProductionOrder_DetailViewModel>()
-                {
-
-                }
+                LampStandards=new List<ProductionOrder_LampStandardViewModel>(),
+                Details =new List<ProductionOrder_DetailViewModel>()   
             };
             var sp = GetServiceProviderMock(DbContext(GetCurrentMethod()));
 
@@ -191,9 +185,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             Assert.NotEmpty(response);
             Assert.True(0 < response.Count());
 
-            var data = await DataUtil(facade, dbContext).GetTestData();
+          //  var data = await DataUtil(facade, dbContext).GetTestData();
             vm.OrderQuantity = 1;
-            vm.FinishingPrintingSalesContract.Id = data.SalesContractId;
+            //vm.FinishingPrintingSalesContract.Id = data.SalesContractId;
+            vm.FinishingPrintingSalesContract.Id = 1;
             vm.Details = new List<ProductionOrder_DetailViewModel>()
             {
                 new ProductionOrder_DetailViewModel()

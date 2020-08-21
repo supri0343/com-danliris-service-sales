@@ -7,6 +7,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DeliveryNoteProduction
 {
@@ -17,6 +19,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DeliveryNoteProduction
         public DeliveryNoteProductionFacadeTest() : base(ENTITY)
         {
         }
+
+        
 
         protected override Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
         {
@@ -36,5 +40,53 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DeliveryNoteProduction
 
             return serviceProviderMock;
         }
+
+        [Fact]
+        public async Task CreateAsync_Return_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DeliveryNoteProductionFacade facade = new DeliveryNoteProductionFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetNewData();
+
+            //Act
+            int result =await facade.CreateAsync(data);
+
+            Assert.NotEqual(0, result);
+        }
+
+
+        [Fact]
+        public async Task CreateAsync_Throws_Exception()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DeliveryNoteProductionFacade facade = new DeliveryNoteProductionFacade(serviceProvider, dbContext);
+            //Act
+
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(null));
+        }
+
+
+        [Fact]
+        public async Task UpdateAsync_Throws_Exception()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DeliveryNoteProductionFacade facade = new DeliveryNoteProductionFacade(serviceProvider, dbContext);
+            var data = await DataUtil(facade).GetTestData();
+            //Act
+
+            //Assert
+            await Assert.ThrowsAsync<Exception>(() => facade.UpdateAsync((int)data.Id,null));
+        }
+
     }
 }

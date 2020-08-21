@@ -5,10 +5,13 @@ using Com.Danliris.Service.Sales.Lib.Utilities.BaseInterface;
 using Com.Moonlay.Data.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
@@ -38,12 +41,27 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
             return string.Concat(sf.GetMethod().Name, "_", _entity);
         }
 
+        protected string GetCurrentAsyncMethod([CallerMemberName] string methodName="")
+        {
+            MethodBase method = new StackTrace()
+                .GetFrames()
+                .Select(frame => frame.GetMethod())
+                .FirstOrDefault(item => item.Name == methodName);
+
+            return method.Name;
+        }
+
         protected TDbContext DbContext(string testName)
         {
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
             DbContextOptionsBuilder<TDbContext> optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
             optionsBuilder
                 .UseInMemoryDatabase(testName)
-                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .UseInternalServiceProvider(serviceProvider);
 
             TDbContext dbContext = Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options) as TDbContext;
 
