@@ -356,7 +356,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
         }
 
         [Fact]
-        public virtual async void Update_Success()
+        public virtual async void UpdateAsync_withExistData_Return_Success()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
@@ -369,6 +369,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
 
             Assert.NotEqual(response, 0);
         }
+
+        
 
         [Fact]
         public virtual async void Delete_Success()

@@ -91,6 +91,34 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.MaxWHC
         }
 
         [Fact]
+        public  async void DeleteAsync_NotImplementedException()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            MaxWHConfirmFacade facade = new MaxWHConfirmFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            //Assert
+            await Assert.ThrowsAsync<NotImplementedException>(() => facade.DeleteAsync((int)data.Id));
+        }
+
+        [Fact]
+        public async void UpdateAsync_NotImplementedException()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            MaxWHConfirmFacade facade = new MaxWHConfirmFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+            var newData = await DataUtil(facade, dbContext).GetNewData();
+            //Assert
+            await Assert.ThrowsAsync<NotImplementedException>(() => facade.UpdateAsync((int)data.Id, newData));
+        }
+
+        [Fact]
         public void Should_Success_Validate_Data()
         {
             var dbContext = DbContext(GetCurrentMethod());
