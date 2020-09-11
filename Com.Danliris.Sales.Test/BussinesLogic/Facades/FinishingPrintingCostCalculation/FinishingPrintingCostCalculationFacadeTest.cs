@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrintingCostCalculation;
+using System.Threading.Tasks;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCalculation
 {
@@ -181,6 +182,18 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.FinishingPrintingCostCal
             var response = await facade.CreateAsync(data);
 
             Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public  async Task CreateAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            FinishingPrintingCostCalculationFacade facade = new FinishingPrintingCostCalculationFacade(serviceProvider, dbContext);
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.Machines = null;
+            await Assert.ThrowsAsync<System.ArgumentNullException>(() => facade.CreateAsync(data));
         }
 
         [Fact]

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentSalesContract
@@ -150,6 +151,46 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentSalesContract
 
             Assert.Equal(vm.Id, model.Id);
 
+        }
+
+        [Fact]
+        public async void UpdatePrinted_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            GarmentSalesContractFacade facade = new GarmentSalesContractFacade(serviceProvider, dbContext);
+
+            var dataUtil = DataUtil(facade, dbContext);
+            var data = await dataUtil.GetTestData();
+            var newData = await dataUtil.GetNewData();
+
+            //Act
+            int Response = await facade.UpdatePrinted((int)data.Id, newData);
+
+            //Assert
+            Assert.NotEqual(Response, 0);
+        }
+
+        [Fact]
+        public async Task ReadByCostCal_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            GarmentSalesContractFacade facade = new GarmentSalesContractFacade(serviceProvider, dbContext);
+
+            var dataUtil = DataUtil(facade, dbContext);
+            var data = await dataUtil.GetTestData();
+            var newData = await dataUtil.GetNewData();
+
+            //Act
+            var result =  facade.ReadByCostCal((int)data.Id);
+
+            //Assert
+            Assert.NotEqual(result.Id, 0);
         }
     }
 }

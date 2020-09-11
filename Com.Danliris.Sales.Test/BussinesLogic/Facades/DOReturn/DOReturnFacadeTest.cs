@@ -8,6 +8,7 @@ using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
@@ -54,6 +55,36 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOReturn
                 .Returns(doReturnLogic);
 
             return serviceProviderMock;
+        }
+
+        [Fact]
+        public async Task CreateAsync_Return_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOReturnFacade facade = new DOReturnFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetNewData();
+
+            //Act
+            int result = await facade.CreateAsync(data);
+
+            Assert.NotEqual(0, result);
+        }
+
+        [Fact]
+        public async Task CreateAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOReturnFacade facade = new DOReturnFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(null));
         }
 
         [Fact]

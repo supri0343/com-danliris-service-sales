@@ -91,7 +91,50 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             Assert.NotEqual(response2, 0);
         }
 
-        
+        [Fact]
+        public async void UpdateDistributedQuantity_Return_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            ProductionOrderFacade facade = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
+            FinishingPrintingSalesContractFacade finishingPrintingSalesContractFacade = new FinishingPrintingSalesContractFacade(GetServiceProviderMock(dbContext).Object, dbContext);
+            FinisihingPrintingSalesContractDataUtil finisihingPrintingSalesContractDataUtil = new FinisihingPrintingSalesContractDataUtil(finishingPrintingSalesContractFacade);
+            var salesData = await finisihingPrintingSalesContractDataUtil.GetTestData();
+
+            var NewData = await DataUtil(facade).GetNewData();
+            NewData.SalesContractId = salesData.Id;
+            var response = await facade.CreateAsync(NewData);
+
+            //Act
+            var result = await facade.UpdateDistributedQuantity(new List<int>() { 1 }, new List<double>() { NewData.DistributedQuantity });
+
+            //Assert
+            Assert.NotEqual(0, result);
+
+
+        }
+
+        [Fact]
+        public async Task Create_Throws_Exception()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            ProductionOrderFacade facade = new ProductionOrderFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetNewData();
+            data.Details = null;
+
+            //Assert
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(data));
+
+
+        }
+
+
 
         public override async void Delete_Success()
         {
@@ -145,13 +188,13 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var all = facade.Read(1, 25, "{}", new List<string>(), null, "{}");
 
             await Assert.ThrowsAnyAsync<Exception>(() => facade.UpdateAsync((int)all.Data.FirstOrDefault().Id, null));
-            
+
         }
 
         [Fact]
         public async void Update_Delete_Success()
         {
-            var dbContext = DbContext(GetCurrentMethod()+ "Update_Delete_Success");
+            var dbContext = DbContext(GetCurrentMethod() + "Update_Delete_Success");
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             ProductionOrderFacade facade1 = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
             ProductionOrderFacade facade2 = Activator.CreateInstance(typeof(ProductionOrderFacade), serviceProvider, dbContext) as ProductionOrderFacade;
