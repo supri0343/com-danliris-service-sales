@@ -53,6 +53,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         [MaxLength(255)]
         public string Grade { get; set; }
 
+        [MaxLength(128)]
+        public string AvalType { get; set; }
+
         public virtual DOSalesModel DOSalesModel { get; set; }
     }
 }

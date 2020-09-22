@@ -7,6 +7,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
 {
     public class DOSalesModel : BaseModel
     {
+        public DOSalesModel()
+        {
+            DOSalesDetailItems = new HashSet<DOSalesDetailModel>();
+        }
+
         [MaxLength(255)]
         public string Code { get; set; }
         public long AutoIncreament { get; set; }
@@ -111,6 +116,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public double FillEachBale { get; set; }
         [MaxLength(1000)]
         public string Remark { get; set; }
+
+        [MaxLength(4096)]
+        public string Construction { get; set; }
 
         public virtual ICollection<DOSalesDetailModel> DOSalesDetailItems { get; set; }
     }
