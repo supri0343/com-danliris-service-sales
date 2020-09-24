@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -91,6 +92,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOSales
             Assert.NotEqual(0, result);
         }
 
-        
+        [Fact]
+        public async Task Get_DPStock()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOSalesFacade facade = new DOSalesFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            var Response = facade.ReadDPAndStock(1, 25, "{}", new List<string>(), "", "{}");
+
+            Assert.NotEqual(Response.Data.Count, 0);
+        }
     }
 }
