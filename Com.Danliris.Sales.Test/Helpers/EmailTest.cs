@@ -20,7 +20,7 @@ namespace Com.Danliris.Sales.Test.Helpers
         [Fact]
         public void IsValid_Return_False()
         {
-            var result = Email.IsValid("elfatih@gmail");
+            var result = Email.IsValid(null);
             Assert.False(result);
         }
     }

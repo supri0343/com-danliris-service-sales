@@ -17,7 +17,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
 
-            Document document = new Document(PageSize.A4, 40, 40, 140, 40);
+            Document document = new Document(PageSize.A4, 40, 40, 110, 40);
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
@@ -115,7 +115,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableIdentity.AddCell(cellIdentityContentLeft);
             cellIdentityContentLeft.Phrase = new Phrase("Hal", normal_font);
             tableIdentity.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + "KONFIRMASI PESANAN PRINTING", normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + "KONFIRMASI PESANAN " + viewModel.OrderType.Name , normal_font);
             tableIdentity.AddCell(cellIdentityContentLeft);
             cellIdentityContentRight.Phrase = new Phrase("");
             tableIdentity.AddCell(cellIdentityContentRight);
@@ -331,6 +331,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             signature.AddCell(cell_signature);
+            signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("", normal_font);
+            signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("", normal_font);
+            signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("", normal_font);
+            signature.AddCell(cell_signature);
+            cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
 
             cell_signature.Phrase = new Phrase("(...........................)", normal_font);

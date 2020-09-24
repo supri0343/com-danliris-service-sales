@@ -9,6 +9,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoiceExport
@@ -131,6 +132,26 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoiceExport
             var response = await facade.CreateAsync(data);
 
             Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public async Task CreateAsync_Throws_Exception()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceExportFacade facade = new SalesInvoiceExportFacade( serviceProvider.Object, dbContext) ;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceCategory = "SPINNING";
+            data.SalesInvoiceExportDetails = null;
+
+            //Assert
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(data));
         }
     }
 }

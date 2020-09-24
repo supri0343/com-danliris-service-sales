@@ -7,6 +7,8 @@ using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOSales
 {
@@ -41,5 +43,54 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DOSales
 
             return serviceProviderMock;
         }
+
+        [Fact]
+        public async Task CreateAsync_Return_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOSalesFacade facade = new DOSalesFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetNewData();
+
+            //Act
+            int result = await facade.CreateAsync(data);
+
+            Assert.NotEqual(0, result);
+        }
+
+        [Fact]
+        public async Task CreateAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOSalesFacade facade = new DOSalesFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(null));
+        }
+
+
+        [Fact]
+        public async Task UpdateAsync_Success()
+        {
+            //Setup
+            var dbContext = DbContext(GetCurrentAsyncMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            DOSalesFacade facade = new DOSalesFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+            var NewData = await DataUtil(facade).GetNewData();
+            //Act
+            int result = await facade.UpdateAsync((int)data.Id, NewData);
+            Assert.NotEqual(0, result);
+        }
+
+        
     }
 }

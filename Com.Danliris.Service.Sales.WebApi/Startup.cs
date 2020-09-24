@@ -80,6 +80,9 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DeliveryNoteProductio
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOAval;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOAval;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOAval;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -160,6 +163,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IShinFinishingPrintingSalesContractFacade, ShinFinishingPrintingSalesContractFacade>()
                 .AddTransient<IShinProductionOrder, ShinProductionOrderFacade>()
                 .AddTransient<IHOrderFacade, HOrderFacade>()
+                .AddTransient<IDOAvalFacade, DOAvalFacade>()
                 .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>();
         }
 
@@ -237,6 +241,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<FinishingPrintingCostCalculationLogic>()
                 .AddTransient<ShinFinishingPrintingSalesContractLogic>()
                 .AddTransient<ShinProductionOrderLogic>()
+                .AddTransient<DOAvalLogic>()
                 .AddTransient<DeliveryNoteProductionLogic>(); ;
         }
 

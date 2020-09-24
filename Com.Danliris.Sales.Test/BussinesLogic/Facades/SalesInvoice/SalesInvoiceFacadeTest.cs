@@ -8,6 +8,7 @@ using Com.Danliris.Service.Sales.Lib.Services;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
@@ -71,6 +72,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
 
             var Response = await facade.UpdateFromSalesReceiptAsync((int)data.Id, model);
             Assert.NotEqual(Response, 0);
+        }
+
+        [Fact]
+        public async void UpdateFromSalesReceiptAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            SalesInvoiceFacade facade = new SalesInvoiceFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+           
+            await Assert.ThrowsAsync<System.NullReferenceException>(() => facade.UpdateFromSalesReceiptAsync((int)data.Id, null));
+         
+           
         }
 
         [Fact]
@@ -143,6 +158,21 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
             Assert.NotNull(Response);
         }
 
+
+        [Fact]
+        public async Task DeleteAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider.Object, dbContext) as SalesInvoiceFacade;
+
+            await Assert.ThrowsAsync<Exception>(() => facade.DeleteAsync(1));
+        }
+
         [Fact]
         public override async void Create_Success()
         {
@@ -162,6 +192,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
         }
 
         [Fact]
+        public async Task CreateAsync_Throws_Exception()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider.Object, dbContext) as SalesInvoiceFacade;
+
+            await Assert.ThrowsAsync<Exception>(() => facade.CreateAsync(null));
+        }
+
+        [Fact]
         public virtual async void Create_Success_SalesInvoiceType_Is_Null()
         {
             var dbContext = DbContext(GetCurrentMethod());
@@ -174,6 +218,25 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
 
             var data = await DataUtil(facade, dbContext).GetNewData_2();
             //data.SalesInvoiceType = "BAB";
+
+            var response = await facade.CreateAsync(data);
+
+            Assert.NotEqual(response, 0);
+        }
+
+        [Fact]
+        public virtual async void Create_Success_SalesInvoiceType_Is_BNG()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext);
+
+            serviceProvider.Setup(s => s.GetService(typeof(IHttpClientService)))
+                .Returns(new HttpClientTestService());
+
+            SalesInvoiceFacade facade = Activator.CreateInstance(typeof(SalesInvoiceFacade), serviceProvider.Object, dbContext) as SalesInvoiceFacade;
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            data.SalesInvoiceType = "BNG";
 
             var response = await facade.CreateAsync(data);
 

@@ -52,7 +52,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                         ColorRequest = "c",
                         Quantity = 10,
                         ColorTemplate = "ct",
-                        ColorType = "type",
+                        ColorType = "ColorType",
                         UomUnit = "unit"
                     }
                 },

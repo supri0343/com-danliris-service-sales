@@ -63,13 +63,13 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                 Sc = 1,
                 DoneBy = "DoneBy",
                 FillEachBale = 1,
-                DOSalesCategory= "DOSalesCategory",
-                StorageId=1,
-                StorageCode= "StorageCode",
-                StorageUnit= "StorageUnit",
-                StorageName= "StorageName",
-
-
+                DOSalesCategory = "DOSalesCategory",
+                StorageId = 1,
+                StorageCode = "StorageCode",
+                StorageUnit = "StorageUnit",
+                StorageName = "StorageName",
+                Construction = "construction",
+                Remark = "reamarl",
                 DOSalesDetailItems = new List<DOSalesDetailModel>()
                 {
                     new DOSalesDetailModel()
@@ -96,6 +96,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                         ConvertionValue = 10,
                         NoSOP="NoSOP",
                         ThreadNumber="ThreadNumber",
+                        AvalType = "ty",
                         Grade="Grade",
                     }
                 }

@@ -932,6 +932,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<string>("AvalType")
+                        .HasMaxLength(128);
+
                     b.Property<string>("ColorRequest")
                         .HasMaxLength(255);
 
@@ -1081,6 +1084,9 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("CommodityName")
                         .HasMaxLength(255);
+
+                    b.Property<string>("Construction")
+                        .HasMaxLength(4096);
 
                     b.Property<string>("CreatedAgent")
                         .IsRequired()

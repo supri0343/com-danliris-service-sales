@@ -15,6 +15,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update;
 
 namespace Com.Danliris.Sales.Test.WebApi.Utils
 {
@@ -256,6 +258,33 @@ namespace Com.Danliris.Sales.Test.WebApi.Utils
             };
             mocks.Mapper.Setup(m => m.Map<TViewModel>(It.IsAny<TModel>())).Returns(viewModel);
             mocks.Facade.Setup(f => f.UpdateAsync(It.IsAny<int>(), It.IsAny<TModel>())).ThrowsAsync(new Exception());
+
+            int statusCode = await this.GetStatusCodePut(mocks, id, viewModel);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+
+        [Fact]
+        public async Task Put_ThrowsDbUpdateConcurrencyException()
+        {
+            var mocks = this.GetMocks();
+            mocks.ValidateService.Setup(vs => vs.Validate(It.IsAny<TViewModel>())).Verifiable();
+            var id = 1;
+            var viewModel = new TViewModel()
+            {
+                Id = id
+            };
+            mocks.Mapper.Setup(m => m.Map<TViewModel>(It.IsAny<TModel>())).Returns(viewModel);
+
+            Mock<IUpdateEntry> updateEntry = new Mock<IUpdateEntry>();
+            List<IUpdateEntry> listData = new List<IUpdateEntry>()
+            {
+                updateEntry.Object
+            };
+
+            IReadOnlyList<IUpdateEntry> readOnlyData = listData.AsReadOnly();
+
+
+            mocks.Facade.Setup(f => f.UpdateAsync(It.IsAny<int>(), It.IsAny<TModel>())).ThrowsAsync(new DbUpdateConcurrencyException("errorMessage",readOnlyData));
 
             int statusCode = await this.GetStatusCodePut(mocks, id, viewModel);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
