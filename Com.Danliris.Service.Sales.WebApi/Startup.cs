@@ -83,6 +83,9 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOAval;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOAval;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOAval;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOStock;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOStock;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOStock;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -164,6 +167,7 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IShinProductionOrder, ShinProductionOrderFacade>()
                 .AddTransient<IHOrderFacade, HOrderFacade>()
                 .AddTransient<IDOAvalFacade, DOAvalFacade>()
+                .AddTransient<IDOStockFacade,DOStockFacade>()
                 .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>();
         }
 
@@ -242,7 +246,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<ShinFinishingPrintingSalesContractLogic>()
                 .AddTransient<ShinProductionOrderLogic>()
                 .AddTransient<DOAvalLogic>()
-                .AddTransient<DeliveryNoteProductionLogic>(); ;
+                .AddTransient<DOStockLogic>()
+                .AddTransient<DeliveryNoteProductionLogic>();
         }
 
         private void RegisterServices(IServiceCollection services)
