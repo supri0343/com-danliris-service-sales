@@ -924,5 +924,31 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             int statusCode = this.GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
+
+        [Fact]
+        public void GetDPStockMobile_WithoutException_ReturnOK()
+        {
+            var mocks = this.GetMocks();
+            mocks.Facade.Setup(f => f.ReadDPAndStock(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new ReadResponse<DOSalesModel>(new List<DOSalesModel>(), 0, new Dictionary<string, string>(), new List<string>()));
+            mocks.Mapper.Setup(f => f.Map<List<DOSalesViewModel>>(It.IsAny<List<DOSalesModel>>())).Returns(this.ViewModels);
+
+            var controller = GetController(mocks);
+            var response = controller.GetDPAndStockForMobile();
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.OK, statusCode);
+        }
+
+        [Fact]
+        public void GetDPStockMobile_ReadThrowException_ReturnInternalServerError()
+        {
+            var mocks = this.GetMocks();
+            mocks.Facade.Setup(f => f.ReadDPAndStock(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
+            mocks.Mapper.Setup(f => f.Map<List<DOSalesViewModel>>(It.IsAny<List<DOSalesModel>>())).Returns(this.ViewModels);
+
+            var controller = GetController(mocks);
+            var response = controller.GetDPAndStockForMobile();
+            int statusCode = this.GetStatusCode(response);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
     }
 }
