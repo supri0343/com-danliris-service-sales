@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOAval;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOStock;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.PDFTemplates;
 using Com.Danliris.Service.Sales.Lib.Services;
-using Com.Danliris.Service.Sales.Lib.ViewModels.DOAval;
+using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.DOStock;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,12 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/sales/do-aval")]
+    [Route("v{version:apiVersion}/sales/do-stock")]
     [Authorize]
-    public class DOAvalController : BaseController<DOSalesModel, DOAvalViewModel, IDOAvalFacade>
+    public class DOStockController : BaseController<DOSalesModel, DOStockViewModel, IDOStockFacade>
     {
         private readonly static string apiVersion = "1.0";
-        public DOAvalController(IIdentityService identityService, IValidateService validateService, IDOAvalFacade facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
+        public DOStockController(IIdentityService identityService, IValidateService validateService, IDOStockFacade facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
         }
 
@@ -44,13 +45,13 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 }
                 else
                 {
-                    var viewModel = Mapper.Map<DOAvalViewModel>(model);
+                    var viewModel = Mapper.Map<DOStockViewModel>(model);
 
-                    DOAvalPdfTemplate PdfTemplate = new DOAvalPdfTemplate();
+                    DOStockPDFTemplate PdfTemplate = new DOStockPDFTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
                     return new FileStreamResult(stream, "application/pdf")
                     {
-                        FileDownloadName = "DO_Aval_" + viewModel.DOAvalNo + ".pdf"
+                        FileDownloadName = "DO_Stock_" + viewModel.DOStockNo + ".pdf"
                     };
                 }
             }
@@ -62,5 +63,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        
     }
 }

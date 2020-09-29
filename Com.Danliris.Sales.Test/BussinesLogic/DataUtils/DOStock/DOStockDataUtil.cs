@@ -1,21 +1,22 @@
 ﻿using Com.Danliris.Sales.Test.BussinesLogic.Utils;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOStock;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
+namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOStock
 {
-    public class DOSalesDataUtil : BaseDataUtil<DOSalesFacade, DOSalesModel>
+    public class DOStockDataUtil : BaseDataUtil<DOStockFacade, DOSalesModel>
     {
-        public DOSalesDataUtil(DOSalesFacade facade) : base(facade)
+        public DOStockDataUtil(DOStockFacade facade) : base(facade)
         {
         }
 
-        public override async Task<DOSalesModel> GetNewData()
+        public override Task<DOSalesModel> GetNewData()
         {
-            return new DOSalesModel()
+            return Task.FromResult(new DOSalesModel()
             {
                 Code = "code",
                 AutoIncreament = 1,
@@ -63,7 +64,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                 Sc = 1,
                 DoneBy = "DoneBy",
                 FillEachBale = 1,
-                DOSalesCategory = "DYEINGPRINTING",
+                DOSalesCategory = "STOCK",
                 StorageId = 1,
                 StorageCode = "StorageCode",
                 StorageUnit = "StorageUnit",
@@ -100,7 +101,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                         Grade="Grade",
                     }
                 }
-            };
+            });
         }
     }
 }

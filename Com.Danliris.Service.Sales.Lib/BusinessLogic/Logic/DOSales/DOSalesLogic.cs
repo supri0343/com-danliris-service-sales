@@ -16,6 +16,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 {
     public class DOSalesLogic : BaseLogic<DOSalesModel>
     {
+        private const string STOCK = "STOCK";
+        private const string DYEINGPRINTING = "DYEINGPRINTING";
         private DOSalesDetailLogic doSalesLocalLogic;
         private SalesDbContext _dbContext;
 
@@ -54,6 +56,32 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOSales
 
             return new ReadResponse<DOSalesModel>(data, totalData, OrderDictionary, SelectedFields);
         }
+
+        public ReadResponse<DOSalesModel> ReadDPAndStock(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            IQueryable<DOSalesModel> Query = DbSet.Include(x => x.DOSalesDetailItems).Where(s => s.DOSalesCategory == STOCK || s.DOSalesCategory == DYEINGPRINTING);
+
+            List<string> SearchAttributes = new List<string>()
+            {
+                "DOSalesNo", "BuyerName", "DOSalesType"
+            };
+
+            Query = QueryHelper<DOSalesModel>.Search(Query, SearchAttributes, keyword);
+
+            Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+            Query = QueryHelper<DOSalesModel>.Filter(Query, FilterDictionary);
+
+
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            Query = QueryHelper<DOSalesModel>.Order(Query, OrderDictionary);
+
+            Pageable<DOSalesModel> pageable = new Pageable<DOSalesModel>(Query, page - 1, size);
+            List<DOSalesModel> data = pageable.Data.ToList<DOSalesModel>();
+            int totalData = pageable.TotalCount;
+
+            return new ReadResponse<DOSalesModel>(data, totalData, OrderDictionary, new List<string>());
+        }
+
 
         public override async void UpdateAsync(long id, DOSalesModel model)
         {

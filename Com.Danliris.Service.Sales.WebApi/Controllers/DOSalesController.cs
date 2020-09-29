@@ -3,6 +3,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOSales;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.PDFTemplates;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.DOSales;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -61,6 +62,70 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                         FileDownloadName = "DO_Sales/" + viewModel.DOSalesNo + ".pdf"
                     };
                 }
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("stock")]
+        public virtual IActionResult GetDPAndStock(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")] List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<DOSalesModel> read = Facade.ReadDPAndStock(page, size, order, select, keyword, filter);
+
+                //Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> Data = Facade.Read(page, size, order, select, keyword, filter);
+                List<DOSalesViewModel> DataVM = Mapper.Map<List<DOSalesViewModel>>(read.Data);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<DOSalesViewModel>(Mapper, DataVM, page, size, read.Count, DataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("stock/mobile")]
+        public virtual IActionResult GetDPAndStockForMobile(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")] List<string> select = null, string keyword = null, string filter = "{}")
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<DOSalesModel> read = Facade.ReadDPAndStock(page, size, order, select, keyword, filter);
+
+                //Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> Data = Facade.Read(page, size, order, select, keyword, filter);
+                List<DOSalesViewModel> DataVM = Mapper.Map<List<DOSalesViewModel>>(read.Data);
+
+                //Dictionary<string, object> Result =
+                //    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                //    .Ok<DOSalesViewModel>(Mapper, DataVM, page, size, read.Count, DataVM.Count, read.Order, read.Selected);
+                return Ok(DataVM);
+
             }
             catch (Exception e)
             {

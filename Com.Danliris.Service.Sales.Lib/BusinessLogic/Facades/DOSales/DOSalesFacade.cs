@@ -83,6 +83,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOSales
             return await DbContext.SaveChangesAsync();
         }
 
+        public ReadResponse<DOSalesModel> ReadDPAndStock(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return doSalesLogic.ReadDPAndStock(page, size, order, select, keyword, filter);
+        }
+
         public ReadResponse<DOSalesModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
         {
             return doSalesLogic.Read(page, size, order, select, keyword, filter);
