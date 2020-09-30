@@ -106,7 +106,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                 cellHeaderBody.Phrase = new Phrase("Order dari " + viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("Sukoharjo", normal_font);
+                cellHeaderBody.Phrase = new Phrase(" ", normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeader2.AddElement(headerTable2);
@@ -565,14 +565,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
                 {
-                    total_weight += item.Weight;
+                    total_weight += item.Packing;
                 }
 
-                cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("3. Jumlah Kirim ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.WeightUom, normal_font);
+                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.PackingUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("4. Piece Length ", bold_font);
@@ -593,7 +593,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.FillEachBale.GetValueOrDefault().ToString("N2"), normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.FillEachBale.GetValueOrDefault().ToString("N2") + " " + viewModel.BaleUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("CATATAN KETERANGAN ", bold_font);
@@ -809,7 +809,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 cellHeaderBody.HorizontalAlignment = Element.ALIGN_CENTER;
                 cellHeaderBody.Phrase = new Phrase("Order dari " + viewModel.SalesContract.Buyer.Name, normal_font);
                 headerTable2.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase("Sukoharjo", normal_font);
+                cellHeaderBody.Phrase = new Phrase(" ", normal_font);
                 headerTable2.AddCell(cellHeaderBody);
 
                 cellHeader2.AddElement(headerTable2);
@@ -1261,14 +1261,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 foreach (DOSalesDetailViewModel item in viewModel.DOSalesDetailItems)
                 {
-                    total_weight += item.Weight;
+                    total_weight += item.Packing;
                 }
 
-                cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
+                cellHeaderBody.Phrase = new Phrase("3. Jumlah Kirim ", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.WeightUom, normal_font);
+                cellHeaderBody.Phrase = new Phrase(total_weight + " " + viewModel.PackingUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 //cellHeaderBody.Phrase = new Phrase("3. Jumlah Order ", bold_font);
@@ -1296,7 +1296,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 headerTable3.AddCell(cellHeaderBody);
                 cellHeaderBody.Phrase = new Phrase(":", bold_font);
                 headerTable3.AddCell(cellHeaderBody);
-                cellHeaderBody.Phrase = new Phrase(viewModel.FillEachBale.GetValueOrDefault().ToString("N2"), normal_font);
+                cellHeaderBody.Phrase = new Phrase(viewModel.FillEachBale.GetValueOrDefault().ToString("N2") + " " + viewModel.BaleUom, normal_font);
                 headerTable3.AddCell(cellHeaderBody);
 
                 cellHeaderBody.Phrase = new Phrase("CATATAN KETERANGAN ", bold_font);

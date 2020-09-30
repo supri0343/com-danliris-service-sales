@@ -34,6 +34,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
         public string PackingUom { get; set; }
         public string LengthUom { get; set; }
         public string WeightUom { get; set; }
+        public string BaleUom { get; set; }
         public int? Disp { get; set; }
         public int? Op { get; set; }
         public int? Sc { get; set; }
@@ -119,8 +120,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if(DOSalesCategory == "DYEINGPRINTING")
                 {
-                    if (string.IsNullOrWhiteSpace(LengthUom))
-                        yield return new ValidationResult("Satuan Panjang harus dipilih", new List<string> { "LengthUom" });
+                    if (string.IsNullOrWhiteSpace(WeightUom))
+                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
                 }
                 else
                 {
@@ -258,11 +259,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                             rowErrorCount++;
                             DetailErrors += "Length : 'Panjang harus lebih besar dari 0',";
                         }
-                        if (DOSalesType == "Ekspor" && detail.Weight <= 0)
+                        if (DOSalesType == "Ekspor" && detail.Weight < 0)
                         {
                             Count++;
                             rowErrorCount++;
-                            DetailErrors += "Weight : 'Berat harus lebih besar dari 0',";
+                            DetailErrors += "Weight : 'Berat harus lebih besar sama dengan 0',";
                         }
                         if (detail.ConvertionValue < 0)
                         {
