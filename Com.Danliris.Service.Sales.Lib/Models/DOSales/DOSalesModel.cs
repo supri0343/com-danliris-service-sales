@@ -108,6 +108,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.DOSales
         public string LengthUom { get; set; }
         [MaxLength(255)]
         public string WeightUom { get; set; }
+        [MaxLength(255)]
+        public string BaleUom { get; set; }
         public int Disp { get; set; }
         public int Op { get; set; }
         public int Sc { get; set; }

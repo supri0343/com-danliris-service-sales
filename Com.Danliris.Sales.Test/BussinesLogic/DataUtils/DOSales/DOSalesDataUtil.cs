@@ -58,6 +58,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.DOSales
                 PackingUom = "PCS",
                 LengthUom = "MTR",
                 WeightUom = "KG",
+                BaleUom = "ROLL",
                 Disp = 1,
                 Op = 1,
                 Sc = 1,
