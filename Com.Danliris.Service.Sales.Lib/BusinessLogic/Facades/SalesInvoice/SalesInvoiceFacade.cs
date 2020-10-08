@@ -458,6 +458,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
 
         public async Task<MemoryStream> GenerateExcel(int buyerId, long salesInvoiceId, bool? isPaidOff, DateTimeOffset? dateFrom, DateTimeOffset? dateTo, int offSet)
         {
+            string title = "Laporan Pembayaran Faktur",
+                _dateFrom = dateFrom == null ? "-" : dateFrom.Value.ToString("dd MMMM yyyy"),
+                _dateTo = dateTo == null ? "-" : dateTo.Value.ToString("dd MMMM yyyy");
             var data = await GetReportQuery(buyerId, salesInvoiceId, isPaidOff, dateFrom, dateTo, offSet);
 
             DataTable dt = new DataTable();
@@ -487,7 +490,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                 }
             }
 
-            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, true);
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, title, _dateFrom, _dateTo, true);
         }
 
         private void UpdateTrueToShippingOut(long id, List<int> ItemIds)
