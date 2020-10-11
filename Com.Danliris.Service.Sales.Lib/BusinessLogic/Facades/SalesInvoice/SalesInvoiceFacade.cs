@@ -483,9 +483,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                 {
                     foreach (var detail in item.SalesReceipts.OrderBy(s => s.SalesReceiptDate))
                     {
-                        dt.Rows.Add(item.SalesInvoiceNo, string.Format("{0} {1}", item.CurrencySymbol, item.TotalPayment),
-                            string.Format("{0} {1}", detail.CurrencySymbol, detail.TotalPaid), string.Format("{0} {1}", detail.CurrencySymbol, detail.Nominal),
-                            string.Format("{0} {1}", detail.CurrencySymbol, detail.UnPaid), detail.SalesReceiptDate.ToOffset(new TimeSpan(offSet, 0, 0)).ToString("d/M/yyyy", new CultureInfo("id-ID")), detail.SalesReceiptNo);
+                        dt.Rows.Add(item.SalesInvoiceNo, string.Format("{0} {1}", item.CurrencySymbol, item.TotalPayment.ToString("#,##0.#0")),
+                            string.Format("{0} {1}", detail.CurrencySymbol, detail.TotalPaid.ToString("#,##0.#0")), string.Format("{0} {1}", detail.CurrencySymbol, detail.Nominal.ToString("#,##0.#0")),
+                            string.Format("{0} {1}", detail.CurrencySymbol, detail.UnPaid.ToString("#,##0.#0")), detail.SalesReceiptDate.ToOffset(new TimeSpan(offSet, 0, 0)).ToString("d/M/yyyy", new CultureInfo("id-ID")), detail.SalesReceiptNo);
                     }
                 }
             }
