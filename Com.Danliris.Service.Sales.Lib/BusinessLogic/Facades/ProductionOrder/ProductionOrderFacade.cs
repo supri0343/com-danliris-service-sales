@@ -547,7 +547,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                          join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
                          where a.IsDeleted == false
                              && b.IsDeleted == false
-                             && b.ColorType == d.Color
+                             //&& b.ColorType == d.Color
+                             && d.Color == (string.IsNullOrWhiteSpace(b.ColorType) ? d.Color : b.ColorType)
                              && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
                              && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
                              && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)

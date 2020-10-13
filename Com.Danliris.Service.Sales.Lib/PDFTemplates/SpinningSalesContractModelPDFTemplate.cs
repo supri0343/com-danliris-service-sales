@@ -260,13 +260,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_signature.Phrase = new Phrase(signatureArea, normal_font);
             signature.AddCell(cell_signature);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("", normal_font);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("", normal_font);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("", normal_font);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("", normal_font);
+            cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
 
             cell_signature.Phrase = new Phrase("(...........................)", normal_font);
