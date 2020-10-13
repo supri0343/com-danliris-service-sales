@@ -272,7 +272,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             Query = QueryHelper<ProductionOrderModel>.Filter(Query, FilterDictionary);
 
             var result = Query
-                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.MaterialWidth)
+                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.FinishWidth + " / " + field.YarnMaterialName)
                 .Distinct();
 
             if (keyword != null)
