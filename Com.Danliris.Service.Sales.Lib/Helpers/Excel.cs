@@ -58,13 +58,16 @@ namespace Com.Danliris.Service.Sales.Lib.Helpers
             {
                 var sheet = package.Workbook.Worksheets.Add(item.Value);
 
-                sheet.Cells["A2"].Value = title;
+                sheet.Cells["A2"].Value = "PT.Dan Liris";
                 sheet.Cells["A2:D2"].Merge = true;
 
-                sheet.Cells["A3"].Value = $"PERIODE : {dateFrom} sampai dengan {dateTo}";
+                sheet.Cells["A3"].Value = title;
                 sheet.Cells["A3:D3"].Merge = true;
 
-                sheet.Cells["A5"].LoadFromDataTable(item.Key, true, (styling == true) ? OfficeOpenXml.Table.TableStyles.Light16 : OfficeOpenXml.Table.TableStyles.None);
+                sheet.Cells["A4"].Value = $"PERIODE : {dateFrom} sampai dengan {dateTo}";
+                sheet.Cells["A4:D4"].Merge = true;
+
+                sheet.Cells["A6"].LoadFromDataTable(item.Key, true, (styling == true) ? OfficeOpenXml.Table.TableStyles.Light16 : OfficeOpenXml.Table.TableStyles.None);
                 sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
             }
             MemoryStream stream = new MemoryStream();

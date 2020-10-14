@@ -148,13 +148,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.SalesInvoice
                 .Returns(new SalesInvoiceHttpClientTestService(data));
             var facade2 = new SalesInvoiceFacade(serviceProvider.Object, dbContext);
 
-
-            var Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-1), data.DueDate.AddDays(1), 7);
-
+            var Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, null, null, 7);
             Assert.NotNull(Response);
 
             Response = await facade2.GenerateExcel(data.BuyerId, data.Id, data.IsPaidOff, data.DueDate.AddDays(-3), data.DueDate.AddDays(-2), 7);
-
             Assert.NotNull(Response);
         }
 
