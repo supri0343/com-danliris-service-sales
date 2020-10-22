@@ -472,9 +472,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pembayaran", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "No Kuitansi", DataType = typeof(string) });
 
+            int index = 0;
             if (data.Count == 0)
             {
-                dt.Rows.Add("", "", "", "", "", "", "");
+                dt.Rows.Add("", 0.ToString("#,##0.#0"), 0.ToString("#,##0.#0"), 0.ToString("#,##0.#0"), 0.ToString("#,##0.#0"), "", "");
+                index++;
             }
             else
             {
@@ -486,11 +488,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.SalesInvoice
                         dt.Rows.Add(item.SalesInvoiceNo, string.Format("{0} {1}", item.CurrencySymbol, item.TotalPayment.ToString("#,##0.#0")),
                             string.Format("{0} {1}", detail.CurrencySymbol, detail.TotalPaid.ToString("#,##0.#0")), string.Format("{0} {1}", detail.CurrencySymbol, detail.Nominal.ToString("#,##0.#0")),
                             string.Format("{0} {1}", detail.CurrencySymbol, detail.UnPaid.ToString("#,##0.#0")), detail.SalesReceiptDate.ToOffset(new TimeSpan(offSet, 0, 0)).ToString("d/M/yyyy", new CultureInfo("id-ID")), detail.SalesReceiptNo);
+                        index++;
                     }
                 }
             }
 
-            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, title, _dateFrom, _dateTo, true);
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Kwitansi") }, title, _dateFrom, _dateTo, true, index);
         }
 
         private void UpdateTrueToShippingOut(long id, List<int> ItemIds)
