@@ -218,7 +218,10 @@ namespace Com.Danliris.Sales.Test.ViewModels.ProductionOrder
 
             viewModel.ProcessType.SPPCode = "c";
             viewModel.ProcessType.Unit = "printing";
-            viewModel.RunWidth.Add(new ProductionOrder_RunWidthViewModel());
+            viewModel.RunWidth.Add(new ProductionOrder_RunWidthViewModel()
+            {
+                Value = 0
+            });
             result = viewModel.Validate(null);
             Assert.True(result.Count() > 0);
             Assert.NotNull(viewModel.ProcessType.Unit);
