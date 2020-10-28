@@ -16,6 +16,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
         public string Remark { get; set; }
         public OrderTypeViewModel OrderType { get; set; }
 
+        public string Unit { get; set; }
 
+        public string SPPCode { get; set; }
     }
 }
