@@ -35,6 +35,8 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.ProductionOrderProfi
             .ForPath(d => d.ProcessType.Code, opt => opt.MapFrom(s => s.ProcessTypeCode))
             .ForPath(d => d.ProcessType.Name, opt => opt.MapFrom(s => s.ProcessTypeName))
             .ForPath(d => d.ProcessType.Remark, opt => opt.MapFrom(s => s.ProcessTypeRemark))
+            .ForPath(d => d.ProcessType.Unit, opt => opt.MapFrom(s => s.ProcessTypeUnit))
+            .ForPath(d => d.ProcessType.SPPCode, opt => opt.MapFrom(s => s.ProcessTypeSPPCode))
 
             .ForPath(d => d.OrderType.Id, opt => opt.MapFrom(s => s.OrderTypeId))
             .ForPath(d => d.OrderType.Code, opt => opt.MapFrom(s => s.OrderTypeCode))
