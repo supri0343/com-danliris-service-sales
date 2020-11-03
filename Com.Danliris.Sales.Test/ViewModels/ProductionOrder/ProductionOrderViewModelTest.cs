@@ -187,5 +187,54 @@ namespace Com.Danliris.Sales.Test.ViewModels.ProductionOrder
             var result = viewModel.Validate(null);
             Assert.True(result.Count() > 0);
         }
+
+        [Fact]
+        public void Validate_ProcessType()
+        {
+            ProductionOrderViewModel viewModel = new ProductionOrderViewModel()
+            {
+                OrderType = new OrderTypeViewModel()
+                {
+                    Id = 1,
+                    Name = "printing"
+                },
+                ProcessType = new ProcessTypeViewModel()
+                {
+                    Id = 1,
+                    Name = "s"
+                },
+                Run = "1 run",
+                RunWidth = new List<ProductionOrder_RunWidthViewModel>()
+                {
+                },
+                Details = new List<ProductionOrder_DetailViewModel>(),
+                LampStandards = new List<ProductionOrder_LampStandardViewModel>(),
+
+            };
+
+            var result = viewModel.Validate(null);
+            Assert.True(result.Count() > 0);
+
+
+            viewModel.ProcessType.SPPCode = "c";
+            viewModel.ProcessType.Unit = "printing";
+            viewModel.RunWidth.Add(new ProductionOrder_RunWidthViewModel()
+            {
+                Value = 0
+            });
+            result = viewModel.Validate(null);
+            Assert.True(result.Count() > 0);
+            Assert.NotNull(viewModel.ProcessType.Unit);
+            Assert.NotNull(viewModel.ProcessType.SPPCode);
+
+            viewModel.Run = null;
+            result = viewModel.Validate(null);
+            Assert.True(result.Count() > 0);
+
+            viewModel.Run = "1run";
+            viewModel.RunWidth = new List<ProductionOrder_RunWidthViewModel>();
+            result = viewModel.Validate(null);
+            Assert.True(result.Count() > 0);
+        }
     }
 }

@@ -166,6 +166,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                             ProcessTypeId = model.ProcessTypeId,
                             ProcessTypeName = model.ProcessTypeName,
                             ProcessTypeRemark = model.ProcessTypeRemark,
+                            ProcessTypeSPPCode = model.ProcessTypeSPPCode,
+                            ProcessTypeUnit = model.ProcessTypeUnit,
                             ProfileFirstName = model.ProfileFirstName,
                             ProfileGender = model.ProfileGender,
                             ProfileLastName = model.ProfileLastName,
@@ -330,17 +332,46 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return await DbContext.SaveChangesAsync();
         }
 
+        //private void ProductionOrderNumberGenerator(ProductionOrderModel model, int index)
+        //{
+        //    string DocumentType = model.OrderTypeName.ToLower().Equals("printing") ? "P" : "F";
+
+        //    int YearNow = DateTime.Now.Year;
+        //    int MonthNow = DateTime.Now.Month;
+
+        //    DateTime createdDateFilter = new DateTime(YearNow, 1, 1);
+        //    ProductionOrderModel lastData = model.OrderTypeName.ToLower().Equals("printing") ? DbSet.IgnoreQueryFilters().Where(w => w.OrderTypeName.ToLower().Equals("printing") && w.CreatedUtc >= createdDateFilter).OrderByDescending(o => o.AutoIncreament).FirstOrDefault() :
+        //        DbSet.IgnoreQueryFilters().Where(w => !w.OrderTypeName.ToLower().Equals("printing") && w.CreatedUtc >= createdDateFilter).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+
+        //    if (lastData == null)
+        //    {
+        //        model.AutoIncreament = 1 + index;
+        //        model.OrderNo = $"{DocumentType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(4, '0')}";
+        //    }
+        //    else
+        //    {
+        //        if (YearNow > lastData.CreatedUtc.Year)
+        //        {
+        //            model.AutoIncreament = 1 + index;
+        //            model.OrderNo = $"{DocumentType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(4, '0')}";
+        //        }
+        //        else
+        //        {
+        //            model.AutoIncreament = lastData.AutoIncreament + (1 + index);
+        //            model.OrderNo = $"{DocumentType}/{YearNow}/{model.AutoIncreament.ToString().PadLeft(4, '0')}";
+        //        }
+        //    }
+        //}
+
         private void ProductionOrderNumberGenerator(ProductionOrderModel model, int index)
         {
-            string DocumentType = model.OrderTypeName.ToLower().Equals("printing") ? "P" : "F";
+            string DocumentType = model.ProcessTypeSPPCode.Substring(2);
 
             int YearNow = DateTime.Now.Year;
             int MonthNow = DateTime.Now.Month;
 
             DateTime createdDateFilter = new DateTime(YearNow, 1, 1);
-            ProductionOrderModel lastData = model.OrderTypeName.ToLower().Equals("printing") ? DbSet.IgnoreQueryFilters().Where(w => w.OrderTypeName.ToLower().Equals("printing") && w.CreatedUtc >= createdDateFilter).OrderByDescending(o => o.AutoIncreament).FirstOrDefault() :
-                DbSet.IgnoreQueryFilters().Where(w => !w.OrderTypeName.ToLower().Equals("printing") && w.CreatedUtc >= createdDateFilter).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
-
+            ProductionOrderModel lastData = DbContext.ProductionOrder.IgnoreQueryFilters().OrderByDescending(s => s.AutoIncreament).FirstOrDefault(s => s.ProcessTypeUnit == model.ProcessTypeUnit && s.ProcessTypeSPPCode == model.ProcessTypeSPPCode && s.CreatedUtc >= createdDateFilter);
             if (lastData == null)
             {
                 model.AutoIncreament = 1 + index;

@@ -134,6 +134,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                             ProcessTypeId = model.ProcessTypeId,
                             ProcessTypeName = model.ProcessTypeName,
                             ProcessTypeRemark = model.ProcessTypeRemark,
+                            ProcessTypeUnit = model.ProcessTypeUnit,
+                            ProcessTypeSPPCode = model.ProcessTypeSPPCode,
                             ProfileFirstName = model.ProfileFirstName,
                             ProfileGender = model.ProfileGender,
                             ProfileLastName = model.ProfileLastName,

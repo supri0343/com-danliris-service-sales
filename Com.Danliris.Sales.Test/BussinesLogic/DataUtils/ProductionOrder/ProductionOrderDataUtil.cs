@@ -34,6 +34,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                 DesignMotiveName = "name",
                 DesignNumber = "number",
                 DistributedQuantity = 1,
+                ProcessTypeSPPCode = "code",
+                ProcessTypeUnit = "unit",
                 FinishTypeCode = "code",
                 FinishTypeId = 1,
                 FinishTypeName = "name",

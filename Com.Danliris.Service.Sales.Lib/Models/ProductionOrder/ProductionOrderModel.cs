@@ -134,6 +134,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ProductionOrder
         [MaxLength(1000)]
         public string ProcessTypeRemark { get; set; }
 
+        [MaxLength(1000)]
+        public string ProcessTypeSPPCode { get; set; }
+
+        [MaxLength(1000)]
+        public string ProcessTypeUnit { get; set; }
+
         /*order type*/
         public long OrderTypeId { get; set; }
 

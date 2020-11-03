@@ -88,6 +88,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     Details = field.Details,
                     DesignCode = field.DesignCode,
                     DesignNumber = field.DesignNumber,
+                    ProcessTypeSPPCode = field.ProcessTypeSPPCode,
+                    ProcessTypeUnit = field.ProcessTypeUnit,
                     DistributedQuantity = field.DistributedQuantity,
                     IsCompleted = field.IsCompleted,
                     IsClosed = field.IsClosed,

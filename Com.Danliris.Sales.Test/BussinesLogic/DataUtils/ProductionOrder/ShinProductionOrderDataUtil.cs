@@ -70,6 +70,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
                 OrderTypeId = 1,
                 OrderTypeName = "name",
                 OrderTypeRemark = "remar",
+                ProcessTypeUnit = "unit",
+                ProcessTypeSPPCode = "code",
                 OrderNo = ccData.ProductionOrderNo,
                 ProcessTypeCode = "cpde",
                 Details = new List<ProductionOrder_DetailModel>()
