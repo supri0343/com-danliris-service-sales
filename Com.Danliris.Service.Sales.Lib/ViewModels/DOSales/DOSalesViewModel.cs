@@ -86,8 +86,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
 
                 if(DOSalesCategory == "SPINNING")
                 {
-                    //if (string.IsNullOrWhiteSpace(WeightUom))
-                    //    yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                    if (string.IsNullOrWhiteSpace(WeightUom))
+                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
                 }
                 else
                 {
