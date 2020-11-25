@@ -19,6 +19,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
         public string processType { get; set; }
         public string construction { get; set; }
         public string designCode { get; set; }
+        public string designNumber { get; set; }
         public string colorTemplate { get; set; }
         public string colorRequest { get; set; }
         public string buyer { get; set; }
