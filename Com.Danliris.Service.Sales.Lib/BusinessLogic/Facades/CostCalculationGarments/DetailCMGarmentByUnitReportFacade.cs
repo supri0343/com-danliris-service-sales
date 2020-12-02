@@ -58,8 +58,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Jumlah", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "FOB Price", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "CM", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "CM IDR", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "CM USD", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "OTL 1", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "OTL 2", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "SMV Cutting", DataType = typeof(String) });

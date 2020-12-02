@@ -19,6 +19,7 @@ namespace Com.Danliris.Sales.Test.ViewModels.ProductionOrder
             {
                 ArticleFabricEdge = "ArticleFabricEdge",
                 MaterialWidth = "MaterialWidth",
+                POType = "Test",
                 Sample = "Sample",
                 Remark = "Remark",
                 IsUsed = true,

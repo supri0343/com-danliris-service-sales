@@ -15,6 +15,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ProductionOrder
             RunWidths = new HashSet<ProductionOrder_RunWidthModel>();
         }
 
+        [MaxLength(50)]
+        public string POType { get; set; }
+
         [MaxLength(255)]
         public string Code { get; set; }
 
