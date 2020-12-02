@@ -355,7 +355,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             }
             else
             {
-                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PPIC D/P", normal_font);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PPIC", normal_font);
                 tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
                 cellIdentityContentCenterWithBorder.Phrase = new Phrase("PENJUALAN / PRDUKSI", normal_font);
                 tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
