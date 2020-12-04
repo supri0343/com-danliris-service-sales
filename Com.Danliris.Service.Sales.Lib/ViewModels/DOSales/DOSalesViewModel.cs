@@ -118,16 +118,16 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (!FillEachBale.HasValue || FillEachBale.Value <= 0)
                     yield return new ValidationResult("Isi tiap bale harus lebih besar dari 0", new List<string> { "FillEachBale" });
 
-                if(DOSalesCategory == "DYEINGPRINTING")
-                {
-                    if (string.IsNullOrWhiteSpace(WeightUom))
-                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
-                }
-                else
-                {
-                    if (string.IsNullOrWhiteSpace(WeightUom))
-                        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
-                }
+                //if(DOSalesCategory == "DYEINGPRINTING")
+                //{
+                //    if (string.IsNullOrWhiteSpace(WeightUom))
+                //        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                //}
+                //else
+                //{
+                //    if (string.IsNullOrWhiteSpace(WeightUom))
+                //        yield return new ValidationResult("Satuan Berat harus dipilih", new List<string> { "WeightUom" });
+                //}
 
                     
             }
