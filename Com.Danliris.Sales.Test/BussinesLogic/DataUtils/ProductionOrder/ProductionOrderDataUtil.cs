@@ -18,6 +18,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.ProductionOrder
             return new ProductionOrderModel()
             {
                 AccountId = 1,
+                POType = "test",
                 AccountUserName = "username",
                 Active = true,
                 ArticleFabricEdge = "fabric",

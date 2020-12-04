@@ -15,6 +15,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         {
             RunWidth = new HashSet<ProductionOrder_RunWidthViewModel>();
         }
+        
+        [MaxLength(50)]
+        public string POType { get; set; }
 
         [MaxLength(255)]
         public string Code { get; set; }
@@ -76,21 +79,28 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
 
-            if (this.Buyer == null || this.Buyer.Id.Equals(0))
+            if (string.IsNullOrWhiteSpace(this.POType) || this.POType == "")
             {
-                yield return new ValidationResult("Buyer harus di isi", new List<string> { "Buyer" });
+                yield return new ValidationResult("Jenis SPP harus di isi", new List<string> { "POType" });
             }
+
+            if (this.POType == "SALES")
+                if (this.Buyer == null || this.Buyer.Id.Equals(0))
+                {
+                    yield return new ValidationResult("Buyer harus di isi", new List<string> { "Buyer" });
+                }
 
             if (this.Uom == null || this.Uom.Id.Equals(0))
             {
                 yield return new ValidationResult("Satuan harus di isi", new List<string> { "Uom" });
             }
 
-            if (this.FinishingPrintingSalesContract == null || this.FinishingPrintingSalesContract.Id.Equals(0))
-            {
-                yield return new ValidationResult("sales contract harus di isi", new List<string> { "FinishingPrintingSalesContract" });
-            }
-
+            if (this.POType == "SALES")
+                if (this.FinishingPrintingSalesContract == null || this.FinishingPrintingSalesContract.Id.Equals(0))
+                {
+                    yield return new ValidationResult("sales contract harus di isi", new List<string> { "FinishingPrintingSalesContract" });
+                }
+           
             if (this.Material == null || this.Material.Id.Equals(0))
             {
                 yield return new ValidationResult("material harus di isi", new List<string> { "Material" });
@@ -110,10 +120,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                 {
                     if (this.ProcessType.Unit.Trim().ToLower() == "printing")
                     {
-                        if (string.IsNullOrWhiteSpace(this.Run))
-                        {
-                            yield return new ValidationResult("Run harus di isi", new List<string> { "Run" });
-                        }
+                        //if (string.IsNullOrWhiteSpace(this.Run))
+                        //{
+                        //    yield return new ValidationResult("Run harus di isi", new List<string> { "Run" });
+                        //}
                         if (!string.IsNullOrWhiteSpace(this.Run) && this.Run != "Tanpa RUN")
                         {
                             if (this.RunWidth.Count.Equals(0))
