@@ -162,6 +162,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                             OrderTypeName = model.OrderTypeName,
                             OrderTypeRemark = model.OrderTypeRemark,
                             PackingInstruction = model.PackingInstruction,
+                            POType = model.POType,
                             ProcessTypeCode = model.ProcessTypeCode,
                             ProcessTypeId = model.ProcessTypeId,
                             ProcessTypeName = model.ProcessTypeName,

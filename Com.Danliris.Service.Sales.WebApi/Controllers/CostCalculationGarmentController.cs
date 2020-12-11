@@ -488,8 +488,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
-		[HttpGet("data/{ro}")]
-		public IActionResult GetComodityQtyOrderHoursBuyerByRo(string ro)
+		[HttpGet("data")]
+		public IActionResult GetComodityQtyOrderHoursBuyerByRo([FromBody]string ro)
 		{
 			try
 			{
@@ -510,7 +510,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 			}
 		}
 
-        [HttpGet("materials/by-prmasteritemids")]
+		[HttpGet("materials/by-prmasteritemids")]
         public IActionResult GetMaterialsByPRMasterItemIds(int page = 1, int size = 25, string order = "{}", string select = null, string keyword = null, string filter = "{}", string search = "[]", string prmasteritemids = "[]")
         {
             try
