@@ -504,6 +504,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var tuple2 = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
             Assert.NotNull(tuple2.Item1);
 
+            var tuple3 = await facade.GetReport(data2.SalesContractNo, null, "1", null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
+            Assert.NotNull(tuple3.Item1);
+
 
         }
         [Fact]
@@ -563,6 +566,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
 
             var tuple = await facade.GenerateExcel(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
+            var tuple2 = await facade.GenerateExcel(data2.SalesContractNo, null, "1", null, null, null, null, null, 7);
+            Assert.IsType<System.IO.MemoryStream>(tuple2);
 
 
         }
