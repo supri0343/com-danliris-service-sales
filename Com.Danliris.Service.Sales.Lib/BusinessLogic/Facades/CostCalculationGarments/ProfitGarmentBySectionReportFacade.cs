@@ -60,17 +60,17 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Fabric Allowance", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Acc Allowance", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Profit %", DataType = typeof(double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Qty Order", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Profit %", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Qty Order", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Confirm Price", DataType = typeof(double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "CM Price", DataType = typeof(double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "FOB Price", DataType = typeof(double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Amount", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Confirm Price", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "CM Price", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "FOB Price", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Amount", DataType = typeof(String) });
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, 0, "", 0, 0, 0, 0); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 Dictionary<string, List<ProfitGarmentBySectionReportViewModel>> dataBySection = new Dictionary<string, List<ProfitGarmentBySectionReportViewModel>>();
@@ -128,15 +128,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         index++;
 
                         string ShipDate = item.DeliveryDate == new DateTime(1970, 1, 1) ? "-" : item.DeliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
-                        //string QtyOrder = string.Format("{0:N2}", item.Quantity);
-                        //string CfrmPrc = string.Format("{0:N4}", item.ConfirmPrice);
-                        //string PrftGmt = string.Format("{0:N2}", item.Profit);
-                        //string CMPrc1 = string.Format("{0:N4}", item.CMPrice);
-                        //string FOBPrc = string.Format("{0:N4}", item.FOBPrice);
-                        //string Amnt = string.Format("{0:N2}", item.Amount);
+                        string QtyOrder = string.Format("{0:N2}", item.Quantity);
+                        string CfrmPrc = string.Format("{0:N4}", item.ConfirmPrice);
+                        string PrftGmt = string.Format("{0:N2}", item.Profit);
+                        string CMPrc1 = string.Format("{0:N4}", item.CMPrice);
+                        string FOBPrc = string.Format("{0:N4}", item.FOBPrice);
+                        string Amnt = string.Format("{0:N2}", item.Amount);
 
                         result.Rows.Add(index, item.RO_Number, item.Section, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Article,
-                                        item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, item.Profit, item.Quantity, item.UOMUnit, item.ConfirmPrice, item.CMPrice, item.FOBPrice, item.Amount);
+                                        item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, PrftGmt, QtyOrder, item.UOMUnit, CfrmPrc, CMPrc1, FOBPrc, Amnt);
 
                         rowPosition += 1;
                         SECTION = item.Section;

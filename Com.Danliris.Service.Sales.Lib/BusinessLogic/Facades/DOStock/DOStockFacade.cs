@@ -68,7 +68,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOStock
             int YearNow = DateTime.Now.Year;
             var YearNowString = DateTime.Now.ToString("yy");
 
-            DOSalesModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.Type.Equals(model.Type)).OrderByDescending(o => o.AutoIncreament).FirstOrDefault();
+            DOSalesModel lastLocalData = DbSet.IgnoreQueryFilters().Where(w => w.Type.Equals(model.Type)).OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
 
             if (lastLocalData == null)
             {
