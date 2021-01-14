@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
 {
-    public class ProfitGarmentBySectionReportViewModel 
+    public class ProfitGarmentBySectionReportViewModel
     {
         public int count { get; set; }
         public string RO_Number { get; set; }
@@ -19,9 +19,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string Comodity { get; set; }
         public string ComodityDescription { get; set; }
         public double Profit { get; set; }
+        public double ProfitIDR { get; set; }
+        public double ProfitUSD { get; set; }
+        public double ProfitFOB { get; set; }
+        public double Commision { get; set; }
         public double Quantity { get; set; }
-        public string UOMUnit { get; set; }        
-        public double ConfirmPrice { get; set; }       
+        public string UOMUnit { get; set; }
+        public double ConfirmPrice { get; set; }
         public double CurrencyRate { get; set; }
         public double CMPrice { get; set; }
         public double FOBPrice { get; set; }

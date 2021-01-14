@@ -99,7 +99,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			cell_detail2.Phrase = new Phrase("DESCRIPTION", normal_font);
 			table_detail2.AddCell(cell_detail2);
-			cell_detail2.Phrase = new Phrase($"{viewModel.CommodityDescription}", normal_font);
+			cell_detail2.Phrase = new Phrase($"{viewModel.Comodity.Code}" + " - " + $"{viewModel.CommodityDescription}", normal_font);
 			table_detail2.AddCell(cell_detail2);
 
 			cell_detail2.Phrase = new Phrase("QTY", normal_font);
@@ -287,7 +287,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable table_ccm = new PdfPTable(11);
 			table_ccm.TotalWidth = 570f;
 
-			float[] ccm_widths = new float[] { 1f, 3f, 2f, 6f, 2f, 3f, 2f, 2f, 3f, 3f, 3f };
+			float[] ccm_widths = new float[] { 1f, 3f, 2f, 6f, 3f, 3f, 2f, 2f, 3f, 3f, 2f };
 			table_ccm.SetWidths(ccm_widths);
 
 			PdfPCell cell_ccm = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
@@ -343,7 +343,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 				cell_ccm.HorizontalAlignment = Element.ALIGN_RIGHT;
 
 				double usage = viewModel.CostCalculationGarment_Materials[i].Quantity ?? 0;
-				cell_ccm.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(usage), normal_font);
+				cell_ccm.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(usage) + "  " + (viewModel.CostCalculationGarment_Materials[i].UOMQuantity.Unit), normal_font);
 				table_ccm.AddCell(cell_ccm);
 
 				double price = viewModel.CostCalculationGarment_Materials[i].Price ?? 0;
@@ -366,7 +366,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 				table_ccm.AddCell(cell_ccm);
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_CENTER;
-				cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].UOMQuantity.Unit, normal_font);
+				cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].UOMPrice.Unit, normal_font);
 				table_ccm.AddCell(cell_ccm);
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_RIGHT;
