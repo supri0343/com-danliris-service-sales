@@ -197,7 +197,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			cell_bottom_column1_1.Phrase = new Phrase("DESCRIPTION", normal_font);
 			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
-			cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.CommodityDescription}", normal_font);
+			cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.Comodity.Code}" + " - " + $"{viewModel.CommodityDescription}", normal_font);
 			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
 
 			cell_bottom_column1_1.Phrase = new Phrase("CONT/STYLE", normal_font);
