@@ -44,17 +44,43 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 var filterDate = _filter.dateTo.GetValueOrDefault().ToOffset(TimeSpan.FromHours(identityService.TimezoneOffset)).AddDays(1).Date;
                 Query = Query.Where(cc => cc.DeliveryDate.AddHours(identityService.TimezoneOffset).Date < filterDate);
             }
- 
+
             Query = Query.OrderBy(o => o.Section).ThenBy(o => o.BuyerBrandCode);
             var newQ = (from a in Query
                         join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId
-                        where b.CategoryName == "FABRIC" && a.IsApprovedKadivMD == true
-                        group new { CMP = b.CM_Price.GetValueOrDefault() } by new { a.UnitName, a.Section, a.BuyerCode, a.BuyerName,
-                                    a.BuyerBrandCode, a.BuyerBrandName, a.Commodity, a.CommodityDescription, a.RO_Number, a.Article, a.Quantity, a.UOMUnit,
-                                    a.DeliveryDate, a.NETFOBP, a.ConfirmPrice, a.RateValue, a.FabricAllowance, a.AccessoriesAllowance } into G
+                        where a.IsApprovedKadivMD == true
+                        group new { CMP = b.CM_Price.GetValueOrDefault(), GmtCost = b.Total, Shipfee = b.TotalShippingFee } by new
+                        {
+                            a.UnitName,
+                            a.Section,
+                            a.BuyerCode,
+                            a.BuyerName,
+                            a.BuyerBrandCode,
+                            a.BuyerBrandName,
+                            a.Commodity,
+                            a.CommodityDescription,
+                            a.RO_Number,
+                            a.Article,
+                            a.Quantity,
+                            a.UOMUnit,
+                            a.DeliveryDate,
+                            a.NETFOBP,
+                            a.NETFOB,
+                            a.ConfirmPrice,
+                            a.RateValue,
+                            a.FabricAllowance,
+                            a.AccessoriesAllowance,
+                            a.OTL1CalculatedRate,
+                            a.OTL2CalculatedRate,
+                            a.Risk,
+                            a.CommissionRate,
+                            a.CommissionPortion,
+                            a.Insurance,
+                            a.Freight
+                        } into G
 
-            select new ProfitGarmentBySectionReportViewModel
-                       {                
+                        select new ProfitGarmentBySectionReportViewModel
+                        {
                             UnitName = G.Key.UnitName,
                             Section = G.Key.Section,
                             BuyerCode = G.Key.BuyerCode,
@@ -64,19 +90,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             RO_Number = G.Key.RO_Number,
                             Comodity = G.Key.Commodity,
                             ComodityDescription = G.Key.CommodityDescription,
-                            Profit = G.Key.NETFOBP, 
+                            Profit = G.Key.NETFOBP,
                             Article = G.Key.Article,
                             Quantity = G.Key.Quantity,
                             UOMUnit = G.Key.UOMUnit,
                             DeliveryDate = G.Key.DeliveryDate,
                             ConfirmPrice = G.Key.ConfirmPrice,
-                            CurrencyRate = G.Key.RateValue,                          
+                            CurrencyRate = G.Key.RateValue,
                             CMPrice = Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue * 1.05,
                             FOBPrice = ((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) + G.Key.ConfirmPrice,
                             FabAllow = G.Key.FabricAllowance,
-                            AccAllow = G.Key.AccessoriesAllowance, 
+                            AccAllow = G.Key.AccessoriesAllowance,
                             Amount = G.Key.Quantity * (((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) + G.Key.ConfirmPrice),
-            });
+                            Commision = G.Key.CommissionPortion,
+                            ProfitIDR = ((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2),
+                            ProfitUSD = Math.Round(((((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2)) / G.Key.RateValue), 2),
+                            ProfitFOB = Math.Round(((((((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2)) / G.Key.RateValue) * 100) / (((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) + G.Key.ConfirmPrice)), 2),
+                        });
             return newQ;
         }
 
