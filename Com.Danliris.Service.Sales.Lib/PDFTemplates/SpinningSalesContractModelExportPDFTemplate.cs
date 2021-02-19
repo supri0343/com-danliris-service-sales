@@ -157,7 +157,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyContentLeft.Phrase = new Phrase("Shipment", normal_font_9);
             tableBody.AddCell(bodyContentLeft);
             tableBody.AddCell(bodyContentColon);
-            bodyContentLeft.Phrase = new Phrase(appx + " " + (viewModel.DeliverySchedule.Value.AddHours(timeoffset).ToString("MMMM yyyy", new CultureInfo("en-US")))?.ToUpper() + " " + viewModel.ShipmentDescription, normal_font_9);
+            bodyContentLeft.Phrase = new Phrase(appx + " " + (viewModel.DeliverySchedule.Value.AddHours(timeoffset).ToString("MMMM yyyy", new CultureInfo("en-US")))?.ToUpper() + "\n " + viewModel.ShipmentDescription, normal_font_9);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Destination", normal_font_9);
             tableBody.AddCell(bodyContentLeft);
