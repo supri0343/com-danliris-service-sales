@@ -84,6 +84,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                 Dictionary<string, double> subTotalPrftIDR = new Dictionary<string, double>();
                 Dictionary<string, double> subTotalPrftUSD = new Dictionary<string, double>();
 
+                var grandTotalByUom = new List<TotalByUom>();
+
                 foreach (ProfitGarmentBySectionReportViewModel item in Query.ToList())
                 {
                     string Section = item.Section;
@@ -117,6 +119,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         ProfitFOB = item.ProfitFOB,
                         Commision = item.Commision,
                     });
+
+                    var currentUom = grandTotalByUom.FirstOrDefault(c => c.uom == item.UOMUnit);
+                    if (currentUom == null)
+                    {
+                        grandTotalByUom.Add(new TotalByUom
+                        {
+                            uom = item.UOMUnit,
+                            quantity = item.Quantity,
+                            amount = item.Amount,
+                        });
+                    }
+                    else
+                    {
+                        currentUom.quantity += item.Quantity;
+                        currentUom.amount += item.Amount;
+                    }
 
                     if (!subTotalAmount.ContainsKey(Section))
                     {
@@ -181,8 +199,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                     totalPrftIDR += subTotalPrftIDR[Seksi.Key];
                     totalPrftUSD += subTotalPrftUSD[Seksi.Key];
                 }
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "GRAND TOTAL", ":", "", "", "", "", "", Math.Round(totalAmount, 2), "", "", Math.Round(totalPrftIDR, 2), Math.Round(totalPrftUSD, 2), "");
-                rowPosition += 1;
+
+                rowPosition++;
+                foreach (var i in Enumerable.Range(0, grandTotalByUom.Count))
+                {
+                    if (i == 0)
+                    {
+                        result.Rows.Add(null, null, "GRAND TOTAL", grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, null, null, "GRAND TOTAL", data.Sum(d => d.Amount), "", "", "", "", ":", "", "", "", "", "", "", "", "", "", "", "");
+                    }
+                    else
+                    {
+                        result.Rows.Add(null, null, null, grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, null, null, null, null, "", "", "", "", ":", "", "", "", "", "", "", "", "", "", "", "");
+                    }
+                }
             }
             ExcelPackage package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add("Profit Garment By Seksi");
@@ -204,6 +233,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             int TotalData = data.Count();
             return Tuple.Create(data, TotalData);
+        }
+
+        private class TotalByUom
+        {
+            public string uom { get; set; }
+            public double quantity { get; set; }
+            public double amount { get; set; }
         }
     }
 }
