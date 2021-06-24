@@ -10,7 +10,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.Garment
         public string PRNo { get; set; }
         public string PRType { get; set; }
         public string RONo { get; set; }
-
+        public string MDStaff { get; set; }
         public long SCId { get; set; }
         public string SCNo { get; set; }
 
