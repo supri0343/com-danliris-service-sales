@@ -142,6 +142,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
             {
                 PRType = "JOB ORDER",
                 RONo = costCalculation.RO_Number,
+                MDStaff = costCalculation.CreatedBy,
                 SCId = costCalculation.PreSCId,
                 SCNo = costCalculation.PreSCNo,
                 Buyer = new BuyerViewModel
