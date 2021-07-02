@@ -99,7 +99,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     ProfileFirstName = field.ProfileFirstName,
                     ProfileGender = field.ProfileGender,
                     ProfileLastName = field.ProfileLastName,
-                    PackingInstruction = field.PackingInstruction
+                    PackingInstruction = field.PackingInstruction,
+                    MaterialOrigin = field.MaterialOrigin
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
