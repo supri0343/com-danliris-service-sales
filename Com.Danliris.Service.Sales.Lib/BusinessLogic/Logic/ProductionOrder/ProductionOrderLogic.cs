@@ -46,7 +46,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             {
 
                 "Id", "POType", "Code", "Buyer", "ProcessType", "LastModifiedUtc", "FinishingPrintingSalesContract", "OrderNo", "Details", "OrderType", "HandlingStandard", "Material", "YarnMaterial", "DeliveryDate","SalesContractNo", "MaterialConstruction", "FinishWidth", "DesignCode", "DesignNumber", "OrderQuantity", "Uom",
-                "DistributedQuantity", "IsCompleted", "IsClosed", "IsCalculated", "Account", "MaterialWidth", "PackingInstruction"
+                "DistributedQuantity", "IsCompleted", "IsClosed", "IsCalculated", "Account", "MaterialWidth", "PackingInstruction", "MaterialOrigin"
 
             };
 
@@ -99,7 +99,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     ProfileFirstName = field.ProfileFirstName,
                     ProfileGender = field.ProfileGender,
                     ProfileLastName = field.ProfileLastName,
-                    PackingInstruction = field.PackingInstruction
+                    PackingInstruction = field.PackingInstruction,
+                    MaterialOrigin = field.MaterialOrigin
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
