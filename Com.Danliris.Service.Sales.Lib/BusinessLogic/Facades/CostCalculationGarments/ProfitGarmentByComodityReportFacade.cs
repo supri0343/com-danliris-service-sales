@@ -35,7 +35,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             this.IdentityService = serviceProvider.GetService<IdentityService>();
             this.ProfitGarmentByComodityReportLogic = serviceProvider.GetService<ProfitGarmentByComodityReportLogic>();
         }
-        
+
         public Tuple<MemoryStream, string> GenerateExcel(string filter = "{}")
         {
 
@@ -44,22 +44,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             var Query = ProfitGarmentByComodityReportLogic.GetQuery(filter);
             var data = Query.ToList();
             DataTable result = new DataTable();
-       
+
             result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Komoditi", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Qty Order", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Quantity", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Amount", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Amount USD", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Profit USD", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Profit IDR ", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Profit FOB", DataType = typeof(double) });
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", 0, "", 0, 0, 0, 0); // to allow column name to be generated properly for empty data as template
             else
             {
                 Dictionary<string, List<ProfitGarmentByComodityReportViewModel>> dataByUOM = new Dictionary<string, List<ProfitGarmentByComodityReportViewModel>>();
 
                 Dictionary<string, double> subTotalAmount = new Dictionary<string, double>();
+                Dictionary<string, double> subTotalProfit1 = new Dictionary<string, double>();
+                Dictionary<string, double> subTotalProfit2 = new Dictionary<string, double>();
+                Dictionary<string, double> subTotalProfit3 = new Dictionary<string, double>();
 
                 foreach (ProfitGarmentByComodityReportViewModel item in Query.ToList())
                 {
@@ -72,7 +78,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         ComodityName = item.ComodityName,
                         Quantity = item.Quantity,
                         UOMUnit = item.UOMUnit,
-                        Amount = item.Amount,                        
+                        Amount = item.Amount,
+                        ProfitUSD = item.ProfitUSD,
+                        ProfitIDR = item.ProfitIDR,
+                        ProfitFOB = item.ProfitFOB,
                     });
 
                     if (!subTotalAmount.ContainsKey(BgtUOM))
@@ -81,9 +90,34 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                     };
 
                     subTotalAmount[BgtUOM] += item.Amount;
+
+                    if (!subTotalProfit1.ContainsKey(BgtUOM))
+                    {
+                        subTotalProfit1.Add(BgtUOM, 0);
+                    };
+
+                    subTotalProfit1[BgtUOM] += item.ProfitUSD;
+
+                    if (!subTotalProfit2.ContainsKey(BgtUOM))
+                    {
+                        subTotalProfit2.Add(BgtUOM, 0);
+                    };
+
+                    subTotalProfit2[BgtUOM] += item.ProfitIDR;
+
+                    if (!subTotalProfit3.ContainsKey(BgtUOM))
+                    {
+                        subTotalProfit3.Add(BgtUOM, 0);
+                    };
+
+                    subTotalProfit3[BgtUOM] += item.ProfitFOB;
                 }
 
                 double totalAmount = 0;
+                double totalAmount1 = 0;
+                double totalAmount2 = 0;
+                double totalAmount3 = 0;
+
 
                 int rowPosition = 1;
 
@@ -96,20 +130,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                     {
                         index++;
 
-                        string TotQty = string.Format("{0:N2}", item.Quantity);
-                        string TotAmt = string.Format("{0:N2}", item.Amount);
-
-                        result.Rows.Add(index, item.ComodityCode, item.ComodityName, TotQty, item.UOMUnit, TotAmt);
+                        result.Rows.Add(index, item.ComodityCode, item.ComodityName, item.Quantity, item.UOMUnit, item.Amount, item.ProfitUSD, item.ProfitIDR, item.ProfitFOB);
 
                         rowPosition += 1;
                         U_o_M = item.UOMUnit;
                     }
-                    result.Rows.Add("", "", "", "SUB TOTAL", U_o_M, Math.Round(subTotalAmount[UoM.Key], 2));
+                    result.Rows.Add("", "", "SUB TOTAL", 0, U_o_M, Math.Round(subTotalAmount[UoM.Key], 2), Math.Round(subTotalProfit1[UoM.Key], 2), Math.Round(subTotalProfit1[UoM.Key], 2), Math.Round(subTotalProfit1[UoM.Key], 2));
 
                     rowPosition += 1;
                     totalAmount += subTotalAmount[UoM.Key];
+                    totalAmount1 += subTotalProfit1[UoM.Key];
+                    totalAmount2 += subTotalProfit1[UoM.Key];
+                    totalAmount3 += subTotalProfit1[UoM.Key];
                 }
-                result.Rows.Add("", "", "", "", "T O T A L", Math.Round(totalAmount, 2));
+                result.Rows.Add("", "", "T O T A L", 0, "", Math.Round(totalAmount, 2), Math.Round(totalAmount1, 2), Math.Round(totalAmount2, 2), Math.Round(totalAmount3, 2));
                 rowPosition += 1;
             }
 
@@ -133,6 +167,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             int TotalData = data.Count();
             return Tuple.Create(data, TotalData);
-        }     
+        }
     }
 }
