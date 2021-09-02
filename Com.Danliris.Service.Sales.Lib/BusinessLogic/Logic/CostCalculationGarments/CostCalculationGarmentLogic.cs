@@ -583,5 +583,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 .Take(size)
                 .ToList();
         }
+
+        public virtual Task<CostCalculationGarment> ReadByRO(string ro)
+        {
+            return DbSet.FirstOrDefaultAsync(d => d.RO_Number.Equals(ro) && d.IsDeleted.Equals(false));
+        }
     }
 }

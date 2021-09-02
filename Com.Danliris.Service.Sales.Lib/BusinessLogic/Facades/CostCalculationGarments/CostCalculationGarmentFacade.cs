@@ -384,5 +384,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             CostCalculationGarmentMaterialLogic costCalculationGarmentMaterialLogic = ServiceProvider.GetService<CostCalculationGarmentMaterialLogic>();
             return costCalculationGarmentMaterialLogic.ReadMaterialsByPRMasterItemIds(page, size, order, select, keyword, filter, search, prmasteritemids);
         }
+
+        public async Task<CostCalculationGarment> ReadByRO(string ro)
+        {
+            CostCalculationGarment read = await this.DbSet
+               .Where(d => d.RO_Number.Equals(ro) && d.IsDeleted.Equals(false))
+               .Include(d => d.CostCalculationGarment_Materials)
+               .FirstOrDefaultAsync();
+
+            read.CostCalculationGarment_Materials = read.CostCalculationGarment_Materials.OrderBy(o => o.MaterialIndex).ToList();
+
+            if (read.ImagePath != null)
+            {
+                read.ImageFile = await this.AzureImageFacade.DownloadImage(read.GetType().Name, read.ImagePath);
+            }
+
+            return read;
+        }
     }
 }
