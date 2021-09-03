@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         private readonly static string apiVersion = "1.0";
         private readonly IEfficiency _facade;
         private readonly IIdentityService Service;
-        public EfficienciesController(IIdentityService identityService, IValidateService validateService, IEfficiency facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public EfficienciesController(IIdentityService identityService, IValidateService validateService, IEfficiency facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
             Service = identityService;
             _facade = facade;
@@ -39,18 +39,18 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var model = await _facade.ReadModelByQuantity(Quantity);
-
-            if (model == null)
-            {
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, Common.NOT_FOUND_STATUS_CODE, Common.NOT_FOUND_MESSAGE)
-                    .Fail();
-                return NotFound(Result);
-            }
-
             try
             {
+                var model = await _facade.ReadModelByQuantity(Quantity);
+
+                if (model == null)
+                {
+                    Dictionary<string, object> Result =
+                        new ResultFormatter(ApiVersion, Common.NOT_FOUND_STATUS_CODE, Common.NOT_FOUND_MESSAGE)
+                        .Fail();
+                    return NotFound(Result);
+                }
+
                 return Ok(new
                 {
                     apiVersion = ApiVersion,

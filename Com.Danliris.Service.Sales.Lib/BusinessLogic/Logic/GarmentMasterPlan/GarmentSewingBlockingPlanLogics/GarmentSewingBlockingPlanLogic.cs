@@ -79,7 +79,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.G
                 GarmentWeeklyPlanItem week = DbContext.GarmentWeeklyPlanItems.FirstOrDefault(a => a.Id == item.WeeklyPlanItemId);
                 week.UsedEH += (int)item.EHBooking;
                 week.RemainingEH-= (int)item.EHBooking;
-
+                if (item.IsConfirm)
+                {
+                    week.WHConfirm += Math.Round((item.EHBooking / (week.Operator * week.Efficiency)), 2);
+                }
+                
                 
                 EntityExtension.FlagForCreate(item, IdentityService.Username, "sales-service");
             }
@@ -106,6 +110,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.G
                 GarmentWeeklyPlanItem week = DbContext.GarmentWeeklyPlanItems.FirstOrDefault(a => a.Id == item.WeeklyPlanItemId);
                 week.UsedEH -= (int)item.EHBooking;
                 week.RemainingEH += (int)item.EHBooking;
+                if (item.IsConfirm)
+                    week.WHConfirm -= Math.Round((item.EHBooking / (week.Operator * week.Efficiency)), 2);
 
                 EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
             }
@@ -125,6 +131,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.G
                 GarmentWeeklyPlanItem week = DbContext.GarmentWeeklyPlanItems.FirstOrDefault(a => a.Id == item.WeeklyPlanItemId);
                 week.UsedEH -= (int)item.EHBooking;
                 week.RemainingEH += (int)item.EHBooking;
+                if (item.IsConfirm)
+                    week.WHConfirm -= Math.Round((item.EHBooking / (week.Operator * week.Efficiency)), 2);
             }
 
             foreach (var newPlan in newModel.Items)
@@ -136,6 +144,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.G
                     
                     week.UsedEH += (int)newPlan.EHBooking;
                     week.RemainingEH -= (int)newPlan.EHBooking;
+                    if (newPlan.IsConfirm)
+                        week.WHConfirm += Math.Round((newPlan.EHBooking / (week.Operator * week.Efficiency)), 2);
 
                     EntityExtension.FlagForCreate(newPlan, IdentityService.Username, "sales-service");
                 }
@@ -143,6 +153,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.G
                 {
                     week.UsedEH += (int)newPlan.EHBooking;
                     week.RemainingEH -= (int)newPlan.EHBooking;
+                    if (newPlan.IsConfirm)
+                        week.WHConfirm += Math.Round((newPlan.EHBooking / (week.Operator * week.Efficiency)), 2);
 
                     EntityExtension.FlagForUpdate(newPlan, IdentityService.Username, "sales-service");
                 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Com.Danliris.Service.Sales.Lib.Utilities.BaseClass
 {
     public abstract class BaseMonitoringLogic<TViewModel>
     {
-        public abstract IQueryable<TViewModel> GetQuery(string filter);
+        public abstract IQueryable<TViewModel> GetQuery(string filterString);
     }
 }

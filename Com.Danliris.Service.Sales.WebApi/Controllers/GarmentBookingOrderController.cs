@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         private readonly static string apiVersion = "1.0";
         private readonly IGarmentBookingOrder facades;
         private readonly IIdentityService Service;
-        public GarmentBookingOrderController(IIdentityService identityService, IValidateService validateService, IGarmentBookingOrder facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public GarmentBookingOrderController(IIdentityService identityService, IValidateService validateService, IGarmentBookingOrder facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
             facades = facade;
             Service = identityService;

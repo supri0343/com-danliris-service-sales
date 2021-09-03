@@ -22,7 +22,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers.GarmentMasterPlan.Weekly
     {
         private readonly static string apiVersion = "1.0";
 
-        public WeeklyPlanController(IIdentityService identityService, IValidateService validateService, IWeeklyPlanFacade facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public WeeklyPlanController(IIdentityService identityService, IValidateService validateService, IWeeklyPlanFacade facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
         }
 

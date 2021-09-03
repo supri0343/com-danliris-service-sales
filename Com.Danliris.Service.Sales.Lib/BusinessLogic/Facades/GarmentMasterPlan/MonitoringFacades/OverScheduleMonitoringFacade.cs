@@ -16,6 +16,7 @@ using Com.Danliris.Service.Sales.Lib.Helpers;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Newtonsoft.Json;
+using Com.Moonlay.NetCore.Lib;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.MonitoringFacades
 {
@@ -155,7 +156,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan
         {
             var Query = OverScheduleMonitoringLogic.GetQuery(filter);
             var data = Query.ToList();
-            return Tuple.Create(data, data.Count);
+            Pageable<OverScheduleMonitoringViewModel> pageable = new Pageable<OverScheduleMonitoringViewModel>(data, page - 1, size);
+            List<OverScheduleMonitoringViewModel> Data_ = pageable.Data.ToList<OverScheduleMonitoringViewModel>();
+
+            int TotalData = pageable.TotalCount;
+
+            return Tuple.Create(Data_, TotalData);
         }
     }
 }

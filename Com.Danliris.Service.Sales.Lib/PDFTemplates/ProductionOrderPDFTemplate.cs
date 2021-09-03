@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
@@ -15,9 +16,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
         {
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 18);
             Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
+            Font extra_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 9);
             Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
 
-            Document document = new Document(PageSize.A4, 40, 40, 40, 40);
+            Document document = new Document(PageSize.A4, 40, 40, 25, 25);
+            //Document document = new Document(PageSize.A4, 40, 40, 40, 40);
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
@@ -31,20 +34,20 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Header
 
-            string blankString = " ";
-            Paragraph bankSpace = new Paragraph(blankString, normal_font);
-            bankSpace.SpacingAfter = 100f;
-            document.Add(bankSpace);
+            //string blankString = " ";
+            //Paragraph bankSpace = new Paragraph(blankString, normal_font);
+            //bankSpace.SpacingAfter = 30f;
+            //document.Add(bankSpace);
 
 
             string codeNoString = "FM-PJ-00-03-021/R1";
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
-            codeNo.SpacingAfter = 20f;
+            codeNo.SpacingAfter = 10f;
             document.Add(codeNo);
 
             string titleString = "SURAT PERINTAH PRODUKSI";
             Paragraph title = new Paragraph(titleString, bold_font) { Alignment = Element.ALIGN_CENTER };
-            title.SpacingAfter = 20f;
+            title.SpacingAfter = 10f;
             document.Add(title);
             bold_font.SetStyle(Font.NORMAL);
 
@@ -62,27 +65,33 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell cellIdentityContentRightWithBorder = new PdfPCell() { HorizontalAlignment = Element.ALIGN_RIGHT };
 
             PdfPCell cellIdentityContentCenterWithBorder = new PdfPCell() { HorizontalAlignment = Element.ALIGN_CENTER };
-
             PdfPTable tableIdentity1 = new PdfPTable(2);
-            cellIdentityContentLeft.Phrase = new Phrase("No. Sales Contract", normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.SalesContractNo, normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
+
+            if (viewModel.POType == "SALES")
+            {
+                cellIdentityContentLeft.Phrase = new Phrase("No. Sales Contract", normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
+                cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.FinishingPrintingSalesContract.SalesContractNo, normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
+            }
 
             cellIdentityContentLeft.Phrase = new Phrase("Nomor Order", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
             cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.OrderNo, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
-            cellIdentityContentLeft.Phrase = new Phrase("Nama Buyer", normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Buyer.Name, normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
+            if (viewModel.POType == "SALES")
+            {
+                cellIdentityContentLeft.Phrase = new Phrase("Nama Buyer", normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
+                cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Buyer.Name, normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
 
-            cellIdentityContentLeft.Phrase = new Phrase("Tipe Buyer", normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Buyer.Type, normal_font);
-            tableIdentity1.AddCell(cellIdentityContentLeft);
+                cellIdentityContentLeft.Phrase = new Phrase("Tipe Buyer", normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
+                cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Buyer.Type, normal_font);
+                tableIdentity1.AddCell(cellIdentityContentLeft);
+            }
 
             cellIdentityContentLeft.Phrase = new Phrase("Material", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
@@ -116,12 +125,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Jumlah Order", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.OrderQuantity + " " + viewModel.Uom.Unit, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + string.Format("{0:n2}", viewModel.OrderQuantity) + " " + viewModel.Uom.Unit, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Jumlah Order + Toleransi Jumlah Kirim", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + spellOrder + " " + viewModel.Uom.Unit, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + string.Format("{0:n2}", spellOrder) + " " + viewModel.Uom.Unit, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Asal Material", normal_font);
@@ -156,10 +165,33 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.HandlingStandard, normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
-            if (!string.IsNullOrWhiteSpace(viewModel.Run) && (viewModel.RunWidths.Count > 0))
+            cellIdentityContentLeft.Phrase = new Phrase("RUN", normal_font);
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Run, normal_font);
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+
+            string runWidth = "";
+
+            if (viewModel.RunWidth != null)
+                runWidth = string.Join(',', viewModel.RunWidth.Select(x => x.Value));
+
+            cellIdentityContentLeft.Phrase = new Phrase("Lebar RUN (cm)", normal_font);
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + runWidth, normal_font);
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+
+            cellIdentityContentLeft.Phrase = new Phrase("Tulisan Pinggir Kain", normal_font);
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.ArticleFabricEdge, extra_font);
+            //cellIdentityContentLeft.Colspan = 2;
+            tableIdentity1.AddCell(cellIdentityContentLeft);
+
+
+
+            if (!string.IsNullOrWhiteSpace(viewModel.Run) && viewModel.RunWidth != null  && (viewModel.RunWidth.Count > 0))
             {
                 var index = 0;
-                foreach (ProductionOrder_RunWidthViewModel runwidths in viewModel.RunWidths)
+                foreach (ProductionOrder_RunWidthViewModel runwidths in viewModel.RunWidth)
                 {
                     index++;
                     cellIdentityContentLeft.Phrase = new Phrase("Lebar RUN (cm)", normal_font);
@@ -204,7 +236,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cellIdentityContentLeft.Phrase = new Phrase("Keterangan", normal_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
-            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Remark, normal_font);
+            cellIdentityContentLeft.Phrase = new Phrase(": " + viewModel.Remark, extra_font);
             tableIdentity1.AddCell(cellIdentityContentLeft);
 
             cellIdentityContentLeft.Phrase = new Phrase("Nama Staff Penjualan", normal_font);
@@ -252,13 +284,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 foreach (var detail in viewModel.Details)
                 {
                     uom = detail.Uom.Unit;
-                    cellIdentityContentCenterWithBorder.Phrase = new Phrase(detail.ColorRequest, normal_font);
-                    tableBody2.AddCell(cellIdentityContentCenterWithBorder);
                     cellIdentityContentCenterWithBorder.Phrase = new Phrase(detail.ColorTemplate, normal_font);
+                    tableBody2.AddCell(cellIdentityContentCenterWithBorder);
+                    cellIdentityContentCenterWithBorder.Phrase = new Phrase(detail.ColorRequest, normal_font);
                     tableBody2.AddCell(cellIdentityContentCenterWithBorder);
                     cellIdentityContentCenterWithBorder.Phrase = new Phrase(detail.ColorType.Name, normal_font);
                     tableBody2.AddCell(cellIdentityContentCenterWithBorder);
-                    cellIdentityContentCenterWithBorder.Phrase = new Phrase(detail.Quantity.ToString() + " " + detail.Uom.Unit, normal_font);
+                    cellIdentityContentCenterWithBorder.Phrase = new Phrase(string.Format("{0:n2}", detail.Quantity) + " " + detail.Uom.Unit, normal_font);
                     tableBody2.AddCell(cellIdentityContentCenterWithBorder);
                     Total += (double)detail.Quantity;
                 }
@@ -284,44 +316,95 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region signature
 
-            PdfPTable tableSignatureRegion = new PdfPTable(4);
-            tableSignatureRegion.SpacingBefore = 30f;
-
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("DIBUAT OLEH", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENGETAHUI", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENYETUJUI", normal_font);
-            tableSignatureRegion.AddCell(new PdfPCell(cellIdentityContentCenterWithBorder) { Colspan = 2 });
-
-            string signatureArea = string.Empty;
-            for (int i = 0; i < 5; i++)
+            if (viewModel.POType == "SALES")
             {
-                signatureArea += Environment.NewLine;
+
+                PdfPTable tableSignatureRegion = new PdfPTable(4);
+                tableSignatureRegion.SpacingBefore = 15f;
+
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("DIBUAT OLEH", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENGETAHUI", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENYETUJUI", normal_font);
+                tableSignatureRegion.AddCell(new PdfPCell(cellIdentityContentCenterWithBorder) { Colspan = 2 });
+
+                string signatureArea = string.Empty;
+                for (int i = 0; i < 5; i++)
+                {
+                    signatureArea += Environment.NewLine;
+                }
+
+
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+
+
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PENJUALAN", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("KABAG PENJUALAN", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("KABAG D/P", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PPIC D/P", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+
+                PdfPCell tableSignatureRegionCell = new PdfPCell(tableSignatureRegion); // dont remove
+                tableSignatureRegion.ExtendLastRow = false;
+                document.Add(tableSignatureRegion);
             }
+            else
+            {
+                PdfPTable tableSignatureRegion = new PdfPTable(3);
+                tableSignatureRegion.SpacingBefore = 15f;
 
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("DIBUAT OLEH", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENGETAHUI", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("MENYETUJUI", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+
+                string signatureArea = string.Empty;
+                for (int i = 0; i < 5; i++)
+                {
+                    signatureArea += Environment.NewLine;
+                }
+               
+               
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                //tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                //cellIdentityContentCenterWithBorder.Phrase = new Phrase(signatureArea, normal_font);
+                //tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
 
 
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("PENJUALAN", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("KABAG PENJUALAN", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("KABAG F/P", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
-            cellIdentityContentCenterWithBorder.Phrase = new Phrase("PPIC F/P", normal_font);
-            tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
 
-            PdfPCell tableSignatureRegionCell = new PdfPCell(tableSignatureRegion); // dont remove
-            tableSignatureRegion.ExtendLastRow = false;
-            document.Add(tableSignatureRegion);
+
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PPIC", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PRODUKSI", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                cellIdentityContentCenterWithBorder.Phrase = new Phrase("PIMPINAN PRODUKSI D/P", normal_font);
+                tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                //tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                //cellIdentityContentCenterWithBorder.Phrase = new Phrase("KABAG PENJUALAN", normal_font);
+                    //tableSignatureRegion.AddCell(cellIdentityContentCenterWithBorder);
+                PdfPCell tableSignatureRegionCell = new PdfPCell(tableSignatureRegion); // dont remove
+                tableSignatureRegion.ExtendLastRow = false;
+                document.Add(tableSignatureRegion);
+            }
+            
 
             #endregion
 

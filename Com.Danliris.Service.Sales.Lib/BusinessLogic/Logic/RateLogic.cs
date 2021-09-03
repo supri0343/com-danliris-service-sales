@@ -14,7 +14,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic
    public  class RateLogic : BaseLogic<Rate>
     {
         private readonly SalesDbContext DbContext;
-        public RateLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
+        public RateLogic(IIdentityService identityService, SalesDbContext dbContext) : base(identityService, dbContext)
         {
             this.DbContext = dbContext;
         }
@@ -32,9 +32,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic
             Dictionary<string, object> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
             Query = QueryHelper<Rate>.Filter(Query, FilterDictionary);
 
-            List<string> SelectedFields = new List<string>()
+            List<string> SelectedFields = select != null && select.Count > 0 ? select : new List<string>()
             {
-                 "Id", "Code", "Name", "Value"
+                "Id", "Code", "Name", "Value", "Unit"
             };
 
             Query = Query
@@ -44,8 +44,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic
                     Code = b.Code,
                     Name = b.Name,
                     Value = b.Value,
-                    LastModifiedUtc=b.LastModifiedUtc
-                }).OrderByDescending(b=>b.LastModifiedUtc);
+                    UnitId = b.UnitId,
+                    UnitCode = b.UnitCode,
+                    UnitName = b.UnitName,
+                    LastModifiedUtc = b.LastModifiedUtc
+                });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
             Query = QueryHelper<Rate>.Order(Query, OrderDictionary);

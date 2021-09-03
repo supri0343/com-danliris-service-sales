@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculationGarmentLogic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ROGarmentInterface;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.PDFTemplates;
@@ -23,10 +24,15 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
     {
         readonly static string apiVersion = "1.0";
         private readonly IIdentityService Service;
-        public RO_GarmentsControllerprivate(IIdentityService identityService, IValidateService validateService, IROGarment facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+
+        private readonly ICostCalculationGarment costCalculationFacade;
+
+        public RO_GarmentsControllerprivate(IIdentityService identityService, IValidateService validateService, IROGarment facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
             Service = identityService;
+            costCalculationFacade = (ICostCalculationGarment)serviceProvider.GetService(typeof(ICostCalculationGarment));
         }
+
         [HttpGet("pdf/{id}")]
         public async Task<IActionResult> GetPDF([FromRoute]int Id)
         {
@@ -53,6 +59,16 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 }
                 else
                 {
+                    Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+
+                    var productIds = viewModel.CostCalculationGarment.CostCalculationGarment_Materials.Select(m => m.Product.Id).Distinct().ToList();
+                    var productDicts = await costCalculationFacade.GetProductNames(productIds);
+
+                    foreach (var material in viewModel.CostCalculationGarment.CostCalculationGarment_Materials)
+                    {
+                        material.Product.Name = productDicts.GetValueOrDefault(material.Product.Id);
+                    }
+
                     ROGarmentPdfTemplate PdfTemplate = new ROGarmentPdfTemplate();
                     MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
 
@@ -72,6 +88,50 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
-        
+
+        [HttpPost("post")]
+        public async Task<IActionResult> PostRO([FromBody]List<long> listId)
+        {
+            try
+            {
+                ValidateUser();
+
+                int result = await Facade.PostRO(listId);
+                if (result < 1)
+                {
+                    Dictionary<string, object> Result =
+                        new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, "No changes applied.")
+                        .Fail();
+                    return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+                }
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPut("unpost/{id}")]
+        public async Task<IActionResult> UnpostRO(long id)
+        {
+            try
+            {
+                ValidateUser();
+
+                await Facade.UnpostRO(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

@@ -11,6 +11,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
 {
     public class ProductionOrderViewModel : BaseViewModel, IValidatableObject
     {
+        public ProductionOrderViewModel()
+        {
+            RunWidth = new HashSet<ProductionOrder_RunWidthViewModel>();
+        }
+        
+        [MaxLength(50)]
+        public string POType { get; set; }
+
         [MaxLength(255)]
         public string Code { get; set; }
         [MaxLength(255)]
@@ -47,11 +55,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public bool? IsClosed { get; set; }
         public bool? IsRequested { get; set; }
         public bool? IsCompleted { get; set; }
+        public bool? IsCalculated { get; set; }
         public long? AutoIncreament { get; set; }
         public string SalesContractNo { get; set; }
 
         public virtual ICollection<ProductionOrder_DetailViewModel> Details { get; set; }
-        public virtual ICollection<ProductionOrder_RunWidthViewModel> RunWidths { get; set; }
+        public virtual ICollection<ProductionOrder_RunWidthViewModel> RunWidth { get; set; }
         public virtual ICollection<ProductionOrder_LampStandardViewModel> LampStandards { get; set; }
 
         public FinishingPrintingSalesContractViewModel FinishingPrintingSalesContract { get; set; }
@@ -70,21 +79,28 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
 
-            if (this.Buyer == null || this.Buyer.Id.Equals(0))
+            if (string.IsNullOrWhiteSpace(this.POType) || this.POType == "")
             {
-                yield return new ValidationResult("Buyer harus di isi", new List<string> { "Buyer" });
+                yield return new ValidationResult("Jenis SPP harus di isi", new List<string> { "POType" });
             }
+
+            if (this.POType == "SALES")
+                if (this.Buyer == null || this.Buyer.Id.Equals(0))
+                {
+                    yield return new ValidationResult("Buyer harus di isi", new List<string> { "Buyer" });
+                }
 
             if (this.Uom == null || this.Uom.Id.Equals(0))
             {
                 yield return new ValidationResult("Satuan harus di isi", new List<string> { "Uom" });
             }
 
-            if (this.FinishingPrintingSalesContract == null || this.FinishingPrintingSalesContract.Id.Equals(0))
-            {
-                yield return new ValidationResult("sales contract harus di isi", new List<string> { "FinishingPrintingSalesContract" });
-            }
-
+            if (this.POType == "SALES")
+                if (this.FinishingPrintingSalesContract == null || this.FinishingPrintingSalesContract.Id.Equals(0))
+                {
+                    yield return new ValidationResult("sales contract harus di isi", new List<string> { "FinishingPrintingSalesContract" });
+                }
+           
             if (this.Material == null || this.Material.Id.Equals(0))
             {
                 yield return new ValidationResult("material harus di isi", new List<string> { "Material" });
@@ -94,65 +110,76 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
             {
                 yield return new ValidationResult("Process Type harus di isi", new List<string> { "ProcessType" });
             }
+            else
+            {
+                if (string.IsNullOrEmpty(ProcessType.Unit) || string.IsNullOrEmpty(ProcessType.SPPCode))
+                {
+                    yield return new ValidationResult("Process Type yang dipilih harus memiliki Unit dan Kode SPP", new List<string> { "ProcessType" });
+                }
+                else
+                {
+                    if (this.ProcessType.Unit.Trim().ToLower() == "printing")
+                    {
+                        //if (string.IsNullOrWhiteSpace(this.Run))
+                        //{
+                        //    yield return new ValidationResult("Run harus di isi", new List<string> { "Run" });
+                        //}
+                        if (!string.IsNullOrWhiteSpace(this.Run) && this.Run != "Tanpa RUN")
+                        {
+                            if (this.RunWidth.Count.Equals(0))
+                            {
+                                yield return new ValidationResult("RunWidths harus di isi", new List<string> { "RunWidths" });
+                            }
+                            else if (!this.RunWidth.Count.Equals(0))
+                            {
+                                int Count = 0;
+                                string RunWidths = "[";
+
+                                foreach (ProductionOrder_RunWidthViewModel data in this.RunWidth)
+                                {
+                                    if (data.Value <= 0)
+                                    {
+
+                                        Count++;
+                                        RunWidths += "{ 'RunWidth harus lebih besar dari 0' }, ";
+                                    }
+                                }
+
+                                RunWidths += "]";
+
+                                if (Count > 0)
+                                {
+                                    yield return new ValidationResult(RunWidths, new List<string> { "RunWidths" });
+                                }
+                            }
+
+                            if (string.IsNullOrWhiteSpace(this.DesignNumber))
+                            {
+                                yield return new ValidationResult("DesignNumber harus di isi", new List<string> { "DesignNumber" });
+                            }
+
+                            if (string.IsNullOrWhiteSpace(this.DesignCode))
+                            {
+                                yield return new ValidationResult("DesignCode harus di isi", new List<string> { "DesignCode" });
+                            }
+
+                        }
+                    }
+                }
+            }
 
             if (this.OrderType == null || this.OrderType.Id.Equals(0))
             {
                 yield return new ValidationResult("Order Type harus di isi", new List<string> { "OrderType" });
             }
-            else if (!this.OrderType.Id.Equals(0) || this.OrderType != null)
-            {
-                if (this.OrderType.Name.Trim().ToLower() == "printing")
-                {
-                    if (string.IsNullOrWhiteSpace(this.Run))
-                    {
-                        yield return new ValidationResult("Run harus di isi", new List<string> { "Run" });
-                    }
-                    if (!string.IsNullOrWhiteSpace(this.Run) && this.Run != "Tanpa RUN")
-                    {
-                        if (this.RunWidths.Count.Equals(0))
-                        {
-                            yield return new ValidationResult("RunWidths harus di isi", new List<string> { "RunWidths" });
-                        }
-                        else if (!this.RunWidths.Count.Equals(0))
-                        {
-                            int Count = 0;
-                            string RunWidths = "[";
+            //else if (!this.OrderType.Id.Equals(0) || this.OrderType != null)
+            //{
+                
+            //    //else if (this.OrderType.Name.ToLower() == "yarn dyed"|| this.OrderType.Name.ToLower() == "yarn dyed")
+            //    //{
 
-                            foreach (ProductionOrder_RunWidthViewModel data in this.RunWidths)
-                            {
-                                if (data.Value <= 0)
-                                {
-
-                                    Count++;
-                                    RunWidths += "{ 'RunWidth harus lebih besar dari 0' }, ";
-                                }
-                            }
-
-                            RunWidths += "]";
-
-                            if (Count > 0)
-                            {
-                                yield return new ValidationResult(RunWidths, new List<string> { "RunWidths" });
-                            }
-                        }
-
-                        if (string.IsNullOrWhiteSpace(this.DesignNumber))
-                        {
-                            yield return new ValidationResult("DesignNumber harus di isi", new List<string> { "DesignNumber" });
-                        }
-
-                        if (string.IsNullOrWhiteSpace(this.DesignCode))
-                        {
-                            yield return new ValidationResult("DesignCode harus di isi", new List<string> { "DesignCode" });
-                        }
-
-                    }
-                }
-                //else if (this.OrderType.Name.ToLower() == "yarn dyed"|| this.OrderType.Name.ToLower() == "yarn dyed")
-                //{
-
-                //}
-            }
+            //    //}
+            //}
 
             if (this.YarnMaterial == null || this.YarnMaterial.Id.Equals(0))
             {
@@ -174,22 +201,22 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                 yield return new ValidationResult("Standard Tests harus di isi", new List<string> { "StandardTests" });
             }
 
-            if (this.Account == null )
+            if (this.Account == null)
             {
                 yield return new ValidationResult("Account harus di isi", new List<string> { "Account" });
             }
 
-            if (string.IsNullOrWhiteSpace(this.PackingInstruction) || this.PackingInstruction == "") 
+            if (string.IsNullOrWhiteSpace(this.PackingInstruction) || this.PackingInstruction == "")
             {
                 yield return new ValidationResult("Packing Instruction harus di isi", new List<string> { "PackingInstruction" });
             }
 
-            if (string.IsNullOrWhiteSpace(this.MaterialOrigin) || this.MaterialOrigin == "") 
+            if (string.IsNullOrWhiteSpace(this.MaterialOrigin) || this.MaterialOrigin == "")
             {
                 yield return new ValidationResult("Material Origin harus di isi", new List<string> { "MaterialOrigin" });
             }
 
-            if (string.IsNullOrWhiteSpace(this.FinishWidth) || this.FinishWidth == "") 
+            if (string.IsNullOrWhiteSpace(this.FinishWidth) || this.FinishWidth == "")
             {
                 yield return new ValidationResult("Finish Width harus di isi", new List<string> { "FinishWidth" });
             }
@@ -199,12 +226,12 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                 yield return new ValidationResult("Sample harus di isi", new List<string> { "Sample" });
             }
 
-            if (string.IsNullOrWhiteSpace(this.HandlingStandard) || this.HandlingStandard == "") 
+            if (string.IsNullOrWhiteSpace(this.HandlingStandard) || this.HandlingStandard == "")
             {
                 yield return new ValidationResult("Handling Standard harus di isi", new List<string> { "HandlingStandard" });
             }
 
-            if (string.IsNullOrWhiteSpace(this.ShrinkageStandard) || this.ShrinkageStandard == "") 
+            if (string.IsNullOrWhiteSpace(this.ShrinkageStandard) || this.ShrinkageStandard == "")
             {
                 yield return new ValidationResult("Shrinkage Standard harus di isi", new List<string> { "ShrinkageStandard" });
             }
@@ -228,7 +255,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
                         totalqty += (double)data.Quantity;
                     }
 
-                    if (!this.OrderQuantity.Equals(totalqty))
+                    if (!this.OrderQuantity.Equals(Math.Round(totalqty, 3)))
                     {
                         yield return new ValidationResult("OrderQuantity tidak sama", new List<string> { "OrderQuantity" });
                     }

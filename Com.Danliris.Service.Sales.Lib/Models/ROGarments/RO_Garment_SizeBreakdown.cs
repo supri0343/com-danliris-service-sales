@@ -8,20 +8,19 @@ using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.Models.ROGarments
 {
-	public class RO_Garment_SizeBreakdown : BaseModel
+    public class RO_Garment_SizeBreakdown : BaseModel
     {
+        public int SizeBreakdownIndex { get; set; }
+
         public long RO_GarmentId { get; set; }
         [ForeignKey("RO_GarmentId")]
         public virtual RO_Garment RO_Garment { get; set; }
-		public string Code { get; set; }
-		public int ColorId { get; set; }
-		public string ColorName { get; set; }
-		public ICollection<RO_Garment_SizeBreakdown_Detail> RO_Garment_SizeBreakdown_Details { get; set; }
-		public int Total { get; set; }
-
-		//public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-		//{
-		//	return new List<ValidationResult>();
-		//}
-	}
+        [MaxLength(50)]
+        public string Code { get; set; }
+        public int ColorId { get; set; }
+        [MaxLength(255)]
+        public string ColorName { get; set; }
+        public ICollection<RO_Garment_SizeBreakdown_Detail> RO_Garment_SizeBreakdown_Details { get; set; }
+        public int Total { get; set; }
+    }
 }

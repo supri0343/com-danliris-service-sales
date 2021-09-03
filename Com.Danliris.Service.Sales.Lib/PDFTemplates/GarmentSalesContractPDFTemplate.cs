@@ -1,5 +1,6 @@
 ﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.GarmentSalesContractInterface;
 using Com.Danliris.Service.Sales.Lib.Helpers;
+using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentSalesContractViewModels;
 using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using iTextSharp.text;
@@ -17,14 +18,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
         public MemoryStream GeneratePdfTemplate(GarmentSalesContractViewModel viewModel, IGarmentSalesContract facade, int timeoffset, Dictionary<string, object> buyer, Dictionary<string, object> bank)
         {
             Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 18);
-            Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 9);
-            Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 9);
+            Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
+            Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 7);
 
-            Document document = new Document(PageSize.A4, 40, 40, 140, 40);
+            Document document = new Document(PageSize.A4, 40, 40, 120, 40);
             MemoryStream stream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
 
-            writer.PageEvent = new PDFPages();
+            writer.PageEvent = new GarmentSalesContractPDFTemplatePageEvent();
 
 
             document.Open();
@@ -199,7 +200,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("ADDRESS : KELURAHAN BANARAN, KECAMATAN GROGOL \n                    KABUPATEN SUKOHARJO, JAWA TENGAH, INDONESIA", normal_font);
+            bodyContentLeft.Phrase = new Phrase("ADDRESS : JL. MERAPI NO. 23, KELURAHAN BANARAN, KECAMATAN GROGOL \n                    KABUPATEN SUKOHARJO, JAWA TENGAH 57552, INDONESIA", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Bank Detail", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -233,7 +234,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             PdfPCell cellBody = new PdfPCell(tableBody); // dont remove
             tableBody.ExtendLastRow = false;
-            tableBody.SpacingAfter = 20f;
+            tableBody.SpacingAfter = 10f;
             document.Add(tableBody);
 
             #endregion
@@ -281,7 +282,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region signature
 
-            string LineSeparator = "=================================================================================================";
+            string LineSeparator = "=============================================================================================================================";
             Paragraph separator = new Paragraph(LineSeparator, bold_font) { Alignment = Element.ALIGN_CENTER };
             separator.SpacingAfter = 10f;
             document.Add(separator);
@@ -376,7 +377,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 cell_loc.Phrase = new Phrase("D.", normal_font);
                 LocList.AddCell(cell_loc);
-                cell_loc.Phrase = new Phrase(" BENEFICIARY      : PT. DAN LIRIS \n                                 ADDRESS    : KELURAHAN BANARAN, KECAMATAN GROGOL \n                                                        KABUPATEN SUKOHARJO, JAWA TENGAH, INDONESIA", normal_font);
+                cell_loc.Phrase = new Phrase(" BENEFICIARY      : PT. DAN LIRIS \n                                 ADDRESS    : JL. MERAPI No. 23, KELURAHAN BANARAN, KECAMATAN GROGOL \n                                                        KABUPATEN SUKOHARJO, JAWA TENGAH 57552, INDONESIA", normal_font);
                 LocList.AddCell(cell_loc);
 
 
@@ -511,6 +512,107 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             return stream;
         }
 
+    }
+
+    class GarmentSalesContractPDFTemplatePageEvent : PDFPages
+    {
+        public override void OnStartPage(PdfWriter writer, Document document)
+        {
+            PdfContentByte cb = writer.DirectContent;
+            cb.BeginText();
+
+            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
+
+            float height = writer.PageSize.Height, width = writer.PageSize.Width;
+            float marginLeft = document.LeftMargin - 10, marginTop = document.TopMargin, marginRight = document.RightMargin - 10;
+
+            cb.SetFontAndSize(bf, 6);
+
+            #region LEFT
+
+            var branchOfficeY = height - marginTop + 50;
+            cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, "BRANCH OFFICE :", marginLeft, branchOfficeY, 0);
+            string[] branchOffices = {
+                "Equity Tower 15th Floor Suite C",
+                "Sudirman Central Business District (SCBD) Lot 9",
+                "Jl. Jend. Sudirman Kav 52-53 Jakarta 12190",
+                "Tel. : (62-21) 2903-5388. 2903-5389 (Hunting)",
+                "Fax. : (62-21) 2903-5398",
+            };
+            for (int i = 0; i < branchOffices.Length; i++)
+            {
+                cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, branchOffices[i], marginLeft, branchOfficeY - 10 - (i * 8), 0);
+            }
+
+            #endregion
+
+            #region CENTER
+
+            var headOfficeX = width / 2 + 30;
+            var headOfficeY = height - marginTop + 45;
+
+            byte[] imageByte = Convert.FromBase64String(Base64ImageStrings.LOGO_NAME);
+            Image image = Image.GetInstance(imageByte);
+            if (image.Width > 160)
+            {
+                float percentage = 0.0f;
+                percentage = 160 / image.Width;
+                image.ScalePercent(percentage * 100);
+            }
+            image.SetAbsolutePosition(headOfficeX - (image.ScaledWidth / 2), headOfficeY);
+            cb.AddImage(image, inlineImage: true);
+
+            string[] headOffices = {
+                "Head Office : JL. MERAPI NO. 23, BANARAN, GROGOL, SUKOHARJO JAWA TENGAH 57552 - INDONESIA",
+                "TELP. 0271-740888, 714400 (HUNTING), FAX. : 0271-735222, 740777, PO BOX 166 SOLO 57100",
+                "Website : www.danliris.com",
+            };
+            for (int i = 0; i < headOffices.Length; i++)
+            {
+                cb.ShowTextAligned(PdfContentByte.ALIGN_CENTER, headOffices[i], headOfficeX, headOfficeY - image.ScaledHeight - (i * 10), 0);
+            }
+
+            #endregion
+
+            #region RIGHT
+
+            byte[] imageByteIso = Convert.FromBase64String(Base64ImageStrings.ISO);
+            Image imageIso = Image.GetInstance(imageByteIso);
+            if (imageIso.Width > 80)
+            {
+                float percentage = 0.0f;
+                percentage = 80 / imageIso.Width;
+                imageIso.ScalePercent(percentage * 100);
+            }
+            imageIso.SetAbsolutePosition(width - imageIso.ScaledWidth - marginRight, height - imageIso.ScaledHeight - marginTop + 60);
+            cb.AddImage(imageIso, inlineImage: true);
+            cb.ShowTextAligned(PdfContentByte.ALIGN_CENTER, "CERTIFICATE ID09 / 01238", width - (imageIso.ScaledWidth / 2) - marginRight, height - imageIso.ScaledHeight - marginTop + 60 - 5, 0);
+
+            #endregion
+
+            #region LINE
+
+            cb.MoveTo(marginLeft, height - marginTop);
+            cb.LineTo(width - marginRight, height - marginTop - 1);
+            cb.Stroke();
+
+            #endregion
+
+            #region WATERMARK
+
+            byte[] imageByteCenter = Convert.FromBase64String(Base64ImageStrings.LOGO_WATERMARK);
+            Image imageCenter = Image.GetInstance(imageByteCenter);
+            float percentageImageCenter = 0.0f;
+            percentageImageCenter = 400 / imageCenter.Width;
+            imageCenter.ScalePercent(percentageImageCenter * 100);
+            imageCenter.SetAbsolutePosition((width / 2) - imageCenter.ScaledWidth / 2, (height / 2) - imageCenter.ScaledHeight / 2);
+            //cb.AddImage(imageCenter);
+            document.Add(imageCenter);
+
+            #endregion
+
+            cb.EndText();
+        }
     }
 }
 

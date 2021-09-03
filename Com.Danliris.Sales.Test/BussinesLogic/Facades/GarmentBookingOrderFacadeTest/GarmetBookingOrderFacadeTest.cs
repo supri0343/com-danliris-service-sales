@@ -1,13 +1,18 @@
-﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils;
+﻿using AutoMapper;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
+using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.GarmentBookingOrderProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrderFacade;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using Com.Danliris.Service.Sales.Lib.Services;
+using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModels;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -48,7 +53,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             GarmentBookingOrderFacade facade = new GarmentBookingOrderFacade(serviceProvider, dbContext);
             
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = await facade.BOCancel((int)data.Id, data);
             Assert.NotEqual(Response, 0);
@@ -80,6 +85,83 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
             var Response = facade.ReadByBookingOrderNo(1, 25, "{}", new List<string>(), "", "{}");
 
             Assert.NotEqual(Response.Data.Count, 0);
+        }
+
+        [Fact]
+        public virtual async void Should_Success_Validate_data()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var iserviceProvider = GetServiceProviderMock(dbContext).Object;
+            Mock<IServiceProvider> serviceProvider = new Mock<IServiceProvider>();
+            serviceProvider.
+                Setup(x => x.GetService(typeof(SalesDbContext)))
+                .Returns(dbContext);
+
+            GarmentBookingOrderFacade facade = new GarmentBookingOrderFacade(serviceProvider.Object, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+
+            var date = DateTime.Now.AddMonths(1);
+            data.DeliveryDate = new DateTime(date.Year, date.Month, 23);
+            
+
+            GarmentBookingOrderViewModel vm = new GarmentBookingOrderViewModel
+            {
+                BookingOrderNo = data.BookingOrderNo,
+                BookingOrderDate = data.BookingOrderDate,
+                DeliveryDate = data.DeliveryDate,
+                Items = new List<GarmentBookingOrderItemViewModel> {
+                    new GarmentBookingOrderItemViewModel
+                    {
+                        DeliveryDate=data.DeliveryDate,
+                        
+                        ConfirmDate = DateTimeOffset.MinValue,
+                        Remark = null,
+                        IsCanceled = false,
+                        CanceledDate = DateTimeOffset.MinValue
+                    },
+                    new GarmentBookingOrderItemViewModel
+                    {
+                        DeliveryDate=data.DeliveryDate.AddDays(-20),
+                    }
+                }
+            };
+            System.ComponentModel.DataAnnotations.ValidationContext validationContext1 = new System.ComponentModel.DataAnnotations.ValidationContext(vm, serviceProvider.Object, null);
+            var validationResultCreate1 = vm.Validate(validationContext1).ToList();
+            Assert.True(validationResultCreate1.Count() > 0);
+
+            //data.DeliveryDate = new DateTime(date.Year, date.Month, 3);
+
+
+            GarmentBookingOrderViewModel vm1 = new GarmentBookingOrderViewModel
+            {
+                BookingOrderNo = data.BookingOrderNo,
+                BookingOrderDate = data.BookingOrderDate,
+                DeliveryDate = new DateTime(date.Year, date.Month, 3),
+
+        };
+
+            System.ComponentModel.DataAnnotations.ValidationContext validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(vm1, serviceProvider.Object, null);
+            var validationResultCreate = vm1.Validate(validationContext).ToList();
+            Assert.True(validationResultCreate.Count() > 0);
+
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<GarmentBookingOrderMapper>();
+                cfg.AddProfile<GarmentBookingOrderItemMapper>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            GarmentBookingOrderViewModel vm = new GarmentBookingOrderViewModel { Id = 1 };
+            GarmentBookingOrder model = mapper.Map<GarmentBookingOrder>(vm);
+
+            Assert.Equal(vm.Id, model.Id);
+
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Com.Danliris.Service.Sales.Lib.Utilities
                 {
                     if (n.ToString()[i] == '1')
                     {
-                        str += tn[Convert.ToInt16(n.ToString()[i + 1])] + " ";
+                        str += tn[Convert.ToInt16(n.ToString()[i + 1].ToString())] + " ";
                         i++;
                         sk = 1;
                     }

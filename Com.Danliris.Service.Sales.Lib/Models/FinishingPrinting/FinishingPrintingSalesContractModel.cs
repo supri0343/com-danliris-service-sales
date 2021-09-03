@@ -7,6 +7,33 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
 {
     public class FinishingPrintingSalesContractModel : BaseModel
     {
+        #region newSC
+        public DateTimeOffset Date { get; set; }
+
+        public long PreSalesContractId { get; set; }
+
+        //[MaxLength(64)]
+        //public string ProductionOrderNo { get; set; }
+        [MaxLength(64)]
+        public string PreSalesContractNo { get; set; }
+
+        [MaxLength(512)]
+        public string UnitName { get; set; }
+
+
+        public long SalesId { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesUserName { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesFirstName { get; set; }
+
+        [MaxLength(1024)]
+        public string SalesLastName { get; set; }
+
+        #endregion
+
         #region Account Bank
         public string AccountBankAccountName { get; set; }
         public int AccountBankID { get; set; }
@@ -78,6 +105,10 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         public string MaterialCode { get; set; }
         [MaxLength(255)]
         public string MaterialName { get; set; }
+        public double MaterialPrice { get; set; }
+
+        [MaxLength(255)]
+        public string MaterialTags { get; set; }
         #endregion
         #region Material Construction
         public int MaterialConstructionId { get; set; }

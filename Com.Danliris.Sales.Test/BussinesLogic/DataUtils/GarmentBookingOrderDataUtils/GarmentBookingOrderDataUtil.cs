@@ -4,6 +4,7 @@ using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils
 {
@@ -13,7 +14,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDat
         {
         }
 
-        public override GarmentBookingOrder GetNewData()
+        public override Task<GarmentBookingOrder> GetNewData()
         {
             var bookingOrder = new GarmentBookingOrder
             {
@@ -45,7 +46,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDat
                 Remark = "Remark",
                 ConfirmDate= new DateTimeOffset()
             });
-            return bookingOrder;
+            return Task.FromResult(bookingOrder);
         }
     }
 }

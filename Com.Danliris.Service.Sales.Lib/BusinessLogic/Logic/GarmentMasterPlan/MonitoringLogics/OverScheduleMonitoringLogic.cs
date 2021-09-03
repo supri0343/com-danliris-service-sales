@@ -71,7 +71,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.M
                                   unit=a.UnitCode,
                                   usedEH=a.EHBooking,
                                   year=a.Year
-                              }).OrderBy(a=>a.deliveryDate);
+                              }).OrderBy(a=>a.bookingDate);
 
             return reportQuery;
         }

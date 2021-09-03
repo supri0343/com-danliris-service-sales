@@ -17,10 +17,15 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
         public List<string> ImagesFile { get; set; }
         public List<string> ImagesPath { get; set; }
         public List<string> ImagesName { get; set; }
+        public List<string> DocumentsFile { get; set; }
+        public List<string> DocumentsFileName { get; set; }
+        public List<string> DocumentsPath { get; set; }
+
+        public bool IsPosted { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (this.CostCalculationGarment == null)
+            if (this.CostCalculationGarment == null || string.IsNullOrWhiteSpace(CostCalculationGarment.RO_Number))
                 yield return new ValidationResult("Nomor RO harus diisi", new List<string> { "CostCalculationGarment" });
 
             if (string.IsNullOrWhiteSpace(Instruction))
@@ -28,13 +33,39 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
                 yield return new ValidationResult("Instruksi harus diisi", new List<string> { "Instruction" });
             }
 
-            if (ImagesFile.Count.Equals(0))
+            if (ImagesFile == null || ImagesFile.Count.Equals(0))
             {
                 yield return new ValidationResult("Gambar harus Ada", new List<string> { "ImageFile" });
             }
-            else if (ImagesName.Count.Equals(0) || ImagesName.Count!=ImagesFile.Count)
+            else if (ImagesName.Count.Equals(0) || ImagesName.Count != ImagesFile.Count)
             {
                 yield return new ValidationResult("Nama Gambar harus diisi", new List<string> { "ImageFile" });
+            }
+
+            if (DocumentsFileName != null && DocumentsFileName.Count > 0)
+            {
+                int DocumentsFileErrorCount = 0;
+                string DocumentsFileError = "[";
+
+                foreach (var doc in DocumentsFileName)
+                {
+                    if (string.IsNullOrWhiteSpace(doc))
+                    {
+                        DocumentsFileError += "'Tidak ada file dipilih',";
+                        DocumentsFileErrorCount++;
+                    }
+                    else
+                    {
+                        DocumentsFileError += ",";
+                    }
+                }
+
+                DocumentsFileError += "]";
+
+                if (DocumentsFileErrorCount > 0)
+                {
+                    yield return new ValidationResult(DocumentsFileError, new List<string> { "DocumentsFile" });
+                }
             }
 
             if (this.RO_Garment_SizeBreakdowns == null || this.RO_Garment_SizeBreakdowns.Count == 0)
@@ -60,7 +91,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
 
                     error += " { ";
 
-                    if (item.Color == null)
+                    if (item.Color == null || string.IsNullOrWhiteSpace(item.Color.Name))
                     {
                         Count++;
                         error += "Color: 'Color harus diisi', ";
@@ -69,7 +100,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
                     if (item.RO_Garment_SizeBreakdown_Details == null || item.RO_Garment_SizeBreakdown_Details.Count == 0)
                     {
                         yield return new ValidationResult("Details harus diisi", new List<string> { "SizeBreakdownDetails" });
-                        
+
                     }
                     else
                     {
@@ -83,7 +114,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
                                 DetailCount++;
                                 Detailerror += "Size: 'Size harus diisi', ";
                             }
-                            if (detail.Quantity<=0)
+                            if (detail.Quantity <= 0)
                             {
                                 DetailCount++;
                                 Detailerror += "Quantity: 'Quantity harus lebih dari 0', ";

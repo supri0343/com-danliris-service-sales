@@ -1,14 +1,17 @@
 ﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.GarmentSewingBlockingPlanDataUtils;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.MaxWHConfirmDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.WeeklyPlanDataUtils;
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrderFacade;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.GarmentSewingBlockingPlanFacades;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.MaxWHConfirmFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.MonitoringFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.WeeklyPlanFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.GarmentMasterPlan.MonitoringInterfaces;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.GarmentSewingBlockingPlanLogics;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.MaxWHConfirmLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.MonitoringLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.WeeklyPlanLogics;
 using Com.Danliris.Service.Sales.Lib.Services;
@@ -77,6 +80,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Monito
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             var WeekserviceProvider = GetWeekServiceProviderMock(dbContext).Object;
             var BOserviceProvider = GetBOServiceProviderMock(dbContext).Object;
+            var WHServiceProviderMock = GetWHServiceProviderMock(dbContext).Object;
 
             var weeklyPlanFacade = new WeeklyPlanFacade(WeekserviceProvider, dbContext);
             var weeklyPlanDataUtil = new WeeklyPlanDataUtil(weeklyPlanFacade);
@@ -84,12 +88,32 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Monito
             var bookingOrderFacade = new GarmentBookingOrderFacade(BOserviceProvider, dbContext);
             var garmentBookingOrderDataUtil = new GarmentBookingOrderDataUtil(bookingOrderFacade);
 
+            var maxWHConfirmFacade = new MaxWHConfirmFacade(WHServiceProviderMock, dbContext);
+            var maxWHConfirmDataUtil = new MaxWHConfirmDataUtil(maxWHConfirmFacade);
+
             var garmentSewingBlockingPlanFacade = new GarmentSewingBlockingPlanFacade(serviceProvider, dbContext);
-            var garmentPurchaseRequestDataUtil = new GarmentSewingBlockingPlanDataUtil(garmentSewingBlockingPlanFacade, weeklyPlanDataUtil, garmentBookingOrderDataUtil);
+            var garmentSewingBlockingPlanDataUtil = new GarmentSewingBlockingPlanDataUtil(garmentSewingBlockingPlanFacade, weeklyPlanDataUtil, garmentBookingOrderDataUtil, maxWHConfirmDataUtil);
 
 
 
-            return garmentPurchaseRequestDataUtil;
+            return garmentSewingBlockingPlanDataUtil;
+        }
+
+        protected virtual Mock<IServiceProvider> GetWHServiceProviderMock(SalesDbContext dbContext)
+        {
+            var serviceProviderMock = new Mock<IServiceProvider>();
+
+            IIdentityService identityService = new IdentityService { Username = "Username" };
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IdentityService)))
+                .Returns(identityService);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(MaxWHConfirmLogic)))
+                .Returns(new MaxWHConfirmLogic(identityService, dbContext));
+
+            return serviceProviderMock;
         }
 
         protected virtual Mock<IServiceProvider> GetWeekServiceProviderMock(SalesDbContext dbContext)

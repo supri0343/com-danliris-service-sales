@@ -47,7 +47,7 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             return (int)response.GetType().GetProperty("StatusCode").GetValue(response, null);
         }
 
-        private readonly List<GarmentBookingOrderMonitoringViewModel> viewModels;
+        private readonly List<GarmentBookingOrderMonitoringViewModel> viewModels = new List<GarmentBookingOrderMonitoringViewModel>();
 
         [Fact]
         public void Get_WithoutException_ReturnOK()

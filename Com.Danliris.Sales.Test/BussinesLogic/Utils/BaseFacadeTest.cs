@@ -5,10 +5,13 @@ using Com.Danliris.Service.Sales.Lib.Utilities.BaseInterface;
 using Com.Moonlay.Data.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Xunit;
@@ -38,12 +41,27 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
             return string.Concat(sf.GetMethod().Name, "_", _entity);
         }
 
+        protected string GetCurrentAsyncMethod([CallerMemberName] string methodName="")
+        {
+            MethodBase method = new StackTrace()
+                .GetFrames()
+                .Select(frame => frame.GetMethod())
+                .FirstOrDefault(item => item.Name == methodName);
+
+            return method.Name;
+        }
+
         protected TDbContext DbContext(string testName)
         {
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
             DbContextOptionsBuilder<TDbContext> optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
             optionsBuilder
                 .UseInMemoryDatabase(testName)
-                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .UseInternalServiceProvider(serviceProvider);
 
             TDbContext dbContext = Activator.CreateInstance(typeof(TDbContext), optionsBuilder.Options) as TDbContext;
 
@@ -81,7 +99,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
 
             TFacade facade = Activator.CreateInstance(typeof(TFacade), serviceProvider, dbContext) as TFacade;
 
-            var data = DataUtil(facade).GetNewData();
+            var data = await DataUtil(facade, dbContext).GetNewData();
 
             var response = await facade.CreateAsync(data);
 
@@ -96,7 +114,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
 
             TFacade facade = Activator.CreateInstance(typeof(TFacade), serviceProvider, dbContext) as TFacade;
 
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = facade.Read(1, 25, "{}", new List<string>(), "", "{}");
 
@@ -111,7 +129,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
 
             TFacade facade = Activator.CreateInstance(typeof(TFacade), serviceProvider, dbContext) as TFacade;
 
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = facade.ReadByIdAsync((int)data.Id);
 
@@ -126,7 +144,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
 
             TFacade facade = Activator.CreateInstance(typeof(TFacade), serviceProvider, dbContext) as TFacade;
 
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
 
             var response = await facade.UpdateAsync((int)data.Id, data);
 
@@ -140,7 +158,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Utils
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             TFacade facade = Activator.CreateInstance(typeof(TFacade), serviceProvider, dbContext) as TFacade;
-            var data = await DataUtil(facade).GetTestData();
+            var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = await facade.DeleteAsync((int)data.Id);
             Assert.NotEqual(Response, 0);

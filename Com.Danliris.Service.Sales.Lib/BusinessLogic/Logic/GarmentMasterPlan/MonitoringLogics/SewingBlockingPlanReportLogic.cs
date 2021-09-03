@@ -99,7 +99,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.M
                                         }).ToList()
                         }).AsQueryable();
 
-            return joinAll;
+            return joinAll.OrderBy(c=>c.unit).ThenBy(c=>c.buyer);
         }
     }
 }

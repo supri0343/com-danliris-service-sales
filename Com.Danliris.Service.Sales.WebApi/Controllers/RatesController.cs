@@ -22,7 +22,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
     {
         private readonly static string apiVersion = "1.0";
         private readonly IIdentityService Service;
-        public RatesController(IIdentityService identityService, IValidateService validateService, IRate facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public RatesController(IIdentityService identityService, IValidateService validateService, IRate facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
             Service = identityService;
         }

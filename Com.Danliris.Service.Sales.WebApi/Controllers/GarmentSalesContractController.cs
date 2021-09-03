@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Danliris.Service.Sales.WebApi.Controllers
 {
@@ -24,9 +25,11 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
     [Authorize]
     public class GarmentSalesContractController : BaseController<GarmentSalesContract, GarmentSalesContractViewModel, IGarmentSalesContract>
     {
+        private readonly IHttpClientService HttpClientService;
         private readonly static string apiVersion = "1.0";
-        public GarmentSalesContractController(IIdentityService identityService, IValidateService validateService, IGarmentSalesContract facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public GarmentSalesContractController(IIdentityService identityService, IValidateService validateService, IGarmentSalesContract facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
+            HttpClientService = serviceProvider.GetService<IHttpClientService>();
         }
 
         [HttpGet("pdf/{Id}")]
@@ -61,13 +64,9 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     string BuyerBrandUri = "master/garment-buyer-brands";
                     string BankUri = "master/account-banks";
 
-                    string Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
-
-                    HttpClient httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
+                   
                     /* Get BuyerBrand */
-                    var response = httpClient.GetAsync($@"{APIEndpoint.Core}{BuyerBrandUri}/" + viewModel.BuyerBrandId).Result.Content.ReadAsStringAsync();
+                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerBrandUri}/" + viewModel.BuyerBrandId).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
                     var json = result.Single(p => p.Key.Equals("data")).Value;
                     Dictionary<string, object> buyerBrand = JsonConvert.DeserializeObject<Dictionary<string, object>>(json.ToString());
@@ -76,13 +75,13 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
 
                     /* Get Buyer */
-                    var responseBuyer = httpClient.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + buyers["Id"]).Result.Content.ReadAsStringAsync();
+                    var responseBuyer = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + buyers["Id"]).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> resultBuyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBuyer.Result);
                     var jsonBuyer = resultBuyer.Single(p => p.Key.Equals("data")).Value;
                     Dictionary<string, object> buyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBuyer.ToString());
 
                     /* Get AccountBank */
-                    var responseBank = httpClient.GetAsync($@"{APIEndpoint.Core}{BankUri}/" + viewModel.AccountBank.Id).Result.Content.ReadAsStringAsync();
+                    var responseBank = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BankUri}/" + viewModel.AccountBank.Id).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> resultBank = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBank.Result);
                     var jsonBank = resultBank.Single(p => p.Key.Equals("data")).Value;
                     Dictionary<string, object> bank = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBank.ToString());

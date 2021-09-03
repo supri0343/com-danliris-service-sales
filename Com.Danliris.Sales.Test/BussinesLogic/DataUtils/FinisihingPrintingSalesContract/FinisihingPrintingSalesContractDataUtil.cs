@@ -4,6 +4,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSalesContract
 {
@@ -13,9 +14,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSale
         {
         }
 
-        public override FinishingPrintingSalesContractModel GetNewData()
+        public override Task<FinishingPrintingSalesContractModel> GetNewData()
         {
-            return new FinishingPrintingSalesContractModel() {
+            return Task.FromResult(new FinishingPrintingSalesContractModel() {
                 AccountBankAccountName = "a",
                 AccountBankCode = "a",
                 AccountBankCurrencyCode = "a",
@@ -29,13 +30,14 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSale
                 {
                     new FinishingPrintingSalesContractDetailModel()
                     {
-                        Color = "c",
+                        Color = "ColorType",
                         UseIncomeTax = true,
-                        Price = 1
+                        Price = 1,
+                        ScreenCost = 1
                     }
                 },
                 BuyerType = "type"
-            };
+            });
 
         }
     }

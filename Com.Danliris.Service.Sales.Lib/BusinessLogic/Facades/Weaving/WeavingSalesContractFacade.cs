@@ -63,19 +63,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Weaving
         public async Task<WeavingSalesContractModel> CustomCodeGenerator(WeavingSalesContractModel Model)
         {
 
-            string type = Model.BuyerType.ToLower() == "export" ? "WVE" : "WVL";
+            string type = Model.BuyerType.ToLower().Equals("ekspor") || Model.BuyerType.ToLower().Equals("export") ? "WVE" : "WVL";
 
-            var lastData = await this.DbSet.Where(w => w.BuyerType == Model.BuyerType).OrderByDescending(o => o.CreatedUtc).FirstOrDefaultAsync();
+            var lastData = await this.DbSet.IgnoreQueryFilters().Where(w => w.BuyerType.Equals(Model.BuyerType, StringComparison.OrdinalIgnoreCase)).OrderByDescending(o => o.CreatedUtc).FirstOrDefaultAsync();
 
             DateTime Now = DateTime.Now;
-            string Year = Now.ToString("yy");
-            string month = Now.ToString("mm");
+            string Year = Now.ToString("yyyy");
+            string month = Now.ToString("MM");
 
             if (lastData == null)
             {
                 Model.AutoIncrementNumber = 1;
                 string Number = Model.AutoIncrementNumber.ToString().PadLeft(4, '0');
-                Model.SalesContractNo = $"{Number}{type}{Number}{month}{Year}";
+                Model.SalesContractNo = $"{Number}/{type}/{month}.{Year}";
             }
             else
             {
@@ -83,13 +83,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Weaving
                 {
                     Model.AutoIncrementNumber = 1;
                     string Number = Model.AutoIncrementNumber.ToString().PadLeft(4, '0');
-                    Model.SalesContractNo = $"{Number}{type}{Number}{month}{Year}";
+                    Model.SalesContractNo = $"{Number}/{type}/{month}.{Year}";
                 }
                 else
                 {
                     Model.AutoIncrementNumber = lastData.AutoIncrementNumber + 1;
                     string Number = Model.AutoIncrementNumber.ToString().PadLeft(4, '0');
-                    Model.SalesContractNo = $"{Number}{type}{Number}{month}{Year}";
+                    Model.SalesContractNo = $"{Number}/{type}/{month}.{Year}";
                 }
             }
 
@@ -100,5 +100,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Weaving
         {
             return WeavingSalesContractLogic.Read(page, size, order, select, keyword, filter);
         }
+        
     }
 }

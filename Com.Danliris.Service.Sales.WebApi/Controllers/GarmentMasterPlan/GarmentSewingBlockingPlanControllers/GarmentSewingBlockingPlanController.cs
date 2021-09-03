@@ -21,7 +21,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers.GarmentMasterPlan.Garmen
     {
         private readonly static string apiVersion = "1.0";
 
-        public GarmentSewingBlockingPlanController(IIdentityService identityService, IValidateService validateService, IGarmentSewingBlockingPlan facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        public GarmentSewingBlockingPlanController(IIdentityService identityService, IValidateService validateService, IGarmentSewingBlockingPlan facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
         }
     }

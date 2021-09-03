@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.Utilities
@@ -22,20 +23,20 @@ namespace Com.Danliris.Service.Sales.Lib.Utilities
                 d = d * -1;
             }
        
-            if (d.ToString().IndexOf(".") != -1)
+            if (d.ToString(CultureInfo.CreateSpecificCulture("en-us")).IndexOf(".") != -1)
             {
-                var a = Convert.ToDouble((d.ToString().Substring(d.ToString().IndexOf(".") + 1)));
+                var a = Convert.ToDouble((d.ToString(CultureInfo.CreateSpecificCulture("en-us")).Substring(d.ToString(CultureInfo.CreateSpecificCulture("en-us")).IndexOf(".") + 1)));
                 if (a != 0)
                 {
                     strHasil = terbilangKoma((float)d);
                 }
-                d = Convert.ToDouble(d.ToString().Substring(0, d.ToString().IndexOf(".")));
+                d = Convert.ToDouble(d.ToString(CultureInfo.CreateSpecificCulture("en-us")).Substring(0, d.ToString(CultureInfo.CreateSpecificCulture("en-us")).IndexOf(".")));
             }
 
             var nDigit = 0;
             var nPosisi = 0;
 
-            var strTemp = Math.Truncate(d).ToString();
+            var strTemp = Math.Truncate(d).ToString(CultureInfo.CreateSpecificCulture("en-us"));
             for (var i = strTemp.Length; i > 0; i--)
             {
                 var tmpBuff = "";
@@ -114,11 +115,11 @@ namespace Com.Danliris.Service.Sales.Lib.Utilities
 
         public static string terbilangKoma(float frac)
         {
-            var a = frac.ToString().Substring(frac.ToString().IndexOf(".") + 1);
+            var a = frac.ToString(CultureInfo.CreateSpecificCulture("en-us")).Substring(frac.ToString(CultureInfo.CreateSpecificCulture("en-us")).IndexOf(".") + 1);
             var fixNumber = "";
             if (a.Length > 4)
             {
-                fixNumber = (frac.ToString("N4")).ToString().Substring((frac.ToString("N4")).ToString().IndexOf(".") + 1);
+                fixNumber = (frac.ToString("N4")).ToString(CultureInfo.CreateSpecificCulture("en-us")).Substring((frac.ToString("N4")).ToString(CultureInfo.CreateSpecificCulture("en-us")).IndexOf(".") + 1);
             }
             else
             {
@@ -127,7 +128,7 @@ namespace Com.Danliris.Service.Sales.Lib.Utilities
             var strHasil = "koma";
             for (var i = 0; i < fixNumber.Length; i++)
             {
-                var temp = (int)(fixNumber[i]);
+                var temp = int.Parse(fixNumber[i].ToString());
                 strHasil = strHasil + " " + satuan[temp];
             }
             return strHasil;

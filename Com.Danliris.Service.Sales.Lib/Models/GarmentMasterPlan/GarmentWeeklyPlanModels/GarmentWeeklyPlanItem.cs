@@ -22,6 +22,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.GarmentMasterPlan.WeeklyPlanMode
         public int UsedEH { get; set; }
         public int RemainingEH { get; set; }
 
+        public double WHConfirm { get; set; }
+
         public virtual long WeeklyPlanId { get; set; }
         [ForeignKey("WeeklyPlanId")]
         public virtual GarmentWeeklyPlan WeeklyPlan { get; set; }

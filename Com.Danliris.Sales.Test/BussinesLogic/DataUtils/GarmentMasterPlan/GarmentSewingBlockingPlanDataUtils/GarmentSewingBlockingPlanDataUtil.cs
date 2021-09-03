@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.MaxWHConfirmDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.WeeklyPlanDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.GarmentSewingBlockingPlanFacades;
@@ -16,16 +17,19 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.Garm
 
         private readonly WeeklyPlanDataUtil weeklyPlanDataUtil;
         private readonly GarmentBookingOrderDataUtil garmentBookingOrderDataUtil;
-        public GarmentSewingBlockingPlanDataUtil(GarmentSewingBlockingPlanFacade facade, WeeklyPlanDataUtil weeklyPlanDataUtil, GarmentBookingOrderDataUtil garmentBookingOrderDataUtil) : base(facade)
+        private readonly MaxWHConfirmDataUtil maxWHConfirmDataUtil;
+        public GarmentSewingBlockingPlanDataUtil(GarmentSewingBlockingPlanFacade facade, WeeklyPlanDataUtil weeklyPlanDataUtil, GarmentBookingOrderDataUtil garmentBookingOrderDataUtil, MaxWHConfirmDataUtil maxWHConfirmDataUtil) : base(facade)
         {
             this.weeklyPlanDataUtil = weeklyPlanDataUtil;
             this.garmentBookingOrderDataUtil = garmentBookingOrderDataUtil;
+            this.maxWHConfirmDataUtil = maxWHConfirmDataUtil;
         }
 
-        public override GarmentSewingBlockingPlan GetNewData()
+        public override Task<GarmentSewingBlockingPlan> GetNewData()
         {
             var datas = Task.Run(() => garmentBookingOrderDataUtil.GetTestData()).Result;
             var dataWeek= Task.Run(() => weeklyPlanDataUtil.GetTestData()).Result;
+            var dataWH= Task.Run(() => maxWHConfirmDataUtil.GetTestData()).Result;
             var week = dataWeek.Items.First();
             var garmentSewingBlockingPlan = new GarmentSewingBlockingPlan
             {
@@ -40,6 +44,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.Garm
                 Items = new List<GarmentSewingBlockingPlanItem> {
                     new GarmentSewingBlockingPlanItem
                     {
+                        IsConfirm=true,
                         WeekNumber=week.WeekNumber,
                         WeeklyPlanId=dataWeek.Id,
                         WeeklyPlanItemId=week.Id,
@@ -83,7 +88,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.Garm
                 }
             };
             
-            return garmentSewingBlockingPlan;
+            return Task.FromResult(garmentSewingBlockingPlan);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SearchAttributes = new List<string>()
             {
-                "SalesContractNo"
+                "SalesContractNo","BuyerName"
             };
 
             Query = QueryHelper<FinishingPrintingSalesContractModel>.Search(Query, SearchAttributes, keyword);
@@ -38,7 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Buyer", "DeliverySchedule","OrderType", "SalesContractNo","YarnMaterial", "LastModifiedUtc","Material","DesignMotive","MaterialWidth"
+                "Id", "Code", "Buyer", "DeliverySchedule","OrderType","Commodity","SalesContractNo","YarnMaterial","PieceLength","OrderQuantity","LastModifiedUtc","Material","MaterialConstruction","DesignMotive","MaterialWidth", "Details"
             };
 
             Query = Query
@@ -51,9 +51,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     BuyerType = field.BuyerType,
                     BuyerName = field.BuyerName,
                     BuyerID = field.BuyerID,
+                    CommodityID = field.CommodityID,
+                    CommodityCode = field.CommodityCode,
+                    CommodityName = field.CommodityName,
                     DesignMotiveID = field.DesignMotiveID,
                     DesignMotiveCode = field.DesignMotiveCode,
                     DesignMotiveName = field.DesignMotiveName,
+                    MaterialConstructionId = field.MaterialConstructionId,
+                    MaterialConstructionCode = field.MaterialConstructionCode,
+                    MaterialConstructionName = field.MaterialConstructionName,
                     MaterialCode = field.MaterialCode,
                     MaterialID = field.MaterialID,
                     MaterialName = field.MaterialName,
@@ -61,12 +67,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     OrderTypeCode = field.OrderTypeCode,
                     OrderTypeID = field.OrderTypeID,
                     OrderTypeName = field.OrderTypeName,
+                    PieceLength = field.PieceLength,
                     DeliverySchedule = field.DeliverySchedule,
                     YarnMaterialID = field.YarnMaterialID,
                     YarnMaterialCode = field.YarnMaterialCode,
                     YarnMaterialName = field.YarnMaterialName,
                     MaterialWidth = field.MaterialWidth,
-                    LastModifiedUtc = field.LastModifiedUtc
+                    LastModifiedUtc = field.LastModifiedUtc,
+                    Details = field.Details
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -96,8 +104,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
         {
             try
             {
-                var finishingPrintingSalesContract = await DbSet.Include(p => p.Details).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));
-                finishingPrintingSalesContract.Details = finishingPrintingSalesContract.Details.OrderBy(s => s.Id).ToArray();
+                var finishingPrintingSalesContract = await DbSet.Include(p => p.Details).FirstOrDefaultAsync(d => d.Id.Equals(id) && d.IsDeleted.Equals(false));               
+                if (finishingPrintingSalesContract != null)
+                {
+                    finishingPrintingSalesContract.Details = finishingPrintingSalesContract.Details.OrderBy(s => s.Id).ToArray();
+                }
                 return finishingPrintingSalesContract;
 
             }
@@ -157,29 +168,42 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
         private void SalesContractNumberGenerator(FinishingPrintingSalesContractModel model)
         {
-            FinishingPrintingSalesContractModel lastData = DbSet.IgnoreQueryFilters().Where(w => w.OrderTypeName.Equals(model.OrderTypeName)).OrderByDescending(o => o.AutoIncrementNumber).FirstOrDefault();
+            FinishingPrintingSalesContractModel lastData;
+            if (model.BuyerType.Equals("ekspor", StringComparison.OrdinalIgnoreCase) || model.BuyerType.Equals("export", StringComparison.OrdinalIgnoreCase))
+            {
+                lastData = DbSet.IgnoreQueryFilters()
+                    .Where(w => w.BuyerType == "ekspor" || w.BuyerType == "export")
+                    .OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
+            else
+            {
+                lastData = DbSet.IgnoreQueryFilters()
+                    .Where(w => w.BuyerType != "ekspor" && w.BuyerType != "export")
+                    .OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
 
             string DocumentType = model.BuyerType.ToLower().Equals("ekspor") || model.BuyerType.ToLower().Equals("export") ? "FPE" : "FPL";
 
-            int YearNow = DateTime.Now.Year;
-            int MonthNow = DateTime.Now.Month;
+            DateTime Now = DateTime.Now;
+            string Year = Now.ToString("yyyy");
+            string month = Now.ToString("MM");
 
             if (lastData == null)
             {
                 model.AutoIncrementNumber = 1;
-                model.SalesContractNo = $"0001/{DocumentType}/{MonthNow}/{YearNow}";
+                model.SalesContractNo = $"0001/{DocumentType}/{month}.{Year}";
             }
             else
             {
-                if (YearNow > lastData.CreatedUtc.Year)
+                if (Now.Year > lastData.CreatedUtc.Year)
                 {
                     model.AutoIncrementNumber = 1;
-                    model.SalesContractNo = $"0001/{DocumentType}/{MonthNow}/{YearNow}";
+                    model.SalesContractNo = $"0001/{DocumentType}/{month}.{Year}";
                 }
                 else
                 {
                     model.AutoIncrementNumber = lastData.AutoIncrementNumber + 1;
-                    model.SalesContractNo = $"{model.AutoIncrementNumber.ToString().PadLeft(4, '0')}/{DocumentType}/{MonthNow}/{YearNow}";
+                    model.SalesContractNo = $"{model.AutoIncrementNumber.ToString().PadLeft(4, '0')}/{DocumentType}/{month}.{Year}";
                 }
             }
         }

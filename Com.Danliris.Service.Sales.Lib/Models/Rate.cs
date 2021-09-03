@@ -1,16 +1,20 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Com.Danliris.Service.Sales.Lib.Models
 {
     public class Rate : BaseModel
     {
+        [MaxLength(50)]
         public string Code { get; set; }
+        [MaxLength(255)]
         public string Name { get; set; }
         public double Value { get; set; }
 
+        public long UnitId { get; set; }
+        [MaxLength(50)]
+        public string UnitCode { get; set; }
+        [MaxLength(255)]
+        public string UnitName { get; set; }
     }
 }

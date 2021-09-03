@@ -8,7 +8,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.Garment
     public class GarmentPurchaseRequestViewModel : BaseViewModel
     {
         public string PRNo { get; set; }
+        public string PRType { get; set; }
         public string RONo { get; set; }
+        public string MDStaff { get; set; }
+        public long SCId { get; set; }
+        public string SCNo { get; set; }
 
         public BuyerViewModel Buyer { get; set; }
 
@@ -23,6 +27,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel.Garment
         public bool IsPosted { get; set; }
         public bool IsUsed { get; set; }
         public string Remark { get; set; }
+
+        public bool IsValidated { get; set; }
+        public string ValidatedBy { get; set; }
+        public DateTimeOffset ValidatedDate { get; set; }
 
         public List<GarmentPurchaseRequestItemViewModel> Items { get; set; }
     }

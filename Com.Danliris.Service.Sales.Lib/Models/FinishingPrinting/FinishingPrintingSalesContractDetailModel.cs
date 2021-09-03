@@ -9,6 +9,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
     public class FinishingPrintingSalesContractDetailModel : BaseModel
     {
         public virtual FinishingPrintingSalesContractModel FinishingPrintingSalesContract { get; set; }
+
+        public long CostCalculationId { get; set; }
+
+        [MaxLength(64)]
+        public string ProductionOrderNo { get; set; }
+
         [MaxLength(255)]
         public string Color { get; set; }
         #region Currency
@@ -20,6 +26,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         public double CurrencyRate { get; set; }
         #endregion
         public double Price { get; set; }
+
+        public decimal ScreenCost { get; set; }
         public bool UseIncomeTax { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
             this.ApiVersion = apiVersion;
         }
 
-        private void ValidateUser()
+        protected void ValidateUser()
         {
             IdentityService.Username = User.Claims.ToArray().SingleOrDefault(p => p.Type.Equals("username")).Value;
             IdentityService.Token = Request.Headers["Authorization"].FirstOrDefault().Replace("Bearer ", "");
@@ -46,7 +46,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
         }
 
         [HttpGet]
-        public IActionResult Get(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")]List<string> select = null, string keyword = null, string filter = "{}")
+        public virtual IActionResult Get(int page = 1, int size = 25, string order = "{}", [Bind(Prefix = "Select[]")]List<string> select = null, string keyword = null, string filter = "{}")
         {
             //if (!ModelState.IsValid)
             //{
@@ -55,6 +55,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
 
             try
             {
+                ValidateUser();
+
                 ReadResponse<TModel> read = Facade.Read(page, size, order, select, keyword, filter);
 
                 //Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> Data = Facade.Read(page, size, order, select, keyword, filter);
@@ -76,7 +78,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] TViewModel viewModel)
+        public virtual async Task<ActionResult> Post([FromBody] TViewModel viewModel)
         {
             try
             {
@@ -107,8 +109,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
             }
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        [HttpGet("{id}")]
+        public virtual async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -144,8 +146,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
             }
         }
 
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] TViewModel viewModel)
+        [HttpPut("{id}")]
+        public virtual async Task<IActionResult> Put([FromRoute] int id, [FromBody] TViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -194,8 +196,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Utilities
             }
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        [HttpDelete("{id}")]
+        public virtual async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

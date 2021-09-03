@@ -20,5 +20,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Garment.WeeklyPlanViewModels
         public int EHTotal { get; set; }
         public int UsedEH { get; set; }
         public int RemainingEH { get; set; }
+        public double WHConfirm { get; set; }
     }
 }

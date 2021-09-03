@@ -10,12 +10,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
+using Com.Moonlay.Models;
+using Microsoft.AspNetCore.JsonPatch;
+using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGarments
 {
     public class CostCalculationGarmentFacade : ICostCalculationGarment
 	{
-		private readonly SalesDbContext DbContext;
+        private string USER_AGENT = "sales-service";
+
+        private readonly SalesDbContext DbContext;
 		private readonly DbSet<CostCalculationGarment> DbSet;
 		private readonly IdentityService identityService;
 		private readonly CostCalculationGarmentLogic costCalculationGarmentLogic ;
@@ -66,36 +72,65 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 		}
 		public async Task<int> CreateAsync(CostCalculationGarment model)
 		{
-			do
-			{
-				model.Code = CodeGenerator.Generate();
-				await CustomCodeGenerator(model);
-			}
-			while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
-
-			model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
-			costCalculationGarmentLogic.Create(model);
-            if (model.ImagePath != null)
+            int Created = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+                try
+                {
+                    do
+                    {
+                        model.Code = CodeGenerator.Generate();
+                        await CustomCodeGenerator(model);
+                    }
+                    while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
+
+                    costCalculationGarmentLogic.Create(model);
+                    Created = await DbContext.SaveChangesAsync();
+
+                    if (!string.IsNullOrWhiteSpace(model.ImageFile))
+                    {
+                        model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+                    }
+                    await DbContext.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
             }
-            model.IsValidated = false;
-            costCalculationGarmentLogic.Create(model);
-			return await DbContext.SaveChangesAsync();
+            return Created;
 		}
-		public async Task<int> DeleteAsync(int id)
+
+        public async Task<int> DeleteAsync(int id)
 		{
-			await costCalculationGarmentLogic.DeleteAsync(id);
-			return await DbContext.SaveChangesAsync();
+            int Deleted = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    await costCalculationGarmentLogic.DeleteAsync(id);
+                    Deleted = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Deleted;
 		}
 
 		public ReadResponse<CostCalculationGarment> Read(int page, int size, string order, List<string> select, string keyword, string filter)
 		{
 			return costCalculationGarmentLogic.Read(page, size, order, select, keyword, filter);
 		}
-		private AzureImageFacade AzureImageFacade
+		private IAzureImageFacade AzureImageFacade
 		{
-			get { return this.ServiceProvider.GetService<AzureImageFacade>(); }
+			get { return this.ServiceProvider.GetService<IAzureImageFacade>(); }
 		}
 		public async Task<CostCalculationGarment> ReadByIdAsync(int id)
 		{
@@ -103,6 +138,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 			   .Where(d => d.Id.Equals(id) && d.IsDeleted.Equals(false))
 			   .Include(d => d.CostCalculationGarment_Materials)
 			   .FirstOrDefaultAsync();
+
+            read.CostCalculationGarment_Materials = read.CostCalculationGarment_Materials.OrderBy(o => o.MaterialIndex).ToList();
 
             if (read.ImagePath != null)
             {
@@ -114,9 +151,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
 		public async Task<int> UpdateAsync(int id, CostCalculationGarment model)
 		{
-            model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
             costCalculationGarmentLogic.UpdateAsync(id, model);
-            if (model.ImagePath != null)
+            if (!string.IsNullOrWhiteSpace(model.ImageFile))
             {
                 model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
             }
@@ -126,6 +162,244 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
         public async Task<Dictionary<long, string>> GetProductNames(List<long> productIds)
         {
             return await costCalculationGarmentLogic.GetProductNames(productIds);
+        }
+
+        public ReadResponse<CostCalculationGarment> ReadForROAcceptance(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return costCalculationGarmentLogic.ReadForROAcceptance(page, size, order, select, keyword, filter);
+        }
+
+        public async Task<int> AcceptanceCC(List<long> listId, string user)
+        {
+            int Updated = 0;
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var listData = DbSet.
+                        Where(w => listId.Contains(w.Id))
+                        .ToList();
+
+                    foreach (var data in listData)
+                    {
+                        EntityExtension.FlagForUpdate(data, user, USER_AGENT);
+                        data.IsROAccepted = true;
+                        data.ROAcceptedDate = DateTimeOffset.Now;
+                        data.ROAcceptedBy = user;
+                    }
+
+                    Updated = await DbContext.SaveChangesAsync();
+
+                    if (Updated < 1)
+                    {
+                        throw new Exception("No data updated");
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return Updated;
+        }
+
+        public ReadResponse<CostCalculationGarment> ReadForROAvailable(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return costCalculationGarmentLogic.ReadForROAvailable(page, size, order, select, keyword, filter);
+        }
+
+        public async Task<int> AvailableCC(List<long> listId, string user)
+        {
+            int Updated = 0;
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var listData = DbSet.
+                        Where(w => listId.Contains(w.Id))
+                        .ToList();
+
+                    foreach (var data in listData)
+                    {
+                        EntityExtension.FlagForUpdate(data, user, USER_AGENT);
+                        data.IsROAvailable = true;
+                        data.ROAvailableDate = DateTimeOffset.Now;
+                        data.ROAvailableBy = user;
+                    }
+
+                    Updated = await DbContext.SaveChangesAsync();
+
+                    if (Updated < 1)
+                    {
+                        throw new Exception("No data updated");
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return Updated;
+        }
+
+        public ReadResponse<CostCalculationGarment> ReadForRODistribution(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return costCalculationGarmentLogic.ReadForRODistribution(page, size, order, select, keyword, filter);
+        }
+
+        public async Task<int> DistributeCC(List<long> listId, string user)
+        {
+            int Updated = 0;
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var listData = DbSet.
+                        Where(w => listId.Contains(w.Id))
+                        .ToList();
+
+                    foreach (var data in listData)
+                    {
+                        EntityExtension.FlagForUpdate(data, user, USER_AGENT);
+                        data.IsRODistributed = true;
+                        data.RODistributionDate = DateTimeOffset.Now;
+                        data.RODistributionBy = user;
+                    }
+
+                    Updated = await DbContext.SaveChangesAsync();
+
+                    if (Updated < 1)
+                    {
+                        throw new Exception("No data updated");
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return Updated;
+        }
+
+        public async Task<int> Patch(long id, JsonPatchDocument<CostCalculationGarment> jsonPatch)
+        {
+            int Updated = 0;
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    costCalculationGarmentLogic.Patch(id, jsonPatch);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw e;
+                }
+            }
+
+            return Updated;
+        }
+
+        public async Task<int> PostCC(List<long> listId)
+        {
+            int Updated = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    costCalculationGarmentLogic.PostCC(listId);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw e;
+                }
+            }
+            return Updated;
+        }
+
+        public async Task<int> UnpostCC(long id, string reason)
+        {
+            int Updated = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    costCalculationGarmentLogic.UnpostCC(id);
+                    costCalculationGarmentLogic.InsertUnpostReason(id, reason);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw e;
+                }
+            }
+            return Updated;
+        }
+		public List<CostCalculationGarmentDataProductionReport> GetComodityQtyOrderHoursBuyerByRo(string ro)
+		{
+			return costCalculationGarmentLogic.GetComodityQtyOrderHoursBuyerByRo(ro);
+
+		}
+		public List<string> ReadUnpostReasonCreators(string keyword, int page, int size)
+        {
+            return costCalculationGarmentLogic.ReadUnpostReasonCreators(keyword, page, size);
+        }
+
+        public ReadResponse<dynamic> ReadDynamic(int page, int size, string order, string select, string keyword, string filter, string search)
+        {
+            return costCalculationGarmentLogic.ReadDynamic(page, size, order, select, keyword, filter, search);
+        }
+
+        public ReadResponse<dynamic> ReadMaterials(int page, int size, string order, string select, string keyword, string filter, string search)
+        {
+            CostCalculationGarmentMaterialLogic costCalculationGarmentMaterialLogic = ServiceProvider.GetService<CostCalculationGarmentMaterialLogic>();
+            return costCalculationGarmentMaterialLogic.ReadMaterials(page, size, order, select, keyword, filter, search);
+        }
+
+        public ReadResponse<dynamic> ReadMaterialsByPRMasterItemIds(int page, int size, string order, string select, string keyword, string filter, string search, string prmasteritemids)
+        {
+            CostCalculationGarmentMaterialLogic costCalculationGarmentMaterialLogic = ServiceProvider.GetService<CostCalculationGarmentMaterialLogic>();
+            return costCalculationGarmentMaterialLogic.ReadMaterialsByPRMasterItemIds(page, size, order, select, keyword, filter, search, prmasteritemids);
+        }
+
+        public async Task<CostCalculationGarment> ReadByRO(string ro)
+        {
+            CostCalculationGarment read = await this.DbSet
+               .Where(d => d.RO_Number.Equals(ro) && d.IsDeleted.Equals(false))
+               .Include(d => d.CostCalculationGarment_Materials)
+               .FirstOrDefaultAsync();
+
+            read.CostCalculationGarment_Materials = read.CostCalculationGarment_Materials.OrderBy(o => o.MaterialIndex).ToList();
+
+            if (read.ImagePath != null)
+            {
+                read.ImageFile = await this.AzureImageFacade.DownloadImage(read.GetType().Name, read.ImagePath);
+            }
+
+            return read;
         }
     }
 }

@@ -1,26 +1,33 @@
 ﻿using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.GarmentSewingBlockingPlanDataUtils;
+using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.MaxWHConfirmDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentMasterPlan.WeeklyPlanDataUtils;
 using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
+using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.GarmentSewingBlockingPlanProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrderFacade;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.GarmentSewingBlockingPlanFacades;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.MaxWHConfirmFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.WeeklyPlanFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.GarmentSewingBlockingPlanLogics;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.MaxWHConfirmLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.WeeklyPlanLogics;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentSewingBlockingPlanModel;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentSewingBlockingPlanViewModels;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.GarmentSewingBlockingPlanTests
@@ -58,6 +65,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             var WeekserviceProvider = GetWeekServiceProviderMock(dbContext).Object;
             var BOserviceProvider = GetBOServiceProviderMock(dbContext).Object;
+            var WHServiceProviderMock = GetWHServiceProviderMock(dbContext).Object;
 
             var weeklyPlanFacade = new WeeklyPlanFacade(WeekserviceProvider, dbContext);
             var weeklyPlanDataUtil = new WeeklyPlanDataUtil(weeklyPlanFacade);
@@ -65,12 +73,15 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
             var bookingOrderFacade = new GarmentBookingOrderFacade(BOserviceProvider, dbContext);
             var garmentBookingOrderDataUtil = new GarmentBookingOrderDataUtil(bookingOrderFacade);
 
+            var maxWHConfirmFacade = new MaxWHConfirmFacade(WHServiceProviderMock, dbContext);
+            var maxWHConfirmDataUtil = new MaxWHConfirmDataUtil(maxWHConfirmFacade);
+
             var garmentSewingBlockingPlanFacade = new GarmentSewingBlockingPlanFacade(serviceProvider, dbContext);
-            var garmentPurchaseRequestDataUtil = new GarmentSewingBlockingPlanDataUtil(garmentSewingBlockingPlanFacade, weeklyPlanDataUtil, garmentBookingOrderDataUtil);
+            var garmentSewingBlockingPlanDataUtil = new GarmentSewingBlockingPlanDataUtil(garmentSewingBlockingPlanFacade, weeklyPlanDataUtil, garmentBookingOrderDataUtil, maxWHConfirmDataUtil);
 
             
 
-            return garmentPurchaseRequestDataUtil;
+            return garmentSewingBlockingPlanDataUtil;
         }
 
         protected virtual Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
@@ -103,6 +114,23 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(WeeklyPlanLogic)))
                 .Returns(new WeeklyPlanLogic( identityService, dbContext) );
+
+            return serviceProviderMock;
+        }
+
+        protected virtual Mock<IServiceProvider> GetWHServiceProviderMock(SalesDbContext dbContext)
+        {
+            var serviceProviderMock = new Mock<IServiceProvider>();
+
+            IIdentityService identityService = new IdentityService { Username = "Username" };
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IdentityService)))
+                .Returns(identityService);
+
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(MaxWHConfirmLogic)))
+                .Returns(new MaxWHConfirmLogic(identityService, dbContext));
 
             return serviceProviderMock;
         }
@@ -142,7 +170,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
 
             GarmentSewingBlockingPlanFacade facade = new GarmentSewingBlockingPlanFacade(serviceProvider, dbContext);
 
-            var data = DataUtil(facade, dbContext).GetNewData();
+            var data = await DataUtil(facade, dbContext).GetNewData();
 
             var response = await facade.CreateAsync(data);
 
@@ -150,36 +178,151 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
         }
 
         [Fact]
-        public void Should_Success_Validate_Data()
+        public async Task Should_Success_Validate_Data_Null()
         {
             var dbContext = DbContext(GetCurrentMethod());
-            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+            var iserviceProvider = GetServiceProviderMock(dbContext).Object;
+            Mock<IServiceProvider> serviceProvider = new Mock<IServiceProvider>();
+            serviceProvider.
+                Setup(x => x.GetService(typeof(SalesDbContext)))
+                .Returns(dbContext);
 
-            GarmentSewingBlockingPlanFacade facade = new GarmentSewingBlockingPlanFacade(serviceProvider, dbContext);
+            GarmentSewingBlockingPlanFacade facade = new GarmentSewingBlockingPlanFacade(serviceProvider.Object, dbContext);
 
-            var data = DataUtil(facade, dbContext).GetNewData();
+            var data = await DataUtil(facade, dbContext).GetNewData();
             GarmentSewingBlockingPlanViewModel nullViewModel = new GarmentSewingBlockingPlanViewModel();
-            Assert.True(nullViewModel.Validate(null).Count() > 0);
+            //Assert.True(nullViewModel.Validate(null).Count() > 0);
 
-            GarmentSewingBlockingPlanViewModel vm = new GarmentSewingBlockingPlanViewModel {
+            ValidationContext validationContext = new ValidationContext(nullViewModel, serviceProvider.Object, null);
+
+            var validationResultCreate = nullViewModel.Validate(validationContext).ToList();
+            Assert.True(validationResultCreate.Count() > 0);
+
+        }
+
+        [Fact]
+        public async Task Should_Success_Validate_Data_Error_Items()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var iserviceProvider = GetServiceProviderMock(dbContext).Object;
+            Mock<IServiceProvider> serviceProvider = new Mock<IServiceProvider>();
+            serviceProvider.
+                Setup(x => x.GetService(typeof(SalesDbContext)))
+                .Returns(dbContext);
+
+            GarmentSewingBlockingPlanFacade facade = new GarmentSewingBlockingPlanFacade(serviceProvider.Object, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetNewData();
+            GarmentSewingBlockingPlanViewModel vm = new GarmentSewingBlockingPlanViewModel
+            {
                 BookingOrderNo = data.BookingOrderNo,
-                BookingOrderDate=data.BookingOrderDate,
-                DeliveryDate=data.DeliveryDate,
+                BookingOrderDate = data.BookingOrderDate,
+                DeliveryDate = data.DeliveryDate,
                 Items = new List<GarmentSewingBlockingPlanItemViewModel> {
                     new GarmentSewingBlockingPlanItemViewModel
                     {
-                        DeliveryDate= DateTimeOffset.UtcNow.Date.AddDays(-2)
+                        IsConfirm=true,
+                        DeliveryDate= DateTimeOffset.UtcNow.Date.AddDays(-2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+                        Unit=new UnitViewModel
+                        {
+                            Name="unit",
+                            Id=1,
+                            Code="unit"
+                        }
                     },
                     new GarmentSewingBlockingPlanItemViewModel
                     {
-                        DeliveryDate= data.DeliveryDate.Date.AddDays(2)
+                        IsConfirm=true,
+                        DeliveryDate= data.DeliveryDate.Date.AddDays(2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+                        Unit=new UnitViewModel
+                        {
+                            Name="unit",
+                            Id=1,
+                            Code="unit"
+                        }
+                    },
+                    new GarmentSewingBlockingPlanItemViewModel
+                    {
+                        IsConfirm=true,
+                        DeliveryDate= data.DeliveryDate.Date.AddDays(2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+                        
                     }
                 }
             };
+            ValidationContext validationContext1 = new ValidationContext(vm, serviceProvider.Object, null);
+            var validationResultCreate1 = vm.Validate(validationContext1).ToList();
+            Assert.True(validationResultCreate1.Count() > 0);
 
-            Assert.True(vm.Validate(null).Count() > 0);
 
+        }
 
+        [Fact]
+        public async Task Should_Success_Validate_Updated_Data()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var iserviceProvider = GetServiceProviderMock(dbContext).Object;
+            Mock<IServiceProvider> serviceProvider = new Mock<IServiceProvider>();
+            serviceProvider.
+                Setup(x => x.GetService(typeof(SalesDbContext)))
+                .Returns(dbContext);
+
+            GarmentSewingBlockingPlanFacade facade = new GarmentSewingBlockingPlanFacade(serviceProvider.Object, dbContext);
+
+            var data = await DataUtil(facade, dbContext).GetTestData();
+
+            GarmentSewingBlockingPlanViewModel vm = new GarmentSewingBlockingPlanViewModel
+            {
+                BookingOrderNo = data.BookingOrderNo,
+                BookingOrderDate = data.BookingOrderDate,
+                DeliveryDate = data.DeliveryDate,
+                Id = data.Id,
+                Items = new List<GarmentSewingBlockingPlanItemViewModel> {
+                    new GarmentSewingBlockingPlanItemViewModel
+                    {
+                        IsConfirm=true,
+                        DeliveryDate= DateTimeOffset.UtcNow.Date.AddDays(-2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+                        Id=data.Items.First().Id,
+                        Unit=new UnitViewModel
+                        {
+                            Name="unit",
+                            Id=1,
+                            Code="unit"
+                        }
+                    },
+                    new GarmentSewingBlockingPlanItemViewModel
+                    {
+                        IsConfirm=true,
+                        DeliveryDate= data.DeliveryDate.Date.AddDays(2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+                        Unit=new UnitViewModel
+                        {
+                            Name="unit",
+                            Id=1,
+                            Code="unit"
+                        }
+                    },
+                    new GarmentSewingBlockingPlanItemViewModel
+                    {
+                        IsConfirm=true,
+                        DeliveryDate= data.DeliveryDate.Date.AddDays(2),
+                        WeeklyPlanItemId=data.Items.First().WeeklyPlanItemId,
+                        whConfirm=63,
+
+                    }
+                }
+            };
+            ValidationContext validationContext1 = new ValidationContext(vm, serviceProvider.Object, null);
+            var validationResultCreate1 = vm.Validate(validationContext1).ToList();
+            Assert.True(validationResultCreate1.Count() > 0);
         }
 
         [Fact]
@@ -213,7 +356,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
         }
 
         [Fact]
-        public virtual async void Update_Success()
+        public virtual async void UpdateAsync_withExistData_Return_Success()
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
@@ -227,6 +370,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
             Assert.NotEqual(response, 0);
         }
 
+        
+
         [Fact]
         public virtual async void Delete_Success()
         {
@@ -238,6 +383,22 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Garmen
 
             var Response = await facade.DeleteAsync((int)data.Id);
             Assert.NotEqual(Response, 0);
+        }
+
+        [Fact]
+        public void Mapping_With_AutoMapper_Profiles()
+        {
+            var configuration = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<GarmentSewingBlockingPlanMapper>();
+            });
+            var mapper = configuration.CreateMapper();
+
+            GarmentSewingBlockingPlanViewModel vm = new GarmentSewingBlockingPlanViewModel { Id = 1 };
+            GarmentSewingBlockingPlan model = mapper.Map<GarmentSewingBlockingPlan>(vm);
+
+            Assert.Equal(vm.Id, model.Id);
+
         }
     }
 }

@@ -55,9 +55,28 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.CostCalculationGarme
 			  .ForPath(d => d.OTL2.Value, opt => opt.MapFrom(s => s.OTL2Rate))
               .ForPath(d => d.UnitName, opt => opt.MapFrom(s => s.UnitName))
               .ForPath(d => d.OTL2.CalculatedValue, opt => opt.MapFrom(s => s.OTL2CalculatedRate))
-			  .ForPath(d => d.NETFOBP, opt => opt.MapFrom(s => Percentage.ToPercent(s.NETFOBP)))
+			  .ForPath(d => d.NETFOBP, opt => opt.MapFrom(s => s.NETFOBP))
               .ForPath(d => d.Index, opt => opt.MapFrom(s =>s.Index))
 
+              .ForPath(d => d.ApprovalMD.IsApproved, opt => opt.MapFrom(s => s.IsApprovedMD))
+              .ForPath(d => d.ApprovalMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMDBy))
+              .ForPath(d => d.ApprovalMD.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedMDDate))
+
+              .ForPath(d => d.ApprovalPurchasing.IsApproved, opt => opt.MapFrom(s => s.IsApprovedPurchasing))
+              .ForPath(d => d.ApprovalPurchasing.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedPurchasingBy))
+              .ForPath(d => d.ApprovalPurchasing.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedPurchasingDate))
+
+              .ForPath(d => d.ApprovalIE.IsApproved, opt => opt.MapFrom(s => s.IsApprovedIE))
+              .ForPath(d => d.ApprovalIE.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedIEBy))
+              .ForPath(d => d.ApprovalIE.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedIEDate))
+
+              .ForPath(d => d.ApprovalKadivMD.IsApproved, opt => opt.MapFrom(s => s.IsApprovedKadivMD))
+              .ForPath(d => d.ApprovalKadivMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedKadivMDBy))
+              .ForPath(d => d.ApprovalKadivMD.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedKadivMDDate))
+
+              .ForPath(d => d.ApprovalPPIC.IsApproved, opt => opt.MapFrom(s => s.IsApprovedPPIC))
+              .ForPath(d => d.ApprovalPPIC.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedPPICBy))
+              .ForPath(d => d.ApprovalPPIC.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedPPICDate))
 
               .ReverseMap();
 		}

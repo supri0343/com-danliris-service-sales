@@ -3,7 +3,6 @@ using Com.Danliris.Service.Sales.Lib.Models.Weaving;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Moonlay.Data.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using Com.Danliris.Service.Sales.Lib.Models.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
@@ -13,6 +12,14 @@ using Com.Danliris.Service.Sales.Lib.Models;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentMasterPlan.WeeklyPlanModels;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentSewingBlockingPlanModel;
+using Com.Danliris.Service.Sales.Lib.Models.GarmentMasterPlan.MaxWHConfirmModel;
+using Com.Danliris.Service.Sales.Lib.Models.GarmentPreSalesContractModel;
+using Com.Danliris.Service.Sales.Lib.Models.GarmentOmzetTargetModel;
+using Com.Danliris.Service.Sales.Lib.Models.SalesInvoice;
+using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
+using Com.Danliris.Service.Sales.Lib.Models.DOSales;
+using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
+using Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport;
 
 namespace Com.Danliris.Service.Sales.Lib
 {
@@ -53,6 +60,33 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<GarmentSewingBlockingPlan> GarmentSewingBlockingPlans { get; set; }
         public DbSet<GarmentSewingBlockingPlanItem> GarmentSewingBlockingPlanItems { get; set; }
 
+        public DbSet<MaxWHConfirm> MaxWHConfirms { get; set; }
+        public DbSet<GarmentPreSalesContract> GarmentPreSalesContracts { get; set; }
+        public DbSet<CostCalculationGarmentUnpostReason> CostCalculationGarmentUnpostReasons { get; set; }
+        public DbSet<GarmentOmzetTarget> GarmentOmzetTargets { get; set; }
+        public DbSet<FinishingPrintingPreSalesContractModel> FinishingPrintingPreSalesContracts { get; set; }
+
+        public DbSet<FinishingPrintingCostCalculationModel> FinishingPrintingCostCalculations { get; set; }
+        public DbSet<FinishingPrintingCostCalculationMachineModel> FinishingPrintingCostCalculationMachines { get; set; }
+        public DbSet<FinishingPrintingCostCalculationChemicalModel> FinishingPrintingCostCalculationChemicals { get; set; }
+
+        public DbSet<DOSalesModel> DOSales { get; set; }
+        public DbSet<DOSalesDetailModel> DOSalesLocalItems { get; set; }
+
+        public DbSet<SalesInvoiceModel> SalesInvoices { get; set; }
+        public DbSet<SalesInvoiceDetailModel> SalesInvoiceDetails { get; set; }
+        public DbSet<SalesInvoiceItemModel> SalesInvoiceItems { get; set; }
+
+        public DbSet<SalesInvoiceExportModel> SalesInvoiceExports { get; set; }
+        public DbSet<SalesInvoiceExportDetailModel> SalesInvoiceExportDetails { get; set; }
+        public DbSet<SalesInvoiceExportItemModel> SalesInvoiceExportItems { get; set; }
+
+        public DbSet<DOReturnModel> DOReturns { get; set; }
+        public DbSet<DOReturnDetailModel> DOReturnDetails { get; set; }
+        public DbSet<DOReturnDetailItemModel> DOReturnDetailItems { get; set; }
+        public DbSet<DOReturnItemModel> DOReturnItems { get; set; }
+
+        public DbSet<DeliveryNoteProductionModel> DeliveryNoteProduction { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,10 +99,35 @@ namespace Com.Danliris.Service.Sales.Lib
 
             modelBuilder.Entity<FinishingPrintingSalesContractModel>()
                 .HasIndex(h => h.SalesContractNo)
-                .IsUnique();
+                .IsUnique()
+                .HasFilter("[IsDeleted]=(0)");
+
+            modelBuilder.Entity<FinishingPrintingCostCalculationModel>()
+               .Ignore(c => c.ImageFile);
+
+            modelBuilder.Entity<CostCalculationGarment>()
+                .Ignore(c => c.ImageFile);
 
             modelBuilder.Entity<RO_Garment>()
-            .Ignore(c => c.ImagesFile);
+                .Ignore(c => c.ImagesFile);
+
+            modelBuilder.Entity<RO_Garment>()
+                .Ignore(c => c.DocumentsFile);
+
+            modelBuilder.Entity<GarmentPreSalesContract>()
+                .HasIndex(i => i.SCNo)
+                .IsUnique()
+                .HasFilter("[IsDeleted]=(0)");
+
+            modelBuilder.Entity<CostCalculationGarment>()
+                .HasIndex(i => i.RO_Number)
+                .IsUnique()
+                .HasFilter("[IsDeleted]=(0)");
+
+            modelBuilder.Entity<GarmentSalesContract>()
+                .HasIndex(i => i.SalesContractNo)
+                .IsUnique()
+                .HasFilter("[IsDeleted]=(0)");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder;
+using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report;
 using Com.Danliris.Service.Sales.WebApi.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -19,22 +20,29 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         private string ApiVersion = "1.0.0";
         private readonly IProductionOrder _facade;
         //private readonly IdentityService identityService;
-        public ProductionOrderReportController(IProductionOrder facade)//, IdentityService identityService)
+        private readonly IIdentityService _identityService;
+        public ProductionOrderReportController(IProductionOrder facade, IIdentityService identityService)
         {
             _facade = facade;
-            //this.identityService = identityService;
+            _identityService = identityService;
+        }
+        private void VerifyUser()
+        {
+            _identityService.Username = User.Claims.ToArray().SingleOrDefault(p => p.Type.Equals("username")).Value;
+            _identityService.Token = Request.Headers["Authorization"].FirstOrDefault().Replace("Bearer ", "");
+            _identityService.TimezoneOffset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
         }
 
         [HttpGet]
-        public IActionResult GetReportAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order = "{}")
+        public async Task<IActionResult> GetReportAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order = "{}")
         {
             int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
             string accept = Request.Headers["Accept"];
-
+            
             try
             {
-
-                var data = _facade.GetReport(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, page, size, Order, offset);
+                VerifyUser();
+                var data = await _facade.GetReport(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, page, size, Order, offset);
 
                 return Ok(new
                 {
@@ -55,17 +63,18 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("download")]
-        public IActionResult GetXlsAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo)
+        public async Task<IActionResult> GetXlsAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo)
         {
 
             try
             {
+                VerifyUser();
                 byte[] xlsInBytes;
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
                 DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
                 DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
 
-                var xls = _facade.GenerateExcel(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+                var xls = await _facade.GenerateExcel(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
 
                 string filename = String.Format("Monitoring Surat Order Produksi - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
 
@@ -84,11 +93,12 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("detail/{no}")]
-        public IActionResult GetDetail([FromRoute] long no)
+        public async Task<IActionResult> GetDetail([FromRoute] long no)
         {
             try
             {
-                ProductionOrderReportDetailViewModel model = _facade.GetDetailReport(no);
+                VerifyUser();
+                ProductionOrderReportDetailViewModel model = await _facade.GetDetailReport(no);
                 return Ok(new
                 {
                     apiVersion = ApiVersion,

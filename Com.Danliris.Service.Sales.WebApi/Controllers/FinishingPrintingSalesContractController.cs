@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.PDFTemplates;
@@ -9,13 +8,12 @@ using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.WebApi.Controllers
@@ -27,8 +25,10 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
     public class FinishingPrintingSalesContractController : BaseController<FinishingPrintingSalesContractModel, FinishingPrintingSalesContractViewModel, IFinishingPrintingSalesContract>
     {
         private readonly static string apiVersion = "1.0";
-        public FinishingPrintingSalesContractController(IIdentityService identityService, IValidateService validateService, IFinishingPrintingSalesContract facade, IMapper mapper) : base(identityService, validateService, facade, mapper, apiVersion)
+        private readonly IHttpClientService HttpClientService;
+        public FinishingPrintingSalesContractController(IIdentityService identityService, IValidateService validateService, IFinishingPrintingSalesContract facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
         {
+            HttpClientService = serviceProvider.GetService<IHttpClientService>();
         }
 
         [HttpGet("pdf/{Id}")]
@@ -56,49 +56,68 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 {
                     string BuyerUri = "master/buyers";
                     string BankUri = "master/account-banks";
-                    string CurrenciesUri = "master/currencies";
+                    //string CurrenciesUri = "master/currencies";
                     string Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
-
-                    HttpClient httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 
                     FinishingPrintingSalesContractViewModel viewModel = Mapper.Map<FinishingPrintingSalesContractViewModel>(model);
 
                     /* Get Buyer */
-                    var response = httpClient.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.Buyer.Id).Result.Content.ReadAsStringAsync();
+                    var response = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.Buyer.Id).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
-                    var json = result.Single(p => p.Key.Equals("data")).Value;
-                    Dictionary<string, object> buyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(json.ToString());
+                    object json;
+                    if (result.TryGetValue("data", out json))
+                    {
+                        Dictionary<string, object> buyer = JsonConvert.DeserializeObject<Dictionary<string, object>>(json.ToString());
+                        viewModel.Buyer.City = buyer.TryGetValue("City", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.Address = buyer.TryGetValue("Address", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.Contact = buyer.TryGetValue("Contact", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
+                    }
+
+                    /* Get Agent */
+                    var responseAgent = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BuyerUri}/" + viewModel.Agent.Id).Result.Content.ReadAsStringAsync();
+                    Dictionary<string, object> resultAgent = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseAgent.Result);
+                    object jsonAgent;
+                    if (resultAgent.TryGetValue("data", out jsonAgent))
+                    {
+                        Dictionary<string, object> agent = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonAgent.ToString());
+                        viewModel.Agent.City = agent.TryGetValue("City", out jsonAgent) ? (jsonAgent != null ? jsonAgent.ToString() : "") : "";
+                        viewModel.Agent.Address = agent.TryGetValue("Address", out jsonAgent) ? (jsonAgent != null ? jsonAgent.ToString() : "") : "";
+                        viewModel.Agent.Contact = agent.TryGetValue("Contact", out jsonAgent) ? (jsonAgent != null ? jsonAgent.ToString() : "") : "";
+                        viewModel.Agent.Country = agent.TryGetValue("Country", out jsonAgent) ? (jsonAgent != null ? jsonAgent.ToString() : "") : "";
+                    }
 
                     /* Get AccountBank */
-                    var responseBank = httpClient.GetAsync($@"{APIEndpoint.Core}{BankUri}/" + viewModel.AccountBank.Id).Result.Content.ReadAsStringAsync();
+                    var responseBank = HttpClientService.GetAsync($@"{APIEndpoint.Core}{BankUri}/" + viewModel.AccountBank.Id).Result.Content.ReadAsStringAsync();
                     Dictionary<string, object> resultBank = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBank.Result);
-                    var jsonBank = resultBank.Single(p => p.Key.Equals("data")).Value;
-                    Dictionary<string, object> bank = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBank.ToString());
+                    object jsonBank;
+                    if (resultBank.TryGetValue("data", out jsonBank))
+                    {
+                        Dictionary<string, object> bank = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonBank.ToString());
+                        var currencyBankObj = new CurrencyViewModel();
+                        object objResult = new object();
+                        if (bank.TryGetValue("Currency", out objResult))
+                        {
+                            currencyBankObj = JsonConvert.DeserializeObject<CurrencyViewModel>(objResult.ToString());
+                        }
+                        viewModel.AccountBank.BankAddress = bank.TryGetValue("BankAddress", out objResult) ? (objResult != null ? objResult.ToString() : "") : "";
+                        viewModel.AccountBank.SwiftCode = bank.TryGetValue("SwiftCode", out objResult) ? (objResult != null ? objResult.ToString() : "") : "";
+
+                        viewModel.AccountBank.Currency = new CurrencyViewModel();
+                        viewModel.AccountBank.Currency.Description = currencyBankObj.Description;
+                        viewModel.AccountBank.Currency.Symbol = currencyBankObj.Symbol;
+                        viewModel.AccountBank.Currency.Rate = currencyBankObj.Rate;
+                        viewModel.AccountBank.Currency.Code = currencyBankObj.Code;
+
+                    }
 
                     /* Get Currencies */
-                    var responseCurrencies = httpClient.GetAsync($@"{APIEndpoint.Core}{CurrenciesUri}/" + viewModel.AccountBank.Id).Result.Content.ReadAsStringAsync();
-                    Dictionary<string, object> resultCurrencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseCurrencies.Result);
-                    var jsonCurrencies = resultCurrencies.Single(p => p.Key.Equals("data")).Value;
-                    Dictionary<string, object> currencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonCurrencies.ToString());
-
-
-                    viewModel.Buyer.City = buyer["City"] != null ? buyer["City"].ToString() : "";
-                    viewModel.Buyer.Address = buyer["Address"] != null ? buyer["Address"].ToString() : "";
-                    viewModel.Buyer.Contact = buyer["Contact"] != null ? buyer["Contact"].ToString() : "";
-                    viewModel.Buyer.Country = buyer["Country"] != null ? buyer["Country"].ToString() : "";
-
-                    viewModel.AccountBank.BankAddress = bank["BankAddress"].ToString();
-                    viewModel.AccountBank.SwiftCode = bank["SwiftCode"].ToString();
-
-                    viewModel.AccountBank.Currency = new CurrencyViewModel();
-                    viewModel.AccountBank.Currency.Description = currencies["Description"] != null ? currencies["Description"].ToString() : "";
-                    viewModel.AccountBank.Currency.Symbol = currencies["Symbol"].ToString();
-                    viewModel.AccountBank.Currency.Rate = Convert.ToDouble(currencies["Rate"].ToString());
-                    viewModel.AccountBank.Currency.Code = currencies["Code"].ToString();
-
-
+                    //var responseCurrencies = httpClient.GetAsync($@"{APIEndpoint.Core}{CurrenciesUri}/" + viewModel.AccountBank.Currency.Id).Result.Content.ReadAsStringAsync();
+                    //Dictionary<string, object> resultCurrencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseCurrencies.Result);
+                    //var jsonCurrencies = resultCurrencies.Single(p => p.Key.Equals("data")).Value;
+                    //Dictionary<string, object> currencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonCurrencies.ToString());
+                    
                     if (viewModel.Buyer.Type != "Ekspor")
                     {
                         FinishingPrintingSalesContractPDFTemplate PdfTemplate = new FinishingPrintingSalesContractPDFTemplate();

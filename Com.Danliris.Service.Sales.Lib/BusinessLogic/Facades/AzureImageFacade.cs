@@ -1,4 +1,5 @@
-﻿using Com.Danliris.Service.Sales.Lib.Helpers;
+﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
+using Com.Danliris.Service.Sales.Lib.Helpers;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades
 {
-    public class AzureImageFacade : AzureStorageFacade
+    public class AzureImageFacade : AzureStorageFacade, IAzureImageFacade
 	{
 		public AzureImageFacade(IServiceProvider serviceProvider) : base(serviceProvider)
 		{

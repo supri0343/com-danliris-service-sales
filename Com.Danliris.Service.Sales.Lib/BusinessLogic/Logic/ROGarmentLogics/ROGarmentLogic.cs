@@ -38,7 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             List<string> SelectedFields = new List<string>()
             {
-                  "Id", "Code", "CostCalculationGarment", "Total"
+                  "Id", "Code", "CostCalculationGarment", "Total", "IsPosted"
             };
 
             Query = Query.Join(DbContext.CostCalculationGarments, ro=>ro.CostCalculationGarmentId, ccg=>ccg.Id, (ro,ccg)=>
@@ -52,10 +52,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
                          Code = ccg.Code,
                          RO_Number = ccg.RO_Number,
                          Article = ccg.Article,
+                         BuyerCode = ccg.BuyerCode,
+                         BuyerName = ccg.BuyerName,
+                         BuyerBrandCode = ccg.BuyerBrandCode,
+                         BuyerBrandName = ccg.BuyerBrandName,
+                         ValidationMDDate = ccg.ValidationMDDate,
+                         ValidationSampleDate = ccg.ValidationSampleDate,
                          UnitCode = ccg.UnitCode,
-                         UnitName = ccg.UnitName
+                         UnitName = ccg.UnitName,
+                         Quantity = ccg.Quantity,
+                         UOMUnit = ccg.UOMUnit,
+                         IsValidatedROPPIC = ccg.IsValidatedROPPIC,
+                         IsValidatedROSample = ccg.IsValidatedROSample,
+                         IsValidatedROMD = ccg.IsValidatedROMD
                      },
                      Total = ro.Total,
+                     IsPosted = ro.IsPosted,
                      LastModifiedUtc = ro.LastModifiedUtc
                  });
 
@@ -155,6 +167,39 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
+        }
+
+        internal void PostRO(List<long> listId)
+        {
+            var models = DbSet.Where(w => listId.Contains(w.Id));
+            foreach (var model in models)
+            {
+                model.IsPosted = true;
+                EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
+            }
+        }
+
+        internal void UnpostRO(long id)
+        {
+            var model = DbSet.Single(m => m.Id == id);
+            model.IsPosted = false;
+            EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
+
+            var cc = DbContext.CostCalculationGarments.Single(m => m.Id == model.CostCalculationGarmentId);
+
+            cc.IsValidatedROPPIC = false;
+            cc.ValidationPPICBy = null;
+            cc.ValidationPPICDate = DateTimeOffset.MinValue;
+
+            cc.IsValidatedROSample = false;
+            cc.ValidationSampleBy = null;
+            cc.ValidationSampleDate = DateTimeOffset.MinValue;
+
+            cc.IsValidatedROMD = false;
+            cc.ValidationMDBy = null;
+            cc.ValidationMDDate = DateTimeOffset.MinValue;
+
+            EntityExtension.FlagForUpdate(cc, IdentityService.Username, "sales-service");
         }
     }
 }

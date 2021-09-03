@@ -13,4 +13,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
         public string machine { get; set; }
         public string step { get; set; }
     }
+
+    public class DailyAPiResult
+    {
+        public string apiVersion { get; set; }
+        public List<DailyOperationViewModel> data { get; set; }
+        public object info { get; set; }
+        public string message { get; set; }
+        public string statusCode { get; set; }
+    }
 }
