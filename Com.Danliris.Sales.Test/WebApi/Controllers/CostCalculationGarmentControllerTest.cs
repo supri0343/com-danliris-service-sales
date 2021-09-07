@@ -964,5 +964,66 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             int statusCode = GetStatusCode(response);
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
+
+
+        [Fact]
+        public async Task GetByRO_NotNullModel_ReturnOK()
+        {
+            var ViewModel = this.ViewModel;
+            ViewModel.CostCalculationGarment_Materials = new List<CostCalculationGarment_MaterialViewModel>();
+
+            var mocks = GetMocks();
+            mocks.Facade
+                .Setup(f => f.ReadByRO(It.IsAny<string>()))
+                .ReturnsAsync(Model);
+            mocks.Facade
+                .Setup(f => f.GetProductNames(It.IsAny<List<long>>()))
+                .ReturnsAsync(new Dictionary<long, string>());
+            mocks.Mapper
+                .Setup(m => m.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>()))
+                .Returns(ViewModel);
+
+            var controller = GetController(mocks);
+            var response = await controller.GetByRO(It.IsAny<string>());
+
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+        }
+
+        [Fact]
+        public async Task GetByRO_NullModel_ReturnNotFound()
+        {
+            var mocks = GetMocks();
+            mocks.Mapper.Setup(f => f.Map<CostCalculationGarmentViewModel>(It.IsAny<CostCalculationGarment>())).Returns(ViewModel);
+            mocks.Facade.Setup(f => f.ReadByRO(It.IsAny<string>())).ReturnsAsync((CostCalculationGarment)null);
+
+            var controller = GetController(mocks);
+            var response = await controller.GetByRO(It.IsAny<string>());
+
+            Assert.Equal((int)HttpStatusCode.NotFound, GetStatusCode(response));
+        }
+
+        [Fact]
+        public async Task GetByRO_ThrowException_ReturnInternalServerError()
+        {
+            var mocks = this.GetMocks();
+            mocks.Facade.Setup(f => f.ReadByRO(It.IsAny<string>())).ThrowsAsync(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetByRO(It.IsAny<string>());
+
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
+        }
+
+        [Fact]
+        public async Task GetByRO_BadRequest()
+        {
+            var mocks = this.GetMocks();
+
+            var controller = GetController(mocks);
+            controller.ModelState.AddModelError("key", "value");
+            var response = await controller.GetByRO(It.IsAny<string>());
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, GetStatusCode(response));
+        }
     }
 }
