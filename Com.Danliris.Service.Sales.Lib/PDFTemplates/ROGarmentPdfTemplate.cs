@@ -81,16 +81,16 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.RO_Number}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("SECTION", normal_font);
+            cell_top.Phrase = new Phrase("DATE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Section}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.ConfirmDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("CREATED DATE", normal_font);
+            cell_top.Phrase = new Phrase("DELIVERY DATE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.ConfirmDate.AddHours(offset).ToString("dd MMMM yyyy")}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.DeliveryDate.AddHours(offset).ToString("dd MMMM yyyy")}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("ARTIKEL", normal_font);
@@ -99,22 +99,22 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Article}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("BUYER", normal_font);
+            cell_top.Phrase = new Phrase("AGENT", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Buyer.Name}", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("BRAND", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.BuyerBrand.Name}", normal_font);
             table_top.AddCell(cell_top);
 
-            cell_top.Phrase = new Phrase("DELIVERY DATE", normal_font);
-            table_top.AddCell(cell_top);
-            table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.DeliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMMM yyyy")}", normal_font);
-            table_top.AddCell(cell_top);
-
             cell_top.Phrase = new Phrase("KONVEKSI", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Unit.Code}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Unit.Code + "      SEKSI   :   " + viewModel.CostCalculationGarment.Section}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("QUANTITY", normal_font);
