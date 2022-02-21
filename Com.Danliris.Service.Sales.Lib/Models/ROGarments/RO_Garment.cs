@@ -25,9 +25,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ROGarments
         public string ImagesPath { get; set; }
         [MaxLength(1000)]
         public string DocumentsPath { get; set; }
-        [MaxLength(255)]
+        [MaxLength(1000)]
         public string ImagesName { get; set; }
-        [MaxLength(255)]
+        [MaxLength(4000)]
         public string DocumentsFileName { get; set; }
 
         public bool IsPosted { get; set; }
