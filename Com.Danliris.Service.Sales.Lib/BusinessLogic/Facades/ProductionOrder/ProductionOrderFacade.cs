@@ -704,43 +704,51 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
                         };
             var fabricQuality = await GetFabricQualityItems(orderNo);
-            var dailyOP = await GetDailyOperationItems(orderNo);
+            //var dailyOP = await GetDailyOperationItems(orderNo); //data is not input in production
             //List<DailyOperationViewModel> dailies = new List<DailyOperationViewModel>();
 
 
             List<ProductionOrderReportViewModel> query = new List<ProductionOrderReportViewModel>();
             foreach (var data in Query)
             {
+                //data is not input in production
+                //double detailProd = 0;
+                //double detailPrep = 0;
+                //foreach (var daily in dailyOP)
+                //{
+                //    if (daily.orderNo == data.orderNo)
+                //        detailProd += daily.orderQuantity;
+
+                //}
+                //foreach (var prep in fabricQuality)
+                //{
+                //    if (prep.orderNo == data.orderNo)
+                //        detailPrep += prep.orderQuantity;
+
+                //}
+                //data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
+                //if (detailPrep > 0)
+                //{
+                //    data.status = "Sudah dalam pemeriksaan kain";
+                //}
+                //else if (detailProd == 0)
+                //{
+                //    data.status = "Belum dalam Produksi";
+                //}
+                //else
+                //{
+                //    data.status = "Sudah dalam Produksi";
+                //}
 
                 double detailProd = 0;
                 double detailPrep = 0;
-                foreach (var daily in dailyOP)
-                {
-                    if (daily.orderNo == data.orderNo)
-                        detailProd += daily.orderQuantity;
 
-                }
-                foreach (var prep in fabricQuality)
-                {
-                    if (prep.orderNo == data.orderNo)
-                        detailPrep += prep.orderQuantity;
-
-                }
                 data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
-                if (detailPrep > 0)
-                {
-                    data.status = "Sudah dalam pemeriksaan kain";
-                }
-                else if (detailProd == 0)
-                {
-                    data.status = "Belum dalam Produksi";
-                }
-                else
-                {
-                    data.status = "Sudah dalam Produksi";
-                }
+                data.status = "Belum dalam Produksi";
+
                 query.Add(data);
             }
+
 
             return Query = query.AsQueryable();
         }

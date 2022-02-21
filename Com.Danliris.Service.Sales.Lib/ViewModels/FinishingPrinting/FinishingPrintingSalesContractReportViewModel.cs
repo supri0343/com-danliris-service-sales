@@ -31,5 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public string color { get; set; }
         public string useIncomeTax { get; set; }
         public string status { get; set; }
+        public string sppOrderNo { get; set; }
+        public DateTimeOffset? sppDate { get; set; }
     }
 }
