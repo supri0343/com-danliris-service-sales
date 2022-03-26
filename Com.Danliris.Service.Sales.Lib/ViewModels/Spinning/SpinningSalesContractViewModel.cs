@@ -50,6 +50,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Spinning
         public TermOfPaymentViewModel TermOfPayment { get; set; }
         public AccountBankViewModel AccountBank { get; set; }
         public AgentViewModel Agent { get; set; }
+        public VatTaxViewModel VatTax { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
