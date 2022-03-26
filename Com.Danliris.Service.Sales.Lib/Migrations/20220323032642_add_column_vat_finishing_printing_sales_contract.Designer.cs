@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220323032642_add_column_vat_finishing_printing_sales_contract")]
+    partial class add_column_vat_finishing_printing_sales_contract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4309,10 +4311,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("UomUnit")
                         .HasMaxLength(255);
 
-                    b.Property<string>("VatId");
-
-                    b.Property<double>("VatRate");
-
                     b.HasKey("Id");
 
                     b.ToTable("SpinningSalesContract");
@@ -4509,10 +4507,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("UomUnit")
                         .HasMaxLength(255);
-
-                    b.Property<string>("VatId");
-
-                    b.Property<double>("VatRate");
 
                     b.Property<string>("YarnMaterialCode")
                         .HasMaxLength(255);

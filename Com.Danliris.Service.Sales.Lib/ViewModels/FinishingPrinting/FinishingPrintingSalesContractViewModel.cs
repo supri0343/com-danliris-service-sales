@@ -41,6 +41,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public string TermOfShipment { get; set; }
         public string TransportFee { get; set; }
         public bool? UseIncomeTax { get; set; }
+        public VatTaxViewModel VatTax { get; set; }
         public UomViewModel UOM { get; set; }
         public YarnMaterialViewModel YarnMaterial { get; set; }
         public double? RemainingQuantity { get; set; }
