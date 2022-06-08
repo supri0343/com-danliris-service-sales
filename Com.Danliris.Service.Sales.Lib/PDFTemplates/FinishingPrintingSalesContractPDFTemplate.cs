@@ -48,7 +48,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 {
                     if (i.UseIncomeTax)
                     {
-                        ppn = "INCLUDING PPN 10%";
+                        ppn = $"INCLUDING PPN {viewModel.VatTax.Rate}%";
                     }
                     else
                     {
