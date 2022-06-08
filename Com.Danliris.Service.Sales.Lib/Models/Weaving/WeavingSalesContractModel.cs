@@ -48,6 +48,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.Weaving
         public string BuyerName { get; set; }
         [MaxLength(255)]
         public string BuyerType { get; set; }
+        public string BuyerJob { get; set; }
 
         /*Product material*/
         public long ProductId { get; set; }
@@ -125,5 +126,32 @@ namespace Com.Danliris.Service.Sales.Lib.Models.Weaving
         [MaxLength(255)]
         public string AgentCode { get; set; }
 
+        /* Vat*/
+        public string VatId { get; set; }
+        public double VatRate { get; set; }
+
+        /*ProductType */
+        public int ProductTypeId { get; set; }
+        [MaxLength(25)]
+        public string ProductTypeCode { get; set; }
+        [MaxLength(255)]
+        public string ProductTypeName { get; set; }
+
+        /* Material */
+        public int MaterialID { get; set; }
+        [MaxLength(25)]
+        public string MaterialCode { get; set; }
+        [MaxLength(255)]
+        public string MaterialName { get; set; }
+        public double MaterialPrice { get; set; }
+
+        [MaxLength(255)]
+        public string MaterialTags { get; set; }
+
+        public string DownPayments { get; set; }
+        public double PriceDP { get; set; }
+        public double precentageDP { get; set; }
+        public string PaymentMethods { get; set; }
+        public int Day { get; set; }
     }
 }

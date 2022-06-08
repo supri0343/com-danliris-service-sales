@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220605095047_Add_DownPayment_PaymentMethod_WV")]
+    partial class Add_DownPayment_PaymentMethod_WV
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4246,8 +4248,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
-                    b.Property<int>("Day");
-
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -4266,8 +4266,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("DispositionNumber")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DownPayments");
-
                     b.Property<bool>("FromStock");
 
                     b.Property<string>("IncomeTax")
@@ -4285,48 +4283,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("MaterialCode")
-                        .HasMaxLength(25);
-
-                    b.Property<string>("MaterialConstructionCode")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("MaterialConstructionId");
-
-                    b.Property<string>("MaterialConstructionName")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("MaterialID");
-
-                    b.Property<string>("MaterialName")
-                        .HasMaxLength(255);
-
-                    b.Property<double>("MaterialPrice");
-
-                    b.Property<string>("MaterialTags")
-                        .HasMaxLength(255);
-
                     b.Property<double>("OrderQuantity");
 
                     b.Property<string>("Packing")
                         .HasMaxLength(1000);
 
-                    b.Property<string>("PaymentMethods");
-
                     b.Property<string>("PieceLength")
                         .HasMaxLength(1000);
 
                     b.Property<double>("Price");
-
-                    b.Property<double>("PriceDP");
-
-                    b.Property<string>("ProductTypeCode")
-                        .HasMaxLength(25);
-
-                    b.Property<int>("ProductTypeId");
-
-                    b.Property<string>("ProductTypeName")
-                        .HasMaxLength(255);
 
                     b.Property<string>("QualityCode")
                         .HasMaxLength(255);
@@ -4370,8 +4335,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("VatId");
 
                     b.Property<double>("VatRate");
-
-                    b.Property<double>("precentageDP");
 
                     b.HasKey("Id");
 
