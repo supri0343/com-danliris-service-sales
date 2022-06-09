@@ -55,14 +55,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Weaving
         public TermOfPaymentViewModel TermOfPayment { get; set; }
         public AccountBankViewModel AccountBank { get; set; }
         public AgentViewModel Agent { get; set; }
-        public VatTaxViewModel VatTax { get; set; }
-        public ProductTypeViewModel ProductType { get; set; }
-        public MaterialViewModel Material { get; set; }
-        public string DownPayments { get; set; }
-        public double? PriceDP { get; set; }
-        public double? precentageDP { get; set; }
-        public string PaymentMethods { get; set; }
-        public int? Day { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
