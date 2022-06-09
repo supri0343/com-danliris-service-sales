@@ -48,7 +48,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             string QuantityToText = NumberToTextIDN.terbilang(viewModel.OrderQuantity);
 
-            var tax = viewModel.IncomeTax == "Include PPn" ? "Include PPn 10%" : viewModel.IncomeTax;
+            var tax = viewModel.IncomeTax == "Include PPn" ? $"Include PPn {viewModel.VatTax.Rate}%" : viewModel.IncomeTax;
 
             var appxLocal = "";
             var date = viewModel.DeliverySchedule.Value.Day;

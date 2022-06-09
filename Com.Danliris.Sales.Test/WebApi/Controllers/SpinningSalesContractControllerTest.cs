@@ -66,7 +66,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 {
                     Id = 1,
                     Type = "Lokal",
-                    Country = "a"
+                    Country = "a",
+                    NIK = "a",
+                    Job = "a"
                 },
                 AccountBank = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AccountBankViewModel
                 {
@@ -99,7 +101,24 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                     Country = "a"
                 },
                 DeliverySchedule = DateTimeOffset.UtcNow,
-                ComodityDescription = "a"
+                ComodityDescription = "a",
+                Material = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialViewModel()
+                {
+                    Name = "a"
+                },
+                MaterialConstruction = new Service.Sales.Lib.ViewModels.IntegrationViewModel.MaterialConstructionViewModel()
+                {
+                    Name = "a"
+                },
+                ProductType = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductTypeViewModel()
+                {
+                    Name = "a"
+                },
+                PaymentMethods = "payment",
+                DownPayments = "DP",
+                Day = 1,
+                PriceDP = 1,
+                precentageDP = 1,
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);
