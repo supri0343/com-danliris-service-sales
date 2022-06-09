@@ -66,6 +66,10 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.WeavingProfiles
                 .ForPath(d => d.Agent.Id, opt => opt.MapFrom(s => s.AgentId))
                 .ForPath(d => d.Agent.Code, opt => opt.MapFrom(s => s.AgentCode))
                 .ForPath(d => d.Agent.Name, opt => opt.MapFrom(s => s.AgentName))
+
+                .ForPath(d => d.VatTax.Id, opt => opt.MapFrom(s => s.VatId))
+                .ForPath(d => d.VatTax.Rate, opt => opt.MapFrom(s => s.VatRate))
+
                 .ReverseMap();
         }
     }

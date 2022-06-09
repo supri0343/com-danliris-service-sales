@@ -125,5 +125,9 @@ namespace Com.Danliris.Service.Sales.Lib.Models.Weaving
         [MaxLength(255)]
         public string AgentCode { get; set; }
 
+        /* Vat*/
+        public string VatId { get; set; }
+        public double VatRate { get; set; }
+
     }
 }
