@@ -94,40 +94,5 @@ namespace Com.Danliris.Service.Sales.Lib.Models.Spinning
         public string AgentCode { get; set; }
         [MaxLength(255)]
         public string UomUnit { get; set; }
-
-        /*Vat*/
-        public string VatId { get; set; }
-        public double VatRate { get; set; }
-
-        /*ProductType */
-        public int ProductTypeId { get; set; }
-        [MaxLength(25)]
-        public string ProductTypeCode { get; set; }
-        [MaxLength(255)]
-        public string ProductTypeName { get; set; }
-
-        /* Material */
-        public int MaterialID { get; set; }
-        [MaxLength(25)]
-        public string MaterialCode { get; set; }
-        [MaxLength(255)]
-        public string MaterialName { get; set; }
-        public double MaterialPrice { get; set; }
-
-        [MaxLength(255)]
-        public string MaterialTags { get; set; }
-
-        /* Material Construction */
-        public int MaterialConstructionId { get; set; }
-        [MaxLength(25)]
-        public string MaterialConstructionCode { get; set; }
-        [MaxLength(255)]
-        public string MaterialConstructionName { get; set; }
-
-        public string DownPayments { get; set; }
-        public double PriceDP { get; set; }
-        public double precentageDP { get; set; }
-        public string PaymentMethods { get; set; }
-        public int Day { get; set; }
     }
 }
