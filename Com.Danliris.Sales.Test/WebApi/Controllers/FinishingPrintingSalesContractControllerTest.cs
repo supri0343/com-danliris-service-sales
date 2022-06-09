@@ -43,7 +43,9 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 Buyer = new Service.Sales.Lib.ViewModels.IntegrationViewModel.BuyerViewModel
                 {
                     Id = 1,
-                    Type = "Lokal"
+                    Type = "Lokal",
+                    NIK = "nik",
+                    Job = "job"
                 },
                 AccountBank = new Service.Sales.Lib.ViewModels.IntegrationViewModel.AccountBankViewModel
                 {
@@ -91,8 +93,16 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
                 OrderType = new Service.Sales.Lib.ViewModels.IntegrationViewModel.OrderTypeViewModel()
                 {
                     Name="SOLID"
-                }
-                
+                },
+                ProductType = new Service.Sales.Lib.ViewModels.IntegrationViewModel.ProductTypeViewModel()
+                {
+                    Name="Printing"
+                },
+                PaymentMethods = "payment",
+                DownPayments = "DP",
+                Day = 1,
+                PriceDP = 1,
+                precentageDP = 1,
             };
 
             mocks.Facade.Setup(x => x.ReadByIdAsync(It.IsAny<int>())).ReturnsAsync(Model);

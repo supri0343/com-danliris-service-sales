@@ -36,7 +36,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.FinisihingPrintingSale
                         ScreenCost = 1
                     }
                 },
-                BuyerType = "type"
+                BuyerType = "type",
+                BuyerJob = "job",
+                ProductTypeName = "name"
             });
 
         }

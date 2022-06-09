@@ -38,7 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Buyer", "DeliverySchedule","OrderType","Commodity","SalesContractNo","YarnMaterial","PieceLength","OrderQuantity","LastModifiedUtc","Material","MaterialConstruction","DesignMotive","MaterialWidth", "Details"
+                "Id", "Code", "Buyer", "DeliverySchedule","OrderType","Commodity","SalesContractNo","YarnMaterial","PieceLength","OrderQuantity","LastModifiedUtc","Material","MaterialConstruction","DesignMotive","MaterialWidth", "Details", "ProductType"
             };
 
             Query = Query
@@ -51,6 +51,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     BuyerType = field.BuyerType,
                     BuyerName = field.BuyerName,
                     BuyerID = field.BuyerID,
+                    BuyerJob = field.BuyerJob,
                     CommodityID = field.CommodityID,
                     CommodityCode = field.CommodityCode,
                     CommodityName = field.CommodityName,
@@ -74,7 +75,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.FinishingPrinting
                     YarnMaterialName = field.YarnMaterialName,
                     MaterialWidth = field.MaterialWidth,
                     LastModifiedUtc = field.LastModifiedUtc,
-                    Details = field.Details
+                    Details = field.Details,
+                    ProductTypeId = field.ProductTypeId,
+                    ProductTypeCode = field.ProductTypeCode,
+                    ProductTypeName = field.ProductTypeName,
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
