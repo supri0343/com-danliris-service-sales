@@ -30,7 +30,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             var ppn = viewModel.IncomeTax;
             if (ppn == "Include PPn")
             {
-                ppn = $"Include PPn {viewModel.VatTax.Rate}%";
+                ppn = "Include PPn 10%";
             }
             var uomLocal = "";
             if (viewModel.UomUnit.ToLower() == "yds")
