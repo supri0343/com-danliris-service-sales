@@ -47,6 +47,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.Spinning
         [MaxLength(255)]
         public string BuyerType { get; set; }
 
+        public string BuyerJob { get; set; }
 
         /*Comodity*/
         public long ComodityId { get; set; }
