@@ -70,6 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         public string BuyerName { get; set; }
         [MaxLength(255)]
         public string BuyerType { get; set; }
+        public string BuyerJob { get; set; }
         #endregion
         [MaxLength(25)]
         public string Code { get; set; }
@@ -174,6 +175,23 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         [MaxLength(255)]
         public string YarnMaterialName { get; set; }
         #endregion
+
+        #region Product Type
+        public int ProductTypeId { get; set; }
+        [MaxLength(25)]
+        public string ProductTypeCode { get; set; }
+        [MaxLength(255)]
+        public string ProductTypeName { get; set; }
+        #endregion
+
+        public string DownPayments { get; set; }
+        public double PriceDP { get; set; }
+        public double precentageDP { get; set; }
+        public string PaymentMethods { get; set; }
+        public int Day { get; set; }
+        public int LatePayment { get; set; }
+        public int LateReturn { get; set; }
+        public double? Claim { get; set; }
         public virtual ICollection<FinishingPrintingSalesContractDetailModel> Details { get; set; }
     }
 }
