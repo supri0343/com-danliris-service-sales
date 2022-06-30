@@ -205,7 +205,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Material/Konstruksi", bold_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.ProductType.Name, normal_font);
+            cellOrder.Phrase = new Phrase(viewModel.OrderType.Name, normal_font);
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase(viewModel.Material.Name + "" + "-" + " " + viewModel.MaterialConstruction.Name, normal_font);
             tableOrder.AddCell(cellOrder);

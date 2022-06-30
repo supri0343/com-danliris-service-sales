@@ -221,10 +221,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                 yield return new ValidationResult("Hari Pengembalian harus diisi", new List<string> { "LateReturn" });
             }
 
-            if(Claim.Equals(null))
-            {
-                yield return new ValidationResult("Claim Hari harus diisi", new List<string> { "Claim" });
-            }
+            //if(Claim.Equals(null))
+            //{
+            //    yield return new ValidationResult("Claim Hari harus diisi", new List<string> { "Claim" });
+            //}
         }
     }
 }
