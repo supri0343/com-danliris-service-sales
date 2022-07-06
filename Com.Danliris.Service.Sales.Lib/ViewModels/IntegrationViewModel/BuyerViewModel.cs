@@ -26,5 +26,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
         public string NPWP { get; set; }
         [MaxLength(255)]
         public string NIK { get; set; }
+        public string Job { get; set; }
     }
 }
