@@ -51,6 +51,17 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Spinning
         public AccountBankViewModel AccountBank { get; set; }
         public AgentViewModel Agent { get; set; }
         public VatTaxViewModel VatTax { get; set; }
+        public ProductTypeViewModel ProductType { get; set; }
+        public MaterialViewModel Material { get; set; }
+        public MaterialConstructionViewModel MaterialConstruction { get; set; }
+        public string DownPayments { get; set; }
+        public double? PriceDP { get; set; }
+        public double? precentageDP { get; set; }
+        public string PaymentMethods { get; set; }
+        public int? Day { get; set; }
+        public int? LatePayment { get; set; }
+        public int? LateReturn { get; set; }
+        public double? Claim { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -92,6 +103,40 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Spinning
                 yield return new ValidationResult("harus lebih dari 0", new List<string> { "Price" });
             if (this.DeliverySchedule == null)
                 yield return new ValidationResult("harus di isi", new List<string> { "DeliverySchedule" });
+            if (ProductType == null || ProductType.Id.Equals(0))
+            {
+                yield return new ValidationResult("Jenis Produk harus diisi", new List<string> { "ProductTypeId" });
+            }
+
+            if (this.Day.Equals(null))
+            {
+                yield return new ValidationResult("Hari harus diisi", new List<string> { "Day" });
+            }
+
+            //if (DownPayments.Equals(null) || DownPayments == "")
+            //{
+            //    yield return new ValidationResult("Tipe DP harus diisi", new List<string> { "DownPayments" });
+            //}
+
+            //if (precentageDP.Equals(null) || precentageDP == 0)
+            //{
+            //    yield return new ValidationResult("Percentage (%) DP harus diisi", new List<string> { "precentageDP" });
+            //}
+
+            if (this.LatePayment.Equals(null))
+            {
+                yield return new ValidationResult("Besar Denda harus diisi", new List<string> { "LatePayment" });
+            }
+
+            if (this.LateReturn.Equals(null))
+            {
+                yield return new ValidationResult("Hari Pengembalian harus diisi", new List<string> { "LateReturn" });
+            }
+
+            //if (Claim.Equals(null))
+            //{
+            //    yield return new ValidationResult("Claim Hari harus diisi", new List<string> { "Claim" });
+            //}
         }
     }
 }
