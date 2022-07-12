@@ -35,6 +35,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             var uom = "";
             var uom1 = "";
+
+            var nameProductType = "";
+            var nameMaterial = "";
+            var nameMaterialConstraction = "";
+
             //if (viewModel.Uom.Unit.ToLower() == "yds")
             if (viewModel.UomUnit.ToLower() == "yds")
             {
@@ -50,6 +55,33 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             {
                 uom = viewModel.UomUnit;
                 uom = viewModel.UomUnit;
+            }
+
+            if (viewModel.ProductType == null)
+            {
+                nameProductType = "-";
+            }
+            else
+            {
+                nameProductType = viewModel.ProductType.Name;
+            }
+
+            if (viewModel.Material == null)
+            {
+                nameMaterial = "-";
+            }
+            else
+            {
+                nameMaterial = viewModel.Material.Name;
+            }
+
+            if (viewModel.MaterialConstruction == null)
+            {
+                nameMaterialConstraction = "-";
+            }
+            else
+            {
+                nameMaterialConstraction = viewModel.MaterialConstruction.Name;
             }
 
             #endregion
@@ -175,9 +207,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Material/Konstruksi", bold_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.ProductType.Name, normal_font);
+            cellOrder.Phrase = new Phrase(nameProductType, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.Material.Name + "" + "-" + " " + viewModel.MaterialConstruction.Name, normal_font);
+            cellOrder.Phrase = new Phrase(nameMaterial + "" + "-" + " " + nameMaterialConstraction, normal_font);
             tableOrder.AddCell(cellOrder);
             tableOrder.AddCell(cellOrder);
 
@@ -216,15 +248,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
             cellDetailOrder.Phrase = new Phrase("Jumlah", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.ToString("n0") + uom, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.ToString("n0") + " " + uom, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.Price.ToString("n0"), normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.Price.ToString("n0"), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", amount) , normal_font);
+            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + amount) , normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
