@@ -258,21 +258,21 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 index++;
                 if (index == 1)
                 {
-                    CellDetailCenter.Phrase = new Phrase(" " + detail, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.Currency.Code + " " + detail, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
                 else
                 {
                     CellDetailCenter.Phrase = new Phrase(" ", normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
-                    CellDetailCenter.Phrase = new Phrase("  " + detail, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.Currency.Code + "  " + detail, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
             }
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
-            CellDetailCenter.Phrase = new Phrase(viewModel.Amount.GetValueOrDefault().ToString(), normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.Amount.GetValueOrDefault().ToString(), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);

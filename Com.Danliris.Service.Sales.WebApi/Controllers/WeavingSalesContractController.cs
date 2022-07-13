@@ -116,14 +116,17 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     }
 
                     /* Get Product Type */
-                    var responseProductType = HttpClientService.GetAsync($@"{APIEndpoint.Core}{ProductTypeUri}/" + viewModel.ProductType.Id).Result.Content.ReadAsStringAsync();
-                    Dictionary<string, object> resultProductType = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseProductType.Result);
-                    object jsonProductType;
-                    if (resultProductType.TryGetValue("data", out jsonProductType))
+                    if (viewModel.ProductType != null)
                     {
-                        Dictionary<string, object> productType = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonProductType.ToString());
-                        viewModel.ProductType.Name = productType.TryGetValue("Name", out jsonProductType) ? (jsonProductType != null ? jsonProductType.ToString() : "") : "";
-                        viewModel.ProductType.Code = productType.TryGetValue("Code", out jsonProductType) ? (jsonProductType != null ? jsonProductType.ToString() : "") : "";
+                        var responseProductType = HttpClientService.GetAsync($@"{APIEndpoint.Core}{ProductTypeUri}/" + viewModel.ProductType.Id).Result.Content.ReadAsStringAsync();
+                        Dictionary<string, object> resultProductType = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseProductType.Result);
+                        object jsonProductType;
+                        if (resultProductType.TryGetValue("data", out jsonProductType))
+                        {
+                            Dictionary<string, object> productType = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonProductType.ToString());
+                            viewModel.ProductType.Name = productType.TryGetValue("Name", out jsonProductType) ? (jsonProductType != null ? jsonProductType.ToString() : "") : "";
+                            viewModel.ProductType.Code = productType.TryGetValue("Code", out jsonProductType) ? (jsonProductType != null ? jsonProductType.ToString() : "") : "";
+                        }
                     }
 
                     /* Get Currencies */

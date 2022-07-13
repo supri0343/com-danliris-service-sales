@@ -23,6 +23,11 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.WeavingProfiles
                 .ForPath(d => d.Product.Price, opt => opt.MapFrom(s => s.ProductPrice))
                 .ForPath(d => d.Product.Tags, opt => opt.MapFrom(s => s.ProductTags))
 
+                .ForPath(d => d.ProductType.Id, opt => opt.MapFrom(s => s.ProductTypeId))
+                .ForPath(d => d.ProductType.Code, opt => opt.MapFrom(s => s.ProductTypeCode))
+                .ForPath(d => d.ProductType.Name, opt => opt.MapFrom(s => s.ProductTypeName))
+                //.ForPath(d => d.ProductType.Remark, opt => opt.MapFrom(s => s.ProductTypeRemark))
+
                 .ForPath(d => d.Uom.Id, opt => opt.MapFrom(s => s.UomId))
                 .ForPath(d => d.Uom.Unit, opt => opt.MapFrom(s => s.UomUnit))
 
