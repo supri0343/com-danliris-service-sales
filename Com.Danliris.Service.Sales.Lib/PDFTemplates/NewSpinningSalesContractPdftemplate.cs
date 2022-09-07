@@ -267,7 +267,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + amount) , normal_font);
+            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + amount.ToString("n0")) , normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -275,11 +275,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jadwal Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.Packing + " " + "/" + " " + viewModel.DeliverySchedule?.AddHours(timeoffset).ToString("dd MMMM yyyy"), normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.DeliverySchedule?.AddHours(timeoffset).ToString("dd MMMM yyyy"), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Ongkos Angkut", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.TransportFee, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.TransportFee, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Alamat Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
