@@ -74,13 +74,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 nameProductType = viewModel.ProductType.Name;
             }
 
-            if (viewModel.Material == null)
+            if (viewModel.Product.Name == null)
             {
                 nameMaterial = "-";
             }
             else 
             {
-                nameMaterial = viewModel.Material.Name;
+                nameMaterial = viewModel.Product.Name;
             }
 
             if (viewModel.MaterialConstruction == null)
@@ -119,13 +119,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 packingName = viewModel.Packing;
             }
 
-            if (viewModel.TermOfShipment == null)
+            if (viewModel.DeliverySchedule == null)
             {
                 jadwalPengiriman = "-";
             }
             else
             {
-                jadwalPengiriman = viewModel.TermOfShipment;
+                jadwalPengiriman = viewModel.DeliverySchedule.Value.AddHours(timeoffset).ToString("dd MMMM yyyy");
             }
 
             if (viewModel.Buyer.NPWP == null)
@@ -317,12 +317,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailLeft.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.Price), normal_font);
+            CellDetailLeft.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + string.Format("{0:n0}", viewModel.Price), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
-            CellDetailLeft.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + amount), normal_font);
+            CellDetailLeft.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + string.Format("{0:n0}", amount), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
