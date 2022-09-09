@@ -76,6 +76,8 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                         viewModel.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.NIK = buyer.TryGetValue("NIK", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.Job = buyer.TryGetValue("Job", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.NPWP = buyer.TryGetValue("NPWP", out json) ? (json != null ? json.ToString() : "") : "";
+
                     }
 
                     /* Get Agent */

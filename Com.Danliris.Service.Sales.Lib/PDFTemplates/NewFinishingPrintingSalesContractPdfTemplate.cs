@@ -63,6 +63,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             List<string> details = new List<string>();
 
+
             foreach (var i in viewModel.Details)
             {
                 var nominal = string.Format("{0:n0}", i.Price);
@@ -71,8 +72,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 {
                     nominal = string.Format("{0:n0}", i.Price);
                 }
+                //var color = i.Color;
 
                 details.Add( nominal );
+                
             }
 
             //foreach (var i in viewModel.Details)
@@ -156,19 +159,25 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("Pekerjaan " , normal_font);
+            bodyContentLefts.Phrase = new Phrase("NPWP ", normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NPWP, normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase("", normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase("Jabatan " , normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase(":"  + " " + viewModel.Buyer.Job, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("Alamat" , normal_font);
+            bodyContentLefts.Phrase = new Phrase("Alamat", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.Address, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             PdfPCell cellBodys = new PdfPCell(tableBodyBuyer); // dont remove
             tableBodyBuyer.ExtendLastRow = false;
-            tableBodyBuyer.SpacingAfter = 0.5f;
+            tableBodyBuyer.SpacingAfter = 0.05f;
             document.Add(tableBodyBuyer);
 
             string ParagraphStringbuyer = "          Bertindak untuk dan atas nama " + "" + viewModel.Buyer.Name + "" + ", selanjutnya disebut pembeli";
@@ -192,10 +201,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             document.Add(Paragraph3);
 
             //#region Produk diorder
-            PdfPTable tableOrder = new PdfPTable(2);
+            PdfPTable tableOrder = new PdfPTable(3);
             tableOrder.TotalWidth = 300f;
             tableOrder.LockedWidth = true;
-            float[] widths = new float[] { 5f, 6f };
+            float[] widths = new float[] { 5f, 7.5f, 6f };
             tableOrder.SetWidths(widths);
             tableOrder.HorizontalAlignment = 0;
             tableOrder.SpacingAfter = 20f;
@@ -205,9 +214,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Material/Konstruksi", bold_font);
             tableOrder.AddCell(cellOrder);
+            cellOrder.Phrase = new Phrase("Keterangan", bold_font);
+            tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase(viewModel.OrderType.Name, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.Material.Name + "" + "-" + " " + viewModel.MaterialConstruction.Name, normal_font);
+            cellOrder.Phrase = new Phrase(viewModel.Material.Name + "" + "/" + " " + viewModel.MaterialConstruction.Name + "" + "/" + " " + viewModel.MaterialWidth, normal_font);
+            tableOrder.AddCell(cellOrder);
+            cellOrder.Phrase = new Phrase(viewModel.Description, normal_font);
             tableOrder.AddCell(cellOrder);
             tableOrder.AddCell(cellOrder);
 
@@ -238,9 +251,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tableDetailOrder = new PdfPTable(2);
             //tableDetailOrder.WidthPercentage = 20;
             //tableDetailOrder.SetWidths(new float[] { 20f, 20f });
-            tableDetailOrder.TotalWidth = 216f;
+            tableDetailOrder.TotalWidth = 270f;
             tableDetailOrder.LockedWidth = true;
-            float[] widthsDetail = new float[] { 1f, 1f };
+            float[] widthsDetail = new float[] { 2f, 2f };
             tableDetailOrder.SetWidths(widthsDetail);
             tableDetailOrder.HorizontalAlignment = 0;
             PdfPCell cellDetailOrder = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_MIDDLE };
@@ -253,22 +266,30 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(cellDetailOrder);
             int index = 0;
 
-            foreach (var detail in details)
+            foreach (var detail in viewModel.Details)
             {
+                var nominal = string.Format("{0:n}", detail.Price);
+
+                //if (detail.Currency.Code.ToLower() == "usd")
+                //{
+                //    nominal = string.Format("{0:n0}", detail.Price);
+                //}
+
                 index++;
                 if (index == 1)
                 {
-                    CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.Currency.Code + " " + detail, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(detail.Color +" - "+viewModel.AccountBank.Currency.Code + " " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
                 else
                 {
                     CellDetailCenter.Phrase = new Phrase(" ", normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
-                    CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.Currency.Code + "  " + detail, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(detail.Color + " - " + viewModel.AccountBank.Currency.Code + "  " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
             }
+            //var date = viewModel.DeliverySchedule.Value.ToString("dd MMM yyyy", new CultureInfo("id-ID"));
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
@@ -280,7 +301,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jadwal Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.TermOfShipment, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.DeliverySchedule.Value.ToString("dd MMM yyyy", new CultureInfo("id-ID")), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Ongkos Angkut", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -326,7 +347,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.PaymentMethods, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(viewModel.TermOfPayment.Name, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("2.", normal_font);
@@ -336,6 +357,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(viewModel.DownPayments, normal_font);
+            tablePembayaran.AddCell(bodyContentPembayaran);
+
+            bodyContentPembayaran.Phrase = new Phrase("3.", normal_font);
+            tablePembayaran.AddCell(bodyContentPembayaran);
+            bodyContentPembayaran.Phrase = new Phrase("Down Payment (%)", normal_font);
+            tablePembayaran.AddCell(bodyContentPembayaran);
+            bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
+            tablePembayaran.AddCell(bodyContentPembayaran);
+            bodyContentPembayaran.Phrase = new Phrase(viewModel.precentageDP + " %", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("3.", normal_font);
