@@ -293,7 +293,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
-            CellDetailCenter.Phrase = new Phrase(currency + " " + viewModel.Amount.GetValueOrDefault().ToString(), normal_font);
+            CellDetailCenter.Phrase = new Phrase(currency + " " + string.Format("{0:n}", viewModel.Amount), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);

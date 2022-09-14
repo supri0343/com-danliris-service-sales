@@ -513,7 +513,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
                 cell_signature.Phrase = new Phrase("(...........................)", normal_font);
                 signatureAgent.AddCell(cell_signature);
-                cell_signature.Phrase = new Phrase("( SRI HENDRATNO )", normal_font);
+                cell_signature.Phrase = new Phrase("SRI HENDRATNO", normal_font);
                 signatureAgent.AddCell(cell_signature);
                 cell_signature.Phrase = new Phrase("Authorized signature", normal_font);
                 signatureAgent.AddCell(cell_signature);
