@@ -298,7 +298,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tableDetailOrder = new PdfPTable(2);
             //tableDetailOrder.WidthPercentage = 20;
             //tableDetailOrder.SetWidths(new float[] { 20f, 20f });
-            tableDetailOrder.TotalWidth = 216f;
+            var currency = viewModel.AccountBank.AccountCurrencyCode == "IDR" ? "RP. " : viewModel.AccountBank.AccountCurrencyCode;
+            tableDetailOrder.TotalWidth = 350f;
             tableDetailOrder.LockedWidth = true;
             float[] widthsDetail = new float[] { 1f, 2f };
             tableDetailOrder.SetWidths(widthsDetail);
@@ -317,12 +318,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailLeft.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + string.Format("{0:n0}", viewModel.Price), normal_font);
+            CellDetailLeft.Phrase = new Phrase(currency + " " + string.Format("{0:n0}", viewModel.Price), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
-            CellDetailLeft.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + string.Format("{0:n0}", amount), normal_font);
+            CellDetailLeft.Phrase = new Phrase(currency + " " + string.Format("{0:n0}", amount), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -389,7 +390,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.AccountBank.BankName + " - " + viewModel.AccountBank.AccountNumber, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase( viewModel.AccountBank.AccountName +" - "+viewModel.AccountBank.BankName + " - " + viewModel.AccountBank.AccountNumber, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("4.", normal_font);
@@ -539,6 +540,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell cellIContentRights = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
             PdfPCell cellIContentLefts = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = /*Element.ALIGN_CENTER*/ Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_signature_buyer = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
             signature.SetWidths(new float[] { 1f, 1f });
             cell_signature.Phrase = new Phrase("Sukoharjo," + " " + viewModel.CreatedUtc.AddHours(timeoffset).ToString("dd MMMM yyyy"/*, new CultureInfo("id - ID")*/), normal_font);
             signature.AddCell(cell_signature);
@@ -546,8 +548,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Penjual,", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Pembeli, ", normal_font);
-            signature.AddCell(cell_signature);
+            cell_signature_buyer.Phrase = new Phrase("Pembeli, ", normal_font);
+            signature.AddCell(cell_signature_buyer);
 
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
@@ -572,10 +574,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("( Sri Hendratno )", normal_font);
+            cell_signature.Phrase = new Phrase("Sri Hendratno ", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
-            signature.AddCell(cell_signature);
+            cell_signature_buyer.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
+            signature.AddCell(cell_signature_buyer);
             cell_signature.Phrase = new Phrase("Penjualan Tekstil", normal_font);
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);

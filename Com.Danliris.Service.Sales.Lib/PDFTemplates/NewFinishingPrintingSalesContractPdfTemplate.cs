@@ -202,7 +202,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             //#region Produk diorder
             PdfPTable tableOrder = new PdfPTable(3);
-            tableOrder.TotalWidth = 300f;
+            tableOrder.TotalWidth = 400f;
             tableOrder.LockedWidth = true;
             float[] widths = new float[] { 5f, 7.5f, 6f };
             tableOrder.SetWidths(widths);
@@ -218,7 +218,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase(viewModel.OrderType.Name, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.Material.Name + "" + "/" + " " + viewModel.MaterialConstruction.Name + "" + "/" + " " + viewModel.MaterialWidth, normal_font);
+            cellOrder.Phrase = new Phrase(viewModel.Material.Name + " " + " " + viewModel.MaterialConstruction.Name + "" + "/" + viewModel.YarnMaterial.Name +" - " + viewModel.MaterialWidth, normal_font);
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase(viewModel.Description, normal_font);
             tableOrder.AddCell(cellOrder);
@@ -257,7 +257,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.SetWidths(widthsDetail);
             tableDetailOrder.HorizontalAlignment = 0;
             PdfPCell cellDetailOrder = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_MIDDLE };
-            PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+            PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             cellDetailOrder.Phrase = new Phrase("Jumlah", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.GetValueOrDefault().ToString() + " " + uom, normal_font);
@@ -265,7 +265,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             int index = 0;
-
+            var currency = viewModel.AccountBank.Currency.Code == "IDR" ? "RP. " : viewModel.AccountBank.Currency.Code;
             foreach (var detail in viewModel.Details)
             {
                 var nominal = string.Format("{0:n}", detail.Price);
@@ -274,18 +274,18 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 //{
                 //    nominal = string.Format("{0:n0}", detail.Price);
                 //}
-
+               
                 index++;
                 if (index == 1)
                 {
-                    CellDetailCenter.Phrase = new Phrase(detail.Color +" - "+viewModel.AccountBank.Currency.Code + " " + nominal, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(detail.Color +" - "+/*viewModel.AccountBank.Currency.Code*/ currency + " " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
                 else
                 {
                     CellDetailCenter.Phrase = new Phrase(" ", normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
-                    CellDetailCenter.Phrase = new Phrase(detail.Color + " - " + viewModel.AccountBank.Currency.Code + "  " + nominal, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(detail.Color + " - " + /*viewModel.AccountBank.Currency.Code*/ currency + "  " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
             }
@@ -293,7 +293,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             //cellDetailOrder.Phrase = new Phrase(Convert.ToString(viewModel.Amount), normal_font);
-            CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.Amount.GetValueOrDefault().ToString(), normal_font);
+            CellDetailCenter.Phrase = new Phrase(currency + " " + viewModel.Amount.GetValueOrDefault().ToString(), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -374,7 +374,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.AccountBank.BankName +" - "+ viewModel.AccountBank.AccountNumber, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(viewModel.AccountBank.AccountName + " - " +viewModel.AccountBank.BankName +" - "+ viewModel.AccountBank.AccountNumber, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("4.", normal_font);
@@ -530,6 +530,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell cellIContentRights = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
             PdfPCell cellIContentLefts = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = /*Element.ALIGN_CENTER*/ Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_signature_buyer = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER , VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
             signature.SetWidths(new float[] { 1f, 1f });
             cell_signature.Phrase = new Phrase("Sukoharjo," + " " + viewModel.CreatedUtc.AddHours(timeoffset).ToString("dd MMMM yyyy"/*, new CultureInfo("id - ID")*/) , normal_font);
             signature.AddCell(cell_signature);
@@ -537,8 +538,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Penjual,", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Pembeli, ", normal_font);
-            signature.AddCell(cell_signature);
+            cell_signature_buyer.Phrase = new Phrase("Pembeli, ", normal_font);
+            signature.AddCell(cell_signature_buyer);
 
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
@@ -563,10 +564,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("( Robby Oentoro )", normal_font);
+            cell_signature.Phrase = new Phrase("Robby O S", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
-            signature.AddCell(cell_signature);
+            cell_signature_buyer.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
+            signature.AddCell(cell_signature_buyer);
             cell_signature.Phrase = new Phrase("Penjualan Tekstil", normal_font);
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
