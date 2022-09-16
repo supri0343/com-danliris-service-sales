@@ -40,6 +40,22 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             var nameMaterial = "";
             var nameMaterialConstraction = "";
 
+            string BuyerAddress = viewModel.Buyer.Address;
+
+            string[] arrBuyerAddress;
+
+            var newBuyerAddress = "";
+
+            arrBuyerAddress = BuyerAddress.Split("\r\n".ToCharArray());
+
+            if (arrBuyerAddress.Length > 0)
+            {
+                foreach (string str in arrBuyerAddress)
+                {
+                    newBuyerAddress += string.Format("{0}{1}", str, " ");
+                }
+            }
+
             //if (viewModel.Uom.Unit.ToLower() == "yds")
             var ppn = viewModel.IncomeTax;
             if (ppn == "Include PPn")
@@ -182,7 +198,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Alamat", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.Address, normal_font);
+            bodyContentLefts.Phrase = new Phrase(":" + " " + newBuyerAddress, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             PdfPCell cellBodys = new PdfPCell(tableBodyBuyer); // dont remove
             tableBodyBuyer.ExtendLastRow = false;
@@ -211,8 +227,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             //#region Produk diorder
             PdfPTable tableOrder = new PdfPTable(2);
-            tableOrder.TotalWidth = 300f;
-            tableOrder.LockedWidth = true;
+            //tableOrder.TotalWidth = 300f;
+            //tableOrder.LockedWidth = true;
             float[] widths = new float[] { 5f, 5f };
             tableOrder.SetWidths(widths);
             tableOrder.HorizontalAlignment = 0;
@@ -255,8 +271,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //tableDetailOrder.SetWidths(new float[] { 20f, 20f });
             //tableDetailOrder.TotalWidth = 216f;
             var currency = viewModel.AccountBank.AccountCurrencyCode == "IDR" ? "RP. " : viewModel.AccountBank.AccountCurrencyCode;
-            tableDetailOrder.TotalWidth = 350f;
-            tableDetailOrder.LockedWidth = true;
+            //tableDetailOrder.TotalWidth = 350f;
+            //tableDetailOrder.LockedWidth = true;
             float[] widthsDetail = new float[] { 1f, 2f };
             tableDetailOrder.SetWidths(widthsDetail);
             tableDetailOrder.HorizontalAlignment = 0;
@@ -289,6 +305,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellDetailOrder.Phrase = new Phrase("Alamat Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             CellDetailCenter.Phrase = new Phrase(viewModel.DeliveredTo, normal_font);
+            tableDetailOrder.AddCell(CellDetailCenter);
+            CellDetailCenter.Phrase = new Phrase("Keterangan", bold_font);
+            tableDetailOrder.AddCell(CellDetailCenter);
+            CellDetailCenter.Phrase = new Phrase(viewModel.Remark, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             //CheckBox checkBox1 = new CheckBox(20, 20, 15, 15, "checkBox1");
             //page.Annotations.Add(checkBox1);
@@ -531,9 +551,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cell_signature.Phrase = new Phrase("Sri Hendratno", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature_buyer.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
+            cell_signature_buyer.Phrase = new Phrase(viewModel.Buyer.Name, normal_font);
             signature.AddCell(cell_signature_buyer);
-            cell_signature.Phrase = new Phrase("Penjualan Tekstil", normal_font);
+            cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
