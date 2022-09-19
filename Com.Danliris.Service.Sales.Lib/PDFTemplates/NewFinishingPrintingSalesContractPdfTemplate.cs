@@ -149,7 +149,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Nama" , normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(": " + "" + viewModel.Buyer.Name, normal_font);
+            bodyContentLefts.Phrase = new Phrase(": " + "" + UppercaseWords(viewModel.Buyer.Name), normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
@@ -173,14 +173,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Alamat", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.Address, normal_font);
+            var addressBuyer = viewModel.Buyer.Address.Replace("\n", " ");
+            bodyContentLefts.Phrase = new Phrase(":" + " " + UppercaseWords(addressBuyer), normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             PdfPCell cellBodys = new PdfPCell(tableBodyBuyer); // dont remove
             tableBodyBuyer.ExtendLastRow = false;
             tableBodyBuyer.SpacingAfter = 0.05f;
             document.Add(tableBodyBuyer);
 
-            string ParagraphStringbuyer = "          Bertindak untuk dan atas nama " + "" + viewModel.Buyer.Name + "" + ", selanjutnya disebut pembeli";
+            string ParagraphStringbuyer = "          Bertindak untuk dan atas nama " + "" + UppercaseWords(viewModel.Buyer.Name) + "" + ", selanjutnya disebut pembeli";
             Paragraph Paragraphbuyer = new Paragraph(ParagraphStringbuyer, normal_font) { Alignment = Element.ALIGN_LEFT };
             Paragraphbuyer.SpacingAfter = 10f;
             document.Add(Paragraphbuyer);
@@ -195,15 +196,16 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             FirstParagraph.SpacingAfter = 10f;
             document.Add(FirstParagraph);
 
-            string ParagraphString3 = "A. PRODUK YANG DIORDER";
+            string ParagraphString3 = "A. Produk Yang Diorder";
             Paragraph Paragraph3 = new Paragraph(ParagraphString3, bold_font) { Alignment = Element.ALIGN_LEFT };
             Paragraph3.SpacingAfter = 4f;
             document.Add(Paragraph3);
 
             //#region Produk diorder
             PdfPTable tableOrder = new PdfPTable(3);
-            tableOrder.TotalWidth = 400f;
-            tableOrder.LockedWidth = true;
+            //tableOrder.TotalWidth = 400f;
+            //tableOrder.LockedWidth = true;
+            tableOrder.WidthPercentage = 100;
             float[] widths = new float[] { 5f, 7.5f, 6f };
             tableOrder.SetWidths(widths);
             tableOrder.HorizontalAlignment = 0;
@@ -216,11 +218,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Keterangan", bold_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.OrderType.Name, normal_font);
+            cellOrder.Phrase = new Phrase(UppercaseWords(viewModel.OrderType.Name), normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.Material.Name + " " + " " + viewModel.MaterialConstruction.Name + "" + "/" + viewModel.YarnMaterial.Name +" - " + viewModel.MaterialWidth, normal_font);
+            cellOrder.Phrase = new Phrase(UppercaseWords(viewModel.Material.Name) + " " + " " + viewModel.MaterialConstruction.Name + "" + "/" + viewModel.YarnMaterial.Name +" - " + viewModel.MaterialWidth, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(viewModel.Description, normal_font);
+            cellOrder.Phrase = new Phrase(UppercaseWords(viewModel.Description), normal_font);
             tableOrder.AddCell(cellOrder);
             tableOrder.AddCell(cellOrder);
 
@@ -241,7 +243,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //document.Add(tableOrder);
             //#endregion
 
-            string ParagraphString4 = "B. KESEPAKATAN ORDER";
+            string ParagraphString4 = "B. Kesepakatan Order";
             Paragraph Paragraph4 = new Paragraph(ParagraphString4, bold_font) { Alignment = Element.ALIGN_LEFT };
             Paragraph4.SpacingAfter = 4f;
             document.Add(Paragraph4);
@@ -251,21 +253,22 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tableDetailOrder = new PdfPTable(2);
             //tableDetailOrder.WidthPercentage = 20;
             //tableDetailOrder.SetWidths(new float[] { 20f, 20f });
-            tableDetailOrder.TotalWidth = 270f;
-            tableDetailOrder.LockedWidth = true;
-            float[] widthsDetail = new float[] { 2f, 2f };
+            //tableDetailOrder.TotalWidth = 270f;
+            tableDetailOrder.WidthPercentage = 100;
+            //tableDetailOrder.LockedWidth = true;
+            float[] widthsDetail = new float[] { 1f, 2f };
             tableDetailOrder.SetWidths(widthsDetail);
             tableDetailOrder.HorizontalAlignment = 0;
             PdfPCell cellDetailOrder = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_MIDDLE };
             PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             cellDetailOrder.Phrase = new Phrase("Jumlah", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.GetValueOrDefault().ToString() + " " + uom, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.GetValueOrDefault().ToString() + " " + UppercaseWords(uom), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             int index = 0;
-            var currency = viewModel.AccountBank.Currency.Code == "IDR" ? "RP. " : viewModel.AccountBank.Currency.Code;
+            var currency = viewModel.AccountBank.Currency.Code == "IDR" ? "Rp. " : viewModel.AccountBank.Currency.Code;
             foreach (var detail in viewModel.Details)
             {
                 var nominal = string.Format("{0:n}", detail.Price);
@@ -278,14 +281,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 index++;
                 if (index == 1)
                 {
-                    CellDetailCenter.Phrase = new Phrase(detail.Color +" - "+/*viewModel.AccountBank.Currency.Code*/ currency + " " + nominal, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(UppercaseWords(detail.Color) +" - "+/*viewModel.AccountBank.Currency.Code*/ currency + " " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
                 else
                 {
                     CellDetailCenter.Phrase = new Phrase(" ", normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
-                    CellDetailCenter.Phrase = new Phrase(detail.Color + " - " + /*viewModel.AccountBank.Currency.Code*/ currency + "  " + nominal, normal_font);
+                    CellDetailCenter.Phrase = new Phrase(UppercaseWords(detail.Color) + " - " + /*viewModel.AccountBank.Currency.Code*/ currency + "  " + nominal, normal_font);
                     tableDetailOrder.AddCell(CellDetailCenter);
                 }
             }
@@ -297,7 +300,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.Packing, normal_font);
+            CellDetailCenter.Phrase = new Phrase(UppercaseWords(viewModel.Packing), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jadwal Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -305,11 +308,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Ongkos Angkut", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.TransportFee, normal_font);
+            CellDetailCenter.Phrase = new Phrase(UppercaseWords(viewModel.TransportFee), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Alamat Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.DeliveredTo, normal_font);
+            CellDetailCenter.Phrase = new Phrase(UppercaseWords(viewModel.DeliveredTo), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             //CheckBox checkBox1 = new CheckBox(20, 20, 15, 15, "checkBox1");
             //page.Annotations.Add(checkBox1);
@@ -340,14 +343,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tablePembayaran = new PdfPTable(4);
             tablePembayaran.SetWidths(new float[] { 0.3f, 3f, 0.2f, 5f });
             PdfPCell bodyContentPembayaran = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
-
+            //tablePembayaran.WidthPercentage = 100;
             bodyContentPembayaran.Phrase = new Phrase("1.", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase("Cara Pembayaran", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.TermOfPayment.Name, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(UppercaseWords(viewModel.TermOfPayment.Name), normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("2.", normal_font);
@@ -374,7 +377,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.AccountBank.AccountName + " - " +viewModel.AccountBank.BankName +" - "+ viewModel.AccountBank.AccountNumber, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(UppercaseWords(viewModel.AccountBank.AccountName) + " - " +viewModel.AccountBank.BankName +" - "+ viewModel.AccountBank.AccountNumber, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("4.", normal_font);
@@ -432,7 +435,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #region ConditionPage
             document.NewPage();
 
-            string ConditionString = "D. SYARAT DAN KETENTUAN";
+            string ConditionString = "D. Syarat Dan Ketentuan";
             Paragraph ConditionName = new Paragraph(ConditionString, bold_font) { Alignment = Element.ALIGN_LEFT };
             ConditionName.SpacingAfter = 1f;
             document.Add(ConditionName);
@@ -566,9 +569,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cell_signature.Phrase = new Phrase("Robby O S", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature_buyer.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
+            cell_signature_buyer.Phrase = new Phrase(UppercaseWords(viewModel.Buyer.Name) , normal_font);
             signature.AddCell(cell_signature_buyer);
-            cell_signature.Phrase = new Phrase("Penjualan Tekstil", normal_font);
+            cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
@@ -587,6 +590,84 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             stream.Position = 0;
 
             return stream;
+        }
+
+        //static string UppercaseWords(string value1)
+        //{
+        //    if (value1 != null)
+        //    {
+        //        string value = value1.ToLower();
+        //        //string value = ("PT. DAN LIRIS").ToLower();
+        //        char[] array = value.ToCharArray();
+        //        // Handle the first letter in the string.
+        //        if (array.Length >= 1)
+        //        {
+        //            if (char.IsLower(array[0]))
+        //            {
+        //                array[0] = char.ToUpper(array[0]);
+        //            }
+        //        }
+        //        // Scan through the letters, checking for spaces.
+        //        // ... Uppercase the lowercase letters following spaces.
+        //        for (int i = 1; i < array.Length; i++)
+        //        {
+        //            if (array[i - 1] == ' ' || array[i - 1] == '\n')
+        //            {
+        //                if (char.IsLower(array[i]))
+        //                {
+        //                    array[i] = char.ToUpper(array[i]);
+        //                }
+        //            }
+        //        }
+        //        return new string(array);
+        //    }
+        //    else
+        //    {
+        //        return "";
+        //    }
+        //    //return new string(array);
+        //}
+
+        static string UppercaseWords(string value1)
+        {
+            if (value1 != null)
+            {
+                string value = value1.ToLower();
+                //string value = ("PT. DAN LIRIS").ToLower();
+                char[] array = value.ToCharArray();
+                // Handle the first letter in the string.
+                if (array.Length >= 1)
+                {
+                    if (char.IsLower(array[0]))
+                    {
+                        array[0] = char.ToUpper(array[0]);
+                    }
+                }
+                // Scan through the letters, checking for spaces.
+                // ... Uppercase the lowercase letters following spaces.
+                for (int i = 1; i < array.Length; i++)
+                {
+                    if (array[i - 1] == ' ' || array[i - 1] == '\n')
+                    {
+                        if (char.IsLower(array[i]))
+                        {
+                            array[i] = char.ToUpper(array[i]);
+                        }
+                    } else if (array[i] == 't' && array[i - 1] == 'P')
+                    {
+                        if (char.IsLower(array[i - 2]))
+                        {
+                            array[i - 2] = char.ToUpper(array[i - 2]);
+                        }
+                    }
+                }
+                return new string(array);
+            }
+            else
+            {
+                return "";
+            }
+            //return new string(array);
         }
     }
 }
