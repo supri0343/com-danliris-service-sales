@@ -655,9 +655,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                         }
                     } else if (array[i] == 't' && array[i - 1] == 'P')
                     {
-                        if (char.IsLower(array[i - 2]))
+                        if (char.IsLower(array[i]))
                         {
-                            array[i - 2] = char.ToUpper(array[i - 2]);
+                            array[i] = char.ToUpper(array[i]);
                         }
                     }
                 }
