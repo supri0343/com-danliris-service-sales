@@ -270,9 +270,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Material/Konstruksi", bold_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(UppercaseWords(nameMaterial) + "" + ", " + "" + nameMaterialConstraction, normal_font);
+            cellOrder.Phrase = new Phrase(UppercaseWords(nameMaterial) + "" + ", " + "" + nameMaterialConstraction + "" + ", " + "" + widthMaterial, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(yarnMaterialName + "" + ", " + "" + widthMaterial, normal_font);
+            cellOrder.Phrase = new Phrase(yarnMaterialName, normal_font);
             tableOrder.AddCell(cellOrder);
             tableOrder.AddCell(cellOrder);
 
@@ -323,7 +323,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailLeft.Phrase = new Phrase(currency + " " + string.Format("{0:n0}", viewModel.Price), normal_font);
+            CellDetailLeft.Phrase = new Phrase(currency + " " + string.Format("{0:n0}", viewModel.Price)+ " / "+ UppercaseWords(viewModel.Uom.Unit) + " " + viewModel.IncomeTax + " " + viewModel.VatTax.Rate + "%", normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
@@ -350,7 +350,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableDetailOrder.AddCell(cellDetailOrder);
             CellDetailLeft.Phrase = new Phrase(UppercaseWords(viewModel.PieceLength), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
-            cellDetailOrder.Phrase = new Phrase("Remark", bold_font);
+            cellDetailOrder.Phrase = new Phrase("Keterangan", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
             CellDetailLeft.Phrase = new Phrase(UppercaseWords(viewModel.Remark), normal_font);
             tableDetailOrder.AddCell(CellDetailLeft);
