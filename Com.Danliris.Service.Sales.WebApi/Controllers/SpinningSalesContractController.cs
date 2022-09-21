@@ -81,6 +81,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                         viewModel.Buyer.Country = buyer.TryGetValue("Country", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.NIK = buyer.TryGetValue("NIK", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.Job = buyer.TryGetValue("Job", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.NPWP = buyer.TryGetValue("NPWP", out json) ? (json != null ? json.ToString() : "") : "";
                     }
 
                     /* Get Agent */
@@ -138,6 +139,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     //Dictionary<string, object> resultCurrencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseCurrencies.Result);
                     //var jsonCurrencies = resultCurrencies.Single(p => p.Key.Equals("data")).Value;
                     //Dictionary<string, object> currencies = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonCurrencies.ToString());
+
 
                     if (viewModel.Buyer.Type != "Ekspor")
                     {

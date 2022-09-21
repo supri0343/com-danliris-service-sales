@@ -1,4 +1,5 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Spinning;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 {
@@ -36,11 +38,137 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             var uom = "";
             var uom1 = "";
 
-            var nameProductType = "";
-            var nameMaterial = "";
-            var nameMaterialConstraction = "";
+            var nameProductType = viewModel.ProductType.Name == viewModel.ProductType.Name ? viewModel.ProductType.Name : " - ";
+            var nameMaterial = viewModel.Material.Name == viewModel.Material.Name ? viewModel.Material.Name : " - ";
+            var nameMaterialConstraction = viewModel.MaterialConstruction.Name;
+            if (nameMaterialConstraction != null)
+            {
+                nameMaterialConstraction = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nameMaterialConstraction.ToLower());
+            }
+            else
+            {
+                nameMaterialConstraction = " - ";
+            }
+
+            viewModel.Buyer.Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(viewModel.Buyer.Name.ToLower());
+                       
+            var materialName = viewModel.Material.Name;    
+            if (materialName != null)
+            {
+                materialName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(materialName.ToLower());
+            }
+            else
+            {
+                materialName = " - ";
+            }
+
+            var kondisi = viewModel.Condition;
+            if (kondisi != null)
+            {
+                kondisi = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(kondisi.ToLower());
+            }
+            else
+            {
+                kondisi = " - ";
+            }
+
+            var deliveredTo = viewModel.DeliveredTo;
+            if (deliveredTo != null)
+            {
+                deliveredTo = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(deliveredTo.ToLower());
+            }
+            else
+            {
+                deliveredTo = " - ";
+            }
+
+            var termOfPaymentName = viewModel.TermOfPayment.Name;
+            if (termOfPaymentName != null)
+            {
+                termOfPaymentName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(termOfPaymentName.ToLower());
+            }
+            else
+            {
+                termOfPaymentName = " - ";
+            }
+
+            var accountBankName = viewModel.AccountBank.AccountName;
+            if (accountBankName != null)
+            {
+                accountBankName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(accountBankName.ToLower());
+            }
+            else
+            {
+                accountBankName = " - ";
+            }
+
+            var buyerJob = viewModel.Buyer.Job;
+            if (buyerJob != null)
+            {
+                buyerJob = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(buyerJob.ToLower());
+            }
+            else
+            {
+                buyerJob = " - ";
+            }
+
+            var comodityName = viewModel.Comodity.Name;
+            if (comodityName != null)
+            {
+                comodityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(comodityName.ToLower());
+            }
+            else
+            {
+                comodityName = " - ";
+            }
+
+            var keterangan = viewModel.Remark;
+            if (keterangan != null)
+            {
+                keterangan = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(keterangan.ToLower());
+            }
+            else
+            {
+                keterangan = " - ";
+            }
+
+            var transportFee = viewModel.TransportFee;
+            if (transportFee != null)
+            {
+                transportFee = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(transportFee.ToLower());
+            }
+            else
+            {
+                transportFee = " - ";
+            }
+
+            //custom Buyer Address
+            string buyerAddress = viewModel.Buyer.Address;
+            var newBuyerAddress = "";
+            if (buyerAddress.Length > 0)
+            {
+                string[] arrBuyerAddress;
+                arrBuyerAddress = buyerAddress.Split("\r\n".ToCharArray());
+                foreach (string str in arrBuyerAddress)
+                {
+                    newBuyerAddress += string.Format("{0}{1}", str, " ");
+                    newBuyerAddress = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Convert.ToString(newBuyerAddress).ToLower());
+                }
+            }
+            else
+            {
+                newBuyerAddress = " - ";
+            }
+
+            //list<spinningsalescontractviewmodel> newvm = new list<spinningsalescontractviewmodel>();
+            List<string> buyer = new List<string>();
 
             //if (viewModel.Uom.Unit.ToLower() == "yds")
+            var ppn = viewModel.IncomeTax;
+            if (ppn == "Include PPn")
+            {
+                ppn = $"Include PPn {viewModel.VatTax.Rate}%";
+            }
             if (viewModel.UomUnit.ToLower() == "yds")
             {
                 uom = "YARD";
@@ -51,37 +179,14 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 uom = "METER";
                 uom1 = "METERS";
             }
+            else if (viewModel.UomUnit.ToLower() == "ball")
+            {
+                uom = "BALE";
+            }
             else
             {
                 uom = viewModel.UomUnit;
                 uom = viewModel.UomUnit;
-            }
-
-            if (viewModel.ProductType == null)
-            {
-                nameProductType = "-";
-            }
-            else
-            {
-                nameProductType = viewModel.ProductType.Name;
-            }
-
-            if (viewModel.Material == null)
-            {
-                nameMaterial = "-";
-            }
-            else
-            {
-                nameMaterial = viewModel.Material.Name;
-            }
-
-            if (viewModel.MaterialConstruction == null)
-            {
-                nameMaterialConstraction = "-";
-            }
-            else
-            {
-                nameMaterialConstraction = viewModel.MaterialConstruction.Name;
             }
 
             #endregion
@@ -91,7 +196,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
             document.Add(codeNo);
 
-            string titleString = "KONTRAK PENJUALAN";
+            string titleString = "Kontrak Penjualan";
             bold_font.SetStyle(Font.UNDERLINE);
             Paragraph title = new Paragraph(titleString, bold_font) { Alignment = Element.ALIGN_CENTER };
             // title.SpacingAfter = 20f;
@@ -118,7 +223,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Nama", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": Robby Oentoro ", normal_font);
+            bodyContentLeft.Phrase = new Phrase(": Sri Hendratno", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -155,19 +260,25 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("NIK ", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NIK, normal_font);
+            bodyContentLefts.Phrase = new Phrase(": " + "" + viewModel.Buyer.NIK, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("Pekerjaan ", normal_font);
+            bodyContentLefts.Phrase = new Phrase("Jabatan ", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.Job, normal_font);
+            bodyContentLefts.Phrase = new Phrase(": " + "" + buyerJob, normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase("", normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase("NPWP", normal_font);
+            tableBodyBuyer.AddCell(bodyContentLefts);
+            bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.NPWP, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Alamat", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(":" + " " + viewModel.Buyer.Address, normal_font);
+            bodyContentLefts.Phrase = new Phrase(":" + " " + newBuyerAddress, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             PdfPCell cellBodys = new PdfPCell(tableBodyBuyer); // dont remove
             tableBodyBuyer.ExtendLastRow = false;
@@ -189,15 +300,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             FirstParagraph.SpacingAfter = 10f;
             document.Add(FirstParagraph);
 
-            string ParagraphString3 = "A. PRODUK YANG DIORDER";
+            string ParagraphString3 = "A. Produk Yang Diorder";
             Paragraph Paragraph3 = new Paragraph(ParagraphString3, bold_font) { Alignment = Element.ALIGN_LEFT };
             Paragraph3.SpacingAfter = 4f;
             document.Add(Paragraph3);
 
             //#region Produk diorder
             PdfPTable tableOrder = new PdfPTable(2);
-            tableOrder.TotalWidth = 300f;
-            tableOrder.LockedWidth = true;
+            //tableOrder.TotalWidth = 300f;
+            //tableOrder.LockedWidth = true;
             float[] widths = new float[] { 5f, 5f };
             tableOrder.SetWidths(widths);
             tableOrder.HorizontalAlignment = 0;
@@ -207,10 +318,9 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase("Material/Konstruksi", bold_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(nameProductType, normal_font);
+            cellOrder.Phrase = new Phrase(comodityName, normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase(nameMaterial + "" + "-" + " " + nameMaterialConstraction, normal_font);
-            tableOrder.AddCell(cellOrder);
+            cellOrder.Phrase = new Phrase(materialName + " " + "-" + " " + nameMaterialConstraction, normal_font);
             tableOrder.AddCell(cellOrder);
 
 
@@ -230,7 +340,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //document.Add(tableOrder);
             //#endregion
 
-            string ParagraphString4 = "B. KESEPAKATAN ORDER";
+            string ParagraphString4 = "B. Kesepakatan Order";
             Paragraph Paragraph4 = new Paragraph(ParagraphString4, bold_font) { Alignment = Element.ALIGN_LEFT };
             Paragraph4.SpacingAfter = 4f;
             document.Add(Paragraph4);
@@ -239,40 +349,46 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable tableDetailOrder = new PdfPTable(2);
             //tableDetailOrder.WidthPercentage = 20;
             //tableDetailOrder.SetWidths(new float[] { 20f, 20f });
-            tableDetailOrder.TotalWidth = 216f;
-            tableDetailOrder.LockedWidth = true;
-            float[] widthsDetail = new float[] { 1f, 1f };
+            //tableDetailOrder.TotalWidth = 216f;
+            var currency = viewModel.AccountBank.AccountCurrencyCode == "IDR" ? "RP. " : viewModel.AccountBank.AccountCurrencyCode;
+            //tableDetailOrder.TotalWidth = 350f;
+            //tableDetailOrder.LockedWidth = true;
+            float[] widthsDetail = new float[] { 1f, 2f };
             tableDetailOrder.SetWidths(widthsDetail);
             tableDetailOrder.HorizontalAlignment = 0;
             PdfPCell cellDetailOrder = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_MIDDLE };
-            PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+            PdfPCell CellDetailCenter = new PdfPCell() { MinimumHeight = 10, Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             cellDetailOrder.Phrase = new Phrase("Jumlah", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.ToString("n0") + " " + uom, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.OrderQuantity.ToString() + " " + uom, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.AccountBank.AccountCurrencyCode + " " + viewModel.Price.ToString("n0"), normal_font);
+            CellDetailCenter.Phrase = new Phrase(currency + " " + viewModel.Price.ToString("n0") + " " + "/" + " " + uom  + " " + ppn, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Total Harga", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", viewModel.AccountBank.AccountCurrencyCode + " " + amount) , normal_font);
+            CellDetailCenter.Phrase = new Phrase(string.Format("{0:n0}", currency + " " + amount.ToString("n0")) , normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jenis Packing", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.Packing, normal_font);
+            CellDetailCenter.Phrase = new Phrase(kondisi, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Jadwal Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.TermOfShipment, normal_font);
+            CellDetailCenter.Phrase = new Phrase(viewModel.DeliverySchedule?.AddHours(timeoffset).ToString("dd MMMM yyyy"), normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Ongkos Angkut", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.TransportFee, normal_font);
+            CellDetailCenter.Phrase = new Phrase(transportFee, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             cellDetailOrder.Phrase = new Phrase("Alamat Pengiriman", bold_font);
             tableDetailOrder.AddCell(cellDetailOrder);
-            CellDetailCenter.Phrase = new Phrase(viewModel.DeliveredTo, normal_font);
+            CellDetailCenter.Phrase = new Phrase(deliveredTo, normal_font);
+            tableDetailOrder.AddCell(CellDetailCenter);
+            CellDetailCenter.Phrase = new Phrase("Keterangan", bold_font);
+            tableDetailOrder.AddCell(CellDetailCenter);
+            CellDetailCenter.Phrase = new Phrase(keterangan, normal_font);
             tableDetailOrder.AddCell(CellDetailCenter);
             //CheckBox checkBox1 = new CheckBox(20, 20, 15, 15, "checkBox1");
             //page.Annotations.Add(checkBox1);
@@ -310,7 +426,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.PaymentMethods, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(termOfPaymentName, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("2.", normal_font);
@@ -328,7 +444,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tablePembayaran.AddCell(bodyContentPembayaran);
             bodyContentPembayaran.Phrase = new Phrase(":", normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
-            bodyContentPembayaran.Phrase = new Phrase(viewModel.AccountBank.BankName + " - " + viewModel.AccountBank.AccountNumber, normal_font);
+            bodyContentPembayaran.Phrase = new Phrase(accountBankName + " - " + viewModel.AccountBank.BankName + " - " + viewModel.AccountBank.AccountNumber, normal_font);
             tablePembayaran.AddCell(bodyContentPembayaran);
 
             bodyContentPembayaran.Phrase = new Phrase("4.", normal_font);
@@ -381,7 +497,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #region ConditionPage
             document.NewPage();
 
-            string ConditionString = "D. SYARAT DAN KETENTUAN";
+            string ConditionString = "D. Syarat dan Ketentuan";
             Paragraph ConditionName = new Paragraph(ConditionString, bold_font) { Alignment = Element.ALIGN_LEFT };
             ConditionName.SpacingAfter = 1f;
             document.Add(ConditionName);
@@ -473,11 +589,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Signature
             PdfPTable signature = new PdfPTable(2);
+           // signature.TotalWidth = 10f;
             signature.SpacingBefore = 10f;
             signature.SetWidths(new float[] { 1f, 1f });
             PdfPCell cellIContentRights = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
             PdfPCell cellIContentLefts = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             PdfPCell cell_signature = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = /*Element.ALIGN_CENTER*/ Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+            PdfPCell cell_signature_buyer = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER};
             signature.SetWidths(new float[] { 1f, 1f });
             cell_signature.Phrase = new Phrase("Sukoharjo," + " " + viewModel.CreatedUtc.AddHours(timeoffset).ToString("dd MMMM yyyy"/*, new CultureInfo("id - ID")*/), normal_font);
             signature.AddCell(cell_signature);
@@ -485,8 +603,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Penjual,", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Pembeli, ", normal_font);
-            signature.AddCell(cell_signature);
+            cell_signature_buyer.Phrase = new Phrase("Pembeli, ", normal_font);
+            signature.AddCell(cell_signature_buyer);
 
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
@@ -511,11 +629,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_signature.Phrase = new Phrase(" ", normal_font);
             signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("( Robby Oentoro )", normal_font);
+            cell_signature.Phrase = new Phrase("Sri Hendratno", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(" + viewModel.Buyer.Name + ")", normal_font);
-            signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Penjualan Tekstil", normal_font);
+            cell_signature_buyer.Phrase = new Phrase(viewModel.Buyer.Name, normal_font);
+            signature.AddCell(cell_signature_buyer);
+            cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);

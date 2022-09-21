@@ -88,6 +88,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Spinning
            
             if (this.Comodity == null || this.Comodity.Id.Equals(0))
                 yield return new ValidationResult("Comodity harus di isi", new List<string> { "Comodity" });
+            if (this.Material == null || this.Material.Id.Equals(0))
+                yield return new ValidationResult("Material harus di isi", new List<string> { "Material" });
+            if (this.MaterialConstruction == null || this.MaterialConstruction.Id.Equals(0))
+                yield return new ValidationResult("MaterialConstruction harus di isi", new List<string> { "MaterialConstruction" });
             if (this.Quality == null || this.Quality.Id.Equals(0))
                 yield return new ValidationResult("Quality harus di isi", new List<string> { "Quality" });
             if (this.TermOfPayment == null || this.TermOfPayment.Id.Equals(0))
@@ -123,15 +127,15 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Spinning
             //    yield return new ValidationResult("Percentage (%) DP harus diisi", new List<string> { "precentageDP" });
             //}
 
-            if (this.LatePayment.Equals(null))
-            {
-                yield return new ValidationResult("Besar Denda harus diisi", new List<string> { "LatePayment" });
-            }
+            //if (this.LatePayment.Equals(null))
+            //{
+            //    yield return new ValidationResult("Besar Denda harus diisi", new List<string> { "LatePayment" });
+            //}
 
-            if (this.LateReturn.Equals(null))
-            {
-                yield return new ValidationResult("Hari Pengembalian harus diisi", new List<string> { "LateReturn" });
-            }
+            //if (this.LateReturn.Equals(null))
+            //{
+            //    yield return new ValidationResult("Hari Pengembalian harus diisi", new List<string> { "LateReturn" });
+            //}
 
             //if (Claim.Equals(null))
             //{
