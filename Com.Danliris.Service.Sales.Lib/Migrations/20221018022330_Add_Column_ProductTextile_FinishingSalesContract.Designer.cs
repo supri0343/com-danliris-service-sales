@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018022330_Add_Column_ProductTextile_FinishingSalesContract")]
+    partial class Add_Column_ProductTextile_FinishingSalesContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3333,12 +3335,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("ProcessTypeUnit")
                         .HasMaxLength(1000);
-
-                    b.Property<string>("ProductTextileCode");
-
-                    b.Property<int?>("ProductTextileId");
-
-                    b.Property<string>("ProductTextileName");
 
                     b.Property<string>("ProfileFirstName")
                         .HasMaxLength(1000);

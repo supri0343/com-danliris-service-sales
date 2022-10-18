@@ -193,6 +193,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting
         public int LateReturn { get; set; }
         public double? Claim { get; set; }
         public string Description { get; set; }
+
+        #region Product Textile
+        public int ProductTextileId { get; set; }
+        public string ProductTextileCode { get; set; }
+        public string ProductTextileName { get; set; }
+        #endregion
         public virtual ICollection<FinishingPrintingSalesContractDetailModel> Details { get; set; }
     }
 }

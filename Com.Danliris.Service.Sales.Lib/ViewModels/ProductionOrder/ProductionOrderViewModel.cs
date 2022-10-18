@@ -75,6 +75,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder
         public StandardTestsViewModel StandardTests { get; set; }
         public FinishTypeViewModel FinishType { get; set; }
         public AccountViewModel Account { get; set; }
+        public ProductTextileViewModel ProductTextile { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

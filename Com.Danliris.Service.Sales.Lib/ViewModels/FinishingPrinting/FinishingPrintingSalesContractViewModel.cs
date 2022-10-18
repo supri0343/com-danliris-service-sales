@@ -55,6 +55,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public int? LateReturn { get; set; }
         public double? Claim { get; set; }
         public string Description { get; set; }
+
+        public ProductTextileViewModel ProductTextile { get; set; }
         public List<FinishingPrintingSalesContractDetailViewModel> Details { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -190,6 +190,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                             YarnMaterialId = model.YarnMaterialId,
                             YarnMaterialName = model.YarnMaterialName,
                             YarnMaterialRemark = model.YarnMaterialRemark,
+                            ProductTextileId = model.ProductTextileId,
+                            ProductTextileName = model.ProductTextileName,
+                            ProductTextileCode = model.ProductTextileCode,
                             Details = new List<ProductionOrder_DetailModel>
                             {
                                 item
