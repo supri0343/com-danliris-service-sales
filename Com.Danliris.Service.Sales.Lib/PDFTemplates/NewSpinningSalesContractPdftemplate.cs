@@ -39,30 +39,30 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             var uom1 = "";
 
             var nameProductType = viewModel.ProductType.Name == viewModel.ProductType.Name ? viewModel.ProductType.Name : " - ";
-            var nameMaterial = viewModel.Material.Name == viewModel.Material.Name ? viewModel.Material.Name : " - ";
-            var nameMaterialConstraction = viewModel.MaterialConstruction.Name;
-            if (nameMaterialConstraction != null)
-            {
-                nameMaterialConstraction = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nameMaterialConstraction.ToLower());
-            }
-            else
-            {
-                nameMaterialConstraction = " - ";
-            }
+			var nameMaterial = viewModel.Material.Name == viewModel.Material.Name ? viewModel.Material.Name : " - ";
+			var nameMaterialConstraction = viewModel.MaterialConstruction.Name;
+			if (nameMaterialConstraction != null)
+			{
+				nameMaterialConstraction = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nameMaterialConstraction.ToLower());
+			}
+			else
+			{
+				nameMaterialConstraction = " - ";
+			}
 
-            viewModel.Buyer.Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(viewModel.Buyer.Name.ToLower());
-                       
-            var materialName = viewModel.Material.Name;    
-            if (materialName != null)
-            {
-                materialName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(materialName.ToLower());
-            }
-            else
-            {
-                materialName = " - ";
-            }
+			viewModel.Buyer.Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(viewModel.Buyer.Name.ToLower());
 
-            var kondisi = viewModel.Condition;
+			var materialName = viewModel.Material.Name;
+			if (materialName != null)
+			{
+				materialName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(materialName.ToLower());
+			}
+			else
+			{
+				materialName = " - ";
+			}
+
+			var kondisi = viewModel.Condition;
             if (kondisi != null)
             {
                 kondisi = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(kondisi.ToLower());
@@ -320,12 +320,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableOrder.AddCell(cellOrder);
             cellOrder.Phrase = new Phrase(UppercaseWords(comodityName), normal_font);
             tableOrder.AddCell(cellOrder);
-            cellOrder.Phrase = new Phrase( UppercaseWords(materialName) + " " + "-" + " " + nameMaterialConstraction, normal_font);
-            tableOrder.AddCell(cellOrder);
+			cellOrder.Phrase = new Phrase(UppercaseWords(materialName) + " " + "-" + " " + nameMaterialConstraction, normal_font);
+			tableOrder.AddCell(cellOrder);
 
 
 
-            PdfPCell cellProduct = new PdfPCell(tableOrder); // dont remove
+			PdfPCell cellProduct = new PdfPCell(tableOrder); // dont remove
             tableOrder.ExtendLastRow = false;
             tableOrder.SpacingAfter = 10f;
             Paragraph p = new Paragraph();
