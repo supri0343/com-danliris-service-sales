@@ -1,5 +1,4 @@
 ﻿using Com.Danliris.Service.Sales.Lib.Models.Spinning;
-using Com.Danliris.Service.Sales.Lib.Models.Weaving;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
@@ -14,7 +13,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning
 {
     public class SpinningSalesContractLogic : BaseLogic<SpinningSalesContractModel>
     {
-        public SpinningSalesContractLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService,serviceProvider, dbContext)
+        public SpinningSalesContractLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
         {
         }
         public override ReadResponse<SpinningSalesContractModel> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -33,7 +32,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "SalesContractNo","Buyer","DeliverySchedule","Comodity","ComodityDescription","OrderQuantity","UomUnit","DeliveredTo"
+                "Id", "SalesContractNo","Buyer","DeliverySchedule","Comodity","ComodityDescription","OrderQuantity","UomUnit","DeliveredTo", "ProductType", "Material", "MaterialConstruction"
             };
 
             Query = Query
@@ -52,7 +51,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Spinning
                     ComodityDescription = field.ComodityDescription,
                     OrderQuantity = field.OrderQuantity,
                     UomUnit = field.UomUnit,
-                    DeliveredTo = field.DeliveredTo
+                    DeliveredTo = field.DeliveredTo,
+                    BuyerJob = field.BuyerJob,
+                    ProductTypeId = field.ProductTypeId,
+                    ProductTypeCode = field.ProductTypeCode,
+                    ProductTypeName = field.ProductTypeName,
+                    MaterialCode = field.MaterialCode,
+                    MaterialID = field.MaterialID,
+                    MaterialName = field.MaterialName,
+                    MaterialPrice = field.MaterialPrice,
+                    MaterialTags = field.MaterialTags,
+                    MaterialConstructionCode = field.MaterialConstructionCode,
+                    MaterialConstructionId = field.MaterialConstructionId,
+                    MaterialConstructionName = field.MaterialConstructionName
                 });
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
