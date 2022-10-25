@@ -559,8 +559,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             {
 			    ro = s.RO_Number,
 			    buyerCode = s.BuyerBrandCode,
-			    hours = s.SMV_Cutting,
-			    comodityName = s.Commodity,
+                //hours = s.SMV_Cutting,
+                hours = s.SMV_Total,
+                comodityName = s.Commodity,
 			    qtyOrder = s.Quantity,
             }).ToList();
 
