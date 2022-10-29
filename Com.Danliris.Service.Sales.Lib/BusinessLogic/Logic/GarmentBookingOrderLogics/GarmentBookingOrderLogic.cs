@@ -2,6 +2,7 @@
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
+using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModels;
 using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using Microsoft.EntityFrameworkCore;
@@ -333,6 +334,103 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
             int totalData = pageable.TotalCount;
 
             return new ReadResponse<GarmentBookingOrder>(data, totalData, OrderDictionary, SelectedFields);
+        }
+
+        public ReadResponse<GarmentBookingOrderForCCGViewModel> ReadByBookingOrderNoForCCG(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            IQueryable<GarmentBookingOrder> Query1 = DbSet;
+            
+            List<string> SearchAttributes = new List<string>()
+            {
+                "BookingOrderNo"
+            };
+
+            Query1 = QueryHelper<GarmentBookingOrder>.Search(Query1, SearchAttributes, keyword);
+           
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+            //Query1 = QueryHelper<GarmentBookingOrder>.Filter(Query1, FilterDictionary);
+
+            string buyer = FilterDictionary["BuyerCode"];
+            string section = FilterDictionary["SectionCode"];
+            string comodity = FilterDictionary["ComodityCode"];
+
+
+            List<string> SelectedFields = new List<string>()
+            {
+                   "BookingOrderId", "BookingOrderItemId", "BookingOrderNo", "ConfirmDate", "BuyerId", "BuyerCode", "BuyerName", "SectionId", "SectionCode", "SectionName", "ComodityId", "ComodityCode", "ComodityName", "ConfirmQuantity"
+            };
+
+            var QueryX = (from a in Query1
+                         join b in DbContext.GarmentBookingOrderItems on a.Id equals b.BookingOrderId
+                         join c in DbContext.CostCalculationGarments on a.Id equals c.BookingOrderItemId into cc
+                         from CCG in cc.DefaultIfEmpty()
+                         where a.HadConfirmed == true && a.IsCanceled == false && b.IsCanceled == false
+                               && a.BuyerCode == buyer && a.SectionCode == section && b.ComodityCode == comodity
+
+                         select new GarmentBookingOrderForCCGViewModel
+                         {
+                             BookingOrderId = a.Id,
+                             BookingOrderItemId = b.Id,
+                             BookingOrderNo = a.BookingOrderNo,
+                             ConfirmDate = b.ConfirmDate,
+                             BuyerId = a.BuyerId,
+                             BuyerCode = a.BuyerCode,
+                             BuyerName = a.BuyerName,
+                             SectionId = a.SectionId,
+                             SectionCode = a.SectionCode,
+                             SectionName = a.SectionName,
+                             ComodityId = b.ComodityId,
+                             ComodityCode = b.ComodityCode,
+                             ComodityName = b.ComodityName,
+                             ConfirmQuantity = b.ConfirmQuantity,
+                             CCQuantity = CCG == null ? 0 : CCG.Quantity,
+                         });
+
+            var Query = (from x in QueryX
+                         group new { Qty = x.CCQuantity } by new
+                         {
+                             x.BookingOrderId,
+                             x.BookingOrderNo,
+                             x.BookingOrderItemId,
+                             x.ConfirmDate,
+                             x.ConfirmQuantity,
+                             x.BuyerId,
+                             x.BuyerCode,
+                             x.BuyerName,
+                             x.SectionId,
+                             x.SectionCode,
+                             x.SectionName,
+                             x.ComodityId,
+                             x.ComodityCode,
+                             x.ComodityName
+                         } into G
+
+                         select new GarmentBookingOrderForCCGViewModel
+                         {
+                             BookingOrderId = G.Key.BookingOrderId,
+                             BookingOrderItemId = G.Key.BookingOrderItemId,
+                             BookingOrderNo = G.Key.BookingOrderNo,
+                             ConfirmDate = G.Key.ConfirmDate,                             
+                             BuyerId = G.Key.BuyerId,
+                             BuyerCode = G.Key.BuyerCode,
+                             BuyerName = G.Key.BuyerName,
+                             SectionId = G.Key.SectionId,
+                             SectionCode = G.Key.SectionCode,
+                             SectionName = G.Key.SectionName,
+                             ComodityId = G.Key.ComodityId,
+                             ComodityCode = G.Key.ComodityCode,
+                             ComodityName = G.Key.ComodityName,
+                             ConfirmQuantity = G.Key.ConfirmQuantity - G.Sum(m => m.Qty),
+                         }).OrderBy(x => x.BookingOrderNo).ThenBy(x => x.SectionCode).ThenBy(x => x.BuyerCode).ThenBy(x => x.ComodityCode);
+
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            //Query = QueryHelper<GarmentBookingOrder>.Order(Query, OrderDictionary);
+
+            Pageable<GarmentBookingOrderForCCGViewModel> pageable = new Pageable<GarmentBookingOrderForCCGViewModel>(Query, page - 1, size);
+            List<GarmentBookingOrderForCCGViewModel> data = pageable.Data.ToList<GarmentBookingOrderForCCGViewModel>();
+            int totalData = pageable.TotalCount;
+
+            return new ReadResponse<GarmentBookingOrderForCCGViewModel>(data, totalData, OrderDictionary, SelectedFields);
         }
 
         public ReadResponse<GarmentBookingOrder> ReadExpired(int page, int size, string order, List<string> select, string keyword, string filter)
