@@ -228,15 +228,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<int>("AutoIncrementNumber");
 
-                    b.Property<int>("BOQuantity");
-
-                    b.Property<int>("BookingOrderId");
-
-                    b.Property<int>("BookingOrderItemId");
-
-                    b.Property<string>("BookingOrderNo")
-                        .HasMaxLength(255);
-
                     b.Property<string>("BuyerBrandCode")
                         .HasMaxLength(50);
 
@@ -2192,8 +2183,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<long>("BookingOrderId");
-
-                    b.Property<double>("CCQuantity");
 
                     b.Property<DateTimeOffset>("CanceledDate");
 
