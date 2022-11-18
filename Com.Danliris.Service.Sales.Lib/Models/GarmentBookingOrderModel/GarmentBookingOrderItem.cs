@@ -20,11 +20,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel
         [MaxLength(100)]
         public string ComodityName { get; set; }
         public double ConfirmQuantity { get; set; }
+        public double CCQuantity { get; set; }
         public DateTimeOffset DeliveryDate { get; set; }
         public DateTimeOffset ConfirmDate { get; set; }
         public string Remark { get; set; }
         public bool IsCanceled { get; set; }
         public DateTimeOffset CanceledDate { get; set; }
-
     }
 }
