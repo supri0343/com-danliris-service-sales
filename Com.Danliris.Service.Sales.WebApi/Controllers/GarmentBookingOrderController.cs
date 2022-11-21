@@ -32,7 +32,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpPut("BOCancel/{id}")]
-        public async Task<IActionResult> CancelLeftOvers([FromRoute]int id, [FromBody] GarmentBookingOrderViewModel viewModel)
+        public async Task<IActionResult> CancelLeftOvers([FromRoute] int id, [FromBody] GarmentBookingOrderViewModel viewModel)
         {
             IdentityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
@@ -50,7 +50,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpPut("BODelete/{id}")]
-        public async Task<IActionResult> DeleteLeftOvers([FromRoute]int id, [FromBody] GarmentBookingOrderViewModel viewModel)
+        public async Task<IActionResult> DeleteLeftOvers([FromRoute] int id, [FromBody] GarmentBookingOrderViewModel viewModel)
         {
             IdentityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
 
@@ -68,7 +68,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("read-by-no")]
-        public IActionResult Get(int page = 1, int size = 25, [Bind(Prefix = "Select[]")]List<string> select = null, string order = "{}", string keyword = null, string filter = "{}")
+        public IActionResult Get(int page = 1, int size = 25, [Bind(Prefix = "Select[]")] List<string> select = null, string order = "{}", string keyword = null, string filter = "{}")
         {
             try
             {
@@ -81,6 +81,29 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     .Ok<GarmentBookingOrderViewModel>(Mapper, DataVM, page, size, read.Count, DataVM.Count, read.Order, read.Selected);
                 return Ok(Result);
 
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utilities.ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("read-by-no-for-ccg")]
+        public IActionResult GetForCCG(int page = 1, int size = 25, [Bind(Prefix = "Select[]")] List<string> select = null, string order = "{}", string keyword = null, string filter = "{}")
+        {
+            try
+            {
+                ReadResponse<GarmentBookingOrderForCCGViewModel> read = Facade.ReadByBookingOrderNoForCCG(page, size, order, select, keyword, filter);
+
+                List<GarmentBookingOrderForCCGViewModel> DataVM = Mapper.Map<List<GarmentBookingOrderForCCGViewModel>>(read.Data);
+
+                Dictionary<string, object> Result =
+                    new Utilities.ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<GarmentBookingOrderForCCGViewModel>(Mapper, DataVM, page, size, read.Count, DataVM.Count, read.Order, read.Selected);
+                return Ok(Result);
             }
             catch (Exception e)
             {

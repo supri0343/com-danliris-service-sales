@@ -45,47 +45,99 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
             List<GarmentBookingOrderMonitoringViewModel> listAllGarmentBookingMonitoring = new List<GarmentBookingOrderMonitoringViewModel>();
             List<GarmentBookingOrderMonitoringViewModel> listGarmentBookingMonitoringFilter = new List<GarmentBookingOrderMonitoringViewModel>();
 
+            var Query1 = (from a in DbContext.GarmentBookingOrders
+                          join b in DbContext.GarmentBookingOrderItems on a.Id equals b.BookingOrderId
+                          join c in DbContext.CostCalculationGarments on b.Id equals c.BookingOrderItemId into cc
+                          from CCG in cc.DefaultIfEmpty()
+                          where a.IsDeleted == false && b.IsDeleted == false && CCG.IsDeleted == false
+                              && a.IsCanceled == false
+                              && a.OrderQuantity > 0
+                              && a.SectionCode == (string.IsNullOrWhiteSpace(section) ? a.SectionCode : section)
+                              && a.BookingOrderNo == (string.IsNullOrWhiteSpace(no) ? a.BookingOrderNo : no)
+                              && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerCode) ? a.BuyerCode : buyerCode)
+                              && b.ComodityCode == (string.IsNullOrWhiteSpace(comodityCode) ? b.ComodityCode : comodityCode)
+                              && a.BookingOrderDate.AddHours(offset).Date >= DateFrom.Date
+                              && a.BookingOrderDate.AddHours(offset).Date <= DateTo.Date
+                              && a.DeliveryDate.AddHours(offset).Date >= DateDeliveryFrom.Date
+                              && a.DeliveryDate.AddHours(offset).Date <= DateDeliveryTo.Date
+                              && b.IsCanceled == false
+                          select new GarmentBookingOrderMonitoringViewModel
+                          {
+                              CreatedUtc = a.CreatedUtc,
+                              BookingOrderNo = a.BookingOrderNo,
+                              BookingOrderDate = a.BookingOrderDate,
+                              BuyerName = a.BuyerName,
+                              OrderQuantity = a.OrderQuantity,
+                              DeliveryDate = a.DeliveryDate,
+                              ComodityName = b.ComodityName,
+                              ConfirmQuantity = b.ConfirmQuantity,
+                              CCQuantity = CCG == null ? 0 : CCG.Quantity,
+                              RemainingQuantity = 0,
+                              DeliveryDateItems = b.DeliveryDate,
+                              ConfirmDate = b.ConfirmDate,
+                              Remark = b.Remark,
+                              StatusConfirm = a.ConfirmedQuantity == 0 ? "Belum Dikonfirmasi" : a.ConfirmedQuantity > 0 ? "Sudah Dikonfirmasi" : "-",
+                              StatusBooking = a.IsBlockingPlan == true ? "Sudah Dibuat Master Plan" : a.ConfirmedQuantity == 0 && a.IsBlockingPlan == false ? "Booking" : a.ConfirmedQuantity > 0 && a.IsBlockingPlan == false ? "Confirmed" : "-",
+                              OrderLeft = (a.OrderQuantity - a.ConfirmedQuantity) > 0 ? (a.OrderQuantity - a.ConfirmedQuantity).ToString() : "0",
+                              DateDiff = ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days <= 45 && ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days >= 0 ? ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days.ToString() : "-",
+                              row_count = 1,
+                              LastModifiedUtc = a.LastModifiedUtc,
+                              NotConfirmedQuantity = a.ExpiredBookingQuantity + a.CanceledQuantity,
+                              SurplusQuantity = (a.ConfirmedQuantity - a.OrderQuantity) > 0 ? (a.ConfirmedQuantity - a.OrderQuantity).ToString() : "-"
+                          }
+                         );
+            //
+            var Query = (from x in Query1
+                         group new { CCQty = x.CCQuantity } by new
+                         {
+                             x.CreatedUtc,
+                             x.BookingOrderNo,
+                             x.BookingOrderDate,
+                             x.BuyerName,
+                             x.OrderQuantity,
+                             x.DeliveryDate,
+                             x.ComodityName,
+                             x.ConfirmQuantity,
+                             x.RemainingQuantity,
+                             x.DeliveryDateItems,
+                             x.ConfirmDate,
+                             x.Remark,
+                             x.StatusConfirm,
+                             x.StatusBooking,
+                             x.OrderLeft,
+                             x.DateDiff,
+                             x.row_count,
+                             x.LastModifiedUtc,
+                             x.NotConfirmedQuantity,
+                             x.SurplusQuantity,
+                         } into G
 
-            var Query = (from a in DbContext.GarmentBookingOrders
-                         join b in DbContext.GarmentBookingOrderItems on a.Id equals b.BookingOrderId
-
-                         where a.IsDeleted == false
-                             && a.IsCanceled == false
-                             && a.OrderQuantity > 0
-                             && a.SectionCode == (string.IsNullOrWhiteSpace(section) ? a.SectionCode : section)
-                             && a.BookingOrderNo == (string.IsNullOrWhiteSpace(no) ? a.BookingOrderNo : no)
-                             && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerCode) ? a.BuyerCode : buyerCode)
-                             && b.ComodityCode == (string.IsNullOrWhiteSpace(comodityCode) ? b.ComodityCode : comodityCode)
-                             && a.BookingOrderDate.AddHours(offset).Date >= DateFrom.Date
-                             && a.BookingOrderDate.AddHours(offset).Date <= DateTo.Date
-                             && a.DeliveryDate.AddHours(offset).Date >= DateDeliveryFrom.Date
-                             && a.DeliveryDate.AddHours(offset).Date <= DateDeliveryTo.Date
-                             && b.IsCanceled==false
                          select new GarmentBookingOrderMonitoringViewModel
                          {
-                             CreatedUtc = a.CreatedUtc,
-                             BookingOrderNo = a.BookingOrderNo,
-                             BookingOrderDate = a.BookingOrderDate,
-                             BuyerName = a.BuyerName,
-                             OrderQuantity = a.OrderQuantity,
-                             DeliveryDate = a.DeliveryDate,
-                             ComodityName = b.ComodityName,
-                             ConfirmQuantity = b.ConfirmQuantity,
-                             DeliveryDateItems = b.DeliveryDate,
-                             ConfirmDate = b.ConfirmDate,
-                             Remark = b.Remark,
-                             StatusConfirm = a.ConfirmedQuantity == 0 ? "Belum Dikonfirmasi" : a.ConfirmedQuantity > 0 ? "Sudah Dikonfirmasi" : "-",
-                             StatusBooking = a.IsBlockingPlan == true ? "Sudah Dibuat Master Plan" : a.ConfirmedQuantity == 0 && a.IsBlockingPlan == false ? "Booking" : a.ConfirmedQuantity > 0 && a.IsBlockingPlan == false ? "Confirmed" : "-",
-                             OrderLeft = (a.OrderQuantity - a.ConfirmedQuantity) > 0 ? (a.OrderQuantity - a.ConfirmedQuantity).ToString() : "0",
-                             DateDiff = ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days <= 45 && ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days >= 0 ? ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days.ToString() : "-",
-                             row_count = 1,
-                             LastModifiedUtc = a.LastModifiedUtc,
-                             NotConfirmedQuantity= a.ExpiredBookingQuantity + a.CanceledQuantity,
-                             SurplusQuantity = (a.ConfirmedQuantity - a.OrderQuantity) > 0 ? (a.ConfirmedQuantity - a.OrderQuantity).ToString() : "-"
-                         }
-            );
-
-            foreach(var query in Query)
+                             CreatedUtc = G.Key.CreatedUtc,
+                             BookingOrderNo = G.Key.BookingOrderNo,
+                             BookingOrderDate = G.Key.BookingOrderDate,
+                             BuyerName = G.Key.BuyerName,
+                             OrderQuantity = G.Key.OrderQuantity,
+                             DeliveryDate = G.Key.DeliveryDate,
+                             ComodityName = G.Key.ComodityName,
+                             ConfirmQuantity = G.Key.ConfirmQuantity,
+                             DeliveryDateItems = G.Key.DeliveryDateItems,
+                             ConfirmDate = G.Key.ConfirmDate,
+                             Remark = G.Key.Remark,
+                             StatusConfirm = G.Key.StatusConfirm,
+                             StatusBooking = G.Key.StatusBooking,
+                             OrderLeft = G.Key.OrderLeft,
+                             DateDiff = G.Key.DateDiff,
+                             row_count = G.Key.row_count,
+                             LastModifiedUtc = G.Key.LastModifiedUtc,
+                             NotConfirmedQuantity = G.Key.NotConfirmedQuantity,
+                             SurplusQuantity = G.Key.SurplusQuantity,
+                             CCQuantity = G.Sum(m => m.CCQty),
+                             RemainingQuantity = Convert.ToInt32((1.1025 * G.Key.ConfirmQuantity)) - G.Sum(m => m.CCQty),
+                         }).OrderBy(x => x.BookingOrderNo).ThenBy(x => x.BuyerName);
+            //
+            foreach (var query in Query)
             {
                 if (statusConfirm == "Belum Dikonfirmasi")
                 {
@@ -93,13 +145,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                     {
                         listGarmentBookingMonitoring.Add(query);
                     }
-                } else if (statusConfirm == "Sudah Dikonfirmasi")
+                }
+                else if (statusConfirm == "Sudah Dikonfirmasi")
                 {
                     if (query.StatusConfirm == statusConfirm)
                     {
                         listGarmentBookingMonitoring.Add(query);
                     }
-                } else
+                }
+                else
                 {
                     listGarmentBookingMonitoring.Add(query);
                 }
@@ -134,12 +188,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                                   Remark = null,
                                   StatusConfirm = "Belum Dikonfirmasi",
                                   StatusBooking = a.IsBlockingPlan == true ? "Sudah Dibuat Master Plan" : a.ConfirmedQuantity == 0 && a.IsBlockingPlan == false ? "Booking" : a.ConfirmedQuantity > 0 && a.IsBlockingPlan == false ? "Confirmed" : "-",
-                                  OrderLeft = (a.OrderQuantity - a.ConfirmedQuantity)>0 ? (a.OrderQuantity - a.ConfirmedQuantity).ToString() : "0",
+                                  OrderLeft = (a.OrderQuantity - a.ConfirmedQuantity) > 0 ? (a.OrderQuantity - a.ConfirmedQuantity).ToString() : "0",
                                   DateDiff = ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days <= 45 && ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days >= 0 ? ((TimeSpan)(a.DeliveryDate.AddHours(offset) - today)).Days.ToString() : "-",
                                   row_count = 1,
                                   LastModifiedUtc = a.LastModifiedUtc,
                                   NotConfirmedQuantity = a.ExpiredBookingQuantity + a.CanceledQuantity,
-                                  SurplusQuantity = (a.ConfirmedQuantity - a.OrderQuantity)>0? (a.ConfirmedQuantity - a.OrderQuantity).ToString(): "-"
+                                  SurplusQuantity = (a.ConfirmedQuantity - a.OrderQuantity) > 0 ? (a.ConfirmedQuantity - a.OrderQuantity).ToString() : "-"
                               }
                 );
                 foreach (var query in query2.OrderBy(o => o.BookingOrderNo))
@@ -168,11 +222,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                 var tempCheck = "";
                 foreach (var query in listGarmentBookingMonitoring.OrderBy(o => o.BookingOrderNo))
                 {
-                    if (tempCheck == query.BookingOrderNo && query.ComodityName==null && query.ConfirmQuantity==null && query.DeliveryDateItems==null && query.ConfirmDate==null && query.Remark==null)
+                    if (tempCheck == query.BookingOrderNo && query.ComodityName == null && query.ConfirmQuantity == null && query.DeliveryDateItems == null && query.ConfirmDate == null && query.Remark == null)
                     {
                         listGarmentBookingMonitoring.Remove(query);
                     }
-                    
+
                     if (tempCheck == "" || tempCheck != query.BookingOrderNo)
                         tempCheck = query.BookingOrderNo;
                 }
@@ -186,19 +240,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                     {
                         listGarmentBookingMonitoringFilter.Add(queryFilter);
                     }
-                } else if (statusBookingOrder == "Booking")
+                }
+                else if (statusBookingOrder == "Booking")
                 {
                     if (queryFilter.StatusBooking == statusBookingOrder)
                     {
                         listGarmentBookingMonitoringFilter.Add(queryFilter);
                     }
-                } else if (statusBookingOrder == "Confirmed")
+                }
+                else if (statusBookingOrder == "Confirmed")
                 {
                     if (queryFilter.StatusBooking == statusBookingOrder)
                     {
                         listGarmentBookingMonitoringFilter.Add(queryFilter);
                     }
-                } else
+                }
+                else
                 {
                     listGarmentBookingMonitoringFilter.Add(queryFilter);
                 }
@@ -234,20 +291,22 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pengeriman (booking)", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jumlah Confirm", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Budget Turun", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Remaining Qty Confirm", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pengiriman (confirm)", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Confirm", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Keterangan", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Status Confirm", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Status Booking Order", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Sisa Order (Belum Confirm)", DataType = typeof(string) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Seilisih Hari (dari Tanggal Pengiriman)", DataType = typeof(string) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Seilisih Hari (dari Tanggal Pengiriman)", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Not Confirmed Order (MINUS)", DataType = typeof(string) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Over Confirm (SURPLUS)", DataType = typeof(string) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Over Confirm (SURPLUS)", DataType = typeof(string) });
 
             List<(string, Enum, Enum)> mergeCells = new List<(string, Enum, Enum)>() { };
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -284,14 +343,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
 
                         counterTemp++;
 
-                        result.Rows.Add(item.BookingOrderNo, BookingOrderDate, item.BuyerName, item.OrderQuantity, DeliveryDate, item.ComodityName, item.ConfirmQuantity,
-                        DeliveryDateItems, ConfirmDate, item.Remark, item.StatusConfirm, item.StatusBooking, item.OrderLeft, item.DateDiff,item.NotConfirmedQuantity, item.SurplusQuantity);
+                        result.Rows.Add(item.BookingOrderNo, BookingOrderDate, item.BuyerName, item.OrderQuantity, DeliveryDate, item.ComodityName, item.ConfirmQuantity, item.CCQuantity, item.RemainingQuantity,
+                        DeliveryDateItems, ConfirmDate, item.Remark, item.StatusConfirm, item.StatusBooking, item.OrderLeft, item.NotConfirmedQuantity);
 
-                       
-                    } else
+
+                    }
+                    else
                     {
-                        result.Rows.Add(item.BookingOrderNo, BookingOrderDate, item.BuyerName, item.OrderQuantity, DeliveryDate, item.ComodityName, item.ConfirmQuantity,
-                        DeliveryDateItems, ConfirmDate, item.Remark, item.StatusConfirm, item.StatusBooking, item.OrderLeft, item.DateDiff, item.NotConfirmedQuantity, item.SurplusQuantity);
+                        result.Rows.Add(item.BookingOrderNo, BookingOrderDate, item.BuyerName, item.OrderQuantity, DeliveryDate, item.ComodityName, item.ConfirmQuantity, item.CCQuantity, item.RemainingQuantity,
+                        DeliveryDateItems, ConfirmDate, item.Remark, item.StatusConfirm, item.StatusBooking, item.OrderLeft, item.NotConfirmedQuantity);
 
                         if (counterTemp > 1)
                         {

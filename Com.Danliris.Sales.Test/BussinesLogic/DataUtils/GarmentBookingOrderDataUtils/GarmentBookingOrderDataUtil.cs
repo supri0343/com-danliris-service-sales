@@ -32,8 +32,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDat
                 OrderQuantity = 9,
                 ExpiredBookingQuantity = 9,
                 HadConfirmed = true,
+                IsCanceled = false,
                 Remark = "Remark",
-                DeliveryDate= DateTime.Now.AddDays(30),
+                DeliveryDate = DateTime.Now.AddDays(30),
                 Items = new List<GarmentBookingOrderItem>()
             };
 
@@ -44,7 +45,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.GarmentBookingOrderDat
                 ComodityName = "ComodityName",
                 ConfirmQuantity = 55,
                 Remark = "Remark",
-                ConfirmDate= new DateTimeOffset()
+                IsCanceled = false,
+                ConfirmDate = new DateTimeOffset()
             });
             return Task.FromResult(bookingOrder);
         }
