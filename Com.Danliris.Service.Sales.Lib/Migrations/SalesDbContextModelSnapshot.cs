@@ -1683,6 +1683,7 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                 b.Property<string>("ProductTextileName");
 
+
                 b.Property<string>("ProductTypeCode")
                     .HasMaxLength(25);
 
@@ -3351,8 +3352,16 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                 b.Property<string>("ProductTextileName");
 
-                b.Property<string>("ProfileFirstName")
-                    .HasMaxLength(1000);
+
+                    b.Property<string>("ProductTextileCode");
+
+                    b.Property<int?>("ProductTextileId");
+
+                    b.Property<string>("ProductTextileName");
+
+                    b.Property<string>("ProfileFirstName")
+                        .HasMaxLength(1000);
+
 
                 b.Property<string>("ProfileGender")
                     .HasMaxLength(255);
