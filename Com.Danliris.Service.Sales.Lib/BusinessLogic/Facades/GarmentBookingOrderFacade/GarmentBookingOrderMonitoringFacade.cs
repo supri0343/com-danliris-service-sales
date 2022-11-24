@@ -361,7 +361,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                             mergeCells.Add(($"D{rowPosition - counterTemp}:D{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                             mergeCells.Add(($"E{rowPosition - counterTemp}:E{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                             mergeCells.Add(($"K{rowPosition - counterTemp}:K{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
-                            mergeCells.Add(($"L{rowPosition - counterTemp}:L{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
+                            //mergeCells.Add(($"L{rowPosition - counterTemp}:L{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                             mergeCells.Add(($"M{rowPosition - counterTemp}:M{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                             mergeCells.Add(($"N{rowPosition - counterTemp}:N{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                             mergeCells.Add(($"O{rowPosition - counterTemp}:O{rowPosition - 1}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
@@ -381,7 +381,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
                     mergeCells.Add(($"D{rowPosition + 1 - counterTemp}:D{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                     mergeCells.Add(($"E{rowPosition + 1 - counterTemp}:E{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                     mergeCells.Add(($"K{rowPosition + 1 - counterTemp}:K{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
-                    mergeCells.Add(($"L{rowPosition + 1 - counterTemp}:L{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
+                   //mergeCells.Add(($"L{rowPosition + 1 - counterTemp}:L{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                     mergeCells.Add(($"M{rowPosition + 1 - counterTemp}:M{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                     mergeCells.Add(($"N{rowPosition + 1 - counterTemp}:N{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
                     mergeCells.Add(($"O{rowPosition + 1 - counterTemp}:O{rowPosition}", OfficeOpenXml.Style.ExcelHorizontalAlignment.Left, OfficeOpenXml.Style.ExcelVerticalAlignment.Center));
