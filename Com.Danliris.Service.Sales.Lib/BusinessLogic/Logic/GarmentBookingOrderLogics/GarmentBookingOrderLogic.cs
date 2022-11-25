@@ -420,7 +420,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                               ComodityId = G.Key.ComodityId,
                               ComodityCode = G.Key.ComodityCode,
                               ComodityName = G.Key.ComodityName,
-                              ConfirmQuantity = Math.Round(((G.Key.ConfirmQuantity * 1.05) * 1.05), 0) - G.Sum(m => m.Qty),
+                              ConfirmQuantity = Math.Round(((G.Key.ConfirmQuantity * 1.05)), 0) - G.Sum(m => m.Qty),
                           }).OrderBy(x => x.BookingOrderNo).ThenBy(x => x.SectionCode).ThenBy(x => x.BuyerCode).ThenBy(x => x.ComodityCode);
 
 
