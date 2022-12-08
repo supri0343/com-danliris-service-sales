@@ -57,10 +57,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
             }
             newModel.ConfirmedQuantity = model.ConfirmedQuantity;
 
-            if (newModel.ConfirmedQuantity == 0)
-            {
-                newModel.HadConfirmed = false;
-            }
+            //if (newModel.ConfirmedQuantity == 0)
+            //{
+            //    newModel.HadConfirmed = false;
+            //}
 
             foreach (var newItem in newModel.Items)
             {
