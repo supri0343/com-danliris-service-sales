@@ -204,7 +204,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Nama", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(": " + "" + UppercaseWords(viewModel.Buyer.Name), normal_font);
+            bodyContentLefts.Phrase = new Phrase(": " + "" + UppercaseWords(viewModel.Buyer.BuyerOwner), normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
@@ -586,7 +586,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             cell_signature.Phrase = new Phrase("Sri Hendratno ", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature_buyer.Phrase = new Phrase( UppercaseWords(viewModel.Buyer.Name) , normal_font);
+            cell_signature_buyer.Phrase = new Phrase( UppercaseWords(viewModel.Buyer.BuyerOwner) , normal_font);
             signature.AddCell(cell_signature_buyer);
             cell_signature.Phrase = new Phrase("", normal_font);
             signature.AddCell(cell_signature);

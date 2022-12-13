@@ -77,6 +77,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                         viewModel.Buyer.NIK = buyer.TryGetValue("NIK", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.Job = buyer.TryGetValue("Job", out json) ? (json != null ? json.ToString() : "") : "";
                         viewModel.Buyer.NPWP = buyer.TryGetValue("NPWP", out json) ? (json != null ? json.ToString() : "") : "";
+                        viewModel.Buyer.BuyerOwner = buyer.TryGetValue("BuyerOwner", out json) ? (json != null ? json.ToString() : "") : "";
 
                     }
 
