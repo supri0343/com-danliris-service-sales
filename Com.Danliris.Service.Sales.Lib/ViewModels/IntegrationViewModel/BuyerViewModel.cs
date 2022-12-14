@@ -27,5 +27,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel
         [MaxLength(255)]
         public string NIK { get; set; }
         public string Job { get; set; }
+
+        public string BuyerOwner { get; set; }
     }
 }
