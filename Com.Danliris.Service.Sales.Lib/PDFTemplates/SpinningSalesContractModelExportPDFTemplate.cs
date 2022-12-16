@@ -24,11 +24,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #region customViewModel
 
             var uom = "";
-            double convertion = 0;
+            //double convertion = 0;
             if (viewModel.UomUnit == "BALL")
             {
                 uom = "BALES";
-                convertion = (viewModel.OrderQuantity) * (181.44);
+                //convertion = (viewModel.OrderQuantity) * (181.44);
             }
 
             var ppn = viewModel.IncomeTax;
@@ -37,6 +37,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 ppn = "Include PPn 10%";
             }
 
+            double convertion = (viewModel.OrderQuantity) * (181.44);
             string QuantityToText = NumberToTextEN.toWords(viewModel.OrderQuantity);
             double amount = Convert.ToDouble((viewModel.Price * convertion).ToString("N2"));
             string AmountToText = NumberToTextEN.toWords(amount);
