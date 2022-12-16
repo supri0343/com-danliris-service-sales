@@ -189,6 +189,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<string>("ApprovalCC")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ApprovalKadiv")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ApprovalRO")
+                        .HasMaxLength(255);
+
                     b.Property<string>("ApprovedIEBy")
                         .HasMaxLength(50);
 
@@ -218,6 +227,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("AutoIncrementNumber");
+
+                    b.Property<double>("BOQuantity");
+
+                    b.Property<int>("BookingOrderId");
+
+                    b.Property<int>("BookingOrderItemId");
+
+                    b.Property<string>("BookingOrderNo")
+                        .HasMaxLength(255);
 
                     b.Property<string>("BuyerBrandCode")
                         .HasMaxLength(50);
@@ -1514,11 +1532,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<int>("BuyerID");
 
+                    b.Property<string>("BuyerJob");
+
                     b.Property<string>("BuyerName")
                         .HasMaxLength(1000);
 
                     b.Property<string>("BuyerType")
                         .HasMaxLength(255);
+
+                    b.Property<double?>("Claim");
 
                     b.Property<string>("Code")
                         .HasMaxLength(25);
@@ -1552,6 +1574,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTimeOffset>("Date");
 
+                    b.Property<int>("Day");
+
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -1567,6 +1591,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTimeOffset>("DeliverySchedule");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("DesignMotiveCode")
                         .HasMaxLength(25);
 
@@ -1577,6 +1603,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("DispositionNumber")
                         .HasMaxLength(255);
+
+                    b.Property<string>("DownPayments");
 
                     b.Property<bool>("FromStock");
 
@@ -1591,6 +1619,10 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
+
+                    b.Property<int>("LatePayment");
+
+                    b.Property<int>("LateReturn");
 
                     b.Property<string>("MaterialCode")
                         .HasMaxLength(25);
@@ -1629,6 +1661,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Packing")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("PaymentMethods");
+
                     b.Property<string>("PieceLength")
                         .HasMaxLength(255);
 
@@ -1640,6 +1674,22 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("PreSalesContractNo")
                         .HasMaxLength(64);
+
+                    b.Property<double>("PriceDP");
+
+                    b.Property<string>("ProductTextileCode");
+
+                    b.Property<int>("ProductTextileId");
+
+                    b.Property<string>("ProductTextileName");
+
+                    b.Property<string>("ProductTypeCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("ProductTypeId");
+
+                    b.Property<string>("ProductTypeName")
+                        .HasMaxLength(255);
 
                     b.Property<string>("QualityCode")
                         .HasMaxLength(25);
@@ -1711,6 +1761,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("YarnMaterialName")
                         .HasMaxLength(255);
+
+                    b.Property<double>("precentageDP");
 
                     b.HasKey("Id");
 
@@ -2146,6 +2198,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<bool>("Active");
 
                     b.Property<long>("BookingOrderId");
+
+                    b.Property<double>("CCQuantity");
 
                     b.Property<DateTimeOffset>("CanceledDate");
 
@@ -3291,6 +3345,12 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("ProcessTypeUnit")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("ProductTextileCode");
+
+                    b.Property<int?>("ProductTextileId");
+
+                    b.Property<string>("ProductTextileName");
+
                     b.Property<string>("ProfileFirstName")
                         .HasMaxLength(1000);
 
@@ -4187,11 +4247,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long>("BuyerId");
 
+                    b.Property<string>("BuyerJob");
+
                     b.Property<string>("BuyerName")
                         .HasMaxLength(1000);
 
                     b.Property<string>("BuyerType")
                         .HasMaxLength(255);
+
+                    b.Property<double?>("Claim");
 
                     b.Property<string>("Code")
                         .HasMaxLength(255);
@@ -4225,6 +4289,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
+                    b.Property<int>("Day");
+
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -4243,6 +4309,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("DispositionNumber")
                         .HasMaxLength(255);
 
+                    b.Property<string>("DownPayments");
+
                     b.Property<bool>("FromStock");
 
                     b.Property<string>("IncomeTax")
@@ -4260,15 +4328,52 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
+                    b.Property<int>("LatePayment");
+
+                    b.Property<int>("LateReturn");
+
+                    b.Property<string>("MaterialCode")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("MaterialConstructionCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("MaterialConstructionId");
+
+                    b.Property<string>("MaterialConstructionName")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("MaterialID");
+
+                    b.Property<string>("MaterialName")
+                        .HasMaxLength(255);
+
+                    b.Property<double>("MaterialPrice");
+
+                    b.Property<string>("MaterialTags")
+                        .HasMaxLength(255);
+
                     b.Property<double>("OrderQuantity");
 
                     b.Property<string>("Packing")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("PaymentMethods");
+
                     b.Property<string>("PieceLength")
                         .HasMaxLength(1000);
 
                     b.Property<double>("Price");
+
+                    b.Property<double>("PriceDP");
+
+                    b.Property<string>("ProductTypeCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("ProductTypeId");
+
+                    b.Property<string>("ProductTypeName")
+                        .HasMaxLength(255);
 
                     b.Property<string>("QualityCode")
                         .HasMaxLength(255);
@@ -4312,6 +4417,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("VatId");
 
                     b.Property<double>("VatRate");
+
+                    b.Property<double>("precentageDP");
 
                     b.HasKey("Id");
 
@@ -4360,11 +4467,15 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<long>("BuyerId");
 
+                    b.Property<string>("BuyerJob");
+
                     b.Property<string>("BuyerName")
                         .HasMaxLength(1000);
 
                     b.Property<string>("BuyerType")
                         .HasMaxLength(255);
+
+                    b.Property<double?>("Claim");
 
                     b.Property<string>("Code")
                         .HasMaxLength(255);
@@ -4398,6 +4509,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("CreatedUtc");
 
+                    b.Property<int>("Day");
+
                     b.Property<string>("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -4416,6 +4529,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("DispositionNumber")
                         .HasMaxLength(255);
 
+                    b.Property<string>("DownPayments");
+
                     b.Property<bool>("FromStock");
 
                     b.Property<string>("IncomeTax")
@@ -4433,6 +4548,13 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
+                    b.Property<int>("LatePayment");
+
+                    b.Property<int>("LateReturn");
+
+                    b.Property<string>("MaterialCode")
+                        .HasMaxLength(25);
+
                     b.Property<string>("MaterialConstructionCode")
                         .HasMaxLength(255);
 
@@ -4443,6 +4565,16 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<string>("MaterialConstructionRemark");
 
+                    b.Property<int>("MaterialID");
+
+                    b.Property<string>("MaterialName")
+                        .HasMaxLength(255);
+
+                    b.Property<double>("MaterialPrice");
+
+                    b.Property<string>("MaterialTags")
+                        .HasMaxLength(255);
+
                     b.Property<string>("MaterialWidth")
                         .HasMaxLength(255);
 
@@ -4451,10 +4583,14 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<string>("Packing")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("PaymentMethods");
+
                     b.Property<string>("PieceLength")
                         .HasMaxLength(1000);
 
                     b.Property<double>("Price");
+
+                    b.Property<double>("PriceDP");
 
                     b.Property<string>("ProductCode")
                         .HasMaxLength(255);
@@ -4467,6 +4603,14 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.Property<double>("ProductPrice");
 
                     b.Property<string>("ProductTags")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ProductTypeCode")
+                        .HasMaxLength(25);
+
+                    b.Property<int>("ProductTypeId");
+
+                    b.Property<string>("ProductTypeName")
                         .HasMaxLength(255);
 
                     b.Property<string>("QualityCode")
@@ -4523,6 +4667,8 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<string>("YarnMaterialRemark");
+
+                    b.Property<double>("precentageDP");
 
                     b.HasKey("Id");
 

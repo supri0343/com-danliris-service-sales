@@ -60,7 +60,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                 else if (this.DeliveryDate < DateTimeOffset.Now.AddDays(45))
                     yield return new ValidationResult("Tanggal Pengiriman harus lebih dari 45 Hari (" + dt.ToOffset(new TimeSpan(clientTimeZoneOffset, 0, 0)).ToString("dd MMMM yyyy", new CultureInfo("id-ID")) + ")", new List<string> { "DeliveryDate" });
             }
-            if (Id<=0 || isUpdate)
+            if (Id <= 0 || isUpdate)
             {
                 var dateDeliveryBook = DeliveryDate.Day;
                 int yearBook = DeliveryDate.Year;
@@ -76,7 +76,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                     var weekly = dbContext.GarmentWeeklyPlans.Where(a => a.UnitCode != "SK");
                     var weeks = (from i in dbContext.GarmentWeeklyPlanItems
                                  join w in weekly on i.WeeklyPlanId equals w.Id
-                                 where i.StartDate.Year == (monthBook == 1 ? yearBook-1 : yearBook) && i.StartDate.Month == (monthBook ==1 ? 12 : monthBook - 1)
+                                 where i.StartDate.Year == (monthBook == 1 ? yearBook - 1 : yearBook) && i.StartDate.Month == (monthBook == 1 ? 12 : monthBook - 1)
                                  select i).ToList();
                     double wh = 0;
                     double SKwh = 0;
@@ -84,7 +84,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                     {
                         SKwh += Math.Round(sk.WHConfirm, 2);
                     }
-                    averageSKWHBook =SKwh / SKweeks.Count();
+                    averageSKWHBook = SKwh / SKweeks.Count();
                     foreach (var w in weeks)
                     {
                         wh += Math.Round(w.WHConfirm, 2);
@@ -121,7 +121,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                     yield return new ValidationResult("Tidak bisa simpan Boooking Order. WH Confirm sudah " + maxWH, new List<string> { "DeliveryDate" });
                 }
             }
-            
+
 
             if (Items != null)
             {
@@ -142,6 +142,13 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                     {
                         Count++;
                         ItemError += " ConfirmQuantity: 'Jumlah tidak boleh kurang dari 0' , ";
+                    }
+
+                    var totalQuantity = Items.Sum(s => s.ConfirmQuantity);
+                    if (totalQuantity > this.OrderQuantity * 1.05)
+                    {
+                        Count++;
+                        ItemError += $"ConfirmQuantity: 'Alllowance Total Confirm Quantity Max 5% dari Order Quantity ({this.OrderQuantity * 1.05})', ";
                     }
 
                     if (item.DeliveryDate == DateTimeOffset.MinValue || item.DeliveryDate == null)
@@ -179,7 +186,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                         {
                             var SKweeks = (from i in dbContext.GarmentWeeklyPlanItems
                                            join w in dbContext.GarmentWeeklyPlans on i.WeeklyPlanId equals w.Id
-                                           where i.StartDate.Year == (month == 1 ? year-1 : year) && i.StartDate.Month == (month == 1 ? 12 : month - 1) && w.UnitCode == "SK"
+                                           where i.StartDate.Year == (month == 1 ? year - 1 : year) && i.StartDate.Month == (month == 1 ? 12 : month - 1) && w.UnitCode == "SK"
                                            select i).ToList();
                             var weekly = dbContext.GarmentWeeklyPlans.Where(a => a.UnitCode != "SK");
                             var weeks = (from i in dbContext.GarmentWeeklyPlanItems
@@ -229,9 +236,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
                             ItemError += $" DeliveryDate: 'Tidak bisa simpan Booking Order. WH Confirm sudah {maxWH}' , ";
                         }
                     }
-                    
 
-                    
+
+
                     ItemError += "}, ";
                 }
 

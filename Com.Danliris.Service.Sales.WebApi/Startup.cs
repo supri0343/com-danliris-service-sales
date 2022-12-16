@@ -363,11 +363,11 @@ namespace Com.Danliris.Service.Sales.WebApi
             }
 
             /* Update Database */
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                SalesDbContext context = serviceScope.ServiceProvider.GetService<SalesDbContext>();
-                context.Database.Migrate();
-            }
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    SalesDbContext context = serviceScope.ServiceProvider.GetService<SalesDbContext>();
+            //    context.Database.Migrate();
+            //}
 
             app.UseAuthentication();
             app.UseCors(SALES_POLICY);

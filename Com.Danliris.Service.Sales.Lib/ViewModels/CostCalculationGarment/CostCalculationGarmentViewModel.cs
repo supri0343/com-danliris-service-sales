@@ -37,6 +37,9 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string RO_Number { get; set; }
         public string Section { get; set; }
         public string SectionName { get; set; }
+        public string ApprovalCC { get; set; }
+        public string ApprovalRO { get; set; }
+        public string ApprovalKadiv { get; set; }
         public int? Quantity { get; set; }
         public string SizeRange { get; set; }
         public double? SMV_Cutting { get; set; }
@@ -61,6 +64,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
 
         public long PreSCId { get; set; }
         public string PreSCNo { get; set; }
+
+        public int BookingOrderId { get; set; }
+        public string BookingOrderNo { get; set; }
+        public double BOQuantity { get; set; }
+        public int BookingOrderItemId { get; set; }
 
         public Approval ApprovalMD { get; set; }
         public Approval ApprovalPurchasing { get; set; }
@@ -99,6 +107,11 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
                 yield return new ValidationResult("Sales Contract harus diisi", new List<string> { "PreSalesContract" });
             }
 
+            if (BookingOrderId < 1 || string.IsNullOrWhiteSpace(BookingOrderNo))
+            {
+                yield return new ValidationResult("No Booking Order harus diisi", new List<string> { "BookingOrder" });
+            }
+
             if (string.IsNullOrWhiteSpace(this.Article))
                 yield return new ValidationResult("Nama Artikel harus diisi", new List<string> { "Article" });
             if (Unit == null || string.IsNullOrWhiteSpace(this.Unit.Code))
@@ -121,6 +134,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
                 yield return new ValidationResult("Kuantitas harus diisi", new List<string> { "Quantity" });
             else if (this.Quantity <= 0)
                 yield return new ValidationResult("Kuantitas harus lebih besar dari 0", new List<string> { "Quantity" });
+            else if (this.Quantity > this.BOQuantity)
+                yield return new ValidationResult("Kuantitas tidak boleh lebih dari Remaining Confirm Quantity Booking Order", new List<string> { "Quantity" });
             else if (this.Efficiency == null || this.Efficiency.Id == 0)
                 yield return new ValidationResult("Tidak ditemukan Efisiensi pada kuantitas ini", new List<string> { "Quantity" });
             if (string.IsNullOrWhiteSpace(this.SizeRange))
@@ -129,6 +144,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
                 yield return new ValidationResult("Delivery Date harus diisi", new List<string> { "DeliveryDate" });
             else if (this.DeliveryDate < DateTimeOffset.Now)
                 yield return new ValidationResult("Delivery Date harus lebih besar dari hari ini", new List<string> { "DeliveryDate" });
+            //else if (this.ConfirmDate.AddDays(30) > this.DeliveryDate)
+            //    yield return new ValidationResult("Selisih Confirm Date dengan Delivery Date harus lebih besar dari 30 hari", new List<string> { "DeliveryDate" });
             if (this.SMV_Cutting == null)
                 yield return new ValidationResult("SMV Cutting harus diisi", new List<string> { "SMV_Cutting" });
             else if (this.SMV_Cutting <= 0)

@@ -52,7 +52,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
             GarmentBookingOrderFacade facade = new GarmentBookingOrderFacade(serviceProvider, dbContext);
-            
+
             var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = await facade.BOCancel((int)data.Id, data);
@@ -88,6 +88,21 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
         }
 
         [Fact]
+        public virtual async void ReadBYNoForCCG_Success()
+        {
+            var dbContext = DbContext(GetCurrentMethod());
+            var serviceProvider = GetServiceProviderMock(dbContext).Object;
+
+            GarmentBookingOrderFacade facade = new GarmentBookingOrderFacade(serviceProvider, dbContext);
+
+            var data = await DataUtil(facade).GetTestData();
+            //var filter = "{BuyerCode : ""}";
+            var Response = facade.ReadByBookingOrderNoForCCG(1, 25, "{}", new List<string>(), "", "{\"BuyerCode\":\"UnitCode\",\"SectionCode\":\"SectionCode\",\"ComodityCode\":\"ComodityCode\"}");
+
+            Assert.NotEqual(Response.Data.Count, 0);
+        }
+
+        [Fact]
         public virtual async void Should_Success_Validate_data()
         {
             var dbContext = DbContext(GetCurrentMethod());
@@ -103,7 +118,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
 
             var date = DateTime.Now.AddMonths(1);
             data.DeliveryDate = new DateTime(date.Year, date.Month, 23);
-            
+
 
             GarmentBookingOrderViewModel vm = new GarmentBookingOrderViewModel
             {
@@ -114,7 +129,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
                     new GarmentBookingOrderItemViewModel
                     {
                         DeliveryDate=data.DeliveryDate,
-                        
+
                         ConfirmDate = DateTimeOffset.MinValue,
                         Remark = null,
                         IsCanceled = false,
@@ -139,7 +154,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
                 BookingOrderDate = data.BookingOrderDate,
                 DeliveryDate = new DateTime(date.Year, date.Month, 3),
 
-        };
+            };
 
             System.ComponentModel.DataAnnotations.ValidationContext validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(vm1, serviceProvider.Object, null);
             var validationResultCreate = vm1.Validate(validationContext).ToList();

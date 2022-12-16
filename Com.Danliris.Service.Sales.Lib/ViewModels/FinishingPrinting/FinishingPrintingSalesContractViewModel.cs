@@ -45,6 +45,18 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
         public UomViewModel UOM { get; set; }
         public YarnMaterialViewModel YarnMaterial { get; set; }
         public double? RemainingQuantity { get; set; }
+        public ProductTypeViewModel ProductType { get; set; }
+        public string DownPayments { get; set; }
+        public double? PriceDP { get; set; }
+        public string PaymentMethods { get; set; }
+        public int? Day { get; set; }
+        public double? precentageDP { get; set; }
+        public int? LatePayment { get; set; }
+        public int? LateReturn { get; set; }
+        public double? Claim { get; set; }
+        public string Description { get; set; }
+
+        public ProductTextileViewModel ProductTextile { get; set; }
         public List<FinishingPrintingSalesContractDetailViewModel> Details { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -120,10 +132,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                 yield return new ValidationResult("Kualitas harus diisi", new List<string> { "QualityID" });
             }
 
-            if (TermOfPayment == null || TermOfPayment.Id.Equals(0))
-            {
-                yield return new ValidationResult("Syarat Pembayaran harus diisi", new List<string> { "TermOfPaymentID" });
-            }
+            //if (TermOfPayment == null || TermOfPayment.Id.Equals(0))
+            //{
+            //    yield return new ValidationResult("Syarat Pembayaran harus diisi", new List<string> { "TermOfPaymentID" });
+            //}
 
             if (AccountBank == null || AccountBank.Id.Equals(0))
             {
@@ -181,6 +193,41 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.FinishingPrinting
                     yield return new ValidationResult(DetailError, new List<string> { "Details" });
                 }
             }
+
+            //if (PaymentMethods.Equals(null) || PaymentMethods == "")
+            //{
+            //    yield return new ValidationResult("Cara Pembayaran harus diisi", new List<string> { "PaymentMethods" });
+            //}
+
+            if (this.Day.Equals(null))
+            {
+                yield return new ValidationResult("Hari harus diisi", new List<string> { "Day" });
+            }
+
+            //if (DownPayments.Equals(null) || DownPayments == "")
+            //{
+            //    yield return new ValidationResult("Tipe DP harus diisi", new List<string> { "DownPayments" });
+            //}
+
+            //if (precentageDP.Equals(null) || precentageDP == 0)
+            //{
+            //    yield return new ValidationResult("Percentage (%) DP harus diisi", new List<string> { "precentageDP" });
+            //}
+
+            if (this.LatePayment.Equals(null))
+            {
+                yield return new ValidationResult("Besar Denda harus diisi", new List<string> { "LatePayment" });
+            }
+
+            if(this.LateReturn.Equals(null))
+            {
+                yield return new ValidationResult("Hari Pengembalian harus diisi", new List<string> { "LateReturn" });
+            }
+
+            //if(Claim.Equals(null))
+            //{
+            //    yield return new ValidationResult("Claim Hari harus diisi", new List<string> { "Claim" });
+            //}
         }
     }
 }

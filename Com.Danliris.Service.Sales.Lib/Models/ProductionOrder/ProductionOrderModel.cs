@@ -247,6 +247,12 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ProductionOrder
         [MaxLength(512)]
         public string ApprovedSampleBy { get; set; }
 
+        #region Product Textile
+        public int? ProductTextileId { get; set; }
+        public string ProductTextileCode { get; set; }
+        public string ProductTextileName { get; set; }
+        #endregion
+
 
     }
 }
