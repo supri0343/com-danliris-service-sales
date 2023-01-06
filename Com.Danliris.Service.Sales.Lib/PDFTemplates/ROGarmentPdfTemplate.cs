@@ -114,19 +114,25 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cell_top.Phrase = new Phrase("KONVEKSI", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Unit.Code + "      SEKSI   :   " + viewModel.CostCalculationGarment.Section}", normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.Unit.Code + "            SEKSI   :   " + viewModel.CostCalculationGarment.Section}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("QUANTITY", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
-            cell_top.Phrase = new Phrase($"{viewModel.Total.ToString()} {viewModel.CostCalculationGarment.UOM.Unit}" , normal_font);
+            cell_top.Phrase = new Phrase($"{viewModel.Total.ToString()} {viewModel.CostCalculationGarment.UOM.Unit}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("SIZE RANGE", normal_font);
             table_top.AddCell(cell_top);
             table_top.AddCell(cell_colon);
             cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.SizeRange}", normal_font);
+            table_top.AddCell(cell_top);
+
+            cell_top.Phrase = new Phrase("MARKETING", normal_font);
+            table_top.AddCell(cell_top);
+            table_top.AddCell(cell_colon);
+            cell_top.Phrase = new Phrase($"{viewModel.CostCalculationGarment.MarketingName}", normal_font);
             table_top.AddCell(cell_top);
 
             cell_top.Phrase = new Phrase("DESC", normal_font);
@@ -217,10 +223,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             document.Add(table_fabric_top);
 
             //Main fabric table
-            PdfPTable table_fabric = new PdfPTable(8);
+            PdfPTable table_fabric = new PdfPTable(5);
             table_fabric.TotalWidth = 570f;
 
-            float[] fabric_widths = new float[] { 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f };
+            float[] fabric_widths = new float[] { 2f, 3.5f, 5f, 2f, 7.5f };
             table_fabric.SetWidths(fabric_widths);
 
             PdfPCell cell_fabric_center = new PdfPCell()
@@ -242,22 +248,24 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //cell_fabric_center.Phrase = new Phrase("FABRIC", bold_font);
             //table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("PRODUCT CODE", bold_font);
+            cell_fabric_center.Phrase = new Phrase("PRODUCT NAME", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("COMPOSITION", bold_font);
-            table_fabric.AddCell(cell_fabric_center);
+            //cell_fabric_center.Phrase = new Phrase("COMPOSITION", bold_font);
+            //table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("CONSTRUCTION", bold_font);
-            table_fabric.AddCell(cell_fabric_center);
+            //cell_fabric_center.Phrase = new Phrase("CONSTRUCTION", bold_font);
+            //table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("YARN", bold_font);
-            table_fabric.AddCell(cell_fabric_center);
+            //cell_fabric_center.Phrase = new Phrase("YARN", bold_font);
+            //table_fabric.AddCell(cell_fabric_center);
 
-            cell_fabric_center.Phrase = new Phrase("WIDTH", bold_font);
-            table_fabric.AddCell(cell_fabric_center);
-
+            //cell_fabric_center.Phrase = new Phrase("WIDTH", bold_font);
+            //table_fabric.AddCell(cell_fabric_center);
             cell_fabric_center.Phrase = new Phrase("DESCRIPTION", bold_font);
+            table_fabric.AddCell(cell_fabric_center);
+
+            cell_fabric_center.Phrase = new Phrase("PRODUCT DETAIL", bold_font);
             table_fabric.AddCell(cell_fabric_center);
 
             cell_fabric_center.Phrase = new Phrase("QUANTITY", bold_font);
@@ -273,23 +281,25 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                     //cell_fabric_left.Phrase = new Phrase(materialModel.Category.SubCategory != null ? materialModel.Category.SubCategory : "", normal_font);
                     //table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Code, normal_font);
+                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Composition.TrimEnd() + ' ' + materialModel.Product.Const.TrimEnd() + ' ' + materialModel.Product.Yarn.TrimEnd() + ' ' + materialModel.Product.Width.TrimEnd(), normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Composition, normal_font);
-                    table_fabric.AddCell(cell_fabric_left);
+                    //cell_fabric_left.Phrase = new Phrase(materialModel.Product.Composition, normal_font);
+                    //table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Const, normal_font);
-                    table_fabric.AddCell(cell_fabric_left);
+                    //cell_fabric_left.Phrase = new Phrase(materialModel.Product.Const, normal_font);
+                    //table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Yarn, normal_font);
-                    table_fabric.AddCell(cell_fabric_left);
+                    //cell_fabric_left.Phrase = new Phrase(materialModel.Product.Yarn, normal_font);
+                    //table_fabric.AddCell(cell_fabric_left);
 
-                    cell_fabric_left.Phrase = new Phrase(materialModel.Product.Width, normal_font);
-
-                    table_fabric.AddCell(cell_fabric_left);
+                    //cell_fabric_left.Phrase = new Phrase(materialModel.Product.Width, normal_font);
+                    //table_fabric.AddCell(cell_fabric_left);
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
+                    table_fabric.AddCell(cell_fabric_left);
+
+                    cell_fabric_left.Phrase = new Phrase(materialModel.ProductRemark != null ? materialModel.ProductRemark : "", normal_font);
                     table_fabric.AddCell(cell_fabric_left);
 
                     cell_fabric_left.Phrase = new Phrase(materialModel.Quantity.ToString() != null ? String.Format("{0} " + materialModel.UOMQuantity.Unit, materialModel.Quantity.ToString()) : "0", normal_font);
@@ -305,7 +315,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             table_fabric.SpacingBefore = 5f;
             table_fabric.ExtendLastRow = false;
             document.Add(table_fabric);
-            
+
             #endregion
 
             #region Table Accessories
@@ -339,7 +349,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPTable table_accessories = new PdfPTable(5);
             table_accessories.TotalWidth = 570f;
 
-            float[] accessories_widths = new float[] { 2f, 3f, 5f, 2.5f, 7.5f };
+            float[] accessories_widths = new float[] { 2f, 3.5f, 5f, 2f, 7.5f };
             table_accessories.SetWidths(accessories_widths);
 
             PdfPCell cell_acc_center = new PdfPCell()
@@ -361,13 +371,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //cell_acc_center.Phrase = new Phrase("ACCESSORIES", bold_font);
             //table_accessories.AddCell(cell_acc_center);
 
-            cell_fabric_center.Phrase = new Phrase("PRODUCT CODE", bold_font);
-            table_accessories.AddCell(cell_fabric_center);
-
             cell_fabric_center.Phrase = new Phrase("PRODUCT NAME", bold_font);
             table_accessories.AddCell(cell_fabric_center);
 
-            cell_acc_center.Phrase = new Phrase("DESCRIPTION", bold_font);
+            cell_fabric_center.Phrase = new Phrase("DESCRIPTION", bold_font);
+            table_accessories.AddCell(cell_fabric_center);
+
+            cell_acc_center.Phrase = new Phrase("PRODUCT DETAIL", bold_font);
             table_accessories.AddCell(cell_acc_center);
 
             cell_acc_center.Phrase = new Phrase("QUANTITY", bold_font);
@@ -381,13 +391,13 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 if (materialModel.Category.name != "FABRIC")
                 {
 
-                    cell_acc_left.Phrase = new Phrase(materialModel.Product.Code, normal_font);
-                    table_accessories.AddCell(cell_acc_left);
-
                     cell_acc_left.Phrase = new Phrase(materialModel.Product.Name, normal_font);
                     table_accessories.AddCell(cell_acc_left);
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Description != null ? materialModel.Description : "", normal_font);
+                    table_accessories.AddCell(cell_acc_left);
+
+                    cell_acc_left.Phrase = new Phrase(materialModel.ProductRemark != null ? materialModel.ProductRemark : "", normal_font);
                     table_accessories.AddCell(cell_acc_left);
 
                     cell_acc_left.Phrase = new Phrase(materialModel.Quantity != null ? String.Format("{0} " + materialModel.UOMQuantity.Unit, materialModel.Quantity.ToString()) : "0", normal_font);
@@ -607,84 +617,84 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             #endregion
 
             #region RO Image
-            var countImageRo = 0;
-            byte[] roImage;
+            //var countImageRo = 0;
+            //byte[] roImage;
 
-            foreach (var index in viewModel.ImagesFile)
-            {
-                countImageRo++;
-            }
+            //foreach (var index in viewModel.ImagesFile)
+            //{
+            //    countImageRo++;
+            //}
 
 
-            if (countImageRo != 0)
-            {
-                if (countImageRo > 5)
-                {
-                    countImageRo = 5;
-                }
+            //if (countImageRo != 0)
+            //{
+            //    if (countImageRo > 5)
+            //    {
+            //        countImageRo = 5;
+            //    }
 
-                PdfPTable table_ro_image = new PdfPTable(countImageRo);
-                float[] ro_widths = new float[countImageRo];
+            //    PdfPTable table_ro_image = new PdfPTable(countImageRo);
+            //    float[] ro_widths = new float[countImageRo];
 
-                for (var i = 0; i < countImageRo; i++)
-                {
-                    ro_widths.SetValue(5f, i);
-                }
+            //    for (var i = 0; i < countImageRo; i++)
+            //    {
+            //        ro_widths.SetValue(5f, i);
+            //    }
 
-                if (countImageRo != 0)
-                {
-                    table_ro_image.SetWidths(ro_widths);
-                }
+            //    if (countImageRo != 0)
+            //    {
+            //        table_ro_image.SetWidths(ro_widths);
+            //    }
 
-                table_ro_image.TotalWidth = 570f;
+            //    table_ro_image.TotalWidth = 570f;
 
-                foreach (var imageFromRo in viewModel.ImagesFile)
-                {
-                    try
-                    {
-                        roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
-                    }
-                    catch (Exception)
-                    {
-                        //var webClient = new WebClient();
-                        //roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
-                        roImage = Convert.FromBase64String("/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAA0NDQ0ODQ4QEA4UFhMWFB4bGRkbHi0gIiAiIC1EKjIqKjIqRDxJOzc7STxsVUtLVWx9aWNpfZeHh5e+tb75+f8BDQ0NDQ4NDhAQDhQWExYUHhsZGRseLSAiICIgLUQqMioqMipEPEk7NztJPGxVS0tVbH1pY2l9l4eHl761vvn5///CABEIAAoACgMBIgACEQEDEQH/xAAVAAEBAAAAAAAAAAAAAAAAAAAAB//aAAgBAQAAAACnD//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIQAAAAf//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMQAAAAf//EABQQAQAAAAAAAAAAAAAAAAAAACD/2gAIAQEAAT8AH//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIBAT8Af//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMBAT8Af//Z");
-                    }
+            //    foreach (var imageFromRo in viewModel.ImagesFile)
+            //    {
+            //        try
+            //        {
+            //            roImage = Convert.FromBase64String(Base64.GetBase64File(imageFromRo));
+            //        }
+            //        catch (Exception)
+            //        {
+            //            //var webClient = new WebClient();
+            //            //roImage = webClient.DownloadData("https://bateeqstorage.blob.core.windows.net/other/no-image.jpg");
+            //            roImage = Convert.FromBase64String("/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAA0NDQ0ODQ4QEA4UFhMWFB4bGRkbHi0gIiAiIC1EKjIqKjIqRDxJOzc7STxsVUtLVWx9aWNpfZeHh5e+tb75+f8BDQ0NDQ4NDhAQDhQWExYUHhsZGRseLSAiICIgLUQqMioqMipEPEk7NztJPGxVS0tVbH1pY2l9l4eHl761vvn5///CABEIAAoACgMBIgACEQEDEQH/xAAVAAEBAAAAAAAAAAAAAAAAAAAAB//aAAgBAQAAAACnD//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIQAAAAf//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMQAAAAf//EABQQAQAAAAAAAAAAAAAAAAAAACD/2gAIAQEAAT8AH//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIBAT8Af//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMBAT8Af//Z");
+            //        }
 
-                    Image images = Image.GetInstance(imgb: roImage);
+            //        Image images = Image.GetInstance(imgb: roImage);
 
-                    if (images.Width > 60)
-                    {
-                        float percentage = 0.0f;
-                        percentage = 60 / images.Width;
-                        images.ScalePercent(percentage * 100);
-                    }
+            //        if (images.Width > 60)
+            //        {
+            //            float percentage = 0.0f;
+            //            percentage = 60 / images.Width;
+            //            images.ScalePercent(percentage * 100);
+            //        }
 
-                    PdfPCell imageCell = new PdfPCell(images);
-                    imageCell.Border = 0;
-                    table_ro_image.AddCell(imageCell);
-                }
+            //        PdfPCell imageCell = new PdfPCell(images);
+            //        imageCell.Border = 0;
+            //        table_ro_image.AddCell(imageCell);
+            //    }
 
-                PdfPCell cell_image = new PdfPCell()
-                {
-                    Border = Rectangle.NO_BORDER,
-                    HorizontalAlignment = Element.ALIGN_LEFT,
-                    VerticalAlignment = Element.ALIGN_MIDDLE,
-                    Padding = 2,
-                };
+            //    PdfPCell cell_image = new PdfPCell()
+            //    {
+            //        Border = Rectangle.NO_BORDER,
+            //        HorizontalAlignment = Element.ALIGN_LEFT,
+            //        VerticalAlignment = Element.ALIGN_MIDDLE,
+            //        Padding = 2,
+            //    };
 
-                foreach (var name in viewModel.ImagesName)
-                {
-                    cell_image.Phrase = new Phrase(name, normal_font);
-                    table_ro_image.AddCell(cell_image);
-                }
+            //    foreach (var name in viewModel.ImagesName)
+            //    {
+            //        cell_image.Phrase = new Phrase(name, normal_font);
+            //        table_ro_image.AddCell(cell_image);
+            //    }
 
-                table_ro_image.LockedWidth = true;
-                table_ro_image.HorizontalAlignment = Element.ALIGN_LEFT;
-                table_ro_image.SpacingBefore = 5f;
-                table_ro_image.ExtendLastRow = false;
-                document.Add(table_ro_image);
-            }
+            //    table_ro_image.LockedWidth = true;
+            //    table_ro_image.HorizontalAlignment = Element.ALIGN_LEFT;
+            //    table_ro_image.SpacingBefore = 5f;
+            //    table_ro_image.ExtendLastRow = false;
+            //    document.Add(table_ro_image);
+            //}
             #endregion
 
             #region Signature
@@ -726,7 +736,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             table_signature.SpacingBefore = 5f;
             table_signature.ExtendLastRow = false;
             document.Add(table_signature);
-            
+
             #endregion
 
             document.Close();

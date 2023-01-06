@@ -33,6 +33,10 @@ namespace Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments
         [MaxLength(255)]
         public string SectionName { get; set; }
         [MaxLength(255)]
+        public string MarketingName { get; set; }
+        [MaxLength(255)]
+        public string ResponsibleName { get; set; }
+        [MaxLength(255)]
         public string ApprovalCC { get; set; }
         [MaxLength(255)]
         public string ApprovalRO { get; set; }
@@ -117,6 +121,11 @@ namespace Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments
         public string BookingOrderNo { get; set; }
         public double BOQuantity { get; set; }
         public int BookingOrderItemId { get; set; }
+
+        public bool IsApprovedMkt { get; set; }
+        public DateTimeOffset ApprovedMktDate { get; set; }
+        [MaxLength(50)]
+        public string ApprovedMktBy { get; set; }
 
         public bool IsApprovedMD { get; set; }
         public DateTimeOffset ApprovedMDDate { get; set; }

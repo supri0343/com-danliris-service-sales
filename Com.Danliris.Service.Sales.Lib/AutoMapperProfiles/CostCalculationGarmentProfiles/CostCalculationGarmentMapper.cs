@@ -58,6 +58,10 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.CostCalculationGarme
 			  .ForPath(d => d.NETFOBP, opt => opt.MapFrom(s => s.NETFOBP))
 			  .ForPath(d => d.Index, opt => opt.MapFrom(s => s.Index))
 
+			  .ForPath(d => d.ApprovalMkt.IsApproved, opt => opt.MapFrom(s => s.IsApprovedMkt))
+			  .ForPath(d => d.ApprovalMkt.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMktBy))
+			  .ForPath(d => d.ApprovalMkt.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedMktDate))
+
 			  .ForPath(d => d.ApprovalMD.IsApproved, opt => opt.MapFrom(s => s.IsApprovedMD))
 			  .ForPath(d => d.ApprovalMD.ApprovedBy, opt => opt.MapFrom(s => s.ApprovedMDBy))
 			  .ForPath(d => d.ApprovalMD.ApprovedDate, opt => opt.MapFrom(s => s.ApprovedMDDate))
@@ -82,6 +86,9 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.CostCalculationGarme
 			  .ForPath(d => d.BookingOrderNo, opt => opt.MapFrom(s => s.BookingOrderNo))
 			  .ForPath(d => d.BOQuantity, opt => opt.MapFrom(s => s.BOQuantity))
 			  .ForPath(d => d.BookingOrderItemId, opt => opt.MapFrom(s => s.BookingOrderItemId))
+
+			  .ForPath(d => d.MarketingName, opt => opt.MapFrom(s => s.MarketingName))
+			  .ForPath(d => d.ResponsibleName, opt => opt.MapFrom(s => s.ResponsibleName))
 
 			  .ReverseMap();
 		}

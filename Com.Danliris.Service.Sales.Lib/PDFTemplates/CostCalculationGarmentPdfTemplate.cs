@@ -2,7 +2,7 @@
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System; 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,8 +25,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 		}
 
 		public MemoryStream GeneratePdfTemplate(CostCalculationGarmentViewModel viewModel, int timeoffset)
-        {
-            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
+		{
+			BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
 			BaseFont bf_bold = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED);
 			Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 6);
 			Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 6);
@@ -85,10 +85,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.Article}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-			cell_detail1.Phrase = new Phrase("SECTION", normal_font);
+			cell_detail1.Phrase = new Phrase("COMMODITY", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_colon);
-			cell_detail1.Phrase = new Phrase($"{viewModel.Section}", normal_font);
+			cell_detail1.Phrase = new Phrase($"{viewModel.Comodity.Name}", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			cell_detail1.Phrase = new Phrase("FABRIC", normal_font);
 			table_detail1.AddCell(cell_detail1);
@@ -101,10 +101,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.CreatedUtc.ToString("dd MMMM yyyy")}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-			cell_detail1.Phrase = new Phrase("COMMODITY", normal_font);
+			cell_detail1.Phrase = new Phrase("SIZE RANGE", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_colon);
-			cell_detail1.Phrase = new Phrase($"{viewModel.Comodity.Name}", normal_font);
+			cell_detail1.Phrase = new Phrase($"{viewModel.SizeRange}", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			cell_detail1.Phrase = new Phrase("ACC", normal_font);
 			table_detail1.AddCell(cell_detail1);
@@ -117,18 +117,26 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.Unit.Code}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase("SIZE RANGE", normal_font);
-            table_detail1.AddCell(cell_detail1);
-            table_detail1.AddCell(cell_colon);
-            cell_detail1.Phrase = new Phrase($"{viewModel.SizeRange}", normal_font);
-            table_detail1.AddCell(cell_detail1);
-            cell_detail1.Phrase = new Phrase("", normal_font);
+
+			cell_detail1.Phrase = new Phrase("SECTION", normal_font);
 			table_detail1.AddCell(cell_detail1);
+			table_detail1.AddCell(cell_colon);
+			cell_detail1.Phrase = new Phrase($"{viewModel.Section}", normal_font);
 			table_detail1.AddCell(cell_detail1);
+
+			cell_detail1.Phrase = new Phrase("MARKETING", normal_font);
 			table_detail1.AddCell(cell_detail1);
+			table_detail1.AddCell(cell_colon);
+			cell_detail1.Phrase = new Phrase($"{viewModel.MarketingName}", normal_font);
 			table_detail1.AddCell(cell_detail1);
-			table_detail1.AddCell(cell_detail1);
-			table_detail1.AddCell(cell_detail1);
+
+			//cell_detail1.Phrase = new Phrase("", normal_font);
+			//table_detail1.AddCell(cell_detail1);
+			//table_detail1.AddCell(cell_detail1);
+			//table_detail1.AddCell(cell_detail1);
+			//table_detail1.AddCell(cell_detail1);
+			//table_detail1.AddCell(cell_detail1);
+			//table_detail1.AddCell(cell_detail1);
 			#endregion
 
 			#region Image
@@ -161,28 +169,28 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			bool isDollar = viewModel.Rate.Id != 0;
 
-            #region Detail 2.1 (Bottom, Column 1.1)
-            string fabric = "";
-            List<string> remark = new List<string>();
-            for (int i = 0; i < viewModel.CostCalculationGarment_Materials.Count; i++)
-            {
-                
-                if (viewModel.CostCalculationGarment_Materials[i].Category.name == "FABRIC")
-                {
-                    remark.Add(viewModel.CostCalculationGarment_Materials[i].Product.Composition + " " + viewModel.CostCalculationGarment_Materials[i].Product.Const + " " + viewModel.CostCalculationGarment_Materials[i].Product.Yarn + " " + viewModel.CostCalculationGarment_Materials[i].Product.Width);
-                }
-            }
-            if (remark.Count == 0)
-                fabric = viewModel.Description;
-            else
-            {
-                foreach (var data in remark)
-                {
-                    fabric += "FABRIC \n"+ data + "\n\n";
-                }
-                fabric += viewModel.Description +"\n";
-            }
-            PdfPTable table_bottom_column1_1 = new PdfPTable(2);
+			#region Detail 2.1 (Bottom, Column 1.1)
+			string fabric = "";
+			List<string> remark = new List<string>();
+			for (int i = 0; i < viewModel.CostCalculationGarment_Materials.Count; i++)
+			{
+
+				if (viewModel.CostCalculationGarment_Materials[i].Category.name == "FABRIC")
+				{
+					remark.Add(viewModel.CostCalculationGarment_Materials[i].Product.Composition + " " + viewModel.CostCalculationGarment_Materials[i].Product.Const + " " + viewModel.CostCalculationGarment_Materials[i].Product.Yarn + " " + viewModel.CostCalculationGarment_Materials[i].Product.Width);
+				}
+			}
+			if (remark.Count == 0)
+				fabric = viewModel.Description;
+			else
+			{
+				foreach (var data in remark)
+				{
+					fabric += "FABRIC \n" + data + "\n\n";
+				}
+				fabric += viewModel.Description + "\n";
+			}
+			PdfPTable table_bottom_column1_1 = new PdfPTable(2);
 			table_bottom_column1_1.TotalWidth = 180f;
 
 			float[] table_bottom_column1_1_widths = new float[] { 1f, 2f };
@@ -210,12 +218,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.Buyer.Code}" + " - " + $"{viewModel.Buyer.Name}", normal_font);
 			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
 
-            cell_bottom_column1_1.Phrase = new Phrase("BUYER BRAND", normal_font);
-            table_bottom_column1_1.AddCell(cell_bottom_column1_1);
-            cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.BuyerBrand.Code}" + " - "+ $"{viewModel.BuyerBrand.Name}", normal_font);
-            table_bottom_column1_1.AddCell(cell_bottom_column1_1);
+			cell_bottom_column1_1.Phrase = new Phrase("BUYER BRAND", normal_font);
+			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
+			cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.BuyerBrand.Code}" + " - " + $"{viewModel.BuyerBrand.Name}", normal_font);
+			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
 
-            cell_bottom_column1_1.Phrase = new Phrase("DELIVERY", normal_font);
+			cell_bottom_column1_1.Phrase = new Phrase("DELIVERY", normal_font);
 			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
 			cell_bottom_column1_1.Phrase = new Phrase($"{viewModel.DeliveryDate.AddHours(timeoffset).ToString("dd/MM/yyyy")}", normal_font);
 			table_bottom_column1_1.AddCell(cell_bottom_column1_1);
@@ -243,15 +251,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			double ConfirmPrice = viewModel.ConfirmPrice ?? 0;
 			double CMT = CM_Price > 0 ? ConfirmPrice : 0;
 			string CMT_Price = this.GetCurrencyValue(CMT, isDollar);
-			double FOB = ConfirmPrice ;
-            double FOB_Remark = 0;
-            if (CMT > 0)
-            {
-                FOB = 0;
-                var b = Convert.ToDouble(viewModel.Rate.Value);
-                double a = (1.05 * CM_Price / Convert.ToDouble(viewModel.Rate.Value)) - (viewModel.Insurance.GetValueOrDefault() + viewModel.Freight.GetValueOrDefault());
-                FOB_Remark = ConfirmPrice + a;
-            }
+			double FOB = ConfirmPrice;
+			double FOB_Remark = 0;
+			if (CMT > 0)
+			{
+				FOB = 0;
+				var b = Convert.ToDouble(viewModel.Rate.Value);
+				double a = (1.05 * CM_Price / Convert.ToDouble(viewModel.Rate.Value)) - (viewModel.Insurance.GetValueOrDefault() + viewModel.Freight.GetValueOrDefault());
+				FOB_Remark = ConfirmPrice + a;
+			}
 			string FOB_Price = this.GetCurrencyValue(FOB, isDollar);
 			cell_bottom_column1_2.Phrase = new Phrase($"{FOB_Price}", normal_font);
 			table_bottom_column1_2.AddCell(cell_bottom_column1_2);
@@ -274,11 +282,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_bottom_column1_3.AddCell(cell_bottom_column1_3);
 
 			string CNF_Price = this.GetCurrencyValue(Convert.ToDouble(viewModel.Freight + viewModel.ConfirmPrice), isDollar);
-            if (viewModel.Freight == 0) CNF_Price = "$";
+			if (viewModel.Freight == 0) CNF_Price = "$";
 			cell_bottom_column1_3.Phrase = new Phrase($"{CNF_Price}", normal_font);
 			table_bottom_column1_3.AddCell(cell_bottom_column1_3);
 			string CIF_Price = this.GetCurrencyValue(Convert.ToDouble(viewModel.Insurance + viewModel.ConfirmPrice), isDollar);
-            if (viewModel.Insurance == 0) CIF_Price = "$";
+			if (viewModel.Insurance == 0) CIF_Price = "$";
 			cell_bottom_column1_3.Phrase = new Phrase($"{CIF_Price}", normal_font);
 			table_bottom_column1_3.AddCell(cell_bottom_column1_3);
 			#endregion
@@ -292,11 +300,11 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			PdfPCell cell_bottom_column2_1 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3 };
 
-			PdfPCell cell_bottom_column2_1_colspan2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3, Colspan = 3};
+			PdfPCell cell_bottom_column2_1_colspan2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 3, Colspan = 3 };
 
-			cell_bottom_column2_1.Phrase = new Phrase("TOTAL" , normal_font);
-      
-            table_bottom_column2_1.AddCell(cell_bottom_column2_1);
+			cell_bottom_column2_1.Phrase = new Phrase("TOTAL", normal_font);
+
+			table_bottom_column2_1.AddCell(cell_bottom_column2_1);
 			double total = 0;
 			foreach (CostCalculationGarment_MaterialViewModel item in viewModel.CostCalculationGarment_Materials)
 			{
@@ -359,7 +367,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_bottom_column2_1.Phrase = new Phrase($"{Number.ToRupiahWithoutSymbol(viewModel.CommissionRate)}", normal_font);
 			table_bottom_column2_1.AddCell(cell_bottom_column2_1);
 
-			cell_bottom_column2_1.Phrase = new Phrase("CONFIRM PRICE" , normal_font);
+			cell_bottom_column2_1.Phrase = new Phrase("CONFIRM PRICE", normal_font);
 			table_bottom_column2_1.AddCell(cell_bottom_column2_1); ;
 			double confirmPrice = viewModel.ConfirmPrice ?? 0 + viewModel.Rate.Value ?? 0;
 			double confirmPriceWithRate = isDollar ? confirmPrice * viewModel.Rate.Value ?? 1 : confirmPrice;
@@ -375,7 +383,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_bottom_column2_2.SetWidths(table_bottom_column2_2_widths);
 			PdfPCell cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 2, PaddingBottom = 4, PaddingLeft = 2, Colspan = 2 };
 
-			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 3, PaddingBottom = 2, PaddingLeft =2, Colspan = 2 };
+			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 3, PaddingBottom = 2, PaddingLeft = 2, Colspan = 2 };
 			cell_bottom_column2_2.Phrase = new Phrase("FREIGHT", normal_font);
 			table_bottom_column2_2.AddCell(cell_bottom_column2_2);
 			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 3, PaddingBottom = 2, PaddingLeft = 2, Colspan = 2 };
@@ -383,10 +391,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_bottom_column2_2.Phrase = new Phrase($"= {freight}", normal_font);
 			table_bottom_column2_2.AddCell(cell_bottom_column2_2);
 
-			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.LEFT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight =2, PaddingBottom = 4, PaddingLeft =2, Colspan = 2 };
+			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.LEFT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 2, PaddingBottom = 4, PaddingLeft = 2, Colspan = 2 };
 			cell_bottom_column2_2.Phrase = new Phrase("INSURANCE", normal_font);
 			table_bottom_column2_2.AddCell(cell_bottom_column2_2);
-			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight =2, PaddingBottom = 4, PaddingLeft =2, Colspan = 2 };
+			cell_bottom_column2_2 = new PdfPCell() { Border = Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingTop = 4, PaddingRight = 2, PaddingBottom = 4, PaddingLeft = 2, Colspan = 2 };
 			string insurance = this.GetCurrencyValue(viewModel.Insurance ?? 0, isDollar);
 			cell_bottom_column2_2.Phrase = new Phrase($"= {insurance}", normal_font);
 			table_bottom_column2_2.AddCell(cell_bottom_column2_2);
@@ -437,15 +445,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 
 
-            var DESC = (viewModel.CostCalculationGarment_Materials.Any(m => m.isFabricCM) ? "FOB PRICE : $ "+ Number.ToRupiahWithoutSymbol(FOB_Remark) + "\n\n" : string.Empty) + fabric;
-   //         cell_bottom_column3_1.Phrase = new Phrase("DESCRIPTION", normal_font);
-   //table_bottom_column3_1.AddCell(cell_bottom_column3_1);
-   //cell_bottom_column3_1.Phrase = new Phrase($"{viewModel.SizeRange + "\n" + viewModel.FabricAllowance + " - " + viewModel.AccessoriesAllowance + "\n" + fabric}", normal_font);
-   //table_bottom_column3_1.AddCell(cell_bottom_column3_1);
-            #endregion
+			var DESC = (viewModel.CostCalculationGarment_Materials.Any(m => m.isFabricCM) ? "FOB PRICE : $ " + Number.ToRupiahWithoutSymbol(FOB_Remark) + "\n\n" : string.Empty) + fabric;
+			//         cell_bottom_column3_1.Phrase = new Phrase("DESCRIPTION", normal_font);
+			//table_bottom_column3_1.AddCell(cell_bottom_column3_1);
+			//cell_bottom_column3_1.Phrase = new Phrase($"{viewModel.SizeRange + "\n" + viewModel.FabricAllowance + " - " + viewModel.AccessoriesAllowance + "\n" + fabric}", normal_font);
+			//table_bottom_column3_1.AddCell(cell_bottom_column3_1);
+			#endregion
 
-            #region Signature
-            PdfPTable table_signature = new PdfPTable(3);
+			#region Signature
+			PdfPTable table_signature = new PdfPTable(3);
 			table_signature.TotalWidth = 570f;
 
 			float[] signature_widths = new float[] { 1f, 1f, 1f };
@@ -470,55 +478,55 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_signature.Phrase = new Phrase(signatureArea, normal_font);
 			table_signature.AddCell(cell_signature);
 
-            var AssignmentKabag = "";
-            var AssignmentKadiv = "";
+			var AssignmentKabag = "";
+			var AssignmentKadiv = "";
 
 
-            if (viewModel.ApprovalMD.IsApproved)
-            {
-                AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
-            }
-            else
-            {
-                AssignmentKabag = " ____________________ ";
-            }
+			if (viewModel.ApprovalMD.IsApproved)
+			{
+				AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
+			}
+			else
+			{
+				AssignmentKabag = " ____________________ ";
+			}
 
-            if (viewModel.ApprovalKadivMD.IsApproved)
-            {
-                AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
-            }
-            else
-            {
-                AssignmentKadiv = " ____________________ ";
-            }
+			if (viewModel.ApprovalKadivMD.IsApproved)
+			{
+				AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
+			}
+			else
+			{
+				AssignmentKadiv = " ____________________ ";
+			}
 
-            string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
+			string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
 
-            cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            #endregion
+			cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			#endregion
 
-            #region Cost Calculation Material
+			#region Cost Calculation Material
 
 
-            PdfPTable table_outer = new PdfPTable(2);
-            table_outer.TotalWidth = 570f;
+			PdfPTable table_outer = new PdfPTable(2);
+			table_outer.TotalWidth = 570f;
 
-            float[] outer_widths = new float[] { 10f, 5f };
-            table_outer.SetWidths(outer_widths);
+			float[] outer_widths = new float[] { 10f, 5f };
+			table_outer.SetWidths(outer_widths);
 
-            PdfPTable table_ccm = new PdfPTable(7);
+			PdfPTable table_ccm = new PdfPTable(7);
 			table_ccm.TotalWidth = 520f;
 
 			float[] ccm_widths = new float[] { 1f, 2f, 1.5f, 3.5f, 2.5f, 3f, 2f };
@@ -586,7 +594,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 				cell_ccm_right.Phrase = new Phrase(String.Format("{0} / {1}", string.Format("{0:n2}", viewModel.CostCalculationGarment_Materials[i].isFabricCM ? 0 : viewModel.CostCalculationGarment_Materials[i].Price), viewModel.CostCalculationGarment_Materials[i].UOMPrice.Unit), normal_font);
 				table_ccm.AddCell(cell_ccm_right);
 
-				cell_ccm_right.Phrase = new Phrase(string.Format("{0:n2}",viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
+				cell_ccm_right.Phrase = new Phrase(string.Format("{0:n2}", viewModel.CostCalculationGarment_Materials[i].Total), normal_font);
 				table_ccm.AddCell(cell_ccm_right);
 
 				//Total += viewModel.CostCalculationGarment_Materials[i].Total;
@@ -612,157 +620,157 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 				//}
 			}
 
-            cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2, Colspan = 6 };
-            cell_ccm_right.Phrase = new Phrase("", bold_font_8);
-            table_ccm.AddCell(cell_ccm_right);
+			cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2, Colspan = 6 };
+			cell_ccm_right.Phrase = new Phrase("", bold_font_8);
+			table_ccm.AddCell(cell_ccm_right);
 
-            cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
-            cell_ccm_right.Phrase = new Phrase("", bold_font_8);
-            table_ccm.AddCell(cell_ccm_right);
-            table_outer.AddCell(table_ccm);
+			cell_ccm_right = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT, VerticalAlignment = Element.ALIGN_MIDDLE, Padding = 2 };
+			cell_ccm_right.Phrase = new Phrase("", bold_font_8);
+			table_ccm.AddCell(cell_ccm_right);
+			table_outer.AddCell(table_ccm);
 
-            PdfPCell cell_breakDown_center = new PdfPCell()
-            {
-                Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
-                HorizontalAlignment = Element.ALIGN_LEFT,
-                VerticalAlignment = Element.ALIGN_TOP,
-                Padding = 2
-            };
-            cell_breakDown_center.Phrase = new Phrase("REMARK : \n\n" + DESC, normal_font);
-            
-            table_outer.AddCell(cell_breakDown_center);
-            #endregion
+			PdfPCell cell_breakDown_center = new PdfPCell()
+			{
+				Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER,
+				HorizontalAlignment = Element.ALIGN_LEFT,
+				VerticalAlignment = Element.ALIGN_TOP,
+				Padding = 2
+			};
+			cell_breakDown_center.Phrase = new Phrase("REMARK : \n\n" + DESC, normal_font);
 
-            #region Draw Middle and Bottom
+			table_outer.AddCell(cell_breakDown_center);
+			#endregion
 
-            //        // table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
-            //         table_outer.WriteSelectedRows(0, -1, 10, row2Y, cb);
+			#region Draw Middle and Bottom
 
-            //         float row3Y = row2Y - table_outer.TotalHeight - 10;
-            //float row3RemainingHeight = row3Y - printedOnHeight - margin;
-            //if (row3RemainingHeight < row3Height)
-            //{
-            //	this.DrawPrintedOn(now, bf, cb);
-            //	row3Y = startY;
-            //	document.NewPage();
-            //}
+			//        // table_ccm.WriteSelectedRows(0, -1, 10, row2Y, cb);
+			//         table_outer.WriteSelectedRows(0, -1, 10, row2Y, cb);
 
-            //table_bottom_column1_1.WriteSelectedRows(0, -1, 10, row3Y, cb);
+			//         float row3Y = row2Y - table_outer.TotalHeight - 10;
+			//float row3RemainingHeight = row3Y - printedOnHeight - margin;
+			//if (row3RemainingHeight < row3Height)
+			//{
+			//	this.DrawPrintedOn(now, bf, cb);
+			//	row3Y = startY;
+			//	document.NewPage();
+			//}
 
-            //         table_bottom_column2_1.WriteSelectedRows(0, -1, 200, row3Y, cb);
+			//table_bottom_column1_1.WriteSelectedRows(0, -1, 10, row3Y, cb);
 
-            //float noteY = row3Y - table_bottom_column2_1.TotalHeight;
-            //float table_bottom_column2_2Y;
-            //if (isDollar)
-            //{
-            //	noteY = noteY - 15;
-            //	table_bottom_column2_2Y = noteY - 5;
-            //	cb.BeginText();
-            //	cb.SetFontAndSize(bf, 6);
-            //	cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 200, noteY, 0);
-            //	cb.EndText();
-            //}
-            //else
-            //{
-            //	table_bottom_column2_2Y = noteY - 10;
-            //}
-            //         table_bottom_column2_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
+			//         table_bottom_column2_1.WriteSelectedRows(0, -1, 200, row3Y, cb);
 
-            //         float detail1_2Y = row3Y - table_bottom_column2_2.TotalHeight - 2;
-            //         table_bottom_column1_2.WriteSelectedRows(0, -1, 400, detail1_2Y, cb);
+			//float noteY = row3Y - table_bottom_column2_1.TotalHeight;
+			//float table_bottom_column2_2Y;
+			//if (isDollar)
+			//{
+			//	noteY = noteY - 15;
+			//	table_bottom_column2_2Y = noteY - 5;
+			//	cb.BeginText();
+			//	cb.SetFontAndSize(bf, 6);
+			//	cb.ShowTextAligned(PdfContentByte.ALIGN_LEFT, $"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", 200, noteY, 0);
+			//	cb.EndText();
+			//}
+			//else
+			//{
+			//	table_bottom_column2_2Y = noteY - 10;
+			//}
+			//         table_bottom_column2_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
 
-            //         float detail1_3Y = detail1_2Y - table_bottom_column1_2.TotalHeight - 2;
-            //         table_bottom_column1_3.WriteSelectedRows(0, -1, 400, detail1_3Y, cb);
+			//         float detail1_2Y = row3Y - table_bottom_column2_2.TotalHeight - 2;
+			//         table_bottom_column1_2.WriteSelectedRows(0, -1, 400, detail1_2Y, cb);
+
+			//         float detail1_3Y = detail1_2Y - table_bottom_column1_2.TotalHeight - 2;
+			//         table_bottom_column1_3.WriteSelectedRows(0, -1, 400, detail1_3Y, cb);
 
 
-            //         //table_bottom_column1_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
-            //         table_bottom_column3_1.WriteSelectedRows(0, -1, 400, row3Y, cb);
+			//         //table_bottom_column1_2.WriteSelectedRows(0, -1, 400, row3Y, cb);
+			//         table_bottom_column3_1.WriteSelectedRows(0, -1, 400, row3Y, cb);
 
-            //float table_signatureX;
-            //float table_signatureY;
-            //if (signatureInsideRow3)
-            //{
-            //	table_signatureX = margin + table_bottom_column2_2.TotalWidth + 10;
-            //	table_signatureY = row3Y - row3Height + table_signature.TotalHeight;
-            //	table_signature.TotalWidth = 390f;
-            //}
-            //else
-            //{
-            //	table_signatureX = margin;
-            //	table_signatureY = row3Y - row3Height - 10;
-            //	float signatureRemainingHeight = table_signatureY - printedOnHeight - margin;
-            //	if (signatureRemainingHeight < table_signature.TotalHeight)
-            //	{
-            //		this.DrawPrintedOn(now, bf, cb);
-            //		table_signatureY = startY;
-            //		document.NewPage();
-            //	}
-            //}
-            //table_signature.WriteSelectedRows(0, -1, table_signatureX, table_signatureY, cb);
+			//float table_signatureX;
+			//float table_signatureY;
+			//if (signatureInsideRow3)
+			//{
+			//	table_signatureX = margin + table_bottom_column2_2.TotalWidth + 10;
+			//	table_signatureY = row3Y - row3Height + table_signature.TotalHeight;
+			//	table_signature.TotalWidth = 390f;
+			//}
+			//else
+			//{
+			//	table_signatureX = margin;
+			//	table_signatureY = row3Y - row3Height - 10;
+			//	float signatureRemainingHeight = table_signatureY - printedOnHeight - margin;
+			//	if (signatureRemainingHeight < table_signature.TotalHeight)
+			//	{
+			//		this.DrawPrintedOn(now, bf, cb);
+			//		table_signatureY = startY;
+			//		document.NewPage();
+			//	}
+			//}
+			//table_signature.WriteSelectedRows(0, -1, table_signatureX, table_signatureY, cb);
 
-            //this.DrawPrintedOn(now, bf, cb);
-            #endregion
+			//this.DrawPrintedOn(now, bf, cb);
+			#endregion
 
-            #region Add Middle and Bottom
+			#region Add Middle and Bottom
 
-            document.Add(new Paragraph("\n") { SpacingAfter = row1Height + 20 });
-            new PdfPCell(table_outer);
-            table_outer.ExtendLastRow = false;
-            table_outer.SplitLate = false;
-            table_outer.SpacingAfter = 10f;
-            document.Add(table_outer);
+			document.Add(new Paragraph("\n") { SpacingAfter = row1Height + 20 });
+			new PdfPCell(table_outer);
+			table_outer.ExtendLastRow = false;
+			table_outer.SplitLate = false;
+			table_outer.SpacingAfter = 10f;
+			document.Add(table_outer);
 
-            PdfPTable table_bottom = new PdfPTable(5);
-            table_bottom.SetWidths(new float[] { 1f, 0.05f, 1f, 0.05f, 1f });
-            table_bottom.DefaultCell.Border = Rectangle.NO_BORDER;
-            table_bottom.DefaultCell.Padding = 0;
+			PdfPTable table_bottom = new PdfPTable(5);
+			table_bottom.SetWidths(new float[] { 1f, 0.05f, 1f, 0.05f, 1f });
+			table_bottom.DefaultCell.Border = Rectangle.NO_BORDER;
+			table_bottom.DefaultCell.Padding = 0;
 
-            var cell_bottom_left = new PdfPCell() { Border = Rectangle.NO_BORDER };
-            new PdfPCell(table_bottom_column1_1);
-            table_bottom_column1_1.ExtendLastRow = false;
-            cell_bottom_left.AddElement(table_bottom_column1_1);
-            table_bottom.AddCell(cell_bottom_left);
+			var cell_bottom_left = new PdfPCell() { Border = Rectangle.NO_BORDER };
+			new PdfPCell(table_bottom_column1_1);
+			table_bottom_column1_1.ExtendLastRow = false;
+			cell_bottom_left.AddElement(table_bottom_column1_1);
+			table_bottom.AddCell(cell_bottom_left);
 
-            table_bottom.AddCell("\n");
+			table_bottom.AddCell("\n");
 
-            var cell_bottom_center = new PdfPCell() { Border = Rectangle.NO_BORDER };
-            new PdfPCell(table_bottom_column2_1);
-            table_bottom_column2_1.ExtendLastRow = false;
-            cell_bottom_center.AddElement(table_bottom_column2_1);
-            if (isDollar)
-            {
-                cell_bottom_center.AddElement(new Paragraph($"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", normal_font));
-            }
-            table_bottom.AddCell(cell_bottom_center);
+			var cell_bottom_center = new PdfPCell() { Border = Rectangle.NO_BORDER };
+			new PdfPCell(table_bottom_column2_1);
+			table_bottom_column2_1.ExtendLastRow = false;
+			cell_bottom_center.AddElement(table_bottom_column2_1);
+			if (isDollar)
+			{
+				cell_bottom_center.AddElement(new Paragraph($"NOTE: 1 US$ = {Number.ToRupiah(viewModel.Rate.Value)}", normal_font));
+			}
+			table_bottom.AddCell(cell_bottom_center);
 
-            table_bottom.AddCell("\n");
+			table_bottom.AddCell("\n");
 
-            var cell_bottom_right = new PdfPCell() { Border = Rectangle.NO_BORDER };
+			var cell_bottom_right = new PdfPCell() { Border = Rectangle.NO_BORDER };
 
-            new PdfPCell(table_bottom_column2_2);
-            table_bottom_column2_2.ExtendLastRow = false;
-            cell_bottom_right.AddElement(table_bottom_column2_2);
-            new PdfPCell(table_bottom_column1_2);
-            table_bottom_column1_2.ExtendLastRow = false;
-            cell_bottom_right.AddElement(table_bottom_column1_2);
-            new PdfPCell(table_bottom_column1_3);
-            table_bottom_column1_3.ExtendLastRow = false;
-            cell_bottom_right.AddElement(table_bottom_column1_3);
+			new PdfPCell(table_bottom_column2_2);
+			table_bottom_column2_2.ExtendLastRow = false;
+			cell_bottom_right.AddElement(table_bottom_column2_2);
+			new PdfPCell(table_bottom_column1_2);
+			table_bottom_column1_2.ExtendLastRow = false;
+			cell_bottom_right.AddElement(table_bottom_column1_2);
+			new PdfPCell(table_bottom_column1_3);
+			table_bottom_column1_3.ExtendLastRow = false;
+			cell_bottom_right.AddElement(table_bottom_column1_3);
 
-            table_bottom.AddCell(cell_bottom_right);
+			table_bottom.AddCell(cell_bottom_right);
 
-            new PdfPCell(table_bottom);
-            table_bottom.ExtendLastRow = false;
-            table_bottom.SpacingAfter = 20f;
-            document.Add(table_bottom);
+			new PdfPCell(table_bottom);
+			table_bottom.ExtendLastRow = false;
+			table_bottom.SpacingAfter = 20f;
+			document.Add(table_bottom);
 
-            new PdfPCell(table_signature);
-            table_signature.ExtendLastRow = false;
-            document.Add(table_signature);
+			new PdfPCell(table_signature);
+			table_signature.ExtendLastRow = false;
+			document.Add(table_signature);
 
-            #endregion
+			#endregion
 
-            document.Close();
+			document.Close();
 
 			byte[] byteInfo = stream.ToArray();
 			stream.Write(byteInfo, 0, byteInfo.Length);

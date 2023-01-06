@@ -41,10 +41,10 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			#endregion
 
 			#region Detail 1 (Top)
-			PdfPTable table_detail1 = new PdfPTable(9);
+			PdfPTable table_detail1 = new PdfPTable(12);
 			table_detail1.TotalWidth = 570f;
 
-			float[] detail1_widths = new float[] { 1f, 0.1f, 2f, 1f, 0.1f, 2f, 1.5f, 0.1f, 2f };
+			float[] detail1_widths = new float[] { 0.5f, 0.1f, 1f, 0.5f, 0.1f, 1f, 0.7f, 0.1f, 2f, 1f, 0.1f, 2f };
 			table_detail1.SetWidths(detail1_widths);
 
 			PdfPCell cell_detail1 = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT, VerticalAlignment = Element.ALIGN_MIDDLE, PaddingRight = 1, PaddingBottom = 2, PaddingTop = 2 };
@@ -59,11 +59,17 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.Section}", normal_font);
 			table_detail1.AddCell(cell_detail1);
+			cell_detail1.Phrase = new Phrase("MARKETING", normal_font);
+			table_detail1.AddCell(cell_detail1);
+			table_detail1.AddCell(cell_colon);
+			cell_detail1.Phrase = new Phrase($"{viewModel.MarketingName}", normal_font);
+			table_detail1.AddCell(cell_detail1);
 			cell_detail1.Phrase = new Phrase("CONFIRM ORDER", normal_font);
 			table_detail1.AddCell(cell_detail1);
 			table_detail1.AddCell(cell_colon);
 			cell_detail1.Phrase = new Phrase($"{viewModel.ConfirmDate.AddHours(timeoffset).ToString("dd/MM/yyyy")}", normal_font);
 			table_detail1.AddCell(cell_detail1);
+
 			#endregion
 
 			#region Draw Detail 1
@@ -84,12 +90,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			cell_detail2.Phrase = new Phrase("BUYER AGENT", normal_font);
 			table_detail2.AddCell(cell_detail2);
-			cell_detail2.Phrase = new Phrase($"{viewModel.Buyer.Code}" + " - "+ $"{viewModel.Buyer.Name}", normal_font);
+			cell_detail2.Phrase = new Phrase($"{viewModel.Buyer.Code}" + " - " + $"{viewModel.Buyer.Name}", normal_font);
 			table_detail2.AddCell(cell_detail2);
 
 			cell_detail2.Phrase = new Phrase("BUYER BRAND", normal_font);
 			table_detail2.AddCell(cell_detail2);
-			cell_detail2.Phrase = new Phrase($"{viewModel.BuyerBrand.Code}" + " - " +$"{viewModel.BuyerBrand.Name}", normal_font);
+			cell_detail2.Phrase = new Phrase($"{viewModel.BuyerBrand.Code}" + " - " + $"{viewModel.BuyerBrand.Name}", normal_font);
 			table_detail2.AddCell(cell_detail2);
 
 			cell_detail2.Phrase = new Phrase("ARTICLE", normal_font);
@@ -227,64 +233,64 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_signature.AddCell(cell_signature);
 			table_signature.AddCell(cell_signature);
 
-            var AssignmentKabag = "";
-            var AssignmentPurch = "";
-            var AssignmentKadiv = "";
+			var AssignmentKabag = "";
+			var AssignmentPurch = "";
+			var AssignmentKadiv = "";
 
-            if (viewModel.ApprovalMD.IsApproved)
-            {
-                AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
-            }
-            else
-            {
-                AssignmentKabag = " ____________________ ";
-            }
+			if (viewModel.ApprovalMD.IsApproved)
+			{
+				AssignmentKabag = viewModel.ApprovalMD.ApprovedBy;
+			}
+			else
+			{
+				AssignmentKabag = " ____________________ ";
+			}
 
-            if (viewModel.ApprovalPurchasing.IsApproved)
-            {
-                AssignmentPurch = viewModel.ApprovalPurchasing.ApprovedBy;
-            }
-            else
-            {
-                AssignmentPurch = " ____________________ ";
-            }
+			if (viewModel.ApprovalPurchasing.IsApproved)
+			{
+				AssignmentPurch = viewModel.ApprovalPurchasing.ApprovedBy;
+			}
+			else
+			{
+				AssignmentPurch = " ____________________ ";
+			}
 
-            if (viewModel.ApprovalKadivMD.IsApproved)
-            {
-                AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
-            }
-            else
-            {
-                AssignmentKadiv = " ____________________ ";
-            }
+			if (viewModel.ApprovalKadivMD.IsApproved)
+			{
+				AssignmentKadiv = viewModel.ApprovalKadivMD.ApprovedBy;
+			}
+			else
+			{
+				AssignmentKadiv = " ____________________ ";
+			}
 
-            string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
+			string AssignMD = viewModel.IsPosted ? viewModel.CreatedBy : " ";
 
-            cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(  " + AssignmentPurch + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("( ____________________ )", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
-            table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignMD + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignmentKabag + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignmentPurch + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("( ____________________ )", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("(  " + AssignmentKadiv + "  )", normal_font);
+			table_signature.AddCell(cell_signature);
 
-            cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Bag Pembelian", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Div Produksi Garment", normal_font);
-            table_signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
-            table_signature.AddCell(cell_signature);
-            #endregion
+			cell_signature.Phrase = new Phrase("Bag. Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Sie/Ka. Bag Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Bag Pembelian", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Div Produksi Garment", normal_font);
+			table_signature.AddCell(cell_signature);
+			cell_signature.Phrase = new Phrase("Ka. Div Penjualan", normal_font);
+			table_signature.AddCell(cell_signature);
+			#endregion
 
-            #region Cost Calculation Material
-            PdfPTable table_ccm = new PdfPTable(11);
+			#region Cost Calculation Material
+			PdfPTable table_ccm = new PdfPTable(11);
 			table_ccm.TotalWidth = 570f;
 
 			float[] ccm_widths = new float[] { 1f, 3f, 2f, 6f, 3f, 3f, 2f, 2f, 3f, 3f, 2f };
@@ -361,8 +367,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 				}
 				double totalQuantity = viewModel.Quantity ?? 0;
 				double quantity = (100 + factor) / 100 * usage * totalQuantity;
-                var budgetQuantity = Number.ToRupiahWithoutSymbol(Math.Ceiling(viewModel.CostCalculationGarment_Materials[i].BudgetQuantity));
-                cell_ccm.Phrase = new Phrase(budgetQuantity.Substring(0, budgetQuantity.Length - 3), normal_font);
+				var budgetQuantity = Number.ToRupiahWithoutSymbol(Math.Ceiling(viewModel.CostCalculationGarment_Materials[i].BudgetQuantity));
+				cell_ccm.Phrase = new Phrase(budgetQuantity.Substring(0, budgetQuantity.Length - 3), normal_font);
 				table_ccm.AddCell(cell_ccm);
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -371,7 +377,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_RIGHT;
 
-				if(viewModel.CostCalculationGarment_Materials[i].isFabricCM==true)
+				if (viewModel.CostCalculationGarment_Materials[i].isFabricCM == true)
 				{
 					cell_ccm.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(0), normal_font);
 					table_ccm.AddCell(cell_ccm);
@@ -382,15 +388,15 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 					cell_ccm.Phrase = new Phrase(Number.ToRupiahWithoutSymbol(amount), normal_font);
 					table_ccm.AddCell(cell_ccm);
 				}
-				
+
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_CENTER;
 				cell_ccm.Phrase = new Phrase(viewModel.CostCalculationGarment_Materials[i].PO_SerialNumber, normal_font);
 				table_ccm.AddCell(cell_ccm);
 
 				cell_ccm.HorizontalAlignment = Element.ALIGN_RIGHT;
-                var beaKirim = Number.ToRupiahWithoutSymbol(Math.Ceiling(viewModel.CostCalculationGarment_Materials[i].TotalShippingFee * viewModel.Quantity.GetValueOrDefault()));
-                cell_ccm.Phrase = new Phrase(beaKirim.Substring(0, beaKirim.Length - 3), normal_font);
+				var beaKirim = Number.ToRupiahWithoutSymbol(Math.Ceiling(viewModel.CostCalculationGarment_Materials[i].TotalShippingFee * viewModel.Quantity.GetValueOrDefault()));
+				cell_ccm.Phrase = new Phrase(beaKirim.Substring(0, beaKirim.Length - 3), normal_font);
 				table_ccm.AddCell(cell_ccm);
 
 				float currentHeight = table_ccm.TotalHeight;
