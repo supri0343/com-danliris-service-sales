@@ -51,6 +51,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.ConfirmPrice = 1;
             data.UOMUnit = "Test";
             data.SectionName = "FRANSISKA YULIANI";
+            data.MarketingName = "ANGGUN RAHMAWATI";
+            data.ResponsibleName = "WAHYU PAMUNGKAS";
             data.ApprovalCC = "FRANSISKA YULIANI";
             data.ApprovalRO = "FRANSISKA YULIANI";
             data.ApprovalKadiv = "AMUMPUNI";
@@ -73,6 +75,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.SMV_Total = 12.11;
             data.FabricAllowance = 0;
             data.AccessoriesAllowance = 3;
+            data.IsApprovedMkt = false;
             data.IsApprovedMD = false;
             data.CreatedBy = "test";
             data.IsApprovedMD = false;
@@ -82,6 +85,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.IsValidatedROSample = true;
             data.IsValidatedROMD = true;
             data.ApprovedKadivMDBy = "Test";
+            data.ApprovedMktDate = DateTimeOffset.Now;
             data.ValidationMDDate = DateTimeOffset.Now;
             data.ApprovedMDDate = DateTimeOffset.Now;
             data.ApprovedIEDate = DateTimeOffset.Now;

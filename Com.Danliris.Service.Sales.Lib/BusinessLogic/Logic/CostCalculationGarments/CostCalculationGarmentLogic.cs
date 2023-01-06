@@ -40,7 +40,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
 
 			List<string> SearchAttributes = new List<string>()
 			{
-                "PreSCNo", "RO_Number","Article","UnitName"
+                "PreSCNo", "RO_Number","MarketingName","Article","UnitName"
 			};
 
 			Query = QueryHelper<CostCalculationGarment>.Search(Query, SearchAttributes, keyword);
@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             {
                   "Id", "Code", "PreSCNo", "RO_Number", "Quantity", "ConfirmPrice", "Article", "Unit", "LastModifiedUtc","UnitName",
                     "Comodity", "UOM", "Buyer", "DeliveryDate", "BuyerBrand", "ApprovalMD", "ApprovalPurchasing", "ApprovalIE", "ApprovalKadivMD", "ApprovalPPIC",
-                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription"
+                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription","MarketingName","ResponsibleName"
             };
 
             Query = Query
@@ -113,7 +113,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                      LastModifiedUtc = ccg.LastModifiedUtc,
                      SectionName = ccg.SectionName,
                      Section = ccg.Section,
-                     CreatedBy = ccg.CreatedBy
+                     CreatedBy = ccg.CreatedBy,
+                     MarketingName = ccg.MarketingName,
+                     ResponsibleName = ccg.ResponsibleName
                  });
 
 			Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
