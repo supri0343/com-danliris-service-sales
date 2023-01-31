@@ -25,7 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             //set pdf stream
             MemoryStream stream = new MemoryStream();
-            Document document = new Document(PageSize.A4, 50, 50, 80, 40);
+            Document document = new Document(PageSize.A4, 50, 50, 120, 40);
             PdfWriter writer = PdfWriter.GetInstance(document, stream);
             document.Open();
 
