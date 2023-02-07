@@ -357,7 +357,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
 
             List<string> SelectedFields = new List<string>()
             {
-                   "BookingOrderId", "BookingOrderItemId", "BookingOrderNo", "ConfirmDate", "BuyerId", "BuyerCode", "BuyerName", "SectionId", "SectionCode", "SectionName", "ComodityId", "ComodityCode", "ComodityName", "ConfirmQuantity"
+                   "BookingOrderId", "BookingOrderItemId", "BookingOrderNo", "ConfirmDate", "BuyerId", "BuyerCode", "BuyerName", "SectionId", "SectionCode", "SectionName", "ComodityId", "ComodityCode", "ComodityName", "Remark",  "ConfirmQuantity"
             };
 
             var QueryX = (from a in Query1
@@ -382,6 +382,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                               ComodityId = b.ComodityId,
                               ComodityCode = b.ComodityCode,
                               ComodityName = b.ComodityName,
+                              Remark = b.Remark,
                               ConfirmQuantity = b.ConfirmQuantity,
                               CCQuantity = CCG == null ? 0 : CCG.Quantity,
                           });
@@ -402,7 +403,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                               x.SectionName,
                               x.ComodityId,
                               x.ComodityCode,
-                              x.ComodityName
+                              x.ComodityName,
+                              x.Remark
                           } into G
 
                           select new GarmentBookingOrderForCCGViewModel
@@ -420,9 +422,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                               ComodityId = G.Key.ComodityId,
                               ComodityCode = G.Key.ComodityCode,
                               ComodityName = G.Key.ComodityName,
+                              Remark = G.Key.Remark,
                               ConfirmQuantity = Math.Round(((G.Key.ConfirmQuantity * 1.05)), 0) - G.Sum(m => m.Qty),
                           }).OrderBy(x => x.BookingOrderNo).ThenBy(x => x.SectionCode).ThenBy(x => x.BuyerCode).ThenBy(x => x.ComodityCode);
-
 
             var Query = (from a in QueryY
                          where a.ConfirmQuantity > 0
@@ -442,6 +444,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                              ComodityId = a.ComodityId,
                              ComodityCode = a.ComodityCode,
                              ComodityName = a.ComodityName,
+                             Remark = a.Remark,
                              ConfirmQuantity = a.ConfirmQuantity,
                          });
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);

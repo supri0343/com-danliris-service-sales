@@ -25,6 +25,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentBookingOrderViewModel
         public long ComodityId { get; set; }
         public string ComodityCode { get; set; }
         public string ComodityName { get; set; }
+        public string Remark { get; set; }
         public double ConfirmQuantity { get; set; }
         public double CCQuantity { get; set; }
     }
