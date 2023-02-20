@@ -172,7 +172,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IHOrderFacade, HOrderFacade>()
                 .AddTransient<IDOAvalFacade, DOAvalFacade>()
                 .AddTransient<IDOStockFacade,DOStockFacade>()
-                .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>();
+                .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>()
+                .AddTransient<IDOSalesMonitoring, DOSalesMonitoringFacade>();
         }
 
         private void RegisterLogic(IServiceCollection services)
@@ -255,7 +256,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<ShinProductionOrderLogic>()
                 .AddTransient<DOAvalLogic>()
                 .AddTransient<DOStockLogic>()
-                .AddTransient<DeliveryNoteProductionLogic>();
+                .AddTransient<DeliveryNoteProductionLogic>()
+                .AddTransient<DOSalesMonitoringLogic>();
         }
 
         private void RegisterServices(IServiceCollection services)
