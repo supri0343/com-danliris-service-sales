@@ -110,7 +110,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
 			cell_detail2.Phrase = new Phrase("QTY", normal_font);
 			table_detail2.AddCell(cell_detail2);
-			cell_detail2.Phrase = new Phrase($"{viewModel.Quantity} PCS", normal_font);
+			//cell_detail2.Phrase = new Phrase($"{viewModel.Quantity} PCS", normal_font);
+			cell_detail2.Phrase = new Phrase($"{string.Format("{0:n2}", viewModel.Quantity)}" + " " + $"{viewModel.UOM.Unit}", normal_font);
 			table_detail2.AddCell(cell_detail2);
 
 			cell_detail2.Phrase = new Phrase("DELIVERY", normal_font);
@@ -190,7 +191,8 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_detail3.Phrase = new Phrase($"{viewModel.SMV_Total}", normal_font);
 			table_detail3.AddCell(cell_detail3);
 
-			cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+			//cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / PCS" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
+			cell_detail3_colspan8.Phrase = new Phrase("BUDGET COST / " + $"{viewModel.UOM.Unit}" + "".PadRight(5) + $"{Number.ToRupiah(budgetCost)}", normal_font);
 			table_detail3.AddCell(cell_detail3_colspan8);
 			cell_detail3_colspan8.Phrase = isDollar ? new Phrase($"US$ 1 = {Number.ToRupiah(viewModel.Rate.Value)}" + "".PadRight(10) + $"CONFIRM PRICE : {Number.ToDollar(viewModel.ConfirmPrice)} / PCS", normal_font) : new Phrase($"CONFIRM PRICE : {Number.ToRupiah(viewModel.ConfirmPrice)} / PCS", normal_font);
 			table_detail3.AddCell(cell_detail3_colspan8);
