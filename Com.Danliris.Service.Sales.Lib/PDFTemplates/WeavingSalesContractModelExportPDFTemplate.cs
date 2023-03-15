@@ -303,7 +303,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             signature.AddCell(cell_signature);
             cell_signature.Phrase = new Phrase("Authorized signature", normal_font);
             signature.AddCell(cell_signature);
-            cell_signature.Phrase = new Phrase("Marketing Textile", normal_font);
+            cell_signature.Phrase = new Phrase("Marketing Manager", normal_font);
             signature.AddCell(cell_signature);
             cellIdentityContentRight.Phrase = new Phrase("");
             signature.AddCell(cellIdentityContentRight);
