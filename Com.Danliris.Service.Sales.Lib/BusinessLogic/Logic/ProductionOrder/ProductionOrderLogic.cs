@@ -45,7 +45,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             List<string> SelectedFields = new List<string>()
             {
 
-                "Id", "POType", "Code", "Buyer", "ProcessType", "LastModifiedUtc", "FinishingPrintingSalesContract", "OrderNo", "Details", "OrderType", "HandlingStandard", "Material", "YarnMaterial", "DeliveryDate","SalesContractNo", "MaterialConstruction", "FinishWidth", "DesignCode", "DesignNumber", "OrderQuantity", "Uom",
+                "Id", "POType", "Code", "Buyer", "ProcessType", "LastModifiedUtc", "CreatedUtc", "FinishingPrintingSalesContract", "OrderNo", "Details", "OrderType", "HandlingStandard", "Material", "YarnMaterial", "DeliveryDate","SalesContractNo", "MaterialConstruction", "FinishWidth", "DesignCode", "DesignNumber", "OrderQuantity", "Uom",
                 "DistributedQuantity", "IsCompleted", "IsClosed", "IsCalculated", "Account", "MaterialWidth", "PackingInstruction", "MaterialOrigin", "ProductTextile", 
 
             };
@@ -86,6 +86,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
                     OrderTypeName = field.OrderTypeName,
                     OrderQuantity = field.OrderQuantity,
                     LastModifiedUtc = field.LastModifiedUtc,
+                    CreatedUtc = field.CreatedUtc,
                     Details = field.Details,
                     DesignCode = field.DesignCode,
                     DesignNumber = field.DesignNumber,
