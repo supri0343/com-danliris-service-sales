@@ -87,6 +87,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOStock
                 dbModel.HeadOfStorage = model.HeadOfStorage;
                 dbModel.Disp = model.Disp;
                 dbModel.Remark = model.Remark;
+                dbModel.BuyerName = model.BuyerName;
+                dbModel.BuyerId = model.BuyerId;
+                dbModel.BuyerCode = model.BuyerCode;
+                dbModel.BuyerType = model.BuyerType;
+                dbModel.BuyerAddress = model.BuyerAddress;
 
                 dbModel.FlagForUpdate(IdentityService.Username, UserAgent);
 
