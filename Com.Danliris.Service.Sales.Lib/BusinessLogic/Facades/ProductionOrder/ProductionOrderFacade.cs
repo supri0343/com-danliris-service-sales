@@ -1059,6 +1059,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return result;
         }
 
+        public List<long> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset)
+        {
+            var dateStart = startdate != DateTime.MinValue ? startdate.Date : DateTime.MinValue;
+            var dateTo = finishdate != DateTime.MinValue ? finishdate.Date : DateTime.Now.Date;
+            
+            var ordersQuery = from a in DbSet
+                              join b in DbContext.FinishingPrintingSalesContracts on a.SalesContractId equals b.Id
+                              where 
+                              b.CreatedUtc.AddHours(timeoffset).Date >= dateStart.Date && b.CreatedUtc.AddHours(timeoffset).Date <= dateTo.Date
+                              && a.OrderTypeId== (!orderTypeId.Equals(0)? orderTypeId : a.OrderTypeId)
+                              select a.Id;
+            
+            return ordersQuery.ToList();
+        }
+
+
+
         public List<MonthlyOrderQuantity> GetMonthlyOrderIdsByOrderType(int year, int month, int orderTypeId, int timeoffset)
         {
             var query = DbSet.Where(w => w.DeliveryDate.AddHours(timeoffset).Year == year && w.DeliveryDate.AddHours(timeoffset).Month == month);
