@@ -1059,7 +1059,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return result;
         }
 
-        public List<long> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset)
+        public List<OrderQuantityForStatusOrder> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset)
         {
             var dateStart = startdate != DateTime.MinValue ? startdate.Date : DateTime.MinValue;
             var dateTo = finishdate != DateTime.MinValue ? finishdate.Date : DateTime.Now.Date;
@@ -1069,7 +1069,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               where 
                               b.CreatedUtc.AddHours(timeoffset).Date >= dateStart.Date && b.CreatedUtc.AddHours(timeoffset).Date <= dateTo.Date
                               && a.OrderTypeId== (!orderTypeId.Equals(0)? orderTypeId : a.OrderTypeId)
-                              select a.Id;
+                              select new OrderQuantityForStatusOrder
+                              {
+                                  OrderId= a.Id,
+                                  OrderQuantity= a.OrderQuantity
+                              };
             
             return ordersQuery.ToList();
         }
