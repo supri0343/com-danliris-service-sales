@@ -32,4 +32,10 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report.OrderStatusReport
         public double storageQuantity { get; set; }
         public DateTimeOffset _createdDate { get; set; }
     }
+
+    public class OrderQuantityForStatusOrder
+    {
+        public long OrderId { get; set; }
+        public double OrderQuantity { get; set; }
+    }
 }
