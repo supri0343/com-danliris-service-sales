@@ -66,6 +66,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
 
         public long PreSCId { get; set; }
         public string PreSCNo { get; set; }
+        public string CCType { get; set; }
+
 
         public int BookingOrderId { get; set; }
         public string BookingOrderNo { get; set; }
