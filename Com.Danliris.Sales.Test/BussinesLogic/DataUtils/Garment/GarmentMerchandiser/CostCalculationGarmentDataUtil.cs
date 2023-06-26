@@ -58,6 +58,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.DataUtils.Garment.GarmentMerchan
             data.ApprovalKadiv = "AMUMPUNI";
             data.PreSCId = garmentPreSalesContractData.Id;
             data.PreSCNo = garmentPreSalesContractData.SCNo;
+            data.CCType = garmentPreSalesContractData.SCType;
             data.UnitCode = "C2A";
             data.UnitName = "test";
             data.IsROAccepted = false;

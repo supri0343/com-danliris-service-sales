@@ -89,6 +89,7 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.CostCalculationGarme
 
 			  .ForPath(d => d.MarketingName, opt => opt.MapFrom(s => s.MarketingName))
 			  .ForPath(d => d.ResponsibleName, opt => opt.MapFrom(s => s.ResponsibleName))
+			  .ForPath(d => d.CCType, opt => opt.MapFrom(s => s.CCType))
 
 			  .ReverseMap();
 		}
