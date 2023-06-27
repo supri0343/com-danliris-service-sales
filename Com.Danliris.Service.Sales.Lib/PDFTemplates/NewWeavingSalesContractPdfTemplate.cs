@@ -183,7 +183,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Alamat", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": Jl. Merapi No.23 Banaran, Grogol, Sukoharjo, 57552 ", normal_font);
+            bodyContentLeft.Phrase = new Phrase(": PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA ", normal_font);
             tableBody.AddCell(bodyContentLeft);
             PdfPCell cellBody = new PdfPCell(tableBody); // dont remove
             tableBody.ExtendLastRow = false;

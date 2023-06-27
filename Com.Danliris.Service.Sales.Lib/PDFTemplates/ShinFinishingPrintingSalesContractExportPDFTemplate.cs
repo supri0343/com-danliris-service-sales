@@ -103,7 +103,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Header
 
-            string codeNoString = "FM-PJ-00-03-004";
+            string codeNoString = "FM-PJ-00-03-004/R2";
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
             document.Add(codeNo);
             Paragraph dateString = new Paragraph($"Sukoharjo, {viewModel.CreatedUtc.AddHours(timeoffset).ToString("MMMM dd, yyyy", new CultureInfo("en-US"))}", normal_font) { Alignment = Element.ALIGN_RIGHT };
