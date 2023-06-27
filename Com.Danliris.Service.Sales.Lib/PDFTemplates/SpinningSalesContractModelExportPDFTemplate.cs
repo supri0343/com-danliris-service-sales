@@ -65,7 +65,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Header
 
-            string codeNoString = "FM-PJ-00-03-004";
+            string codeNoString = "FM-PJ-00-03-004/R2";
             Paragraph dateString = new Paragraph($"{codeNoString}\nSukoharjo, {viewModel.CreatedUtc.AddHours(timeoffset).ToString("MMMM dd, yyyy", new CultureInfo("en-US"))}", normal_font_9) { Alignment = Element.ALIGN_RIGHT, Leading  = 10 };
             dateString.SpacingAfter = 5f;
             document.Add(dateString);
@@ -102,7 +102,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Paragraph HeaderParagraph = new Paragraph(HeaderParagraphString, normal_font_9) { Alignment = Element.ALIGN_LEFT, Leading = 11 };
             document.Add(HeaderParagraph);
 
-            string firstParagraphString = "P.T. DAN LIRIS KELURAHAN BANARAN, KECAMATAN GROGOL SUKOHARJO - INDONESIA, we confrm the order under the following terms and conditions as mentioned below: ";
+            string firstParagraphString = "PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA, we confrm the order under the following terms and conditions as mentioned below: ";
             Paragraph firstParagraph = new Paragraph(firstParagraphString, normal_font_9) { Alignment = Element.ALIGN_LEFT, Leading = 11 };
             firstParagraph.SpacingAfter = 10f;
             document.Add(firstParagraph);
