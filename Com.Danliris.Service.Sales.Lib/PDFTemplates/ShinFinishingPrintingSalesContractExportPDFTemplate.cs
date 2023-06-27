@@ -194,7 +194,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Paragraph HeaderParagraph = new Paragraph(HeaderParagraphString, normal_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(HeaderParagraph);
 
-            string firstParagraphString = "PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA, we confrm the order under the following terms and conditions as mentioned below: ";
+            string firstParagraphString = "P.T. DAN LIRIS KELURAHAN BANARAN, KECAMATAN GROGOL SUKOHARJO - INDONESIA, we confrm the order under the following terms and conditions as mentioned below: ";
             Paragraph firstParagraph = new Paragraph(firstParagraphString, normal_font) { Alignment = Element.ALIGN_JUSTIFIED };
             firstParagraph.SpacingAfter = 10f;
             document.Add(firstParagraph);
