@@ -102,7 +102,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 
             #region Header
 
-            string codeNoString = "FM-PJ-00-03-004/R1";
+            string codeNoString = "FM-PJ-00-03-004/R2";
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
             document.Add(codeNo);
             Paragraph dateString = new Paragraph($"Sukoharjo, {viewModel.CreatedUtc.AddHours(timeoffset).ToString("MMMM dd, yyyy", new CultureInfo("en-US"))}", normal_font) { Alignment = Element.ALIGN_RIGHT };
@@ -193,7 +193,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             Paragraph HeaderParagraph = new Paragraph(HeaderParagraphString, normal_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(HeaderParagraph);
 
-            string firstParagraphString = "P.T. DAN LIRIS KELURAHAN BANARAN, KECAMATAN GROGOL SUKOHARJO - INDONESIA, we confrm the order under the following terms and conditions as mentioned below: ";
+            string firstParagraphString = "PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA, we confirm the order under the following terms and conditions as mentioned below: ";
             Paragraph firstParagraph = new Paragraph(firstParagraphString, normal_font) { Alignment = Element.ALIGN_JUSTIFIED };
             firstParagraph.SpacingAfter = 10f;
             document.Add(firstParagraph);
@@ -405,7 +405,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //conditionList.AddCell(cellIdentityContentLeft);
             cellIdentityContentLeft.Phrase = new Phrase(bulletListSymbol, normal_font);
             conditionList.AddCell(cellIdentityContentLeft);
-            bodyContentJustify.Phrase = new Phrase("Benefciary :  P.T. DAN LIRIS KELURAHAN BANARAN, KECAMATAN GROGOL SUKOHARJO - INDONESIA  (Phone No. 0271 - 740888 / 714400). ", normal_font);
+            bodyContentJustify.Phrase = new Phrase("Benefciary :  PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA  (Phone No. 0271 - 740888 / 714400). ", normal_font);
             conditionList.AddCell(bodyContentJustify);
             cellIdentityContentLeft.Phrase = new Phrase(" ", normal_font);
             conditionList.AddCell(cellIdentityContentLeft);
