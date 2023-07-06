@@ -405,7 +405,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             //conditionList.AddCell(cellIdentityContentLeft);
             cellIdentityContentLeft.Phrase = new Phrase(bulletListSymbol, normal_font);
             conditionList.AddCell(cellIdentityContentLeft);
-            bodyContentJustify.Phrase = new Phrase("Benefciary :  P.T. DAN LIRIS KELURAHAN BANARAN, KECAMATAN GROGOL SUKOHARJO - INDONESIA  (Phone No. 0271 - 740888 / 714400). ", normal_font);
+            bodyContentJustify.Phrase = new Phrase("Benefciary :  PT. DAN LIRIS JL. MERAPI NO. 23 BANARAN, GROGOL, SUKOHARJO, 57552, CENTRAL JAVA – INDONESIA  (Phone No. 0271 - 740888 / 714400). ", normal_font);
             conditionList.AddCell(bodyContentJustify);
             cellIdentityContentLeft.Phrase = new Phrase(" ", normal_font);
             conditionList.AddCell(cellIdentityContentLeft);
