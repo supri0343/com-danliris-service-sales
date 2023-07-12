@@ -94,7 +94,46 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.FinishingPrinting
                              sppDate = c.CreatedUtc,
                              status = DbContext.ProductionOrder.Count(c => c.SalesContractId == a.Id && c.IsDeleted == false) > 0 ? "Sudah dibuat SPP" : "Belum dibuat SPP"
                          });
-            return Query;
+            var queryGroup = Query.GroupBy(s => new {  s.salesContractNo, s.sppOrderNo, }).Select(a => new FinishingPrintingSalesContractReportViewModel()
+            {
+                CreatedUtc = a.FirstOrDefault().CreatedUtc,
+                salesContractNo = a.Key.salesContractNo,
+                comission = a.FirstOrDefault().comission,
+                comodityName = a.FirstOrDefault().comodityName,
+                buyerName = a.FirstOrDefault().buyerName,
+                buyerType = a.FirstOrDefault().buyerType,
+                agentName = a.FirstOrDefault().agentName,
+                paymentTo = a.FirstOrDefault().paymentTo,
+                accountCurrencyCode = a.FirstOrDefault().accountCurrencyCode,
+                deliverySchedule = a.FirstOrDefault().deliverySchedule,
+                dispositionNo = a.FirstOrDefault().dispositionNo,
+                orderQuantity = a.FirstOrDefault().orderQuantity,
+                price = a.FirstOrDefault().price,
+                qualityName = a.FirstOrDefault().qualityName,
+                shippingQuantityTolerance = a.FirstOrDefault().shippingQuantityTolerance,
+                termOfPaymentName = a.FirstOrDefault().termOfPaymentName,
+                uomUnit = a.FirstOrDefault().uomUnit,
+                LastModifiedUtc = a.FirstOrDefault().LastModifiedUtc,
+                materialConstructionName = a.FirstOrDefault().materialConstructionName,
+                materialName = a.FirstOrDefault().materialName,
+                materialWidth = a.FirstOrDefault().materialWidth,
+                orderType = a.FirstOrDefault().orderType,
+                yarnMaterialName = a.FirstOrDefault().yarnMaterialName,
+                color = a.FirstOrDefault().color,
+                useIncomeTax = a.FirstOrDefault().useIncomeTax,
+                productionOrderQuantity = a.FirstOrDefault().productionOrderQuantity,
+                /*productionOrderQuantity = (from d in DbContext.ProductionOrder
+                                           join e in DbContext.ProductionOrder_Details
+                                           on d.Id equals e.ProductionOrderModel.Id
+                                           where d.SalesContractId == a.Id
+                                           && d.IsDeleted==false
+                                           && e.IsDeleted==false
+                                           select e.Quantity).Sum(),*/
+                sppOrderNo = a.Key.sppOrderNo,
+                sppDate = a.FirstOrDefault().sppDate,
+                status = a.FirstOrDefault().status
+            });
+            return queryGroup;
         }
 
         public Tuple<List<FinishingPrintingSalesContractReportViewModel>, int> GetReport(string no, string buyerCode, string orderTypeCode, string comodityCode, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
