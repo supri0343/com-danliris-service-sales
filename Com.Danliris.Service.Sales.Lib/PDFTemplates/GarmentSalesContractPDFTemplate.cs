@@ -69,6 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             cellHeaderContentLeft.Phrase = new Phrase("", normal_font);
             tableHeader.AddCell(cellHeaderContentLeft);
             string buyerAddress = buyer["Address"] !=null? buyer["Address"].ToString() : "";
+            string buyerAgentCode = buyer["Code"] !=null? buyer["Code"].ToString() : "";
             cellHeaderContentLeft.Phrase=new Phrase( buyerAddress, normal_font);
             tableHeader.AddCell(cellHeaderContentLeft);
 
@@ -100,37 +101,37 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             PdfPCell bodyContentCenter = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
             PdfPCell bodyContentLeft = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             PdfPCell bodyContentRight = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
-            bodyContentLeft.Phrase = new Phrase("Description of Goods", normal_font);
+            bodyContentLeft.Phrase = new Phrase("DESCRIPTION OF GOODS", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ");
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(viewModel.Description, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Material", normal_font);
+            bodyContentLeft.Phrase = new Phrase("MATERIAL", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ");
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.Material, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Packing", normal_font);
+            bodyContentLeft.Phrase = new Phrase("PACKING", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ");
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.Packing, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Style/Order/Article No.", normal_font);
+            bodyContentLeft.Phrase = new Phrase("STYLE/ORDER/ARTICLE NO.", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": " );
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.Article, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Quantity", normal_font);
+            bodyContentLeft.Phrase = new Phrase("QUANTITY", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": " , normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.Quantity + " " + viewModel.Uom.Unit, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Unit Price", normal_font);
+            bodyContentLeft.Phrase = new Phrase("UNIT PRICE", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -160,37 +161,37 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
                 }
             }
 
-            bodyContentLeft.Phrase = new Phrase("Total Amount", normal_font);
+            bodyContentLeft.Phrase = new Phrase("TOTAL AMOUNT", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("US$ " + string.Format("{0:n2}",viewModel.Amount) , normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Shipment/Delivery", normal_font);
+            bodyContentLeft.Phrase = new Phrase("SHIPMENT/DELIVERY", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": " , normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.DeliveryDate.ToOffset(new TimeSpan(timeoffset, 0, 0)).ToString("dd/MM/yyyy") + " " + viewModel.Delivery, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Destination", normal_font);
+            bodyContentLeft.Phrase = new Phrase("DESTINATION", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(viewModel.Country, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("H.S.No.", normal_font);
+            bodyContentLeft.Phrase = new Phrase("H.S No.", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(viewModel.NoHS, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Payment", normal_font);
+            bodyContentLeft.Phrase = new Phrase("PAYMENT", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase( viewModel.PaymentDetail, normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Manufacturer", normal_font);
+            bodyContentLeft.Phrase = new Phrase("MANUFACTURER", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -202,7 +203,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("ADDRESS : JL. MERAPI NO. 23, KELURAHAN BANARAN, KECAMATAN GROGOL \n                    KABUPATEN SUKOHARJO, JAWA TENGAH 57552, INDONESIA", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase("Bank Detail", normal_font);
+            bodyContentLeft.Phrase = new Phrase("BANK DETAIL", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase(": ", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -261,18 +262,38 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             remarks.AddCell(cell_remark);
             cell_remark.Phrase = new Phrase("SELLER WILL NOT BE HELD RESPONSIBLE FOR LATE DELIVERY CAUSED BY BUYER ASKING FOR ANY AND OR ACCESSORIES THAT HAS TO BE IMPORTED INTO INDONESIA FOR THEIR ORDER.", normal_font);
             remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("4)", normal_font);
-            remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("L/C MUST BE OPENED MINIMUM THREE MONTHS PRIOR TO DELIVERY DATE.", normal_font);
-            remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("5)", normal_font);
-            remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("IN CASE L/C AMENDMENT (S) REQUIRED DUE TO MISTAKE OR NEGLECT ON BUYER'S SIDE, ANY CHARGES INCURRED IS TO BE BORNE BY BUYER. ", normal_font);
-            remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("6)", normal_font);
-            remarks.AddCell(cell_remark);
-            cell_remark.Phrase = new Phrase("CONDITION OF LETTER OF CREDIT SHOULD CONFORM TO THE INDONESIAN BANKING AND GOVERNMENT EXPORT REGULATIONS AS PER OUR ENCLOSURE, OF WHICH IT FORMS AN INTEGRAL PART.", normal_font);
-            remarks.AddCell(cell_remark);
+
+            if (buyerAgentCode == "K14")
+            {
+                cell_remark.Phrase = new Phrase("4)", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("5% MORE OR LESS BOTH IN AMOUNT AND QUANTITY ARE ALLOWED AT THE SELLERS OPTION.", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("5)", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("CERTIFICATE OF ORIGIN REQUIRED. ", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("", normal_font);
+                remarks.AddCell(cell_remark);
+            }
+            else
+            {
+                cell_remark.Phrase = new Phrase("4)", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("L/C MUST BE OPENED MINIMUM THREE MONTHS PRIOR TO DELIVERY DATE.", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("5)", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("IN CASE L/C AMENDMENT (S) REQUIRED DUE TO MISTAKE OR NEGLECT ON BUYER'S SIDE, ANY CHARGES INCURRED IS TO BE BORNE BY BUYER. ", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("6)", normal_font);
+                remarks.AddCell(cell_remark);
+                cell_remark.Phrase = new Phrase("CONDITION OF LETTER OF CREDIT SHOULD CONFORM TO THE INDONESIAN BANKING AND GOVERNMENT EXPORT REGULATIONS AS PER OUR ENCLOSURE, OF WHICH IT FORMS AN INTEGRAL PART.", normal_font);
+                remarks.AddCell(cell_remark);
+            }
+
 
             PdfPCell remarkCell = new PdfPCell(remarks); // dont remove
             remarks.ExtendLastRow = false;
