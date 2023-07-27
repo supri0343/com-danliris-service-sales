@@ -1134,5 +1134,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         {
             return productionOrderLogic.ReadConstruction(page, size, keyword, filter);
         }
+
+        public string GetProductionOrderbyOrderNo(string orderNo)
+        {
+            var ordersQuery = from a in DbSet
+                              where
+                              a.OrderNo == orderNo
+                              select a.StandardTestName;
+
+            return ordersQuery.FirstOrDefault();
+        }
     }
 }
