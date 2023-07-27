@@ -28,5 +28,6 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
         List<string> ReadConstruction(int page, int size, string keyword, string filter);
 
         List<OrderQuantityForStatusOrder> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset);
+        string GetProductionOrderbyOrderNo(string orderNo);
     }
 }
