@@ -6,6 +6,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Models.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report.OrderStatusReport;
 using Com.Moonlay.NetCore.Lib;
@@ -1059,6 +1060,27 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return result;
         }
 
+        public List<OrderQuantityForStatusOrder> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset)
+        {
+            var dateStart = startdate != DateTime.MinValue ? startdate.Date : DateTime.MinValue;
+            var dateTo = finishdate != DateTime.MinValue ? finishdate.Date : DateTime.Now.Date;
+            
+            var ordersQuery = from a in DbSet
+                              join b in DbContext.FinishingPrintingSalesContracts on a.SalesContractId equals b.Id
+                              where 
+                              b.CreatedUtc.AddHours(timeoffset).Date >= dateStart.Date && b.CreatedUtc.AddHours(timeoffset).Date <= dateTo.Date
+                              && a.OrderTypeId== (!orderTypeId.Equals(0)? orderTypeId : a.OrderTypeId)
+                              select new OrderQuantityForStatusOrder
+                              {
+                                  OrderId= a.Id,
+                                  OrderQuantity= a.OrderQuantity
+                              };
+            
+            return ordersQuery.ToList();
+        }
+
+
+
         public List<MonthlyOrderQuantity> GetMonthlyOrderIdsByOrderType(int year, int month, int orderTypeId, int timeoffset)
         {
             var query = DbSet.Where(w => w.DeliveryDate.AddHours(timeoffset).Year == year && w.DeliveryDate.AddHours(timeoffset).Month == month);
@@ -1112,6 +1134,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         public List<string> ReadConstruction(int page, int size, string keyword, string filter)
         {
             return productionOrderLogic.ReadConstruction(page, size, keyword, filter);
+        }
+
+        public ProductionOrderForDPViewModel GetProductionOrderbyOrderNo(string orderNo)
+        {
+            var ordersQuery = from a in DbSet
+                              where
+                              a.OrderNo == orderNo
+                              select new ProductionOrderForDPViewModel()
+                              {
+                                  standardTestName=a.StandardTestName,
+                                  buyer=a.BuyerName,
+                                  deliveryDate=a.DeliveryDate,
+                                  finishType=a.FinishTypeName,
+                                  yarnMaterialName=a.YarnMaterialName
+                              };
+
+            return ordersQuery.FirstOrDefault();
         }
     }
 }

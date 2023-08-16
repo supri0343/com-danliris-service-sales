@@ -364,7 +364,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                           join b in DbContext.GarmentBookingOrderItems on a.Id equals b.BookingOrderId
                           join c in DbContext.CostCalculationGarments on b.Id equals c.BookingOrderItemId into cc
                           from CCG in cc.DefaultIfEmpty()
-                          where a.HadConfirmed == true && a.IsCanceled == false && b.IsCanceled == false
+                          where a.HadConfirmed == true && a.IsCanceled == false && b.IsCanceled == false && CCG.IsDeleted == false
                                 && a.BuyerCode == buyer && a.SectionCode == section && b.ComodityCode == comodity
 
                           select new GarmentBookingOrderForCCGViewModel
