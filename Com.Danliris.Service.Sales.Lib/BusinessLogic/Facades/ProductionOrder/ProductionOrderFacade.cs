@@ -815,7 +815,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               buyer = a.BuyerName,
                               _createdDate = a.CreatedUtc,
                               finishTypeName = a.FinishTypeName,
+
                               standardTest= a.StandardTestName,
+
                               finishWidth = a.FinishWidth,
                               materialName = a.MaterialName,
                               yarnMaterialName = a.YarnMaterialName,
@@ -826,6 +828,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             return Query1;
         }
+
 
         public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
         {
@@ -904,7 +907,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Warna", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Motif", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jenis Finish", DataType = typeof(String) });
+
             result.Columns.Add(new DataColumn() { ColumnName = "Standar Test", DataType = typeof(String) });
+
             result.Columns.Add(new DataColumn() { ColumnName = "Lebar Finish", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Delivery", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Material", DataType = typeof(String) });
@@ -916,7 +921,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Dibuat", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
+
                 result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "", "", 0, 0, "", ""); // to allow column name to be generated properly for empty data as template
+
             else
             {
                 int index = 0;
@@ -926,13 +933,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                     string deliverySchedule = item.deliveryDate == null ? "-" : item.deliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     string createdDate = item._createdDate == null ? "-" : item._createdDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     result.Rows.Add(index, item.orderNo, item.buyer, item.colorType, item.designCode,
+
                         item.finishTypeName,item.standardTest, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
+
                         item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate);
                 }
             }
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "IEDP Report") }, true);
         }
+
 
         public async Task<ProductionOrderReportDetailViewModel> GetDetailReport(long no)
         {
