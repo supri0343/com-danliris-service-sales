@@ -757,6 +757,63 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return Query = query.AsQueryable();
         }
 
+        //--CobaMDP--//
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        {
+            string OrderTypeId1;
+            string OrderTypeId2;
+            if (orderTypeId == "1" || orderTypeId == "9")
+            {
+                OrderTypeId1 = "9";
+                OrderTypeId2 = "1";
+            }
+            else
+            {
+                OrderTypeId1 = orderTypeId;
+                OrderTypeId2 = orderTypeId;
+            }
+
+            DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
+            DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
+
+            var Query1 = (from a in DbContext.ProductionOrder
+                          join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
+                          join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
+                          join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
+                          where a.IsDeleted == false
+                              && b.IsDeleted == false
+                              && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
+                              && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
+                              && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
+                              && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
+                              && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)
+                              && (a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
+                                  || a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2))
+                              && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
+                              && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
+                          select new ProductionOrderReportViewModel
+                          {
+                              orderNo = a.OrderNo,
+                              colorType = b.ColorType,
+                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
+                              designCode = a.DesignCode,
+                              buyer = a.BuyerName,
+                              _createdDate = a.CreatedUtc,
+                              finishTypeName = a.FinishTypeName,
+                              finishWidth = a.FinishWidth,
+                              materialName = a.MaterialName,
+                              yarnMaterialName = a.YarnMaterialName,
+                              materialWidth = a.MaterialWidth,
+                              handlingStandard = a.HandlingStandard,
+                              orderQuantity = b.Quantity
+                          });
+
+            return Query1;
+        }
+
+
+
+
         public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
         {
             var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
@@ -819,6 +876,53 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }
+
+        //--cobaIEDP--//
+        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        {
+            var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+            Query = Query.OrderByDescending(b => b._createdDate);
+            DataTable result = new DataTable();
+
+            result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Nomor SPP", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Buyer", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Warna", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Motif", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Jenis Finish", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Lebar Finish", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Delivery", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Material", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Konstruksi Material", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Lebar Material", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Nomor Benang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Panjang (M)", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Standar Handling", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Dibuat", DataType = typeof(String) });
+
+            if (Query.ToArray().Count() == 0)
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, 0,"", ""); // to allow column name to be generated properly for empty data as template
+            else
+            {
+                int index = 0;
+                foreach (var item in Query)
+                {
+                    index++;
+                    string deliverySchedule = item.deliveryDate == null ? "-" : item.deliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
+                    string createdDate = item._createdDate == null ? "-" : item._createdDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
+                    result.Rows.Add(index, item.orderNo, item.buyer, item.colorType, item.designCode,
+                        item.finishTypeName, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
+                        item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate);
+                }
+            }
+
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "IEDP Report") }, true);
+        }
+
+
+
+
+
 
         public async Task<ProductionOrderReportDetailViewModel> GetDetailReport(long no)
         {
