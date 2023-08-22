@@ -6,6 +6,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Models.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report.OrderStatusReport;
 using Com.Moonlay.NetCore.Lib;
@@ -1135,12 +1136,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return productionOrderLogic.ReadConstruction(page, size, keyword, filter);
         }
 
-        public string GetProductionOrderbyOrderNo(string orderNo)
+        public ProductionOrderForDPViewModel GetProductionOrderbyOrderNo(string orderNo)
         {
             var ordersQuery = from a in DbSet
                               where
                               a.OrderNo == orderNo
-                              select a.StandardTestName;
+                              select new ProductionOrderForDPViewModel()
+                              {
+                                  standardTestName=a.StandardTestName,
+                                  buyer=a.BuyerName,
+                                  deliveryDate=a.DeliveryDate,
+                                  finishType=a.FinishTypeName,
+                                  yarnMaterialName=a.YarnMaterialName
+                              };
 
             return ordersQuery.FirstOrDefault();
         }
