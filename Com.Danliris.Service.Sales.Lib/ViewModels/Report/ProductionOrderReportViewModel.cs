@@ -6,6 +6,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
 {
     public class ProductionOrderReportViewModel
     {
+        
+
         public long id { get; set; }
         public string status { get; set; }
         public string detail { get; set; }
@@ -27,6 +29,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
         public string staffName { get; set; }
         public DateTimeOffset _createdDate { get; set; }
         public DateTimeOffset deliveryDate { get; set; }
+
+        public string finishTypeName { get; set; } // nvarchar(255), null
+        public string finishWidth { get; set; }    // nvarchar(255), null
+        public string materialName { get; set; }   // nvarchar(1000), null
+        public string yarnMaterialName { get; set; } // nvarchar(1000), null
+        public string materialWidth { get; set; }  // nvarchar(1000), null
+        public string handlingStandard { get; set; } // nvarchar(255), null
+
 
     }
 }
