@@ -13,6 +13,8 @@ using System.Linq;
 using Com.Danliris.Service.Sales.Lib.ViewModels.DyeingPrintingReport;
 using OfficeOpenXml;
 using System.Globalization;
+using Newtonsoft.Json;
+using OfficeOpenXml.Style;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingReportFacades
 {
@@ -39,6 +41,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingRep
             var data = Query.ToList();
             DataTable result = new DataTable();
             var offset = 7;
+            Filter _filter = JsonConvert.DeserializeObject<Filter>(filter);
 
             result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "No SPP", DataType = typeof(String) });
@@ -46,12 +49,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingRep
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Delivery", DataType = typeof(String) });
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
+            var index = 0;
+
             if (Query.ToArray().Count() == 0)
                 result.Rows.Add("", "", "", ""); 
             else
             {
-                var index = 0;
-                
                 foreach (MachineQueueReportViewModel item in Query.ToList())
                 {
                     index++;
@@ -60,17 +63,37 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingRep
                     result.Rows.Add(index, item.SPPNo, length, date);
                 }
             }
-            ExcelPackage package = new ExcelPackage();
-            var sheet = package.Workbook.Worksheets.Add("LAPORAN ORDER BELUM DIPRODUKSI MESIN");
-            sheet.Cells["A1"].LoadFromDataTable(result, true, OfficeOpenXml.Table.TableStyles.Light16);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sheet 1");
+                var type = !string.IsNullOrEmpty(_filter.orderTypeName ) ? _filter.orderTypeName : "-";
+                var dateFrom = _filter.dateFrom !=null ? _filter.dateFrom.GetValueOrDefault().ToString("dd MMM yyyy")  : "-";
+                var dateTo = _filter.dateTo != null ? _filter.dateTo.GetValueOrDefault().ToString("dd MMM yyyy") : "-";
+                worksheet.Cells["A1"].Value = "LAPORAN ORDER BELUM DIPRODUKSI MESIN";
+                worksheet.Cells["A2"].Value = "JENIS ORDER : " + type;
+                worksheet.Cells["A3"].Value = "TANGGAL AWAL : " + dateFrom + "  TANGGAL AKHIR : " + dateTo;
 
-            sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
-            MemoryStream streamExcel = new MemoryStream();
-            package.SaveAs(streamExcel);
+                worksheet.Cells["A" + 1 + ":D" + 1 + ""].Merge = true;
+                worksheet.Cells["A" + 2 + ":D" + 2 + ""].Merge = true;
+                worksheet.Cells["A" + 3 + ":D" + 3 + ""].Merge = true;
+                worksheet.Cells["A" + 4 + ":D" + 4 + ""].Merge = true;
+                worksheet.Cells["A" + 1 + ":D" + 5 + ""].Style.Font.Bold = true;
+                worksheet.Cells["A5"].LoadFromDataTable(result, true);
+                worksheet.Cells["A" + 5 + ":D" + (index + 5) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 5 + ":D" + (index + 5) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 5 + ":D" + (index + 5) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 5 + ":D" + (index + 5) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
-            string fileName = string.Concat("Budget Export Garment", ".xlsx");
+                worksheet.Cells["A" + 1 + ":D" + (index + 5) + ""].AutoFitColumns();
 
-            return Tuple.Create(streamExcel, fileName);
+
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+                string fileName = string.Concat("Laporan Order Belum Diproduksi Mesin", ".xlsx");
+
+                return Tuple.Create(stream, fileName);
+            }
+            
         }
 
         public Tuple<List<MachineQueueReportViewModel>, int> Read(int page = 1, int size = 25, string filter = "{}")
@@ -80,6 +103,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingRep
 
             int TotalData = data.Count();
             return Tuple.Create(data, TotalData);
+        }
+        private class Filter
+        {
+            public string orderType { get; set; }
+            public DateTimeOffset? dateFrom { get; set; }
+            public DateTimeOffset? dateTo { get; set; }
+            public string orderTypeName { get; set; }
         }
     }
 }
