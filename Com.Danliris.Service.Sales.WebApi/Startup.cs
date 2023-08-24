@@ -86,6 +86,9 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOAval;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DOStock;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DOStock;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DOStock;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DyeingPrintingReportLogics;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.DyeingPrintingReportInterface;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.DyeingPrintingReportFacades;
 
 namespace Com.Danliris.Service.Sales.WebApi
 {
@@ -173,7 +176,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<IDOAvalFacade, DOAvalFacade>()
                 .AddTransient<IDOStockFacade,DOStockFacade>()
                 .AddTransient<IDeliveryNoteProduction, DeliveryNoteProductionFacade>()
-                .AddTransient<IDOSalesMonitoring, DOSalesMonitoringFacade>();
+                .AddTransient<IDOSalesMonitoring, DOSalesMonitoringFacade>()
+                .AddTransient<IMachineQueueReport, MachineQueueReportFacade>();
         }
 
         private void RegisterLogic(IServiceCollection services)
@@ -257,7 +261,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<DOAvalLogic>()
                 .AddTransient<DOStockLogic>()
                 .AddTransient<DeliveryNoteProductionLogic>()
-                .AddTransient<DOSalesMonitoringLogic>();
+                .AddTransient<DOSalesMonitoringLogic>()
+                .AddTransient<MachineQueueReportLogic>();
         }
 
         private void RegisterServices(IServiceCollection services)
