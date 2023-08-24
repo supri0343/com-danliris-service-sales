@@ -69,6 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DyeingPrintingRepor
             public string orderType { get; set; }
             public DateTimeOffset? dateFrom { get; set; }
             public DateTimeOffset? dateTo { get; set; }
+            public string orderTypeName { get; set; }
         }
     }
 }
