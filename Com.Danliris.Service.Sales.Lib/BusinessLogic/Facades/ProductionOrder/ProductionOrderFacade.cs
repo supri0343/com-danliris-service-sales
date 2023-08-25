@@ -574,17 +574,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         }
         public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-           
-            string OrderTypeId1;
-            string OrderTypeId2;
-            if (orderTypeId == "1" || orderTypeId == "9") {
-                OrderTypeId1 = "9";
-                OrderTypeId2 = "1";
+
+            List<string> OrderTypeId1 = new List<string>();
+          //  string OrderTypeId2;
+            if (orderTypeId == "1" || orderTypeId == "3")
+            {
+                OrderTypeId1 = new List<string> { "1", "3" };
+               
             }
-            else {
-                 OrderTypeId1 = orderTypeId;
-                OrderTypeId2 = orderTypeId;
+            else
+            {
+                OrderTypeId1 = new List<string> { orderTypeId };
             }
+            
+
 
             DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
             DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
@@ -640,21 +643,26 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               && b.IsDeleted == false
                               //&& b.ColorType == d.Color
                               //&& d.Color == (string.IsNullOrWhiteSpace(b.ColorType) ? d.Color : b.ColorType)
+
                               && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
                               && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                               && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
                               && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)
-                              //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString(): orderTypeId)
-                              //&& a.OrderTypeName == "DYEING" || a.OrderTypeName == "SOLID"
-                              && a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
-                              || a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2)
-
                               && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
                               && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
-                         
 
-                             
+                              //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString(): orderTypeId)
+                              //&& a.OrderTypeName == "DYEING" || a.OrderTypeName == "SOLID"
+                              // && a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
+                              //|| a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2)
+
+                              //&& string.IsNullOrWhiteSpace(orderTypeId)  ? a.OrderTypeId.ToString() == a.OrderTypeId.ToString(): OrderTypeId1.Contains(a.OrderTypeId.ToString())
+
+                              
+
+
+
                           select new ProductionOrderReportViewModel
                           {
                               id = a.Id,
@@ -673,14 +681,20 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               deliveryDate = a.DeliveryDate,
                               designCode = a.DesignCode,
                               orderType = a.OrderTypeName,
+                              orderTypeId = Convert.ToInt32(a.OrderTypeId),
                               processType = a.ProcessTypeName,
                               staffName = a.ProfileFirstName + " - " + a.ProfileLastName,
                               _createdDate = a.CreatedUtc
                           });
 
+            if (orderTypeId !=null) {
+                Query1 = Query1.Where(x => OrderTypeId1.Contains(x.orderTypeId.ToString()));
+            }
+            
+
             var Query = from data in Query1
                         group data by new { data.orderNo, data.colorType } into groupdata
-                        where groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date >= DateFrom.Date 
+                        where groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date >= DateFrom.Date
 
                         && groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date <= DateTo.Date
                         select new ProductionOrderReportViewModel
@@ -707,7 +721,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
 
                         };
-            var fabricQuality = await GetFabricQualityItems(orderNo);
+            //var fabricQuality = await GetFabricQualityItems(orderNo);
             //var dailyOP = await GetDailyOperationItems(orderNo); //data is not input in production
             //List<DailyOperationViewModel> dailies = new List<DailyOperationViewModel>();
 
@@ -860,7 +874,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Permintaan Pengiriman", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "","","", 0, "", 0, "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", 0, "", 0, "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -901,7 +915,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Dibuat", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, 0,"", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, 0, "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -1168,18 +1182,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         {
             var dateStart = startdate != DateTime.MinValue ? startdate.Date : DateTime.MinValue;
             var dateTo = finishdate != DateTime.MinValue ? finishdate.Date : DateTime.Now.Date;
-            
+
             var ordersQuery = from a in DbSet
                               join b in DbContext.FinishingPrintingSalesContracts on a.SalesContractId equals b.Id
-                              where 
+                              where
                               b.CreatedUtc.AddHours(timeoffset).Date >= dateStart.Date && b.CreatedUtc.AddHours(timeoffset).Date <= dateTo.Date
-                              && a.OrderTypeId== (!orderTypeId.Equals(0)? orderTypeId : a.OrderTypeId)
+                              && a.OrderTypeId == (!orderTypeId.Equals(0) ? orderTypeId : a.OrderTypeId)
                               select new OrderQuantityForStatusOrder
                               {
-                                  OrderId= a.Id,
-                                  OrderQuantity= a.OrderQuantity
+                                  OrderId = a.Id,
+                                  OrderQuantity = a.OrderQuantity
                               };
-            
+
             return ordersQuery.ToList();
         }
 
@@ -1247,11 +1261,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               a.OrderNo == orderNo
                               select new ProductionOrderForDPViewModel()
                               {
-                                  standardTestName=a.StandardTestName,
-                                  buyer=a.BuyerName,
-                                  deliveryDate=a.DeliveryDate,
-                                  finishType=a.FinishTypeName,
-                                  yarnMaterialName=a.YarnMaterialName
+                                  standardTestName = a.StandardTestName,
+                                  buyer = a.BuyerName,
+                                  deliveryDate = a.DeliveryDate,
+                                  finishType = a.FinishTypeName,
+                                  yarnMaterialName = a.YarnMaterialName
                               };
 
             return ordersQuery.FirstOrDefault();
