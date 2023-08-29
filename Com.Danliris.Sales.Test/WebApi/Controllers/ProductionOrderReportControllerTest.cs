@@ -94,6 +94,25 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             Assert.NotNull(response);
         }
 
+        //--Unit Test Coba MDP GenerateExcel2_WithoutException_ReturnsOK --//
+        [Fact]
+        public async Task GenerateExcel2_WithoutException_ReturnsOK()
+        {
+            // Arrange
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel2(
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
+                It.IsAny<int>()))
+                .ReturnsAsync(new MemoryStream());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null);
+            // Assert
+            Assert.NotNull(response);
+        }
+        //--Berhasil acur100%--//
+        
         [Fact]
         public async Task DownloadExcel_Exception_InternalServer()
         {
@@ -109,6 +128,28 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
+
+        //--Unit Test Coba MDP DownloadExcel_Exception_InternalServer--//
+        [Fact]
+        public async Task DownloadExcel2_Exception_InternalServer()
+        {
+            // Arrange
+            var mocks = GetMocks();
+            mocks.Facade.Setup(f => f.GenerateExcel2(
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
+                It.IsAny<int>()))
+                .ThrowsAsync(new Exception());
+
+            var controller = GetController(mocks);
+            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null);
+
+            int statusCode = this.GetStatusCode(response);
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
+        }
+        //---------//
 
         [Fact]
         public async Task GetDetail_WithoutException_ReturnOK()
@@ -139,4 +180,5 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             Assert.Equal((int)HttpStatusCode.InternalServerError, statusCode);
         }
     }
+    
 }
