@@ -904,6 +904,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Warna", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Motif", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jenis Finish", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Standar Test", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Lebar Finish", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Delivery", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Material", DataType = typeof(String) });
@@ -915,7 +916,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Dibuat", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, 0, "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "", "", 0, 0, "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -925,7 +926,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                     string deliverySchedule = item.deliveryDate == null ? "-" : item.deliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     string createdDate = item._createdDate == null ? "-" : item._createdDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     result.Rows.Add(index, item.orderNo, item.buyer, item.colorType, item.designCode,
-                        item.finishTypeName, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
+                        item.finishTypeName,item.standardTest, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
                         item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate);
                 }
             }
