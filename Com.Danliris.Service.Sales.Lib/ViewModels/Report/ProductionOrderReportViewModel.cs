@@ -6,7 +6,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
 {
     public class ProductionOrderReportViewModel
     {
-        
+        internal string standardTest;
 
         public long id { get; set; }
         public string status { get; set; }
