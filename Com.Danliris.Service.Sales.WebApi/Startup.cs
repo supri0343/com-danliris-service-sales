@@ -284,7 +284,7 @@ namespace Com.Danliris.Service.Sales.WebApi
             Lib.Helpers.APIEndpoint.Production = Configuration.GetValue<string>("ProductionEndpoint") ?? Configuration["ProductionEndpoint"];
             Lib.Helpers.APIEndpoint.Finance = Configuration.GetValue<string>("FinanceEndpoint") ?? Configuration["FinanceEndpoint"];
             Lib.Helpers.APIEndpoint.PackingInventory = Configuration.GetValue<string>("PackingInventoryEndpoint") ?? Configuration["PackingInventoryEndpoint"];
-
+            Lib.Helpers.APIEndpoint.DyeingPrinting = Configuration.GetValue<string>("DyeingPrintingEndpoint") ?? Configuration["DyeingPrintingEndpoint"];
         }
 
         #endregion Register
