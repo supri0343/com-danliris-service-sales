@@ -56,5 +56,10 @@ namespace Com.Danliris.Sales.Test
                 Content = new StringContent(dataJson)
             });
         }
+
+        public Task<HttpResponseMessage> SendAsync(HttpMethod method, string url, HttpContent content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

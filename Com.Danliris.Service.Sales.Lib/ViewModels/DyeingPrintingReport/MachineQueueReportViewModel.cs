@@ -10,5 +10,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DyeingPrintingReport
         public string UomUnit { get; set; }
         public double orderLength { get; set; }
         public DateTimeOffset DeliveryDate { get; set; }
+        public string OrderType { get; set; }
+        public string ProcessType { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DyeingPrintingReportLogics
 {
@@ -52,13 +53,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DyeingPrintingRepor
 
             var newQ = (from a in Query
                         join b in SCQuery on a.SalesContractNo equals b.SalesContractNo
-                        //where b.CategoryName != "PROCESS" && a.IsApprovedKadivMD == true
                         select new MachineQueueReportViewModel
                         {
                             SPPNo = a.OrderNo,
                             orderLength = a.OrderQuantity,
                             UomUnit = a.UomUnit,
-                            DeliveryDate = a.DeliveryDate
+                            DeliveryDate = a.DeliveryDate,
+                            OrderType=a.OrderTypeName,
+                            ProcessType=a.ProcessTypeName
                         });
 
             return newQ;
@@ -71,5 +73,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.DyeingPrintingRepor
             public DateTimeOffset? dateTo { get; set; }
             public string orderTypeName { get; set; }
         }
+
+        
     }
 }
