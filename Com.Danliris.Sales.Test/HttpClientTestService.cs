@@ -34,5 +34,14 @@ namespace Com.Danliris.Sales.Test
                 StatusCode = System.Net.HttpStatusCode.Created
             });
         }
+
+        public Task<HttpResponseMessage> SendAsync(HttpMethod method, string url, HttpContent content)
+        {
+            return Task.Run(() => new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Content = new StringContent("{data:{'data':'data', 'Buyers':{'Id':1}, 'Address' :'ad', 'BankAddress':'ad', 'SwiftCode':'ad', 'BankName':'ad', 'Currency' : {'Id':1}}}")
+            });
+        }
     }
 }

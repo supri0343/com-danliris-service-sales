@@ -30,5 +30,15 @@ namespace Com.Danliris.Service.Sales.Lib.Services
         {
             return await _client.PostAsync(url, content);
         }
+
+        public async Task<HttpResponseMessage> SendAsync(HttpMethod method, string url, HttpContent content)
+        {
+            var request = new HttpRequestMessage(method, url)
+            {
+                Content = content
+            };
+
+            return await _client.SendAsync(request);
+        }
     }
 }

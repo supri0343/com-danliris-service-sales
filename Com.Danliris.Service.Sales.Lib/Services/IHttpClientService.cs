@@ -11,5 +11,6 @@ namespace Com.Danliris.Service.Sales.Lib.Services
         Task<HttpResponseMessage> PutAsync(string url, HttpContent content);
         Task<HttpResponseMessage> GetAsync(string url);
         Task<HttpResponseMessage> PostAsync(string url, HttpContent content);
+        Task<HttpResponseMessage> SendAsync(HttpMethod method, string url, HttpContent content);
     }
 }

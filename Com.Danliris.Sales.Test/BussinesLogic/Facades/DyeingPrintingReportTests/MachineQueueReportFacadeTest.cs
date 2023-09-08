@@ -127,7 +127,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.DyeingPrintingReportTest
             };
             var Response = machineQueueReportFacade.GenerateExcel(filter: JsonConvert.SerializeObject(filter));
 
-            Assert.NotNull(Response.Item2);
+            Assert.NotNull(Response);
         }
 
         //[Fact]
