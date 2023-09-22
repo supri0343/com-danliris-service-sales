@@ -18,6 +18,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculationGarmentLogic;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContractFacades
 {
@@ -28,6 +29,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
         private readonly IdentityService identityService;
         private readonly GarmentSalesContractLogic garmentSalesContractLogic;
         private readonly ICostCalculationGarment costCalGarmentLogic;
+        private readonly LogHistoryLogic logHistoryLogic;
 
         public GarmentSalesContractFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
         {
@@ -36,6 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
             identityService = serviceProvider.GetService<IdentityService>();
             garmentSalesContractLogic = serviceProvider.GetService<GarmentSalesContractLogic>();
             costCalGarmentLogic = serviceProvider.GetService<ICostCalculationGarment>();
+            logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
         }
 
         public async Task<int> CreateAsync(GarmentSalesContract model)

@@ -257,7 +257,8 @@ namespace Com.Danliris.Service.Sales.WebApi
                 .AddTransient<DOAvalLogic>()
                 .AddTransient<DOStockLogic>()
                 .AddTransient<DeliveryNoteProductionLogic>()
-                .AddTransient<DOSalesMonitoringLogic>();
+                .AddTransient<DOSalesMonitoringLogic>()
+                .AddTransient<LogHistoryLogic>();
         }
 
         private void RegisterServices(IServiceCollection services)

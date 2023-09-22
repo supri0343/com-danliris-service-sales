@@ -20,6 +20,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrintingCostCalculation;
 using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport;
+using Com.Danliris.Service.Sales.Lib.Models.LogHistoryModel;
 
 namespace Com.Danliris.Service.Sales.Lib
 {
@@ -87,6 +88,8 @@ namespace Com.Danliris.Service.Sales.Lib
         public DbSet<DOReturnItemModel> DOReturnItems { get; set; }
 
         public DbSet<DeliveryNoteProductionModel> DeliveryNoteProduction { get; set; }
+
+        public DbSet<LogHistory> LogHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

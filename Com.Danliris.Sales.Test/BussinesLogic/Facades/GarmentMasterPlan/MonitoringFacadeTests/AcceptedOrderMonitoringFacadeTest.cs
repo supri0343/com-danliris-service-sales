@@ -9,6 +9,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.Max
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.MonitoringFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentMasterPlan.WeeklyPlanFacades;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.GarmentMasterPlan.MonitoringInterfaces;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.GarmentSewingBlockingPlanLogics;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.MaxWHConfirmLogics;
@@ -144,7 +145,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentMasterPlan.Monito
                 .Returns(identityService);
 
             var garmentBookingOrderItemLogic = new GarmentBookingOrderItemLogic(identityService, serviceProviderMock.Object, dbContext);
-            var garmentBookingOrderLogic = new GarmentBookingOrderLogic(garmentBookingOrderItemLogic, identityService, dbContext);
+            var logHistoryLogic = new LogHistoryLogic(identityService, serviceProviderMock.Object, dbContext);
+            var garmentBookingOrderLogic = new GarmentBookingOrderLogic(garmentBookingOrderItemLogic, identityService, dbContext, logHistoryLogic);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(GarmentBookingOrderLogic)))
