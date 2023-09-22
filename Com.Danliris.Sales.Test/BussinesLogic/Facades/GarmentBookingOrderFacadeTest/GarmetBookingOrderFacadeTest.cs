@@ -4,6 +4,7 @@ using Com.Danliris.Sales.Test.BussinesLogic.Utils;
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.GarmentBookingOrderProfiles;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrderFacade;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using Com.Danliris.Service.Sales.Lib.Services;
@@ -37,7 +38,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
                 .Returns(identityService);
 
             var garmentBookingOrderItemLogic = new GarmentBookingOrderItemLogic(identityService, serviceProviderMock.Object, dbContext);
-            var garmentBookingOrderLogic = new GarmentBookingOrderLogic(garmentBookingOrderItemLogic, identityService, dbContext);
+            var logHistoryLogic = new LogHistoryLogic(identityService, serviceProviderMock.Object, dbContext);
+
+            var garmentBookingOrderLogic = new GarmentBookingOrderLogic(garmentBookingOrderItemLogic, identityService, dbContext, logHistoryLogic);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(GarmentBookingOrderLogic)))

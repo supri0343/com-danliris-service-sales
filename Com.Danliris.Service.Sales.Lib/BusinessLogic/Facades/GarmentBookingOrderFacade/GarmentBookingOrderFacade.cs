@@ -31,14 +31,44 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
 
         public async Task<int> CreateAsync(GarmentBookingOrder model)
         {
-            garmentBookingOrderLogic.Create(model);
-            return await DbContext.SaveChangesAsync();
+            int Created = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentBookingOrderLogic.Create(model);
+                    Created = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Created;
         }
 
         public async Task<int> DeleteAsync(int id)
         {
-            await garmentBookingOrderLogic.DeleteAsync(id);
-            return await DbContext.SaveChangesAsync();
+            int Deleted = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    await garmentBookingOrderLogic.DeleteAsync(id);
+                    Deleted = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Deleted;
         }
 
         public ReadResponse<GarmentBookingOrder> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -63,20 +93,65 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrd
 
         public async Task<int> UpdateAsync(int id, GarmentBookingOrder model)
         {
-            garmentBookingOrderLogic.UpdateAsync(id, model);
-            return await DbContext.SaveChangesAsync();
+            int Updated = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentBookingOrderLogic.UpdateAsync(id, model);
+                    Updated =  await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Updated;
         }
 
         public async Task<int> BOCancel(int id, GarmentBookingOrder model)  
         {
-            garmentBookingOrderLogic.BOCancel(id, model);
-            return await DbContext.SaveChangesAsync();
+            int Updated = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentBookingOrderLogic.BOCancel(id, model);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Updated;
         }
 
         public async Task<int> BODelete(int id, GarmentBookingOrder model)
         {
-            garmentBookingOrderLogic.BODelete(id, model);
-            return await DbContext.SaveChangesAsync();
+            int Deleted = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentBookingOrderLogic.BODelete(id, model);
+                    Deleted = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Deleted;
         }
     }
 }
