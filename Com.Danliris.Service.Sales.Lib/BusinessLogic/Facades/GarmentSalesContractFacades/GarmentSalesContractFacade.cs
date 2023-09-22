@@ -18,6 +18,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculationGarmentLogic;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContractFacades
 {
@@ -28,6 +29,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
         private readonly IdentityService identityService;
         private readonly GarmentSalesContractLogic garmentSalesContractLogic;
         private readonly ICostCalculationGarment costCalGarmentLogic;
+        private readonly LogHistoryLogic logHistoryLogic;
 
         public GarmentSalesContractFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
         {
@@ -36,6 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
             identityService = serviceProvider.GetService<IdentityService>();
             garmentSalesContractLogic = serviceProvider.GetService<GarmentSalesContractLogic>();
             costCalGarmentLogic = serviceProvider.GetService<ICostCalculationGarment>();
+            logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
         }
 
         public async Task<int> CreateAsync(GarmentSalesContract model)
@@ -48,6 +51,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
             CostCalculationGarment costCal = await costCalGarmentLogic.ReadByIdAsync(model.CostCalculationId); //await DbContext.CostCalculationGarments.FirstOrDefaultAsync(a => a.Id.Equals(model.CostCalculationId));
             //costCal.SCGarmentId=
             garmentSalesContractLogic.Create(model);
+
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Create Sales Contract - " + model.SalesContractNo);
 
             int result =  await DbContext.SaveChangesAsync();
             return result += await UpdateCostCalAsync(costCal, (int)model.Id);
@@ -68,6 +74,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
             costCal.SCGarmentId = null;
             await costCalGarmentLogic.UpdateAsync((int)sc.CostCalculationId, costCal);
             await garmentSalesContractLogic.DeleteAsync(id);
+
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Delete Sales Contract - " + sc.SalesContractNo);
+
             return await DbContext.SaveChangesAsync();
         }
 
@@ -84,6 +94,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
         public async Task<int> UpdateAsync(int id, GarmentSalesContract model)
         {
             garmentSalesContractLogic.UpdateAsync(id, model);
+
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Update Sales Contract - " + model.SalesContractNo);
+
             return await DbContext.SaveChangesAsync();
         }
 

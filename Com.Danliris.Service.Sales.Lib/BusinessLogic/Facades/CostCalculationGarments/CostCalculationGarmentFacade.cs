@@ -14,6 +14,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
 using Com.Moonlay.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGarments
 {
@@ -26,15 +27,17 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 		private readonly IdentityService identityService;
 		private readonly CostCalculationGarmentLogic costCalculationGarmentLogic ;
 		public IServiceProvider ServiceProvider;
+        private readonly LogHistoryLogic logHistoryLogic;
 
-		public CostCalculationGarmentFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
+        public CostCalculationGarmentFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
 		{
 			DbContext = dbContext;
 			DbSet = DbContext.Set<CostCalculationGarment>();
 			identityService = serviceProvider.GetService<IdentityService>();
 			costCalculationGarmentLogic = serviceProvider.GetService<CostCalculationGarmentLogic>();
 			ServiceProvider = serviceProvider;
-		}
+            logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
+        }
 
 		public async Task<CostCalculationGarment> CustomCodeGenerator(CostCalculationGarment Model)
 		{
@@ -85,6 +88,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                     while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
                     costCalculationGarmentLogic.Create(model);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Create Cost Calculation - " + model.RO_Number);
+
                     Created = await DbContext.SaveChangesAsync();
 
                     if (!string.IsNullOrWhiteSpace(model.ImageFile))
@@ -111,7 +118,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             {
                 try
                 {
+                    var model = await DbSet.FirstOrDefaultAsync(d => d.Id == id);
                     await costCalculationGarmentLogic.DeleteAsync(id);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Delete Cost Calculation - " + model.RO_Number);
+
                     Deleted = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
@@ -151,13 +163,32 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
 		public async Task<int> UpdateAsync(int id, CostCalculationGarment model)
 		{
-            costCalculationGarmentLogic.UpdateAsync(id, model);
-            if (!string.IsNullOrWhiteSpace(model.ImageFile))
+            int Updated = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+                try
+                {
+                    costCalculationGarmentLogic.UpdateAsync(id, model);
+
+                    if (!string.IsNullOrWhiteSpace(model.ImageFile))
+                    {
+                        model.ImagePath = await this.AzureImageFacade.UploadImage(model.GetType().Name, model.Id, model.CreatedUtc, model.ImageFile);
+                    }
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Update Cost Calculation - " + model.RO_Number);
+
+                    Updated =  await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
             }
-            return await DbContext.SaveChangesAsync();
-		}
+            return Updated;
+        }
 
         public async Task<Dictionary<long, string>> GetProductNames(List<long> productIds)
         {
@@ -326,6 +357,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                 try
                 {
                     costCalculationGarmentLogic.PostCC(listId);
+
+                    var models = DbSet.Where(w => listId.Contains(w.Id));
+                    foreach (var model in models)
+                    {
+                        //Create Log History
+                        logHistoryLogic.Create("PENJUALAN", "Post Cost Calculation - " + model.RO_Number);
+                    }
+
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
@@ -345,8 +384,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             {
                 try
                 {
+
                     costCalculationGarmentLogic.UnpostCC(id);
                     costCalculationGarmentLogic.InsertUnpostReason(id, reason);
+
+                    var model = DbSet.FirstOrDefault(w => w.Id == id);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Post Cost Calculation - " + model.RO_Number);
+
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
