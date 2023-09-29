@@ -391,7 +391,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                     var model = DbSet.FirstOrDefault(w => w.Id == id);
 
                     //Create Log History
-                    logHistoryLogic.Create("PENJUALAN", "Post Cost Calculation - " + model.RO_Number);
+                    logHistoryLogic.Create("PENJUALAN", "UnPost Cost Calculation - " + model.RO_Number);
 
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();
