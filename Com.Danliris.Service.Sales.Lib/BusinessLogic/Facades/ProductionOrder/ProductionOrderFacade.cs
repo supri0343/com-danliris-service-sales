@@ -6,6 +6,7 @@ using Com.Danliris.Service.Sales.Lib.Models.FinishingPrinting;
 using Com.Danliris.Service.Sales.Lib.Models.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.ProductionOrder;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report;
 using Com.Danliris.Service.Sales.Lib.ViewModels.Report.OrderStatusReport;
 using Com.Moonlay.NetCore.Lib;
@@ -1186,18 +1187,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         {
             var dateStart = startdate != DateTime.MinValue ? startdate.Date : DateTime.MinValue;
             var dateTo = finishdate != DateTime.MinValue ? finishdate.Date : DateTime.Now.Date;
-
+            
             var ordersQuery = from a in DbSet
                               join b in DbContext.FinishingPrintingSalesContracts on a.SalesContractId equals b.Id
-                              where
+                              where 
                               b.CreatedUtc.AddHours(timeoffset).Date >= dateStart.Date && b.CreatedUtc.AddHours(timeoffset).Date <= dateTo.Date
-                              && a.OrderTypeId == (!orderTypeId.Equals(0) ? orderTypeId : a.OrderTypeId)
+                              && a.OrderTypeId== (!orderTypeId.Equals(0)? orderTypeId : a.OrderTypeId)
                               select new OrderQuantityForStatusOrder
                               {
-                                  OrderId = a.Id,
-                                  OrderQuantity = a.OrderQuantity
+                                  OrderId= a.Id,
+                                  OrderQuantity= a.OrderQuantity
                               };
-
+            
             return ordersQuery.ToList();
         }
 
@@ -1265,11 +1266,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               a.OrderNo == orderNo
                               select new ProductionOrderForDPViewModel()
                               {
-                                  standardTestName = a.StandardTestName,
-                                  buyer = a.BuyerName,
-                                  deliveryDate = a.DeliveryDate,
-                                  finishType = a.FinishTypeName,
-                                  yarnMaterialName = a.YarnMaterialName
+                                  standardTestName=a.StandardTestName,
+                                  buyer=a.BuyerName,
+                                  deliveryDate=a.DeliveryDate,
+                                  finishType=a.FinishTypeName,
+                                  yarnMaterialName=a.YarnMaterialName
                               };
 
             return ordersQuery.FirstOrDefault();
