@@ -32,10 +32,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
         List<ProductionOrderModel> ReadBySalesContractId(long salesContractId);
         List<string> ReadConstruction(int page, int size, string keyword, string filter);
 
-
         List<OrderQuantityForStatusOrder> GetProductionOrderIdByFilter(DateTime startdate, DateTime finishdate, int orderTypeId, int timeoffset);
         ProductionOrderForDPViewModel GetProductionOrderbyOrderNo(string orderNo);
-        //Task GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset);
-
     }
 }
