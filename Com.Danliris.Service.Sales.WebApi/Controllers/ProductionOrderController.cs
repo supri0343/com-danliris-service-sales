@@ -322,6 +322,31 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             }
         }
 
+        [HttpGet("for-status-order-report")]
+        public IActionResult GetIdsForStatusOrderType([FromQuery] DateTime startdate, DateTime finishdate, [FromQuery] int orderTypeId = 0)
+        {
+            try
+            {
+                var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
+                int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+
+                var result = Facade.GetProductionOrderIdByFilter(startdate, finishdate, orderTypeId, timeoffsset);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(result);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
         [HttpGet("monthly-by-order-type")]
         public IActionResult GetMonthlyOrderIdsByOrderTypeId([FromQuery] int year = 0, [FromQuery] int month = 0, [FromQuery] int orderTypeId = 0)
         {
@@ -403,6 +428,31 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
                     .Ok<ProductionOrderViewModel>(Mapper, data, page, size, data.Count, data.Count, new Dictionary<string, string>(), new List<string>());
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("get-standar-tests")]
+        public IActionResult GetStandarTestbyOrderNo(string orderNo)
+        {
+            try
+            {
+                var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
+                int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+
+                var result = Facade.GetProductionOrderbyOrderNo(orderNo);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(result);
                 return Ok(Result);
 
             }
