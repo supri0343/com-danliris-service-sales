@@ -823,7 +823,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               yarnMaterialName = a.YarnMaterialName,
                               materialWidth = a.MaterialWidth,
                               handlingStandard = a.HandlingStandard,
-                              orderQuantity = b.Quantity
+                              orderQuantity = b.Quantity,
+                              remark = a.Remark
                           });
 
             return Query1;
@@ -874,6 +875,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Staff Penjualan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Terima Order", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Permintaan Pengiriman", DataType = typeof(String) });
+            
 
             if (Query.ToArray().Count() == 0)
                 result.Rows.Add("", "", "", "", "", "", "", 0, "", 0, "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
@@ -919,11 +921,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             result.Columns.Add(new DataColumn() { ColumnName = "Panjang (M)", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Standar Handling", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Dibuat", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Keterangan", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-
-                result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "", "", 0, 0, "", ""); // to allow column name to be generated properly for empty data as template
-
+                result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "", "", 0, 0, "", "",""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -935,8 +936,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                     result.Rows.Add(index, item.orderNo, item.buyer, item.colorType, item.designCode,
 
                         item.finishTypeName,item.standardTest, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
-
-                        item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate);
+                        item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate, item.remark);
                 }
             }
 
