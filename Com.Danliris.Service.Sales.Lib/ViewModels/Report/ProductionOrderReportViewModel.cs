@@ -30,6 +30,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
         public string staffName { get; set; }
         public DateTimeOffset _createdDate { get; set; }
         public DateTimeOffset deliveryDate { get; set; }
+        public string remark { get; set; }
 
         public string finishTypeName { get; set; } // nvarchar(255), null
         public string finishWidth { get; set; }    // nvarchar(255), null
