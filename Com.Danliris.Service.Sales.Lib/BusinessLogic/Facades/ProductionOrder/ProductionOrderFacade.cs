@@ -810,6 +810,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               orderNo = a.OrderNo,
                               colorType = b.ColorType,
                               construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
+                              deliveryDate = a.DeliveryDate,
                               designCode = a.DesignCode,
                               buyer = a.BuyerName,
                               _createdDate = a.CreatedUtc,
