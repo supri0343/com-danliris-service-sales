@@ -47,33 +47,49 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
 
         public async Task<int> CreateAsync(RO_Garment Model)
         {
-            do
-            {
-                Model.Code = Code.Generate();
-            }
-            while (this.DbSet.Any(d => d.Code.Equals(Model.Code)));
+            int Created = 0;
 
             CostCalculationGarment costCalculationGarment = await costCalGarmentLogic.ReadByIdAsync((int)Model.CostCalculationGarment.Id); //Model.CostCalculationGarment;
-            foreach(var item in costCalculationGarment.CostCalculationGarment_Materials)
+            foreach (var item in costCalculationGarment.CostCalculationGarment_Materials)
             {
-                foreach(var itemModel in Model.CostCalculationGarment.CostCalculationGarment_Materials)
+                foreach (var itemModel in Model.CostCalculationGarment.CostCalculationGarment_Materials)
                 {
-                    if(item.Id == itemModel.Id)
+                    if (item.Id == itemModel.Id)
                     {
                         item.Information = itemModel.Information;
                     }
                 }
-            }   
-            Model.CostCalculationGarment = null;
+            }
 
-            roGarmentLogic.Create(Model);
-            int created = await DbContext.SaveChangesAsync();
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    do
+                    {
+                        Model.Code = Code.Generate();
+                    }
+                    while (this.DbSet.Any(d => d.Code.Equals(Model.Code)));
 
-            Model.ImagesPath = await AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
-            Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
+                    Model.CostCalculationGarment = null;
 
-            await UpdateCostCalAsync(costCalculationGarment, (int)Model.Id);
-            return created;
+                    roGarmentLogic.Create(Model);
+                    Created = await DbContext.SaveChangesAsync();
+
+                    Model.ImagesPath = await AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
+                    Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+
+            }
+          
+            return Created += await UpdateCostCalAsync(costCalculationGarment, (int)Model.Id); ;
         }
 
         public async Task<int> UpdateCostCalAsync(CostCalculationGarment costCalculationGarment, int Id)
@@ -86,15 +102,31 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
 
         public async Task<int> DeleteAsync(int id)
         {
+            int Deleted = 0;
+
             RO_Garment deletedImage = await this.ReadByIdAsync(id);
-            await this.AzureImageFacade.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
-            await this.AzureDocumentFacade.RemoveMultipleFile(deletedImage.GetType().Name, deletedImage.DocumentsPath);
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    
+                    await this.AzureImageFacade.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
+                    await this.AzureDocumentFacade.RemoveMultipleFile(deletedImage.GetType().Name, deletedImage.DocumentsPath);
 
-            await roGarmentLogic.DeleteAsync(id);
-            int deleted = await DbContext.SaveChangesAsync();
+                    await roGarmentLogic.DeleteAsync(id);
+                    Deleted = await DbContext.SaveChangesAsync();
 
-            await DeletedROCostCalAsync(deletedImage.CostCalculationGarment, (int)deletedImage.CostCalculationGarmentId);
-            return deleted;
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+
+            }
+
+            return Deleted += await DeletedROCostCalAsync(deletedImage.CostCalculationGarment, (int)deletedImage.CostCalculationGarmentId); ;
         }
 
         public async Task<int> DeletedROCostCalAsync(CostCalculationGarment costCalculationGarment, int Id)
@@ -146,17 +178,32 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
 
         public async Task<int> UpdateAsync(int id, RO_Garment Model)
         {
+            int Updated = 0;
+
             CostCalculationGarment costCalculationGarment = Model.CostCalculationGarment;
-            Model.CostCalculationGarment = null;
 
-            Model.ImagesPath = await this.AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
-            Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    Model.CostCalculationGarment = null;
 
-            roGarmentLogic.UpdateAsync(id,Model);
-            int updated = await DbContext.SaveChangesAsync();
+                    Model.ImagesPath = await this.AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
+                    Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
 
-            await UpdateCostCalAsync(costCalculationGarment, (int)Model.Id);
-            return updated;
+                    roGarmentLogic.UpdateAsync(id, Model);
+                    Updated = await DbContext.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+           
+            return Updated += await UpdateCostCalAsync(costCalculationGarment, (int)Model.Id); ;
         }
 
         public async Task<int> PostRO(List<long> listId)
