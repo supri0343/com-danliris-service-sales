@@ -22,6 +22,7 @@ using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesContract
 using System.Linq;
 using Com.Moonlay.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesContractFacades
 {
@@ -33,19 +34,39 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesCo
         private readonly DbSet<GarmentPreSalesContract> DbSet;
         private readonly IdentityService identityService;
         private readonly GarmentPreSalesContractLogic garmentPreSalesContractLogic;
-
+        private readonly LogHistoryLogic logHistoryLogic;
         public GarmentPreSalesContractFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
         {
             DbContext = dbContext;
             DbSet = DbContext.Set<GarmentPreSalesContract>();
             identityService = serviceProvider.GetService<IdentityService>();
             garmentPreSalesContractLogic = serviceProvider.GetService<GarmentPreSalesContractLogic>();
+            logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
         }
 
         public async Task<int> CreateAsync(GarmentPreSalesContract model)
         {
-            garmentPreSalesContractLogic.Create(model);
-            return await DbContext.SaveChangesAsync();
+            int Created = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentPreSalesContractLogic.Create(model);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Create Pre Sales Kontrak - " + model.SCNo);
+
+                    Created = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Created;
         }
 
         public ReadResponse<GarmentPreSalesContract> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -60,14 +81,53 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesCo
 
         public async Task<int> UpdateAsync(int id, GarmentPreSalesContract model)
         {
-            garmentPreSalesContractLogic.UpdateAsync(id, model);
-            return await DbContext.SaveChangesAsync();
+            int Updated = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    garmentPreSalesContractLogic.UpdateAsync(id, model);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Update Pre Sales Kontrak - " + model.SCNo);
+
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Updated;
         }
 
         public async Task<int> DeleteAsync(int id)
         {
-            await garmentPreSalesContractLogic.DeleteAsync(id);
-            return await DbContext.SaveChangesAsync();
+            int Deleted = 0;
+
+            using (var transaction = this.DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var model = await ReadByIdAsync(id);
+                    await garmentPreSalesContractLogic.DeleteAsync(id);
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Delete Pre Sales Kontrak - " + model.SCNo);
+
+                    Deleted = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception(e.Message);
+                }
+            }
+            return Deleted;
         }
 
         public async Task<int> Patch(long id, JsonPatchDocument<GarmentPreSalesContract> jsonPatch)
@@ -108,6 +168,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesCo
                     {
                         EntityExtension.FlagForUpdate(data, user, USER_AGENT);
                         data.IsPosted = true;
+
+                        //Create Log History
+                        logHistoryLogic.Create("PENJUALAN", "Post Pre Sales Kontrak - " + data.SCNo);
+
                     }
 
                     Updated = await DbContext.SaveChangesAsync();
@@ -143,6 +207,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentPreSalesCo
 
                     EntityExtension.FlagForUpdate(data, user, USER_AGENT);
                     data.IsPosted = false;
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "UnPost Pre Sales Kontrak - " + data.SCNo);
 
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();
