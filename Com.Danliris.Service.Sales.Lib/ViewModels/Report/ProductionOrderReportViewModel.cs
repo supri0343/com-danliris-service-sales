@@ -38,6 +38,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.Report
         public string yarnMaterialName { get; set; } // nvarchar(1000), null
         public string materialWidth { get; set; }  // nvarchar(1000), null
         public string handlingStandard { get; set; } // nvarchar(255), null
+        public string constructionFilter { get; set; }
 
 
     }
