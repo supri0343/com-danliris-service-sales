@@ -783,7 +783,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         }
 
         //--CobaMDP--//
-        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
             string OrderTypeId1;
             string OrderTypeId2;
@@ -821,6 +821,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               orderNo = a.OrderNo,
                               colorType = b.ColorType,
                               construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
+                              constructionFilter = a.MaterialName.Replace(" ", "") + " / " + a.MaterialConstructionName.Replace(" ", "") + " / " + a.MaterialWidth + "/" + a.YarnMaterialName.Replace(" ", ""),
                               deliveryDate = a.DeliveryDate,
                               designCode = a.DesignCode,
                               buyer = a.BuyerName,
@@ -837,7 +838,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               orderQuantity = b.Quantity,
                               remark = a.Remark
                           });
+            var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
 
+            if (construction != null)
+            {
+                Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                // Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(construction));
+            }
             return Query1;
         }
 
@@ -907,9 +914,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
 
         //--cobaIEDP--//
-        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-            var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+            var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
             Query = Query.OrderByDescending(b => b._createdDate);
             DataTable result = new DataTable();
 

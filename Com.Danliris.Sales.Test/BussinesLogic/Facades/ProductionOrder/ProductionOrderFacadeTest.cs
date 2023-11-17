@@ -626,9 +626,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
-            var tuple2 = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
+            var tuple2 = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple2);
         }
 
@@ -749,7 +749,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel2(null, null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel2(null, null, null, null, null, null, null, null,null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
 
 
