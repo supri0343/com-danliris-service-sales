@@ -150,8 +150,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
 
+            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+
             //Create Log History
-            logHistoryLogic.Create("PENJUALAN", "Update RO Garment - " + model.CostCalculationGarment.RO_Number);
+            logHistoryLogic.Create("PENJUALAN", "Update RO Garment - " + CC.RO_Number);
         }
 
         //public override async void DeleteAsync(int id)
@@ -176,8 +178,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
 
+            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
             //Create Log History
-            logHistoryLogic.Create("PENJUALAN", "Delete RO Garment - " + model.CostCalculationGarment.RO_Number);
+            logHistoryLogic.Create("PENJUALAN", "Delete RO Garment - " + CC.RO_Number);
 
         }
 
@@ -189,8 +192,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
                 model.IsPosted = true;
                 EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
 
+                var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+
                 //Create Log History
-                logHistoryLogic.Create("PENJUALAN", "Post RO Garment - " + model.CostCalculationGarment.RO_Number);
+                logHistoryLogic.Create("PENJUALAN", "Post RO Garment - " + CC.RO_Number);
             }
         }
 
@@ -216,8 +221,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             EntityExtension.FlagForUpdate(cc, IdentityService.Username, "sales-service");
 
+            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
             //Create Log History
-            logHistoryLogic.Create("PENJUALAN", "Un Post RO Garment - " + model.CostCalculationGarment.RO_Number);
+            logHistoryLogic.Create("PENJUALAN", "Un Post RO Garment - " + CC.RO_Number);
         }
     }
 }
