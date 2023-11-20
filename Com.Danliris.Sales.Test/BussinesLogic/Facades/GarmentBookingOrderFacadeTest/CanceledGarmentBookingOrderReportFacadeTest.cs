@@ -2,6 +2,7 @@
 using Com.Danliris.Service.Sales.Lib;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentBookingOrderFacade;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.GarmentBookingOrderInterface;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrderLogics;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentBookingOrderModel;
 using Com.Danliris.Service.Sales.Lib.Services;
@@ -44,16 +45,16 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.GarmentBookingOrderFacad
         protected virtual Mock<IServiceProvider> GetServiceProviderMock(SalesDbContext dbContext)
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
-            
+           
             IIdentityService identityService = new IdentityService { Username = "Username" };
-
+            var logHistoryLogic = new LogHistoryLogic(identityService, serviceProviderMock.Object, dbContext);
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(identityService);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(GarmentBookingOrderLogic)))
-                .Returns(new GarmentBookingOrderLogic(new GarmentBookingOrderItemLogic(identityService, serviceProviderMock.Object, dbContext), identityService, dbContext));
+                .Returns(new GarmentBookingOrderLogic(new GarmentBookingOrderItemLogic(identityService, serviceProviderMock.Object, dbContext), identityService, dbContext, logHistoryLogic));
 
             return serviceProviderMock;
         }
