@@ -13,6 +13,7 @@ using Com.Danliris.Service.Sales.Lib.Helpers;
 using Com.Moonlay.Models;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 {
@@ -150,10 +151,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
 
-            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+            var CC = DbContext.CostCalculationGarments.Where(w => w.Id == model.CostCalculationGarmentId).AsNoTracking().ToList();
 
             //Create Log History
-            logHistoryLogic.Create("PENJUALAN", "Update RO Garment - " + CC.RO_Number);
+            logHistoryLogic.Create("PENJUALAN", "Update RO Garment - " + CC[0].RO_Number);
         }
 
         //public override async void DeleteAsync(int id)
