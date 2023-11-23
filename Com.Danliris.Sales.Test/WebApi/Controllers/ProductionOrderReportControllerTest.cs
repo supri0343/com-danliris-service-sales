@@ -54,11 +54,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = this.GetMocks();
             mocks.Facade.Setup(f => f.GetReport(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
+                It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(new Tuple<List<ProductionOrderReportViewModel>, int>(new List<ProductionOrderReportViewModel>(), 0));
 
             var controller = GetController(mocks);
-            var response = await controller.GetReportAll(null, null, null, null, null, null, null, null, 1, 25);
+            var response = await controller.GetReportAll(null, null, null, null, null, null, null, null, null, 1, 25);
 
             int statusCode = this.GetStatusCode(response);
 
@@ -70,11 +70,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = this.GetMocks();
             mocks.Facade.Setup(f => f.GetReport(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
+               It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ThrowsAsync(new Exception());
 
             var controller = GetController(mocks);
-            var response = await controller.GetReportAll(null, null, null, null, null, null, null, null, 1, 25);
+            var response = await controller.GetReportAll(null, null, null, null, null, null, null, null, null, 1, 25);
 
             int statusCode = this.GetStatusCode(response);
 
@@ -86,11 +86,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = this.GetMocks();
             mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
+                It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
                 .ReturnsAsync(new MemoryStream());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll(null, null, null, null, null, null, null, null);
+            var response = await controller.GetXlsAll(null, null, null, null, null, null, null, null, null);
             Assert.NotNull(response);
         }
 
@@ -102,12 +102,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var mocks = GetMocks();
             mocks.Facade.Setup(f => f.GenerateExcel2(
                 It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
                 It.IsAny<int>()))
                 .ReturnsAsync(new MemoryStream());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null);
+            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null, null);
             // Assert
             Assert.NotNull(response);
         }
@@ -118,11 +118,11 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
         {
             var mocks = this.GetMocks();
             mocks.Facade.Setup(f => f.GenerateExcel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-               It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
+              It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<int>()))
                .ThrowsAsync(new Exception());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll(null, null, null, null, null, null, null, null);
+            var response = await controller.GetXlsAll(null, null, null, null, null, null, null, null, null);
 
             int statusCode = this.GetStatusCode(response);
 
@@ -137,12 +137,12 @@ namespace Com.Danliris.Sales.Test.WebApi.Controllers
             var mocks = GetMocks();
             mocks.Facade.Setup(f => f.GenerateExcel2(
                 It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
+                It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(),
                 It.IsAny<int>()))
                 .ThrowsAsync(new Exception());
 
             var controller = GetController(mocks);
-            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null);
+            var response = await controller.GetXlsAll2(null, null, null, null, null, null, null, null, null);
 
             int statusCode = this.GetStatusCode(response);
 

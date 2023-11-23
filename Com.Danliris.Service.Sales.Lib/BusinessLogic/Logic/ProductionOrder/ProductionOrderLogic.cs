@@ -280,11 +280,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ProductionOrder
             Query = QueryHelper<ProductionOrderModel>.Filter(Query, FilterDictionary);
 
             var result = Query
-                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.FinishWidth + " / " + field.YarnMaterialName)
+                .Select(field => field.MaterialName + " / " + field.MaterialConstructionName + " / " + field.MaterialWidth + " / " + field.YarnMaterialName)
                 .Distinct();
 
             if (keyword != null)
-                result = result.Where(s => s.Contains(keyword));
+                //result = result.Where(s => s.Contains(keyword));
+                result = result.Where(s => s.Replace(" ", "").Contains(keyword.Replace(" ", "")));
+
 
             result = result.OrderBy(s => s)
              .Skip((page - 1) * size).Take(size);
