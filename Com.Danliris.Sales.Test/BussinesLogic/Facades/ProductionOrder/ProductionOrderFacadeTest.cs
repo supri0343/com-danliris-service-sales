@@ -498,13 +498,13 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             var model = await facade.CreateAsync(data);
 
 
-            var tuple = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, null, null, 1, 25, "{}", 7);
+            var tuple = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, null, null, null, 1, 25, "{}", 7);
             Assert.NotNull(tuple.Item1);
 
-            var tuple2 = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
+            var tuple2 = await facade.GetReport(data2.SalesContractNo, null, null, null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
             Assert.NotNull(tuple2.Item1);
 
-            var tuple3 = await facade.GetReport(data2.SalesContractNo, null, "1", null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
+            var tuple3 = await facade.GetReport(data2.SalesContractNo, null, "1", null, null, null, null, DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(2), 1, 25, "{}", 7);
             Assert.NotNull(tuple3.Item1);
 
 
@@ -564,9 +564,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel(data2.SalesContractNo, null, null, null, null, null, null,null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
-            var tuple2 = await facade.GenerateExcel(data2.SalesContractNo, null, "1", null, null, null, null, null, 7);
+            var tuple2 = await facade.GenerateExcel(data2.SalesContractNo, null, "1", null, null, null, null,null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple2);
         }
 
@@ -626,9 +626,9 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
-            var tuple2 = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, 7);
+            var tuple2 = await facade.GenerateExcel2(data2.SalesContractNo, null, null, null, null, null, null, null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple2);
         }
 
@@ -687,7 +687,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel("ab", null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel("ab", null, null, null, null, null, null,null, null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
 
 
@@ -749,7 +749,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ProductionOrder
             data.SalesContractNo = data2.SalesContractNo;
             var model = await facade.CreateAsync(data);
 
-            var tuple = await facade.GenerateExcel2(null, null, null, null, null, null, null, null, 7);
+            var tuple = await facade.GenerateExcel2(null, null, null, null, null, null, null, null,null, 7);
             Assert.IsType<System.IO.MemoryStream>(tuple);
 
 

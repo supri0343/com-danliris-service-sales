@@ -14,10 +14,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ProductionOrder
 {
     public interface IProductionOrder : IBaseFacade<ProductionOrderModel>
     {
-        Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset);
-        Task<MemoryStream> GenerateExcel(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset);
+        Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset);
+        Task<MemoryStream> GenerateExcel(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset);
 
-        Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset);
+        Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset);
 
 
         Task<ProductionOrderReportDetailViewModel> GetDetailReport(long no);

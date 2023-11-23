@@ -34,7 +34,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetReportAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order = "{}")
+        public async Task<IActionResult> GetReportAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order = "{}")
         {
             int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
             string accept = Request.Headers["Accept"];
@@ -42,7 +42,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
             try
             {
                 VerifyUser();
-                var data = await _facade.GetReport(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, page, size, Order, offset);
+                var data = await _facade.GetReport(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, page, size, Order, offset);
 
                 return Ok(new
                 {
@@ -63,7 +63,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("download")]
-        public async Task<IActionResult> GetXlsAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo)
+        public async Task<IActionResult> GetXlsAll(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId,string construction, DateTime? dateFrom, DateTime? dateTo)
         {
 
             try
@@ -74,7 +74,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
                 DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
 
-                var xls = await _facade.GenerateExcel(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+                var xls = await _facade.GenerateExcel(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
 
                 string filename = String.Format("Monitoring Surat Order Produksi - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
 
@@ -93,7 +93,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
         //--cobaIEDP--//
         [HttpGet("download2")]
-        public async Task<IActionResult> GetXlsAll2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo)
+        public async Task<IActionResult> GetXlsAll2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo)
         {
 
             try
@@ -104,7 +104,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
                 DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
 
-                var xls = await _facade.GenerateExcel2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+                var xls = await _facade.GenerateExcel2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
 
                 string filename = String.Format("IEDP Report - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
 
