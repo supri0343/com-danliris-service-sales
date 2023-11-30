@@ -70,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             {
                   "Id", "Code", "PreSCNo", "RO_Number", "Quantity", "ConfirmPrice", "Article", "Unit", "LastModifiedUtc","UnitName",
                     "Comodity", "UOM", "Buyer", "DeliveryDate", "BuyerBrand", "ApprovalMD", "ApprovalPurchasing", "ApprovalIE", "ApprovalKadivMD", "ApprovalPPIC",
-                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription","MarketingName","ResponsibleName"
+                    "IsPosted","SectionName","CreatedBy","Section","CommodityDescription","MarketingName","ResponsibleName","CCType"
             };
 
             Query = Query
@@ -115,7 +115,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                      Section = ccg.Section,
                      CreatedBy = ccg.CreatedBy,
                      MarketingName = ccg.MarketingName,
-                     ResponsibleName = ccg.ResponsibleName
+                     ResponsibleName = ccg.ResponsibleName,
+                     CCType = ccg.CCType
                  });
 
 			Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
@@ -232,6 +233,12 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
         {
             var model = await DbSet.Include(d => d.CostCalculationGarment_Materials).FirstOrDefaultAsync(d => d.Id == id);
             EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service", true);
+
+            model.BOQuantity = 0;
+            model.BookingOrderId = 0;
+            model.BookingOrderItemId = 0;
+            model.BookingOrderNo = "-";
+
             DbSet.Update(model);
 
             var countPreSCinOtherCC = DbSet.Count(c => c.Id != id && c.PreSCId == model.PreSCId);

@@ -115,6 +115,8 @@ namespace Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments
         public long PreSCId { get; set; }
         [MaxLength(255)]
         public string PreSCNo { get; set; }
+        [MaxLength(50)]
+        public string CCType { get; set; }
 
         public int BookingOrderId { get; set; }
         [MaxLength(255)]

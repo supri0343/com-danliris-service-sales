@@ -4,14 +4,16 @@ using Com.Danliris.Service.Sales.Lib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Com.Danliris.Service.Sales.Lib.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230626072410_Add_Column_CCType_On_Tables_Cost_Calculation_Garment")]
+    partial class Add_Column_CCType_On_Tables_Cost_Calculation_Garment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2984,28 +2986,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                     b.HasIndex("BlockingPlanId");
 
                     b.ToTable("GarmentSewingBlockingPlanItems");
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.LogHistoryModel.LogHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Activity")
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Division")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LogHistories");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Sales.Lib.Models.ProductionOrder.ProductionOrder_DetailModel", b =>
