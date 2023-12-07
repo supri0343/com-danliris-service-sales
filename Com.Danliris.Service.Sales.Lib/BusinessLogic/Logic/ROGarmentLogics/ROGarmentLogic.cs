@@ -13,6 +13,7 @@ using Com.Danliris.Service.Sales.Lib.Helpers;
 using Com.Moonlay.Models;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 {
@@ -20,6 +21,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
     {
         private ROGarmentSizeBreakdownLogic roGarmentSizeBreakdownLogic;
         private ROGarmentSizeBreakdownDetailLogic roGarmentSizeBreakdownDetailLogic;
+        private LogHistoryLogic logHistoryLogic;
 
         private readonly SalesDbContext DbContext;
         public ROGarmentLogic(IServiceProvider serviceProvider, IIdentityService identityService, SalesDbContext dbContext) : base(identityService, serviceProvider, dbContext)
@@ -27,6 +29,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             this.roGarmentSizeBreakdownLogic = serviceProvider.GetService<ROGarmentSizeBreakdownLogic>();
             this.roGarmentSizeBreakdownDetailLogic = serviceProvider.GetService<ROGarmentSizeBreakdownDetailLogic>();
             this.DbContext = dbContext;
+            this.logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
         }
 
         public override ReadResponse<RO_Garment> Read(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -106,6 +109,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
             DbSet.Add(model);
+
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Create RO Garment - " + model.CostCalculationGarment.RO_Number);
         }
 
         public override void UpdateAsync(long id, RO_Garment model)
@@ -144,6 +150,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
+
+            var CC = DbContext.CostCalculationGarments.Where(w => w.Id == model.CostCalculationGarmentId).AsNoTracking().ToList();
+
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Update RO Garment - " + CC[0].RO_Number);
         }
 
         //public override async void DeleteAsync(int id)
@@ -167,6 +178,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             EntityExtension.FlagForDelete(model, IdentityService.Username, "sales-service");
             DbSet.Update(model);
+
+            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Delete RO Garment - " + CC.RO_Number);
+
         }
 
         internal void PostRO(List<long> listId)
@@ -176,6 +192,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             {
                 model.IsPosted = true;
                 EntityExtension.FlagForUpdate(model, IdentityService.Username, "sales-service");
+
+                var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+
+                //Create Log History
+                logHistoryLogic.Create("PENJUALAN", "Post RO Garment - " + CC.RO_Number);
             }
         }
 
@@ -200,6 +221,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
             cc.ValidationMDDate = DateTimeOffset.MinValue;
 
             EntityExtension.FlagForUpdate(cc, IdentityService.Username, "sales-service");
+
+            var CC = DbContext.CostCalculationGarments.Single(w => w.Id == model.CostCalculationGarmentId);
+            //Create Log History
+            logHistoryLogic.Create("PENJUALAN", "Un Post RO Garment - " + CC.RO_Number);
         }
     }
 }

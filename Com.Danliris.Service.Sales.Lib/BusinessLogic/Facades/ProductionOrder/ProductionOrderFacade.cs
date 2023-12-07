@@ -572,7 +572,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             //return reportData.AsQueryable();
         }
-        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
 
             List<string> OrderTypeId1 = new List<string>();
@@ -652,14 +652,17 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
                               && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
 
-                              //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString(): orderTypeId)
-                              //&& a.OrderTypeName == "DYEING" || a.OrderTypeName == "SOLID"
-                              // && a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
-                              //|| a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2)
-
-                              //&& string.IsNullOrWhiteSpace(orderTypeId)  ? a.OrderTypeId.ToString() == a.OrderTypeId.ToString(): OrderTypeId1.Contains(a.OrderTypeId.ToString())
-
                               
+
+
+                          //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString(): orderTypeId)
+                          //&& a.OrderTypeName == "DYEING" || a.OrderTypeName == "SOLID"
+                          // && a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
+                          //|| a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2)
+
+                          //&& string.IsNullOrWhiteSpace(orderTypeId)  ? a.OrderTypeId.ToString() == a.OrderTypeId.ToString(): OrderTypeId1.Contains(a.OrderTypeId.ToString())
+
+
 
 
 
@@ -677,7 +680,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               designNumber = a.DesignNumber,
                               CurrCode = d.CurrencyCode,
                               colorTemplate = b.ColorTemplate,
-                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
+                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                              //constructionFilter = a.MaterialName.Replace(" ","") + " / " + a.MaterialConstructionName.Replace(" ", "") + " / " + a.MaterialWidth.Replace(" ","")+"/"+a.YarnMaterialName.Replace(" ", ""),
+                              constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
                               deliveryDate = a.DeliveryDate,
                               designCode = a.DesignCode,
                               orderType = a.OrderTypeName,
@@ -690,7 +695,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             if (orderTypeId !=null) {
                 Query1 = Query1.Where(x => OrderTypeId1.Contains(x.orderTypeId.ToString()));
             }
-            
+
+            var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
+            if (construction != null)
+            {
+                Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                // Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(construction));
+            }
 
             var Query = from data in Query1
                         group data by new { data.orderNo, data.colorType } into groupdata
@@ -772,7 +784,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         }
 
         //--CobaMDP--//
-        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
             string OrderTypeId1;
             string OrderTypeId2;
@@ -789,6 +801,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
             DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
+
+            var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
 
             var Query1 = (from a in DbContext.ProductionOrder
                           join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
@@ -809,7 +824,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                           {
                               orderNo = a.OrderNo,
                               colorType = b.ColorType,
-                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
+                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                              constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
                               deliveryDate = a.DeliveryDate,
                               designCode = a.DesignCode,
                               buyer = a.BuyerName,
@@ -826,14 +842,24 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                               orderQuantity = b.Quantity,
                               remark = a.Remark
                           });
+            //var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
+            //if (construction != null)
+            //{
+            //    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+
+            //}
+            if (cons != null)
+            {
+                Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+            }
 
             return Query1;
         }
 
-
-        public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
+        public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
         {
-            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             if (OrderDictionary.Count.Equals(0))
@@ -848,9 +874,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return Tuple.Create(Data, TotalData);
         }
 
-        public async Task<MemoryStream> GenerateExcel(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<MemoryStream> GenerateExcel(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
             Query = Query.OrderByDescending(b => b._createdDate);
             DataTable result = new DataTable();
 
@@ -897,9 +923,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
 
         //--cobaIEDP--//
-        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-            var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, dateFrom, dateTo, offset);
+           var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
+            
             Query = Query.OrderByDescending(b => b._createdDate);
             DataTable result = new DataTable();
 
@@ -934,8 +961,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                     string deliverySchedule = item.deliveryDate == null ? "-" : item.deliveryDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     string createdDate = item._createdDate == null ? "-" : item._createdDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     result.Rows.Add(index, item.orderNo, item.buyer, item.colorType, item.designCode,
-
-                        item.finishTypeName,item.standardTest, item.finishWidth, deliverySchedule, item.materialName, item.yarnMaterialName,
+                        item.finishTypeName,item.standardTest, item.finishWidth, deliverySchedule, item.materialName, item.construction,
                         item.materialWidth, item.yarnMaterialName, item.orderQuantity, item.handlingStandard, createdDate, item.remark);
                 }
             }

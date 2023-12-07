@@ -18,9 +18,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
     {
         private readonly SalesDbContext DbContext;
         private GarmentBookingOrderItemLogic GarmentBookingOrderItemsLogic;
-        public GarmentBookingOrderLogic(GarmentBookingOrderItemLogic GarmentBookingOrderItemsLogic, IIdentityService IdentityService, SalesDbContext dbContext) : base(IdentityService, dbContext)
+        private readonly LogHistoryLogic LogHistoryLogic;
+        public GarmentBookingOrderLogic(GarmentBookingOrderItemLogic GarmentBookingOrderItemsLogic, IIdentityService IdentityService, SalesDbContext dbContext, LogHistoryLogic logHistoryLogic) : base(IdentityService, dbContext)
         {
             this.GarmentBookingOrderItemsLogic = GarmentBookingOrderItemsLogic;
+            this.LogHistoryLogic = logHistoryLogic;
             this.DbContext = dbContext;
         }
 
@@ -31,6 +33,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
             {
                 model.HadConfirmed = true;
             }
+
+            //Create Log History
+            LogHistoryLogic.Create("PENJUALAN", "Create Booking Order - " + model.BookingOrderNo);
 
             EntityExtension.FlagForCreate(model, IdentityService.Username, "sales-service");
             DbSet.Add(model);
@@ -92,6 +97,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
 
             }
 
+            //Create Log History
+            LogHistoryLogic.Create("PENJUALAN", "Update Booking Order - " + model.BookingOrderNo);
+
             DbSet.Update(newModel);
 
             foreach (var oldItem in model.Items)
@@ -145,6 +153,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
             {
                 EntityExtension.FlagForDelete(item, IdentityService.Username, "sales-service", true);
             }
+
+            //Create Log History
+            LogHistoryLogic.Create("PENJUALAN", "Delete Booking Order - " + model.BookingOrderNo);
         }
 
         private void GenerateBookingOrderNo(GarmentBookingOrder model)
@@ -264,6 +275,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
             }
 
             DbSet.Update(model);
+
+            //Create Log History
+            LogHistoryLogic.Create("PENJUALAN", "Cancel Item Booking Order - " + model.BookingOrderNo);
         }
 
         public void BODelete(int id, GarmentBookingOrder model)
@@ -298,6 +312,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                 }
             }
             DbSet.Update(model);
+
+            //Create Log History
+            LogHistoryLogic.Create("PENJUALAN", "Delete Item Booking Order - " + model.BookingOrderNo);
         }
 
         public ReadResponse<GarmentBookingOrder> ReadByBookingOrderNo(int page, int size, string order, List<string> select, string keyword, string filter)
@@ -364,7 +381,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentBookingOrder
                           join b in DbContext.GarmentBookingOrderItems on a.Id equals b.BookingOrderId
                           join c in DbContext.CostCalculationGarments on b.Id equals c.BookingOrderItemId into cc
                           from CCG in cc.DefaultIfEmpty()
-                          where a.HadConfirmed == true && a.IsCanceled == false && b.IsCanceled == false
+                          where a.HadConfirmed == true && a.IsCanceled == false && b.IsCanceled == false && CCG.IsDeleted == false
                                 && a.BuyerCode == buyer && a.SectionCode == section && b.ComodityCode == comodity
 
                           select new GarmentBookingOrderForCCGViewModel
