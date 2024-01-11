@@ -67,7 +67,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             List<string> SearchAttributes = JsonConvert.DeserializeObject<List<string>>(search);
             if (SearchAttributes.Count < 1)
             {
-                SearchAttributes = new List<string>() { "Code", "PO_SerialNumber" };
+                SearchAttributes = new List<string>() { "Code", "PO_SerialNumber", "CategoryName" };
             }
             Query = QueryHelper<CostCalculationGarment_Material>.Search(Query, SearchAttributes, keyword);
 
