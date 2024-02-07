@@ -168,7 +168,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             {
                 try
                 {
-                    costCalculationGarmentLogic.UpdateAsync(id, model);
+                     costCalculationGarmentLogic.UpdateAsync(id, model);
 
                     if (!string.IsNullOrWhiteSpace(model.ImageFile))
                     {
