@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -196,21 +197,28 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
         {
             int Updated = 0;
 
-            CostCalculationGarment costCalculationGarment = Model.CostCalculationGarment;
+            CostCalculationGarment oldCC = Model.CostCalculationGarment;
 
             using (var transaction = DbContext.Database.BeginTransaction())
             {
                 try
                 {
+                    CostCalculationGarment costCalculationGarment = await costCalGarmentLogic.ReadByIdAsync((int)Model.CostCalculationGarmentId); //Model.CostCalculationGarment;
                     Model.CostCalculationGarment = null;
 
                     Model.ImagesPath = await this.AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
                     Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
 
                     roGarmentLogic.UpdateAsync(id, Model);
+
                     await DbContext.SaveChangesAsync();
                     //Update CC
                     costCalculationGarment.RO_GarmentId = (int)Model.Id;
+                    foreach (var item in costCalculationGarment.CostCalculationGarment_Materials)
+                    {
+                        var matchCC = oldCC.CostCalculationGarment_Materials.FirstOrDefault(x => x.Id == item.Id);
+                        item.Information = matchCC.Information;
+                    }
 
                     Updated = await DbContext.SaveChangesAsync();
 
