@@ -78,7 +78,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
 
                     Model.ImagesPath = await AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
                     Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
-
+                    await DbContext.SaveChangesAsync();
                     //Update CC
                     costCalculationGarment.RO_GarmentId = (int)Model.Id;
 
@@ -208,7 +208,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
                     Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
 
                     roGarmentLogic.UpdateAsync(id, Model);
-
+                    await DbContext.SaveChangesAsync();
                     //Update CC
                     costCalculationGarment.RO_GarmentId = (int)Model.Id;
 
