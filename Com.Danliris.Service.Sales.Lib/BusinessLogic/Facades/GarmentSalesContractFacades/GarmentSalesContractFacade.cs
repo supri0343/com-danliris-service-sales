@@ -63,7 +63,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
                     logHistoryLogic.Create("PENJUALAN", "Create Sales Contract - " + model.SalesContractNo);
 
                     //Update CC
-                    costCal.SCGarmentId = model.Id;
+                    costCal.SCGarmentId = (int)model.Id;
 
                     Created = await DbContext.SaveChangesAsync();
 
