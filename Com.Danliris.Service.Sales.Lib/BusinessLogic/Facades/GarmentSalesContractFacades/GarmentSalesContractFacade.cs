@@ -61,9 +61,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
 
                     //Create Log History
                     logHistoryLogic.Create("PENJUALAN", "Create Sales Contract - " + model.SalesContractNo);
-
+                    await DbContext.SaveChangesAsync();
                     //Update CC
-                    costCal.SCGarmentId = (int)model.Id;
+                    costCal.SCGarmentId = (long)model.Id;
 
                     Created = await DbContext.SaveChangesAsync();
 
