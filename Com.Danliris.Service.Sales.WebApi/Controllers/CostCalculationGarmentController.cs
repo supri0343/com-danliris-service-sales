@@ -573,5 +573,31 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+        [HttpGet("by-ros")]
+        public async Task<IActionResult> GetByROs([FromBody]List<string> ro)
+        {
+            try
+            {
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+
+                var model = await Facade.ReadByROs(ro);
+
+                List<CostCalculationGarmentViewModel> viewModel = Mapper.Map<List<CostCalculationGarmentViewModel>>(model);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<List<CostCalculationGarmentViewModel>>(viewModel);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }
