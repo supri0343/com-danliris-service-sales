@@ -447,5 +447,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             return read;
         }
+
+        public async Task<List<CostCalculationGarment>> ReadByROs(List<string> ros)
+        {
+            var read = await this.DbSet
+               .Where(d => ros.Contains(d.RO_Number) && d.IsDeleted.Equals(false))
+               .Include(d => d.CostCalculationGarment_Materials).ToListAsync();
+
+            return read;
+        }
     }
 }
