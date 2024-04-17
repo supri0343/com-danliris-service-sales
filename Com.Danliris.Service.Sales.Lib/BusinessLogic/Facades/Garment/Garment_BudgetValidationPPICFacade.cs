@@ -64,13 +64,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                     model.CostCalculationGarment_Materials = model.CostCalculationGarment_Materials
                         .Where(material => CostCalculationGarment.CostCalculationGarment_Materials.Any(oldMaterial => oldMaterial.Id == material.Id) && material.IsPRMaster == false).ToList();
 
+                    string[] productProcess = { "PROCESS", "PROCESS SUBCON" };
                     if (model.CostCalculationGarment_Materials.Count > 0)
                     {
-                        if (CostCalculationGarment.CostCalculationGarment_Materials.All(m => !m.CategoryName.ToUpper().Equals("PROCESS")))
+                        if (CostCalculationGarment.CostCalculationGarment_Materials.All(m => !productProcess.Contains(m.CategoryName.ToUpper())))
                         {
                             await RO_Garment_ValidationLogic.CreateGarmentPurchaseRequest(model, productDicts);
                         }
-                        else if (CostCalculationGarment.CostCalculationGarment_Materials.All(m => m.CategoryName.ToUpper().Equals("PROCESS")))
+                        else if (CostCalculationGarment.CostCalculationGarment_Materials.All(m => productProcess.Contains(m.CategoryName.ToUpper())))
                         {
                             await RO_Garment_ValidationLogic.AddItemsGarmentPurchaseRequest(model, productDicts);
                         }
