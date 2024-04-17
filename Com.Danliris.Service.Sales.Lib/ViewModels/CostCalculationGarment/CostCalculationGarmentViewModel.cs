@@ -104,7 +104,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string RODistributionBy { get; set; }
 
         public bool IsPosted { get; set; }
-
+        public string SubconType { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (PreSCId < 1 || string.IsNullOrWhiteSpace(PreSCNo))
