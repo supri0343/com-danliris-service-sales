@@ -41,7 +41,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
 
             List<string> SelectedFields = new List<string>()
             {
-                  "Id", "Code", "CostCalculationGarment", "Total", "IsPosted"
+                  "Id", "Code", "CostCalculationGarment", "Total", "IsPosted","IsRejected"
             };
 
             Query = Query.Join(DbContext.CostCalculationGarments, ro=>ro.CostCalculationGarmentId, ccg=>ccg.Id, (ro,ccg)=>
@@ -72,7 +72,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
                      },
                      Total = ro.Total,
                      IsPosted = ro.IsPosted,
-                     LastModifiedUtc = ro.LastModifiedUtc
+                     LastModifiedUtc = ro.LastModifiedUtc,
+                     IsRejected = ro.IsRejected
                  });
 
             //List<string> SearchAttributes = new List<string>()
