@@ -31,5 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.ROGarments
         public string DocumentsFileName { get; set; }
 
         public bool IsPosted { get; set; }
+        public bool IsRejected { get; set; }
+        public string RejectReason{ get; set; }
     }
 }
