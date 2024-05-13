@@ -3574,8 +3574,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
 
                     b.Property<bool>("IsPosted");
 
-                    b.Property<bool>("IsRejected");
-
                     b.Property<string>("LastModifiedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -3585,8 +3583,6 @@ namespace Com.Danliris.Service.Sales.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("RejectReason");
 
                     b.Property<int>("Total");
 

@@ -229,8 +229,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         {
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
-            IIdentityService identityService = new IdentityService { Username = "Username" };
-            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext, identityService);
+
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
 
             var data = await DataUtil(facade, dbContext).GetTestData();
             var NewData = await DataUtil(facade, dbContext).GetNewData();
@@ -245,8 +245,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
-            IIdentityService identityService = new IdentityService { Username = "Username" };
-            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext, identityService);
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
             var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = await facade.PostRO(new List<long> { data.Id });
@@ -286,7 +285,8 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
 
             dbContext.RO_Garments.Add(garment);
             dbContext.SaveChanges();
-            ROGarmentFacade facade = new ROGarmentFacade(serviceProviderMock.Object, dbContext, identityService.Object);
+
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProviderMock.Object, dbContext);
 
             await Assert.ThrowsAsync<Exception>(() => facade.PostRO(new List<long> { 1 }));
         }
@@ -294,12 +294,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         [Fact]
         public async Task UnpostRO_Success()
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
-
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
-            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext, identityService);
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
             var data = await DataUtil(facade, dbContext).GetTestData();
 
             var Response = await facade.UnpostRO(data.Id);
@@ -312,11 +310,10 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.ROGarment
         [Fact]
         public async Task UnpostRO_Error()
         {
-            IIdentityService identityService = new IdentityService { Username = "Username" };
             var dbContext = DbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
-            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext, identityService);
+            ROGarmentFacade facade = new ROGarmentFacade(serviceProvider, dbContext);
 
             await Assert.ThrowsAnyAsync<Exception>(async () => await facade.UnpostRO(0));
         }
