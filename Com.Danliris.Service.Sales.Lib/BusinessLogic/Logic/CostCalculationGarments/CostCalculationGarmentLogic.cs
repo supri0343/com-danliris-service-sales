@@ -1,6 +1,7 @@
 ﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades;
 using Com.Danliris.Service.Sales.Lib.Helpers;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
+using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
@@ -303,6 +304,17 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
             EntityExtension.FlagForUpdate(data, IdentityService.Username, "sales-service");
 
             jsonPatch.ApplyTo(data);
+
+            //Delete isRejected if validated by RO Sample
+            if (data.IsValidatedROPPIC)
+            {
+                RO_Garment ROGarment = DbContext.RO_Garments.FirstOrDefault(x => x.CostCalculationGarmentId ==  id);
+
+                ROGarment.IsRejected = false;
+                ROGarment.RejectReason = null;
+
+                EntityExtension.FlagForUpdate(ROGarment, IdentityService.Username, "sales-service");
+            }
         }
 
         public ReadResponse<CostCalculationGarment> ReadForROAcceptance(int page, int size, string order, List<string> select, string keyword, string filter)

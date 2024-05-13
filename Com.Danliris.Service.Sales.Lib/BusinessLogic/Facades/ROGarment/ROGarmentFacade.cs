@@ -7,6 +7,7 @@ using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Models.ROGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels;
 using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +27,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
         private readonly ROGarmentLogic roGarmentLogic;
         private readonly ICostCalculationGarment costCalGarmentLogic;
         public IServiceProvider ServiceProvider;
+        protected IIdentityService IdentityService;
 
-        public ROGarmentFacade(IServiceProvider serviceProvider, SalesDbContext dbContext)
+        public ROGarmentFacade(IServiceProvider serviceProvider, SalesDbContext dbContext, IIdentityService iIdentityService)
         {
             DbContext = dbContext;
             DbSet = DbContext.Set<RO_Garment>();
@@ -35,6 +37,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
             roGarmentLogic = serviceProvider.GetService<ROGarmentLogic>();
             costCalGarmentLogic = serviceProvider.GetService<ICostCalculationGarment>();
             ServiceProvider = serviceProvider;
+            IdentityService = iIdentityService;
         }
         private IAzureImageFacade AzureImageFacade
         {
@@ -75,7 +78,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
                     Model.CostCalculationGarment = null;
 
                     roGarmentLogic.Create(Model);
-                  
+
 
                     Model.ImagesPath = await AzureImageFacade.UploadMultipleImage(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.ImagesFile, Model.ImagesPath);
                     Model.DocumentsPath = await AzureDocumentFacade.UploadMultipleFile(Model.GetType().Name, (int)Model.Id, Model.CreatedUtc, Model.DocumentsFile, Model.DocumentsFileName, Model.DocumentsPath);
@@ -116,10 +119,10 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
             {
                 try
                 {
-                    
+
                     await this.AzureImageFacade.RemoveMultipleImage(deletedImage.GetType().Name, deletedImage.ImagesPath);
                     await this.AzureDocumentFacade.RemoveMultipleFile(deletedImage.GetType().Name, deletedImage.DocumentsPath);
-                    
+
                     //Update CC
                     CostCalculationGarment costCal = await costCalGarmentLogic.ReadByIdAsync((int)deletedImage.CostCalculationGarment.Id); //Model.CostCalculationGarment;
 
@@ -148,11 +151,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
 
         public async Task<int> DeletedROCostCalAsync(CostCalculationGarment costCalculationGarment, int Id)
         {
-            CostCalculationGarment costCal= await costCalGarmentLogic.ReadByIdAsync((int)costCalculationGarment.Id); //Model.CostCalculationGarment;
+            CostCalculationGarment costCal = await costCalGarmentLogic.ReadByIdAsync((int)costCalculationGarment.Id); //Model.CostCalculationGarment;
 
             costCal.RO_GarmentId = null;
             costCal.ImageFile = string.IsNullOrWhiteSpace(costCal.ImageFile) ? "#" : costCal.ImageFile;
-            foreach(var item in costCal.CostCalculationGarment_Materials)
+            foreach (var item in costCal.CostCalculationGarment_Materials)
             {
                 item.Information = null;
             }
@@ -262,6 +265,42 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
                 try
                 {
                     roGarmentLogic.UnpostRO(id);
+                    Updated = await DbContext.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    throw e;
+                }
+            }
+            return Updated;
+        }
+
+
+        public async Task<int> RejectSample(int id, RO_GarmentViewModel viewModel)
+        {
+            int Updated = 0;
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    //Update RO Garment
+                    RO_Garment ROGarment = await ReadByIdAsync(id);
+
+                    ROGarment.IsRejected = true;
+                    ROGarment.RejectReason = viewModel.RejectReason;
+                    ROGarment.IsPosted = false;
+                    EntityExtension.FlagForUpdate(ROGarment, IdentityService.Username, "sales-service");
+
+                    //Update CC
+                    CostCalculationGarment costCalculationGarment = await costCalGarmentLogic.ReadByIdAsync((int)ROGarment.CostCalculationGarmentId);
+                    costCalculationGarment.IsValidatedROMD = false;
+                    costCalculationGarment.ValidationMDBy = null;
+                    costCalculationGarment.ValidationMDDate = DateTimeOffset.MinValue;
+
+                    EntityExtension.FlagForUpdate(costCalculationGarment, IdentityService.Username, "sales-service");
+
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
