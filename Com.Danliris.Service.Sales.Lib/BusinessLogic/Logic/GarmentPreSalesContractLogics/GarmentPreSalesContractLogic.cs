@@ -123,6 +123,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
                     tempSCNo = lastData.SCNo.Substring(0, lastData.SCNo.Length - 4);
                 }
 
+                if (model.SCType == "SUBCON KELUAR")
+                {
+                    tempSCNo = lastData.SCNo.Substring(0, lastData.SCNo.Length - 3);
+                }
+
                 int lastNoNumber = Int32.Parse(tempSCNo.Replace(no, "")) + 1;
                 model.SCNo = no + lastNoNumber.ToString().PadLeft(Padding, '0');
             }
@@ -135,6 +140,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
             if (model.SCType == "SUBCON")
             {
                 model.SCNo = model.SCNo + "-SUB";
+            }
+
+            if (model.SCType == "SUBCON KELUAR")
+            {
+                model.SCNo += "-SK";
             }
         }
 
