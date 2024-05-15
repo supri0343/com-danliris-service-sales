@@ -100,7 +100,16 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
             string no = $"SC-{model.SectionCode}-{model.BuyerBrandCode}-{Year}-";
             int Padding = 5;
 
-            var lastData = DbSet.IgnoreQueryFilters().Where(w => w.SCNo.StartsWith(no) && w.SCType == model.SCType && !w.IsDeleted).OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+
+            if(model.SCType != "TERIMA SUBCON")
+            {
+                lastData = DbSet.IgnoreQueryFilters().Where(w => w.SCNo.StartsWith(no) && w.SCType == model.SCType && !w.IsDeleted).OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
+            else if (model.SCType == "TERIMA SUBCON")
+            {
+                lastData = DbSet.IgnoreQueryFilters().Where(w => w.SCNo.StartsWith(no) && (w.SCType == "SUBCON" || w.SCType == "TERIMA SUBCON") && !w.IsDeleted).OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
+            }
+            
 
             //string DocumentType = model.BuyerType.ToLower().Equals("ekspor") || model.BuyerType.ToLower().Equals("export") ? "FPE" : "FPL";
 
@@ -118,7 +127,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
                     tempSCNo = lastData.SCNo.Substring(0, lastData.SCNo.Length - 2);
                 }
 
-                if (model.SCType == "SUBCON")
+                if (model.SCType == "TERIMA SUBCON")
                 {
                     tempSCNo = lastData.SCNo.Substring(0, lastData.SCNo.Length - 4);
                 }
@@ -137,7 +146,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
                 model.SCNo = model.SCNo + "-S";
             }
 
-            if (model.SCType == "SUBCON")
+            if (model.SCType == "TERIMA SUBCON")
             {
                 model.SCNo = model.SCNo + "-SUB";
             }
