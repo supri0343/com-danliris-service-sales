@@ -100,7 +100,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentPreSalesCont
             string no = $"SC-{model.SectionCode}-{model.BuyerBrandCode}-{Year}-";
             int Padding = 5;
 
-
+            GarmentPreSalesContract lastData = new GarmentPreSalesContract();
             if(model.SCType != "TERIMA SUBCON")
             {
                 lastData = DbSet.IgnoreQueryFilters().Where(w => w.SCNo.StartsWith(no) && w.SCType == model.SCType && !w.IsDeleted).OrderByDescending(o => o.CreatedUtc).FirstOrDefault();
