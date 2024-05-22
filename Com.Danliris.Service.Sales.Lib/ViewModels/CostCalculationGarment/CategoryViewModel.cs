@@ -11,7 +11,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
 		public string code { get; set; }
 		public string name { get; set; }
 		public string SubCategory { get; set; }
-
+		public string CodeRequirement { get; set; }
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			if (string.IsNullOrWhiteSpace(this.name))
