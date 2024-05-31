@@ -308,7 +308,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			table_ccm.AddCell(cell_ccm);
 			cell_ccm.Phrase = new Phrase("KODE", bold_font);
 			table_ccm.AddCell(cell_ccm);
-			cell_ccm.Phrase = new Phrase("BAGIAN", bold_font);
+			cell_ccm.Phrase = new Phrase("JENIS", bold_font);
 			table_ccm.AddCell(cell_ccm);
 			cell_ccm.Phrase = new Phrase("DESCRIPTION", bold_font);
 			table_ccm.AddCell(cell_ccm);
