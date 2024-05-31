@@ -546,7 +546,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
 			cell_ccm_center.Phrase = new Phrase("KODE", bold_font);
 			table_ccm.AddCell(cell_ccm_center);
 
-			cell_ccm_center.Phrase = new Phrase("BAGIAN", bold_font);
+			cell_ccm_center.Phrase = new Phrase("JENIS", bold_font);
 			table_ccm.AddCell(cell_ccm_center);
 
 			cell_ccm_center.Phrase = new Phrase("DESKRIPSI", bold_font);
