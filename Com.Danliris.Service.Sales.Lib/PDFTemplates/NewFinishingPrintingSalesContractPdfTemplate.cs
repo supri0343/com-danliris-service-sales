@@ -157,12 +157,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase(": " + " " +  viewModel.Buyer.NIK, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("", normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("NPWP ", normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NPWP, normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase("", normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase("NPWP ", normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NPWP, normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Jabatan " , normal_font);
