@@ -73,6 +73,8 @@ namespace Com.Danliris.Service.Sales.Lib.AutoMapperProfiles.FinishingPrintingPro
                 .ForPath(d => d.ProductTextile.Id, opt => opt.MapFrom(s => s.ProductTextileId))
                 .ForPath(d => d.ProductTextile.Code, opt => opt.MapFrom(s => s.ProductTextileCode))
                 .ForPath(d => d.ProductTextile.Name, opt => opt.MapFrom(s => s.ProductTextileName))
+               
+                .ForPath(d => d.precentageDP, opt => opt.MapFrom(s => s.precentageDP))
 
                 .ReverseMap();
         }
