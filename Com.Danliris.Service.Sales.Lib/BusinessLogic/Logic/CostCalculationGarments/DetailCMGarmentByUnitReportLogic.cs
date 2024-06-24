@@ -49,14 +49,49 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 Query = Query.Where(d => d.UnitName == unitName.ToString());
             }
 
-
             Query = Query.OrderBy(o => o.UnitName).ThenBy(o => o.BuyerBrandName);
+
             var newQ = (from a in Query
                         join b in dbContext.CostCalculationGarment_Materials on a.Id equals b.CostCalculationGarmentId
                         where b.CategoryName != "PROCESS"
-                        group new { BgtAmt = b.Price * b.BudgetQuantity, CMP = b.CM_Price.GetValueOrDefault() } by new { a.UnitName, a.BuyerCode, a.BuyerName, a.BuyerBrandCode, a.BuyerBrandName,
-                                    a.RO_Number, a.Article, a.Quantity, a.UOMUnit, a.DeliveryDate, a.OTL1CalculatedRate, a.OTL2CalculatedRate,
-                                    a.SMV_Cutting, a.SMV_Sewing, a.SMV_Finishing, a.SMV_Total, a.CommissionRate, a.Insurance, a.Freight, a.ConfirmPrice, a.RateValue} into G
+
+                        select new TempDetailCMGarmentByUnitReportViewModel
+                        {                  
+                            UnitName = a.UnitName,
+                            BuyerCode = a.BuyerCode,
+                            BuyerName = a.BuyerName,
+                            BuyerBrandCode = a.BuyerBrandCode,
+                            BuyerBrandName = a.BuyerBrandName,
+                            RO_Number = a.RO_Number,
+                            Article = a.Article,
+                            Quantity = a.Quantity,
+                            UOMUnit = a.UOMUnit,
+                            DeliveryDate = a.DeliveryDate,
+                            OTL1CalculatedRate = a.OTL1CalculatedRate,
+                            OTL2CalculatedRate = a.OTL2CalculatedRate,
+                            SMV_Cutting = a.SMV_Cutting,
+                            SMV_Sewing = a.SMV_Sewing,
+                            SMV_Finishing = a.SMV_Finishing,
+                            SMV_Total = a.SMV_Total,
+                            CommissionRate = a.CommissionRate,
+                            Insurance = a.Insurance,
+                            Freight = a.Freight,
+                            ConfirmPrice = a.ConfirmPrice,
+                            RateValue = a.RateValue,
+                            BudgetAmount = b.isFabricCM == true && b.Price > 0 ? 0 : b.Price * b.BudgetQuantity,
+                            CMPrice = b.CM_Price.GetValueOrDefault(),
+                            CMIDR = 0,
+                            CM = 0, 
+                            FOB_Price = 0
+                        });
+
+                        // GROUPING DATA
+
+                        var newQ1 = (from c in newQ
+                                     group new { BgtAmt = c.BudgetAmount, CMP = c.CMPrice } by new { c.UnitName, c.BuyerCode, c.BuyerName, c.BuyerBrandCode, c.BuyerBrandName,
+                                     c.RO_Number, c.Article, c.Quantity, c.UOMUnit, c.DeliveryDate, c.OTL1CalculatedRate, c.OTL2CalculatedRate, c.SMV_Cutting, c.SMV_Sewing,
+                                     c.SMV_Finishing, c.SMV_Total, c.CommissionRate, c.Insurance, c.Freight, c.ConfirmPrice, c.RateValue} into G
+
                         select new DetailCMGarmentByUnitReportViewModel
                          {
                             UnitName = G.Key.UnitName,
@@ -86,7 +121,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             CM = ((G.Key.ConfirmPrice * G.Key.RateValue) - G.Key.CommissionRate - (Math.Round(G.Sum(m => m.BgtAmt), 2) / G.Key.Quantity)) / G.Key.RateValue,
                             FOB_Price = G.Key.ConfirmPrice + ((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) - (G.Key.Insurance + G.Key.Freight),
                         });
-            return newQ;
+            return newQ1;
         }
     }
 }
