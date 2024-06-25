@@ -34,4 +34,34 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double BudgetAmount { get; set; }
         public double CMPrice { get; set; }
     }
+
+    public class TempDetailCMGarmentByUnitReportViewModel
+    {
+        public string RO_Number { get; set; }
+        public DateTimeOffset DeliveryDate { get; set; }
+        public string Article { get; set; }
+        public string BuyerCode { get; set; }
+        public string BuyerName { get; set; }
+        public string BuyerBrandCode { get; set; }
+        public string BuyerBrandName { get; set; }
+        public string UnitName { get; set; }
+        public double Quantity { get; set; }
+        public string UOMUnit { get; set; }
+        public double FOB_Price { get; set; }
+        public double ConfirmPrice { get; set; }
+        public double CM { get; set; }
+        public double RateValue { get; set; }
+        public double CMIDR { get; set; }
+        public double OTL1CalculatedRate { get; set; }
+        public double OTL2CalculatedRate { get; set; }
+        public double SMV_Cutting { get; set; }
+        public double SMV_Sewing { get; set; }
+        public double SMV_Finishing { get; set; }
+        public double SMV_Total { get; set; }
+        public double Insurance { get; set; }
+        public double Freight { get; set; }
+        public double CommissionRate { get; set; }
+        public double BudgetAmount { get; set; }
+        public double CMPrice { get; set; }
+    }
 }
