@@ -572,7 +572,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
 
             //return reportData.AsQueryable();
         }
-        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery(string poType, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
 
             List<string> OrderTypeId1 = new List<string>();
@@ -587,204 +587,210 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
                 OrderTypeId1 = new List<string> { orderTypeId };
             }
             
-
-
             DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
             DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
 
-
-            //var Query = (from a in DbContext.ProductionOrder
-            //             join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
-            //             join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
-            //             join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
-            //             where a.IsDeleted == false
-            //                 && b.IsDeleted == false
-            //                 //&& b.ColorType == d.Color
-            //                 && d.Color == (string.IsNullOrWhiteSpace(b.ColorType) ? d.Color : b.ColorType)
-            //                 && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
-            //                 && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
-            //                 && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)
-            //                 //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString() : orderTypeId)
-            //                 && a.OrderTypeName == "SOLID" 
-            //                 || a.OrderTypeName == "DYEING"
-            //                 && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
-            //                 && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
-            //                 && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
-            //                 && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
-            //             select new ProductionOrderReportViewModel
-            //             {
-            //                 id = a.Id,
-            //                 orderNo = a.OrderNo,
-            //                 buyer = a.BuyerName,
-            //                 buyerType = a.BuyerType,
-            //                 colorRequest = b.ColorRequest,
-            //                 orderQuantity = b.Quantity,
-            //                 NoSalesContract = a.SalesContractNo,
-            //                 colorType = b.ColorType,
-            //                 Price = d.Price,
-            //                 designNumber = a.DesignNumber,
-            //                 CurrCode = d.CurrencyCode,
-            //                 colorTemplate = b.ColorTemplate,
-            //                 construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth,
-            //                 deliveryDate = a.DeliveryDate,
-            //                 designCode = a.DesignCode,
-            //                 orderType = a.OrderTypeName,
-            //                 processType = a.ProcessTypeName,
-            //                 staffName = a.ProfileFirstName + " - " + a.ProfileLastName,
-            //                 _createdDate = a.CreatedUtc
-            //             });
-
-
-            var Query1 = (from a in DbContext.ProductionOrder
-                          join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
-                          join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
-                          join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
-                          where a.IsDeleted == false
-                              && b.IsDeleted == false
-                              //&& b.ColorType == d.Color
-                              //&& d.Color == (string.IsNullOrWhiteSpace(b.ColorType) ? d.Color : b.ColorType)
-
-                              && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
-                              && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
-                              && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
-                              && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
-                              && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)
-                              && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
-                              && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
-
-                              
-
-
-                          //&& a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeId.ToString(): orderTypeId)
-                          //&& a.OrderTypeName == "DYEING" || a.OrderTypeName == "SOLID"
-                          // && a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
-                          //|| a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2)
-
-                          //&& string.IsNullOrWhiteSpace(orderTypeId)  ? a.OrderTypeId.ToString() == a.OrderTypeId.ToString(): OrderTypeId1.Contains(a.OrderTypeId.ToString())
-
-
-
-
-
-                          select new ProductionOrderReportViewModel
-                          {
-                              id = a.Id,
-                              orderNo = a.OrderNo,
-                              buyer = a.BuyerName,
-                              buyerType = a.BuyerType,
-                              colorRequest = b.ColorRequest,
-                              orderQuantity = b.Quantity,
-                              NoSalesContract = a.SalesContractNo,
-                              colorType = b.ColorType,
-                              Price = d.Price,
-                              designNumber = a.DesignNumber,
-                              CurrCode = d.CurrencyCode,
-                              colorTemplate = b.ColorTemplate,
-                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
-                              //constructionFilter = a.MaterialName.Replace(" ","") + " / " + a.MaterialConstructionName.Replace(" ", "") + " / " + a.MaterialWidth.Replace(" ","")+"/"+a.YarnMaterialName.Replace(" ", ""),
-                              constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
-                              deliveryDate = a.DeliveryDate,
-                              designCode = a.DesignCode,
-                              orderType = a.OrderTypeName,
-                              orderTypeId = Convert.ToInt32(a.OrderTypeId),
-                              processType = a.ProcessTypeName,
-                              staffName = a.ProfileFirstName + " - " + a.ProfileLastName,
-                              _createdDate = a.CreatedUtc
-                          });
-
-            if (orderTypeId !=null) {
-                Query1 = Query1.Where(x => OrderTypeId1.Contains(x.orderTypeId.ToString()));
-            }
-
-            var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
-
-            if (construction != null)
+            if (poType == "SALES")
             {
-                Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
-                // Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(construction));
+                var Query1 = (from a in DbContext.ProductionOrder
+                              join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
+                              join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
+                              join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
+                              where a.IsDeleted == false && b.IsDeleted == false
+
+                                  && a.POType == (string.IsNullOrWhiteSpace(poType) ? a.POType : poType)
+                                  && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
+                                  && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
+                                  && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
+                                  && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerCode : buyerId)
+                                  && a.OrderTypeName == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeName : orderTypeId)
+                                  && a.ProcessTypeName == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeName : processTypeId)                          
+                                  && a.AccountUserName == (string.IsNullOrWhiteSpace(accountId) ? a.AccountUserName : accountId)
+
+                              select new ProductionOrderReportViewModel
+                              {
+                                  id = a.Id,
+                                  orderNo = a.OrderNo,
+                                  buyer = a.BuyerName,
+                                  buyerType = a.BuyerType,
+                                  colorRequest = b.ColorRequest,
+                                  orderQuantity = b.Quantity,
+                                  NoSalesContract = a.SalesContractNo,
+                                  colorType = b.ColorType,
+                                  Price = d.Price,
+                                  designNumber = a.DesignNumber,
+                                  CurrCode = d.CurrencyCode,
+                                  colorTemplate = b.ColorTemplate,
+                                  construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                                  constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
+                                  deliveryDate = a.DeliveryDate,
+                                  designCode = a.DesignCode,
+                                  orderType = a.OrderTypeName,
+                                  orderTypeId = Convert.ToInt32(a.OrderTypeId),
+                                  processType = a.ProcessTypeName,
+                                  staffName = a.ProfileFirstName + " - " + a.ProfileLastName,
+                                  _createdDate = a.CreatedUtc
+                              });
+
+                //if (orderTypeId != null)
+                //{
+                //    Query1 = Query1.Where(x => OrderTypeId1.Contains(x.orderTypeId.ToString()));
+                //}
+
+                var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
+                if (construction != null)
+                {
+                    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                }
+
+                var Query = from data in Query1
+                            group data by new { data.orderNo, data.colorType } into groupdata
+                            where groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date >= DateFrom.Date
+
+                            && groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date <= DateTo.Date
+                            select new ProductionOrderReportViewModel
+                            {
+                                id = groupdata.FirstOrDefault().id,
+                                orderNo = groupdata.Key.orderNo,
+                                buyer = groupdata.FirstOrDefault().buyer,
+                                buyerType = groupdata.FirstOrDefault().buyerType,
+                                colorRequest = groupdata.FirstOrDefault().colorRequest,
+                                orderQuantity = groupdata.FirstOrDefault().orderQuantity,
+                                NoSalesContract = groupdata.FirstOrDefault().NoSalesContract,
+                                colorType = groupdata.Key.colorType,
+                                Price = groupdata.FirstOrDefault().Price,
+                                designNumber = groupdata.FirstOrDefault().designNumber,
+                                CurrCode = groupdata.FirstOrDefault().CurrCode,
+                                colorTemplate = groupdata.FirstOrDefault().colorTemplate,
+                                construction = groupdata.FirstOrDefault().construction,
+                                deliveryDate = groupdata.FirstOrDefault().deliveryDate,
+                                designCode = groupdata.FirstOrDefault().designCode,
+                                orderType = groupdata.FirstOrDefault().orderType,
+                                processType = groupdata.FirstOrDefault().processType,
+                                staffName = groupdata.FirstOrDefault().staffName,
+                                _createdDate = groupdata.FirstOrDefault()._createdDate
+
+
+                            };
+
+                List<ProductionOrderReportViewModel> query = new List<ProductionOrderReportViewModel>();
+                foreach (var data in Query)
+                {
+
+                    double detailProd = 0;
+                    double detailPrep = 0;
+
+                    data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
+                    data.status = "Belum dalam Produksi";
+
+                    query.Add(data);
+                }
+
+                return Query = query.AsQueryable();
+
             }
-
-            var Query = from data in Query1
-                        group data by new { data.orderNo, data.colorType } into groupdata
-                        where groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date >= DateFrom.Date
-
-                        && groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date <= DateTo.Date
-                        select new ProductionOrderReportViewModel
-                        {
-                            id = groupdata.FirstOrDefault().id,
-                            orderNo = groupdata.Key.orderNo,
-                            buyer = groupdata.FirstOrDefault().buyer,
-                            buyerType = groupdata.FirstOrDefault().buyerType,
-                            colorRequest = groupdata.FirstOrDefault().colorRequest,
-                            orderQuantity = groupdata.FirstOrDefault().orderQuantity,
-                            NoSalesContract = groupdata.FirstOrDefault().NoSalesContract,
-                            colorType = groupdata.Key.colorType,
-                            Price = groupdata.FirstOrDefault().Price,
-                            designNumber = groupdata.FirstOrDefault().designNumber,
-                            CurrCode = groupdata.FirstOrDefault().CurrCode,
-                            colorTemplate = groupdata.FirstOrDefault().colorTemplate,
-                            construction = groupdata.FirstOrDefault().construction,
-                            deliveryDate = groupdata.FirstOrDefault().deliveryDate,
-                            designCode = groupdata.FirstOrDefault().designCode,
-                            orderType = groupdata.FirstOrDefault().orderType,
-                            processType = groupdata.FirstOrDefault().processType,
-                            staffName = groupdata.FirstOrDefault().staffName,
-                            _createdDate = groupdata.FirstOrDefault()._createdDate
-
-
-                        };
-            //var fabricQuality = await GetFabricQualityItems(orderNo);
-            //var dailyOP = await GetDailyOperationItems(orderNo); //data is not input in production
-            //List<DailyOperationViewModel> dailies = new List<DailyOperationViewModel>();
-
-
-            List<ProductionOrderReportViewModel> query = new List<ProductionOrderReportViewModel>();
-            foreach (var data in Query)
+            else
             {
-                //data is not input in production
-                //double detailProd = 0;
-                //double detailPrep = 0;
-                //foreach (var daily in dailyOP)
-                //{
-                //    if (daily.orderNo == data.orderNo)
-                //        detailProd += daily.orderQuantity;
+                var Query1 = (from a in DbContext.ProductionOrder
+                              join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
+                              where a.IsDeleted == false && b.IsDeleted == false
+                                  && a.POType == (string.IsNullOrWhiteSpace(poType) ? a.POType : poType)
+                                  && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
+                                  && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
+                                  && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
+                                  && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerCode : buyerId)
+                                  && a.OrderTypeName == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeName : orderTypeId)
+                                  && a.ProcessTypeName == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeName : processTypeId)
+                                  && a.AccountUserName == (string.IsNullOrWhiteSpace(accountId) ? a.AccountUserName : accountId)
 
-                //}
-                //foreach (var prep in fabricQuality)
-                //{
-                //    if (prep.orderNo == data.orderNo)
-                //        detailPrep += prep.orderQuantity;
+                              select new ProductionOrderReportViewModel
+                              {
+                                  id = a.Id,
+                                  orderNo = a.OrderNo,
+                                  buyer = a.BuyerName,
+                                  buyerType = a.BuyerType,
+                                  colorRequest = b.ColorRequest,
+                                  orderQuantity = b.Quantity,
+                                  NoSalesContract = a.SalesContractNo,
+                                  colorType = b.ColorType,
+                                  Price = 0,
+                                  designNumber = a.DesignNumber,
+                                  CurrCode = "-",
+                                  colorTemplate = b.ColorTemplate,
+                                  construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                                  constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
+                                  deliveryDate = a.DeliveryDate,
+                                  designCode = a.DesignCode,
+                                  orderType = a.OrderTypeName,
+                                  orderTypeId = Convert.ToInt32(a.OrderTypeId),
+                                  processType = a.ProcessTypeName,
+                                  staffName = a.ProfileFirstName + " - " + a.ProfileLastName,
+                                  _createdDate = a.CreatedUtc
+                              });
 
-                //}
-                //data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
-                //if (detailPrep > 0)
+                //if (orderTypeId != null)
                 //{
-                //    data.status = "Sudah dalam pemeriksaan kain";
-                //}
-                //else if (detailProd == 0)
-                //{
-                //    data.status = "Belum dalam Produksi";
-                //}
-                //else
-                //{
-                //    data.status = "Sudah dalam Produksi";
+                //    Query1 = Query1.Where(x => OrderTypeId1.Contains(x.orderTypeId.ToString()));
                 //}
 
-                double detailProd = 0;
-                double detailPrep = 0;
+                var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
 
-                data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
-                data.status = "Belum dalam Produksi";
+                if (construction != null)
+                {
+                    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                }
 
-                query.Add(data);
+                var Query = from data in Query1
+                            group data by new { data.orderNo, data.colorType } into groupdata
+                            where groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date >= DateFrom.Date
+
+                            && groupdata.FirstOrDefault()._createdDate.AddHours(offset).Date <= DateTo.Date
+                            select new ProductionOrderReportViewModel
+                            {
+                                id = groupdata.FirstOrDefault().id,
+                                orderNo = groupdata.Key.orderNo,
+                                buyer = groupdata.FirstOrDefault().buyer,
+                                buyerType = groupdata.FirstOrDefault().buyerType,
+                                colorRequest = groupdata.FirstOrDefault().colorRequest,
+                                orderQuantity = groupdata.FirstOrDefault().orderQuantity,
+                                NoSalesContract = groupdata.FirstOrDefault().NoSalesContract,
+                                colorType = groupdata.Key.colorType,
+                                Price = groupdata.FirstOrDefault().Price,
+                                designNumber = groupdata.FirstOrDefault().designNumber,
+                                CurrCode = groupdata.FirstOrDefault().CurrCode,
+                                colorTemplate = groupdata.FirstOrDefault().colorTemplate,
+                                construction = groupdata.FirstOrDefault().construction,
+                                deliveryDate = groupdata.FirstOrDefault().deliveryDate,
+                                designCode = groupdata.FirstOrDefault().designCode,
+                                orderType = groupdata.FirstOrDefault().orderType,
+                                processType = groupdata.FirstOrDefault().processType,
+                                staffName = groupdata.FirstOrDefault().staffName,
+                                _createdDate = groupdata.FirstOrDefault()._createdDate
+
+
+                            };
+
+                List<ProductionOrderReportViewModel> query = new List<ProductionOrderReportViewModel>();
+                foreach (var data in Query)
+                {
+
+                    double detailProd = 0;
+                    double detailPrep = 0;
+
+                    data.detail = data.orderQuantity + " di SPP \n" + detailProd + " di Produksi \n" + detailPrep + " di Pemeriksaan \n";
+                    data.status = "Belum dalam Produksi";
+
+                    query.Add(data);
+                }
+
+                return Query = query.AsQueryable();
             }
-
-
-            return Query = query.AsQueryable();
+           
         }
 
         //--CobaMDP--//
-        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<IQueryable<ProductionOrderReportViewModel>> GetReportQuery2(string poType, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
             string OrderTypeId1;
             string OrderTypeId2;
@@ -805,59 +811,116 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
 
 
-            var Query1 = (from a in DbContext.ProductionOrder
-                          join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
-                          join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
-                          join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
-                          where a.IsDeleted == false
-                              && b.IsDeleted == false
-                              && a.SalesContractNo == (string.IsNullOrWhiteSpace(salesContractNo) ? a.SalesContractNo : salesContractNo)
-                              && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
-                              && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
-                              && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
-                              && a.BuyerId.ToString() == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerId.ToString() : buyerId)
-                              && (a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId1) ? a.OrderTypeId.ToString() : OrderTypeId1)
-                                  || a.OrderTypeId.ToString() == (string.IsNullOrWhiteSpace(OrderTypeId2) ? a.OrderTypeId.ToString() : OrderTypeId2))
-                              && a.ProcessTypeId.ToString() == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeId.ToString() : processTypeId)
-                              && a.AccountId.ToString() == (string.IsNullOrWhiteSpace(accountId) ? a.AccountId.ToString() : accountId)
-                          select new ProductionOrderReportViewModel
-                          {
-                              orderNo = a.OrderNo,
-                              colorType = b.ColorType,
-                              construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
-                              constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
-                              deliveryDate = a.DeliveryDate,
-                              designCode = a.DesignCode,
-                              buyer = a.BuyerName,
-                              _createdDate = a.CreatedUtc,
-                              finishTypeName = a.FinishTypeName,
-                              standardTest= a.StandardTestName,
-                              finishWidth = a.FinishWidth,
-                              materialName = a.MaterialName,
-                              yarnMaterialName = a.YarnMaterialName,
-                              materialWidth = a.MaterialWidth,
-                              handlingStandard = a.HandlingStandard,
-                              orderQuantity = b.Quantity,
-                              remark = a.Remark
-                          });
-            //var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
-
-            //if (construction != null)
-            //{
-            //    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
-
-            //}
-            if (cons != null)
+            if (poType == "SALES")
             {
-                Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
-            }
+                var Query1 = (from a in DbContext.ProductionOrder
+                              join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id
+                              join c in DbContext.FinishingPrintingSalesContracts on a.SalesContractNo equals c.SalesContractNo
+                              join d in DbContext.FinishingPrintingSalesContractDetails on c.Id equals d.FinishingPrintingSalesContract.Id
+                              where a.IsDeleted == false
+                                  && b.IsDeleted == false
+                                  && a.POType == (string.IsNullOrWhiteSpace(poType) ? a.POType : poType)
+                                  && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
+                                  && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
+                                  && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
+                                  && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerCode : buyerId)
+                                  && a.OrderTypeName == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeName : orderTypeId)
+                                  && a.ProcessTypeName == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeName : processTypeId)
+                                  && a.AccountUserName == (string.IsNullOrWhiteSpace(accountId) ? a.AccountUserName : accountId)
 
-            return Query1;
+                              select new ProductionOrderReportViewModel
+                              {
+                                  orderNo = a.OrderNo,
+                                  colorType = b.ColorType,
+                                  construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                                  constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
+                                  deliveryDate = a.DeliveryDate,
+                                  designCode = a.DesignCode,
+                                  buyer = a.BuyerName,
+                                  _createdDate = a.CreatedUtc,
+                                  finishTypeName = a.FinishTypeName,
+
+                                  standardTest = a.StandardTestName,
+
+                                  finishWidth = a.FinishWidth,
+                                  materialName = a.MaterialName,
+                                  yarnMaterialName = a.YarnMaterialName,
+                                  materialWidth = a.MaterialWidth,
+                                  handlingStandard = a.HandlingStandard,
+                                  orderQuantity = b.Quantity,
+                                  remark = a.Remark
+                              });
+                //var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
+                //if (construction != null)
+                //{
+                //    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+
+                //}
+                if (cons != null)
+                {
+                    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                }
+
+                return Query1;
+            }
+            else
+            {
+                var Query1 = (from a in DbContext.ProductionOrder
+                              join b in DbContext.ProductionOrder_Details on a.Id equals b.ProductionOrderModel.Id                          
+                              where a.IsDeleted == false
+                                  && b.IsDeleted == false
+                                  && a.POType == (string.IsNullOrWhiteSpace(poType) ? a.POType : poType)
+                                  && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
+                                  && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
+                                  && a.OrderNo == (string.IsNullOrWhiteSpace(orderNo) ? a.OrderNo : orderNo)
+                                  && a.BuyerCode == (string.IsNullOrWhiteSpace(buyerId) ? a.BuyerCode : buyerId)
+                                  && a.OrderTypeName == (string.IsNullOrWhiteSpace(orderTypeId) ? a.OrderTypeName : orderTypeId)
+                                  && a.ProcessTypeName == (string.IsNullOrWhiteSpace(processTypeId) ? a.ProcessTypeName : processTypeId)
+                                  && a.AccountUserName == (string.IsNullOrWhiteSpace(accountId) ? a.AccountUserName : accountId)
+
+                              select new ProductionOrderReportViewModel
+                              {
+                                  orderNo = a.OrderNo,
+                                  colorType = b.ColorType,
+                                  construction = a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName,
+                                  constructionFilter = (a.MaterialName + " / " + a.MaterialConstructionName + " / " + a.MaterialWidth + "/" + a.YarnMaterialName).Replace(" ", ""),
+                                  deliveryDate = a.DeliveryDate,
+                                  designCode = a.DesignCode,
+                                  buyer = a.BuyerName,
+                                  _createdDate = a.CreatedUtc,
+                                  finishTypeName = a.FinishTypeName,
+
+                                  standardTest = a.StandardTestName,
+
+                                  finishWidth = a.FinishWidth,
+                                  materialName = a.MaterialName,
+                                  yarnMaterialName = a.YarnMaterialName,
+                                  materialWidth = a.MaterialWidth,
+                                  handlingStandard = a.HandlingStandard,
+                                  orderQuantity = b.Quantity,
+                                  remark = a.Remark
+                              });
+                //var cons = construction != null ? construction.Replace(" ", "").ToLower() : null;
+
+                //if (construction != null)
+                //{
+                //    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+
+                //}
+                if (cons != null)
+                {
+                    Query1 = Query1.Where(x => x.constructionFilter.Replace(" ", "").ToLower().Contains(cons));
+                }
+
+                return Query1;
+
+            }
         }
 
-        public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
+        public async Task<Tuple<List<ProductionOrderReportViewModel>, int>> GetReport(string poTypo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
         {
-            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
+            var Query = await GetReportQuery(poTypo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             if (OrderDictionary.Count.Equals(0))
@@ -872,9 +935,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
             return Tuple.Create(Data, TotalData);
         }
 
-        public async Task<MemoryStream> GenerateExcel(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<MemoryStream> GenerateExcel(string poTypo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-            var Query = await GetReportQuery(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
+            var Query = await GetReportQuery(poTypo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
             Query = Query.OrderByDescending(b => b._createdDate);
             DataTable result = new DataTable();
 
@@ -920,9 +983,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ProductionOrder
         }
 
         //--cobaIEDP--//
-        public async Task<MemoryStream> GenerateExcel2(string salesContractNo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
+        public async Task<MemoryStream> GenerateExcel2(string poTypo, string orderNo, string orderTypeId, string processTypeId, string buyerId, string accountId, string construction, DateTime? dateFrom, DateTime? dateTo, int offset)
         {
-           var Query = await GetReportQuery2(salesContractNo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
+           var Query = await GetReportQuery2(poTypo, orderNo, orderTypeId, processTypeId, buyerId, accountId, construction, dateFrom, dateTo, offset);
             
             Query = Query.OrderByDescending(b => b._createdDate);
             DataTable result = new DataTable();
