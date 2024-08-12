@@ -58,17 +58,68 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
                 dataTable.Rows.Add(null, null, null, null, null, null, null, null, null, null);
 
-                var Count35 = data.Count(d => d.LeadTime == 40);
-                var Count35Ok = data.Count(d => d.DateDiff >= 40 && d.LeadTime == 40);
-                var Percent35Ok = ((decimal)Count35Ok / Count35).ToString("P", new CultureInfo("id-ID"));
-                var Count35NotOk = data.Count(d => d.DateDiff < 40 && d.LeadTime == 40);
-                var Percent35NotOk = ((decimal)Count35NotOk / Count35).ToString("P", new CultureInfo("id-ID"));
+                //var Count35 = data.Count(d => d.LeadTime == 40);
+                //var Count35Ok = data.Count(d => d.DateDiff >= 40 && d.LeadTime == 40);
+                //var Percent35Ok = ((decimal)Count35Ok / Count35).ToString("P", new CultureInfo("id-ID"));
+                //var Count35NotOk = data.Count(d => d.DateDiff < 40 && d.LeadTime == 40);
+                //var Percent35NotOk = ((decimal)Count35NotOk / Count35).ToString("P", new CultureInfo("id-ID"));
 
-                var Count25 = data.Count(d => d.LeadTime == 25);
-                var Count25Ok = data.Count(d => d.DateDiff >= 25 && d.LeadTime == 25);
-                var Percent25Ok = ((decimal)Count25Ok / Count25).ToString("P", new CultureInfo("id-ID"));
-                var Count25NotOk = data.Count(d => d.DateDiff < 25 && d.LeadTime == 25);
-                var Percent25NotOk = ((decimal)Count25NotOk / Count25).ToString("P", new CultureInfo("id-ID"));
+                //var Count25 = data.Count(d => d.LeadTime == 25);
+                //var Count25Ok = data.Count(d => d.DateDiff >= 25 && d.LeadTime == 25);
+                //var Percent25Ok = ((decimal)Count25Ok / Count25).ToString("P", new CultureInfo("id-ID"));
+                //var Count25NotOk = data.Count(d => d.DateDiff < 25 && d.LeadTime == 25);
+                //var Percent25NotOk = ((decimal)Count25NotOk / Count25).ToString("P", new CultureInfo("id-ID"));
+
+                //--------------------
+
+                int Count35 = 0;
+                int Count35Ok = 0;
+                string Percent35Ok = "";
+                int Count35NotOk = 0;
+                string Percent35NotOk = "";
+
+                Count35 = data.Count(d => d.LeadTime == 40);
+                if (Count35 > 0)
+                {
+                    Count35 = data.Count(d => d.LeadTime == 40);
+                    Count35Ok = data.Count(d => d.DateDiff >= 40 && d.LeadTime == 40);
+                    Percent35Ok = ((decimal)Count35Ok / Count35).ToString("P", new CultureInfo("id-ID"));
+                    Count35NotOk = data.Count(d => d.DateDiff < 40 && d.LeadTime == 40);
+                    Percent35NotOk = ((decimal)Count35NotOk / Count35).ToString("P", new CultureInfo("id-ID"));
+                }
+                else
+                {
+                    Count35 = 0;
+                    Count35Ok = 0;
+                    Percent35Ok = "0";
+                    Count35NotOk = 0;
+                    Percent35NotOk = "0";
+                }
+
+                int Count25 = 0;
+                int Count25Ok = 0;
+                string Percent25Ok = "";
+                int Count25NotOk = 0;
+                string Percent25NotOk = "";
+
+                if (Count25 > 0)
+                {
+                    Count25 = data.Count(d => d.LeadTime == 25);
+                    Count25Ok = data.Count(d => d.DateDiff >= 25 && d.LeadTime == 25);
+                    Percent25Ok = ((decimal)Count25Ok / Count25).ToString("P", new CultureInfo("id-ID"));
+                    Count25NotOk = data.Count(d => d.DateDiff < 25 && d.LeadTime == 25);
+                    Percent25NotOk = ((decimal)Count25NotOk / Count25).ToString("P", new CultureInfo("id-ID"));
+                }
+                else
+                {
+                    Count25 = 0;
+                    Count25Ok = 0;
+                    Percent25Ok = "0";
+                    Count25NotOk = 0;
+                    Percent25NotOk = "0";
+                }
+
+                //--------------------
 
                 var Count = Count25 + Count35;
                 var CountOk = Count35Ok + Count25Ok;
