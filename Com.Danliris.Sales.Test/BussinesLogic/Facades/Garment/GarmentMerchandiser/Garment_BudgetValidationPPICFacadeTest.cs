@@ -51,6 +51,20 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
             return dbContext;
         }
 
+        protected PurchasingDbContext PurchasingDbContext(string testName)
+        {
+            DbContextOptionsBuilder<PurchasingDbContext> optionsBuilder = new DbContextOptionsBuilder<PurchasingDbContext>();
+            optionsBuilder
+                .UseInMemoryDatabase(testName)
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+
+            PurchasingDbContext dbContext = new PurchasingDbContext(optionsBuilder.Options);
+
+            return dbContext;
+        }
+
+
+
         protected CostCalculationGarmentDataUtil DataUtil(CostCalculationGarmentFacade facade, IServiceProvider serviceProvider = null, SalesDbContext dbContext = null)
         {
             serviceProvider = serviceProvider ?? GetServiceProviderMock(dbContext).Object;
@@ -104,6 +118,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
         public async void Validate_RO_Garment_Success()
         {
             var dbContext = DbContext(GetCurrentMethod());
+            var purchasingDbContext = PurchasingDbContext(GetCurrentMethod());
             var serviceProviderMock = GetServiceProviderMock(dbContext);
 
             Mock<IHttpClientService> httpClientMock = new Mock<IHttpClientService>();
@@ -124,7 +139,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 material.IsPRMaster = false;
             }
 
-            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext);
+            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext, purchasingDbContext);
 
             var productDict = dataCostCalculationGarment.CostCalculationGarment_Materials.ToDictionary(k => long.Parse(k.ProductId), v => v.ProductCode);
 
@@ -137,6 +152,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
         public async void Validate_RO_Garment_Error()
         {
             var dbContext = DbContext(GetCurrentMethod());
+            var purchasingDbContext = PurchasingDbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
@@ -147,7 +163,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 material.IsPRMaster = false;
             }
 
-            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext);
+            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext, purchasingDbContext);
 
             var productDict = dataCostCalculationGarment.CostCalculationGarment_Materials.ToDictionary(k => long.Parse(k.ProductId), v => v.ProductCode);
 
@@ -160,6 +176,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
         public async void Validate_RO_Garment_Success_Category_PROCESS()
         {
             var dbContext = DbContext(GetCurrentMethod());
+            var purchasingDbContext = PurchasingDbContext(GetCurrentMethod());
             var serviceProviderMock = GetServiceProviderMock(dbContext);
 
             Mock<IHttpClientService> httpClientMock = new Mock<IHttpClientService>();
@@ -183,7 +200,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 material.IsPRMaster = false;
             }
 
-            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext);
+            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext, purchasingDbContext);
 
             var productDict = dataCostCalculationGarment.CostCalculationGarment_Materials.ToDictionary(k => long.Parse(k.ProductId), v => v.ProductCode);
 
@@ -196,6 +213,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
         public async void Validate_RO_Garment_Error_Category_PROCESS()
         {
             var dbContext = DbContext(GetCurrentMethod());
+            var purchasingDbContext = PurchasingDbContext(GetCurrentMethod());
             var serviceProviderMock = GetServiceProviderMock(dbContext);
 
             //serviceProviderMock.Setup()
@@ -211,7 +229,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 material.IsPRMaster = false;
             }
 
-            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext);
+            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext, purchasingDbContext);
 
             var productDict = dataCostCalculationGarment.CostCalculationGarment_Materials.ToDictionary(k => long.Parse(k.ProductId), v => v.ProductCode);
 
@@ -224,6 +242,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
         public async void Validate_RO_Garment_Error_Category_Mixed()
         {
             var dbContext = DbContext(GetCurrentMethod());
+            var purchasingDbContext = PurchasingDbContext(GetCurrentMethod());
             var serviceProvider = GetServiceProviderMock(dbContext).Object;
 
             CostCalculationGarmentFacade facade = new CostCalculationGarmentFacade(serviceProvider, dbContext);
@@ -240,7 +259,7 @@ namespace Com.Danliris.Sales.Test.BussinesLogic.Facades.Garment.GarmentMerchandi
                 IsPRMaster = false
             });
 
-            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext);
+            Garment_BudgetValidationPPICFacade garmentValidationFacade = new Garment_BudgetValidationPPICFacade(serviceProvider, dbContext, purchasingDbContext);
 
             var productDict = dataCostCalculationGarment.CostCalculationGarment_Materials.ToDictionary(k => long.Parse(k.ProductId), v => v.ProductCode);
 

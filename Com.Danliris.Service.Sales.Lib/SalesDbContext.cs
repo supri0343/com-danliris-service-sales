@@ -21,6 +21,8 @@ using Com.Danliris.Service.Sales.Lib.Models.DOSales;
 using Com.Danliris.Service.Sales.Lib.Models.DOReturn;
 using Com.Danliris.Service.Sales.Lib.Models.SalesInvoiceExport;
 using Com.Danliris.Service.Sales.Lib.Models.LogHistoryModel;
+using Microsoft.Extensions.Options;
+using Com.Danliris.Service.Sales.Lib.Helpers;
 
 namespace Com.Danliris.Service.Sales.Lib
 {
@@ -110,6 +112,12 @@ namespace Com.Danliris.Service.Sales.Lib
 
             modelBuilder.Entity<CostCalculationGarment>()
                 .Ignore(c => c.ImageFile);
+
+            modelBuilder.Entity<CostCalculationGarment>()
+                .HasMany(c => c.CostCalculationGarment_Materials)
+                .WithOne(m => m.CostCalculationGarment)
+                .HasForeignKey(m => m.CostCalculationGarmentId)
+                .OnDelete(DeleteBehavior.Cascade); // Mengaktifkan cascade delete
 
             modelBuilder.Entity<RO_Garment>()
                 .Ignore(c => c.ImagesFile);

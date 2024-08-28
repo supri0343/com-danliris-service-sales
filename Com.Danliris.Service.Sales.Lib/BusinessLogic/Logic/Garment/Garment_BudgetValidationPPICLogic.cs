@@ -106,7 +106,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
             }
         }
 
-        private List<GarmentPurchaseRequestItemViewModel> FillGarmentPurchaseRequestItems(List<CostCalculationGarment_Material> costCalculationGarment_Materials, Dictionary<long, string> productDicts)
+        public List<GarmentPurchaseRequestItemViewModel> FillGarmentPurchaseRequestItems(List<CostCalculationGarment_Material> costCalculationGarment_Materials, Dictionary<long, string> productDicts)
         {
             List<GarmentPurchaseRequestItemViewModel> GarmentPurchaseRequestItems = costCalculationGarment_Materials.Select(i => new GarmentPurchaseRequestItemViewModel
             {
@@ -136,7 +136,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.Garment
             return GarmentPurchaseRequestItems;
         }
 
-        private GarmentPurchaseRequestViewModel FillGarmentPurchaseRequest(CostCalculationGarment costCalculation, Dictionary<long, string> productDicts)
+        public GarmentPurchaseRequestViewModel FillGarmentPurchaseRequest(CostCalculationGarment costCalculation, Dictionary<long, string> productDicts)
         {
             GarmentPurchaseRequestViewModel garmentPurchaseRequest = new GarmentPurchaseRequestViewModel
             {
