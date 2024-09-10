@@ -29,5 +29,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculation
         ReadResponse<dynamic> ReadMaterialsByPRMasterItemIds(int page, int size, string order, string select, string keyword, string filter, string search, string prmasteritemids);
         Task<CostCalculationGarment> ReadByRO(string ro);
         Task<List<CostCalculationGarment>> ReadByROs(List<string> ros);
+
+        ReadResponse<CostCalculationGarment> ReadForCancelApproval(int page, int size, string order, List<string> select, string keyword, string filter);
+        Task<int> CancelApproval(long id, string deletedRemark);
     }
 }

@@ -456,5 +456,15 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             return read;
         }
+
+        public ReadResponse<CostCalculationGarment> ReadForCancelApproval(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return costCalculationGarmentLogic.ReadForCancelApproval(page, size, order, select, keyword, filter);
+        }
+
+        public async Task<int> CancelApproval(long id, string deletedRemark)
+        {
+            return await costCalculationGarmentLogic.CancelApproval(id, deletedRemark);
+        }
     }
 }
