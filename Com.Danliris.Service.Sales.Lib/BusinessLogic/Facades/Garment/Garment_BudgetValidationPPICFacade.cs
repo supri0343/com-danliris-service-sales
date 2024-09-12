@@ -78,11 +78,31 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                                 Updated = await DbContext.SaveChangesAsync();
 
 
-                                model.CostCalculationGarment_Materials = model.CostCalculationGarment_Materials
+                                var listMaterial = model.CostCalculationGarment_Materials
                                     .Where(material => CostCalculationGarment.CostCalculationGarment_Materials.Any(oldMaterial => oldMaterial.Id == material.Id) && material.IsPRMaster == false).ToList();
 
+                                //create alias from model to newModel
+                                var newModel = new CostCalculationGarment()
+                                {
+                                    RO_Number = model.RO_Number,
+                                    CreatedBy = model.CreatedBy,
+                                    PreSCId = model.PreSCId,
+                                    PreSCNo = model.PreSCNo,
+                                    BuyerBrandId = model.BuyerBrandId,
+                                    BuyerBrandCode = model.BuyerBrandCode,
+                                    BuyerBrandName = model.BuyerBrandName,
+                                    Article = model.Article,
+                                    DeliveryDate = model.DeliveryDate,
+                                    UnitId = model.UnitId,
+                                    UnitCode = model.UnitCode,
+                                    UnitName = model.UnitName,
+                                    LastModifiedBy = model.LastModifiedBy,
+                                    LastModifiedUtc = model.LastModifiedUtc,
+                                    CostCalculationGarment_Materials = listMaterial
+                                };
+
                                 string[] productProcess = { "PROCESS", "PROCESS SUBCON" };
-                                if (model.CostCalculationGarment_Materials.Count > 0)
+                                if (listMaterial.Count > 0)
                                 {
                                     if (CostCalculationGarment.CostCalculationGarment_Materials.All(m => !productProcess.Contains(m.CategoryName.ToUpper())))
                                     {
@@ -92,7 +112,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
 
                                         //New Code
                                         // Create Garment Purchase Request
-                                        var PRViewModel = RO_Garment_ValidationLogic.FillGarmentPurchaseRequest(model, productDicts);
+                                        var PRViewModel = RO_Garment_ValidationLogic.FillGarmentPurchaseRequest(newModel, productDicts);
                                         validateService.Validate(PRViewModel);
 
                                         var PRModel = AutoMapper.Mapper.Map<GarmentPurchaseRequest>(PRViewModel);
@@ -143,7 +163,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.Garment
                                         //await RO_Garment_ValidationLogic.AddItemsGarmentPurchaseRequest(model, productDicts);
 
                                         //New Code
-                                        var PRViewModel = RO_Garment_ValidationLogic.FillGarmentPurchaseRequest(model, productDicts);
+                                        var PRViewModel = RO_Garment_ValidationLogic.FillGarmentPurchaseRequest(newModel, productDicts);
                                         validateService.Validate(PRViewModel);
 
                                         var newPR = AutoMapper.Mapper.Map<GarmentPurchaseRequest>(PRViewModel);
