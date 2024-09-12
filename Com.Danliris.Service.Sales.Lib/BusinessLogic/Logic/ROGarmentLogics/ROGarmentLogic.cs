@@ -68,7 +68,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics
                          UOMUnit = ccg.UOMUnit,
                          IsValidatedROPPIC = ccg.IsValidatedROPPIC,
                          IsValidatedROSample = ccg.IsValidatedROSample,
-                         IsValidatedROMD = ccg.IsValidatedROMD
+                         IsValidatedROMD = ccg.IsValidatedROMD,
+                         DeliveryDate = ccg.DeliveryDate
                      },
                      Total = ro.Total,
                      IsPosted = ro.IsPosted,
