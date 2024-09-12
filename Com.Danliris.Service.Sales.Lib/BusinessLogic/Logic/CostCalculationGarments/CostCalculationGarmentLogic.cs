@@ -709,7 +709,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         {
                             try
                             {
-                                var data = await DbSet.FirstOrDefaultAsync(d => d.Id == id);
+                                var data = await DbSet.Include(x => x.CostCalculationGarment_Materials).FirstOrDefaultAsync(d => d.Id == id);
 
                                 //update CostCalculationGarment approved
                                 if (data != null)
@@ -738,6 +738,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                                     data.IsPosted = false;
 
                                     EntityExtension.FlagForUpdate(data, IdentityService.Username, "sales-service");
+
+                                    foreach (var item in data.CostCalculationGarment_Materials)
+                                    {
+                                        item.IsPRMaster = false;
+                                        item.IsPosted = false;
+                                        EntityExtension.FlagForUpdate(item, IdentityService.Username, "sales-service");
+                                    }
+
 
                                     DbSet.Update(data);
 
