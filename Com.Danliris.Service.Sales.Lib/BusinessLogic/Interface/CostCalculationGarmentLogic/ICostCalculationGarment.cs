@@ -2,9 +2,11 @@
 using Com.Danliris.Service.Sales.Lib.Utilities;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseInterface;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
+using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment.Cancel_Approval;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +32,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculation
         Task<CostCalculationGarment> ReadByRO(string ro);
         Task<List<CostCalculationGarment>> ReadByROs(List<string> ros);
 
+        #region CancelApproval
         ReadResponse<CostCalculationGarment> ReadForCancelApproval(int page, int size, string order, List<string> select, string keyword, string filter);
         Task<int> CancelApproval(long id, string deletedRemark);
+        Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadCancelApproval(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset);
+        MemoryStream GenerateExcelCancelApproval(DateTime? dateFrom, DateTime? dateTo, int offset);
+        #endregion
     }
 }

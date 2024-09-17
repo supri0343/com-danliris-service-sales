@@ -15,6 +15,8 @@ using Com.Moonlay.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
+using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment.Cancel_Approval;
+using System.IO;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGarments
 {
@@ -456,7 +458,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             return read;
         }
-
+        #region Cancel Approval
         public ReadResponse<CostCalculationGarment> ReadForCancelApproval(int page, int size, string order, List<string> select, string keyword, string filter)
         {
             return costCalculationGarmentLogic.ReadForCancelApproval(page, size, order, select, keyword, filter);
@@ -466,5 +468,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
         {
             return await costCalculationGarmentLogic.CancelApproval(id, deletedRemark);
         }
+
+
+        public Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadCancelApproval(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset)
+        {
+            return costCalculationGarmentLogic.ReadCancelApproval(dateFrom, dateTo, page, size, offset);
+        }
+
+        public MemoryStream GenerateExcelCancelApproval(DateTime? dateFrom, DateTime? dateTo, int offset)
+        {
+            return costCalculationGarmentLogic.GenerateExcelCancelApproval(dateFrom, dateTo, offset);
+        }
+
+#endregion
+
     }
 }
