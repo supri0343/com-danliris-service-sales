@@ -37,6 +37,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculation
         Task<int> CancelApproval(long id, string deletedRemark);
         Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadCancelApproval(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset);
         MemoryStream GenerateExcelCancelApproval(DateTime? dateFrom, DateTime? dateTo, int offset);
+
+        Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadRejectRO(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset);
+        MemoryStream GenerateExcelReadRejectRO(DateTime? dateFrom, DateTime? dateTo, int offset);
         #endregion
     }
 }
