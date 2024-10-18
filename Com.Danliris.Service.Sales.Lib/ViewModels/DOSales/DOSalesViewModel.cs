@@ -100,8 +100,8 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.DOSales
                 if (!Disp.HasValue || Disp <= 0)
                     yield return new ValidationResult("Disp harus diisi", new List<string> { "Disp" });
 
-                if (!Op.HasValue || Op <= 0)
-                    yield return new ValidationResult("Op harus diisi", new List<string> { "Op" });
+                //if (!Op.HasValue || Op <= 0)
+                //    yield return new ValidationResult("Op harus diisi", new List<string> { "Op" });
 
                 if(DOSalesCategory == "DYEINGPRINTING")
                 {
