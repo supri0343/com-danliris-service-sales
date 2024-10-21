@@ -32,5 +32,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double FabAllow { get; set; }
         public double AccAllow { get; set; }
         public double Amount { get; set; }
+        public string ProductCategory { get; set; }
     }
 }
