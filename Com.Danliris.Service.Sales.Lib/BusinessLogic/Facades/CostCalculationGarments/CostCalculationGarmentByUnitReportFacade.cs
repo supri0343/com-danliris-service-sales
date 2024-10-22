@@ -50,7 +50,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Konfeksi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Seksi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Kategori Produk", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Produk", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Description", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Agennt", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Agent", DataType = typeof(String) });
@@ -63,7 +64,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                     Dictionary<string, List<CostCalculationGarmentByUnitReportViewModel>> dataByBrand = new Dictionary<string, List<CostCalculationGarmentByUnitReportViewModel>>();
@@ -92,6 +93,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                             ConfirmPrice = item.ConfirmPrice,
                             UOMUnit = item.UOMUnit,
                             Amount = item.Amount,
+                            ProductCategory = item.ProductCategory
                         });
 
                         if (!subTotalQty.ContainsKey(BrandName))
@@ -127,18 +129,18 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                             string CnfrmPrice = string.Format("{0:N4}", item.ConfirmPrice);
                             string Amount = string.Format("{0:N2}", item.Amount);
 
-                            result.Rows.Add(index, item.RO_Number, CfrmDate, ShipDate, item.UnitName, item.Section, item.Article, item.Comodity, item.Description,
+                            result.Rows.Add(index, item.RO_Number, CfrmDate, ShipDate, item.UnitName, item.Section, item.Article,item.ProductCategory, item.Comodity, item.Description,
                                             item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, QtyOrder, item.UOMUnit, CnfrmPrice, Amount);
                             rowPosition += 1;
                             BrandCode = item.BrandName;
                         }
-                        result.Rows.Add("", "", "", "", "", "", "", "", "", "", "SUB TOTAL", "", BrandCode, Math.Round(subTotalQty[BuyerBrand.Key], 2), "", "", Math.Round(subTotalAmount[BuyerBrand.Key], 2));
+                        result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "SUB TOTAL", "", BrandCode, Math.Round(subTotalQty[BuyerBrand.Key], 2), "", "", Math.Round(subTotalAmount[BuyerBrand.Key], 2));
 
                         rowPosition += 1;
                         totalQty += subTotalQty[BuyerBrand.Key];
                         totalAmount += subTotalAmount[BuyerBrand.Key];
                     }
-                        result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "T O T A L", "", Math.Round(totalQty, 2), "", "", Math.Round(totalAmount, 2));
+                        result.Rows.Add("", "", "", "", "", "", "", "","", "", "", "", "T O T A L", "", Math.Round(totalQty, 2), "", "", Math.Round(totalAmount, 2));
                         rowPosition += 1;
             }
             ExcelPackage package = new ExcelPackage();

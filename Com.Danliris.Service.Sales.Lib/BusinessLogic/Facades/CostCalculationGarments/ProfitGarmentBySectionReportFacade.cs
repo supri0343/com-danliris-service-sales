@@ -55,7 +55,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Kategori Produk", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Produk", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Deskripsi Garment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Fabric Allowance %", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Acc Allowance %", DataType = typeof(String) });
@@ -75,7 +76,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", 0, "", 0, "", "", 0, 0, 0, 0, 0, 0, 0); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "","", "", "", "", "", 0, "", 0, "", "", 0, 0, 0, 0, 0, 0, 0); // to allow column name to be generated properly for empty data as template
             else
             {
                 Dictionary<string, List<ProfitGarmentBySectionReportViewModel>> dataBySection = new Dictionary<string, List<ProfitGarmentBySectionReportViewModel>>();
@@ -118,6 +119,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         ProfitUSD = item.ProfitUSD,
                         ProfitFOB = item.ProfitFOB,
                         Commision = item.Commision,
+                        ProductCategory = item.ProductCategory
                     });
 
                     var currentUom = grandTotalByUom.FirstOrDefault(c => c.uom == item.UOMUnit);
@@ -186,14 +188,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         string Comm = string.Format("{0:N2}", item.Commision);
 
                         result.Rows.Add(index, item.RO_Number, item.Section, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName,
-                                        item.Article, item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, item.Quantity, item.UOMUnit,
+                                        item.Article,item.ProductCategory, item.Comodity, item.ComodityDescription, item.FabAllow, item.AccAllow, ShipDate, item.Quantity, item.UOMUnit,
                                         item.ConfirmPrice, item.CMPrice, item.FOBPrice, item.Amount, item.CurrencyRate, item.Commision, item.Profit, item.ProfitIDR, item.ProfitUSD, item.ProfitFOB);
 
                         rowPosition += 1;
                         SECTION = item.Section;
                     }
 
-                    result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "SUB TOTAL  :", "", "", 0, "", 0, "SEKSI :", SECTION, 0, Math.Round(subTotalAmount[Seksi.Key], 2), 0, 0, Math.Round(subTotalPrftIDR[Seksi.Key], 2), Math.Round(subTotalPrftUSD[Seksi.Key], 2), 0);
+                    result.Rows.Add("", "", "", "", "", "", "","", "", "", "", "", "SUB TOTAL  :", "", "", 0, "", 0, "SEKSI :", SECTION, 0, Math.Round(subTotalAmount[Seksi.Key], 2), 0, 0, Math.Round(subTotalPrftIDR[Seksi.Key], 2), Math.Round(subTotalPrftUSD[Seksi.Key], 2), 0);
 
                     rowPosition += 1;
                     totalAmount += subTotalAmount[Seksi.Key];
@@ -206,11 +208,11 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                 {
                     if (i == 0)
                     {
-                        result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "GRAND TOTAL", grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, "", "GRAND TOTAL AMOUNT", data.Sum(d => d.Amount), 0, 0, 0, 0, 0, 0);
+                        result.Rows.Add("", "", "", "","", "", "", "", "", "", "", "", "", "", "GRAND TOTAL", grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, "", "GRAND TOTAL AMOUNT", data.Sum(d => d.Amount), 0, 0, 0, 0, 0, 0);
                     }
                     else
                     {
-                        result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, "", "", 0, 0, 0, 0, 0, 0, 0);
+                        result.Rows.Add("", "", "", "","", "", "", "", "", "", "", "", "", "", "", grandTotalByUom[i].quantity, grandTotalByUom[i].uom, grandTotalByUom[i].amount, "", "", 0, 0, 0, 0, 0, 0, 0);
                     }
                 }
             }
