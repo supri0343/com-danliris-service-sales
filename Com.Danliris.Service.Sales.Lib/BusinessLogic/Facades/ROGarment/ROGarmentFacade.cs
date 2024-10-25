@@ -1,6 +1,7 @@
 ﻿using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.CostCalculationGarmentLogic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Interface.ROGarmentInterface;
+using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.ROGarmentLogics;
 using Com.Danliris.Service.Sales.Lib.Helpers;
 using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
@@ -12,6 +13,7 @@ using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
         public IServiceProvider ServiceProvider;
         protected IIdentityService IdentityService;
 
+        private readonly LogHistoryLogic logHistoryLogic;
         public ROGarmentFacade(IServiceProvider serviceProvider, SalesDbContext dbContext, IIdentityService iIdentityService)
         {
             DbContext = dbContext;
@@ -38,6 +41,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
             costCalGarmentLogic = serviceProvider.GetService<ICostCalculationGarment>();
             ServiceProvider = serviceProvider;
             IdentityService = iIdentityService;
+
+            logHistoryLogic = serviceProvider.GetService<LogHistoryLogic>();
         }
         private IAzureImageFacade AzureImageFacade
         {
@@ -300,6 +305,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.ROGarment
                     costCalculationGarment.ValidationMDDate = DateTimeOffset.MinValue;
 
                     EntityExtension.FlagForUpdate(costCalculationGarment, IdentityService.Username, "sales-service");
+
+                    //Create Log History
+                    logHistoryLogic.Create("PENJUALAN", "Reject RO Garment - " + costCalculationGarment.RO_Number, viewModel.RejectReason);
 
                     Updated = await DbContext.SaveChangesAsync();
                     transaction.Commit();

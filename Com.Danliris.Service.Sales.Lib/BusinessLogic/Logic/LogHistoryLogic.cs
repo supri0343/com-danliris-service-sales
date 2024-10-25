@@ -34,5 +34,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic
 
             DbSet.Add(model);
         }
+
+        public void Create(string division, string activity, string remark)
+        {
+            LogHistory model = new LogHistory
+            {
+                Division = division,
+                Activity = activity,
+                CreatedDate = DateTime.Now,
+                CreatedBy = IdentityService.Username,
+                Remark = remark
+            };
+
+            DbSet.Add(model);
+        }
     }
 }
