@@ -34,7 +34,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpGet("pdf/{id}")]
-        public async Task<IActionResult> GetPDF([FromRoute]int Id)
+        public async Task<IActionResult> GetPDF([FromRoute] int Id)
         {
 
 
@@ -90,7 +90,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
 
         [HttpPost("post")]
-        public async Task<IActionResult> PostRO([FromBody]List<long> listId)
+        public async Task<IActionResult> PostRO([FromBody] List<long> listId)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
         }
 
         [HttpPut("reject-sample/{id}")]
-        public async Task<IActionResult> RejectSample(int id,[FromBody] RO_GarmentViewModel viewModel)
+        public async Task<IActionResult> RejectSample(int id, [FromBody] RO_GarmentViewModel viewModel)
         {
             try
             {
@@ -174,8 +174,71 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                     .Fail();
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
+
         }
 
+        #region Report Reject RO
+        [HttpGet("reject-ro/report")]
+        public IActionResult GetReportRejectRO(DateTime? dateFrom, DateTime? dateTo, int page, int size)
+        {
+            int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+            string accept = Request.Headers["Accept"];
+
+            try
+            {
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+
+                var data = costCalculationFacade.ReadRejectRO(DateFrom, DateTo, page, size, offset);
+
+                return Ok(new
+                {
+                    apiVersion = apiVersion,
+                    data = data.Item1,
+                    info = new { total = data.Item2 },
+                    message = Common.OK_MESSAGE,
+                    statusCode = Common.OK_STATUS_CODE
+                });
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("reject-ro/download")]
+        public IActionResult GetXlsRejectRO(DateTime? dateFrom, DateTime? dateTo)
+        {
+
+            try
+            {
+                byte[] xlsInBytes;
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+
+                var xls = costCalculationFacade.GenerateExcelReadRejectRO(dateFrom, dateTo, offset);
+
+                string filename = String.Format("Laporan Cancel Approval CostCalculation - {0} - {1}.xlsx", DateFrom.ToString("dd-MM-yyyy"), DateTo.ToString("dd-MM-yyyy"));
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utilities.ResultFormatter(apiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+        #endregion
 
     }
 }
+    
