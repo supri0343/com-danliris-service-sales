@@ -821,7 +821,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                 CancelDate = x.CreatedDate.AddHours(offset),
                 CancelBy = x.CreatedBy,
                 CancelReason = x.Remark,
-                RequestedBy = DbSet.First(s => s.RO_Number == x.Activity.Substring(x.Activity.Length - 7)).CreatedBy
+                RequestedBy = DbSet.IgnoreQueryFilters().First(s => s.RO_Number == x.Activity.Substring(x.Activity.Length - 7)).CreatedBy
             });
 
             return result;
