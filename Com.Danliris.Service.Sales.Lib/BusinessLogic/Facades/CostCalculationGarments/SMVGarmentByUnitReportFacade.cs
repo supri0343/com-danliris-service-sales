@@ -57,7 +57,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Confirm", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Kategori Produk", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Produk", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jumlah", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "SMV Cutting", DataType = typeof(String) });
@@ -68,7 +69,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -83,7 +84,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                             string SMVF = string.Format("{0:N2}", item.SMV_Finishing);
                             string SMVT = string.Format("{0:N2}", item.SMV_Total);
 
-                            result.Rows.Add(index, item.UnitName, item.Section, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Article, item.RO_Number, CfrmDate, ShipDate, item.Comodity,
+                            result.Rows.Add(index, item.UnitName, item.Section, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Article, item.RO_Number, CfrmDate, ShipDate,item.ProductCategory, item.Comodity,
                                             QtyOrder, item.UOMUnit, SMVC, SMVS, SMVF, SMVT, item.StatusValid);
                 }
             }

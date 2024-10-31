@@ -25,5 +25,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public double SMV_Finishing { get; set; }
         public double SMV_Total { get; set; }
         public string StatusValid { get; set; }
+        public string ProductCategory { get; set; }
     }
 }

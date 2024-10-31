@@ -45,6 +45,8 @@ namespace Com.Danliris.Service.Sales.Lib.Helpers
                 "BOYS LAYETTE BODY SUIT",
                 "BOYS SHIRT AND SHORT",
                 "BOYS BLOUSON",
+                "BOYS APRON",
+                "GIRLS APRON",
             }
         },
         new ProductCategoryMapping
@@ -88,12 +90,10 @@ namespace Com.Danliris.Service.Sales.Lib.Helpers
             Products = new List<string>
             {
                 "UNISEX ROBE",
-                "GIRLS APRON",
                 "ACCESSORIES GARMENT LAIN-LAIN",
                 "OTHERS COMODITY",
                 "KAPPO",
                 "LADIES APRON",
-                "BOYS APRON",
                 "LADIES T-SHIRT",
                 "MENS T-SHIRT",
 
