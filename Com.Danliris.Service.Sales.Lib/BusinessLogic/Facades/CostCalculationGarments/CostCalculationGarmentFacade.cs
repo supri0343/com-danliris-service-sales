@@ -43,8 +43,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
 		public async Task<CostCalculationGarment> CustomCodeGenerator(CostCalculationGarment Model)
 		{
-			List<string> convectionOption = new List<string> { "C2A", "C2B", "C2C", "C1A", "C1B" };
-			int convectionCode = convectionOption.IndexOf(Model.UnitCode) + 1;
+			List<string> convectionOption = new List<string> {"GMT", "C2A", "C2B", "C2C", "C1A", "C1B" };
+			int convectionCode = convectionOption.IndexOf(Model.UnitCode);
 
 			var lastData = await this.DbSet.Where(w => w.IsDeleted == false && w.UnitCode == Model.UnitCode).OrderByDescending(o => o.CreatedUtc).FirstOrDefaultAsync();
 
