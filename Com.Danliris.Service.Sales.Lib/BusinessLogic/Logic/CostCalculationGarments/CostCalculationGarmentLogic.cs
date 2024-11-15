@@ -628,11 +628,19 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
 
             //add query left join with GarmentPurchaseRequest from purchasing dbcontext
 
-            var prs = PurchasingDbContext.GarmentPurchaseRequests.Where(w => w.IsDeleted == false && w.IsUsed == false && w.PRType == "JOB ORDER").Select(s => s.RONo).ToHashSet();
+            var prs = PurchasingDbContext.GarmentPurchaseRequests
+                .Include(s => s.Items)
+                .Where(w => w.IsDeleted == false
+                            && w.IsUsed == false
+                            && w.PRType == "JOB ORDER"
+                            )
+                .Select(s => new { s.RONo, IsNotUsingItem = s.Items.All(r => r.IsUsed == false) })
+                .ToHashSet();
+
             var Query = from a in DbSet
-                        join b in prs on a.RO_Number equals b into gpr
+                        join b in prs on a.RO_Number equals b.RONo into gpr
                         from gprs in gpr.DefaultIfEmpty()
-                        where a.IsApprovedIE == true && a.IsApprovedPurchasing == true/* && (gprs == null || gprs.IsUsed == false && gprs.IsDeleted == false)*/
+                        where a.IsApprovedIE == true && a.IsApprovedPurchasing == true && (gprs == null || (gprs != null && gprs.IsNotUsingItem == true) /*&& gprs.IsDeleted == false*/)
                         select a;
 
             List<string> SearchAttributes = new List<string>()
