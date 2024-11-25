@@ -18,6 +18,10 @@ using Com.Danliris.Service.Sales.Lib.PDFTemplates;
 using Com.Danliris.Service.Sales.Lib.Helpers;
 using Microsoft.AspNetCore.JsonPatch;
 using Com.Danliris.Service.Sales.Lib.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
+using Microsoft.EntityFrameworkCore;
+using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment.Cancel_Approval;
 
 namespace Com.Danliris.Service.Sales.WebApi.Controllers
 {
@@ -29,10 +33,12 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 	{
 		private readonly static string apiVersion = "1.0";
 		private readonly IIdentityService Service;
-		public CostCalculationGarmentController(IIdentityService identityService, IValidateService validateService, ICostCalculationGarment facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
+        private readonly IHttpClientService HttpClientService;
+        public CostCalculationGarmentController(IIdentityService identityService, IValidateService validateService, ICostCalculationGarment facade, IMapper mapper, IServiceProvider serviceProvider) : base(identityService, validateService, facade, mapper, apiVersion)
 		{
 			Service = identityService;
-		}
+            HttpClientService = serviceProvider.GetService<IHttpClientService>();
+        }
 
         [HttpGet("dynamic")]
         public IActionResult GetDynamic(int page = 1, int size = 25, string order = "{}", string select = null, string keyword = null, string filter = "{}", string search = "[]")
@@ -106,8 +112,14 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 				}
 				else
 				{
-					CostCalculationGarmentPdfTemplate PdfTemplate = new CostCalculationGarmentPdfTemplate();
-					MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
+                    //Get GarmentCategory
+                    List<GarmentCategoryViewModel> GarmentCategoryViewModel;
+                    var response = HttpClientService.GetAsync($@"{Lib.Helpers.APIEndpoint.Core}master/garment-categories?size=10000").Result.Content.ReadAsStringAsync();
+                    Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
+                    GarmentCategoryViewModel = JsonConvert.DeserializeObject<List<GarmentCategoryViewModel>>(result.GetValueOrDefault("data").ToString());
+
+                    CostCalculationGarmentPdfTemplate PdfTemplate = new CostCalculationGarmentPdfTemplate();
+					MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset, GarmentCategoryViewModel);
 
 					return new FileStreamResult(stream, "application/pdf")
 					{
@@ -139,8 +151,14 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
 
 				int timeoffsset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
 
-				CostCalculationGarmentBudgetPdfTemplate PdfTemplate = new CostCalculationGarmentBudgetPdfTemplate();
-				MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset);
+                //Get GarmentCategory
+                List<GarmentCategoryViewModel> GarmentCategoryViewModel;
+                var response = HttpClientService.GetAsync($@"{Lib.Helpers.APIEndpoint.Core}master/garment-categories?size=10000").Result.Content.ReadAsStringAsync();
+                Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
+                GarmentCategoryViewModel = JsonConvert.DeserializeObject<List<GarmentCategoryViewModel>>(result.GetValueOrDefault("data").ToString());
+
+                CostCalculationGarmentBudgetPdfTemplate PdfTemplate = new CostCalculationGarmentBudgetPdfTemplate();
+				MemoryStream stream = PdfTemplate.GeneratePdfTemplate(viewModel, timeoffsset, GarmentCategoryViewModel);
 
 				return new FileStreamResult(stream, "application/pdf")
 				{
@@ -573,5 +591,145 @@ namespace Com.Danliris.Service.Sales.WebApi.Controllers
                 return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+        [HttpGet("by-ros")]
+        public async Task<IActionResult> GetByROs([FromBody]List<string> ro)
+        {
+            try
+            {
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                Service.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+
+                var model = await Facade.ReadByROs(ro);
+
+                List<CostCalculationGarmentViewModel> viewModel = Mapper.Map<List<CostCalculationGarmentViewModel>>(model);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok<List<CostCalculationGarmentViewModel>>(viewModel);
+                return Ok(Result);
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        #region Cancel Approval
+        [HttpGet("read-cancel-approval")]
+        public IActionResult ReadForCancelApproval(int page = 1, int size = 25, string order = "{}", List<string> select = null, string keyword = null, string filter = "{}", string search = "[]")
+        {
+            try
+            {
+                ValidateUser();
+
+                ReadResponse<CostCalculationGarment> read = Facade.ReadForCancelApproval(page, size, order, select, keyword, filter);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.OK_STATUS_CODE, Common.OK_MESSAGE)
+                    .Ok(Mapper, read.Data, page, size, read.Count, read.Data.Count, read.Order, read.Selected);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpPut("cancel-approval/{id}")]
+        public virtual async Task<IActionResult> CancelApproval([FromRoute] int id, [FromBody] CancelApprovalCostCalculationGarmentViewModel data)
+        {
+            try
+            {
+                ValidateUser();
+
+                await Facade.CancelApproval(id, data.DeletedRemark);
+
+                return NoContent();
+            }
+
+            catch (DbUpdateConcurrencyException e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("cancel-approval/report")]
+        public IActionResult GetReportAll(DateTime? dateFrom, DateTime? dateTo, int page, int size)
+        {
+            int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+            string accept = Request.Headers["Accept"];
+
+            try
+            {
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+
+                var data = Facade.ReadCancelApproval(DateFrom, DateTo, page, size, offset);
+
+                return Ok(new
+                {
+                    apiVersion = apiVersion,
+                    data = data.Item1,
+                    info = new { total = data.Item2 },
+                    message = Common.OK_MESSAGE,
+                    statusCode = Common.OK_STATUS_CODE
+                });
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utilities.ResultFormatter(apiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("cancel-approval/download")]
+        public IActionResult GetXlsCancelApproval(DateTime? dateFrom, DateTime? dateTo)
+        {
+
+            try
+            {
+                byte[] xlsInBytes;
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+
+                var xls = Facade.GenerateExcelCancelApproval(dateFrom, dateTo, offset);
+
+                string filename = String.Format("Laporan Cancel Approval CostCalculation - {0} - {1}.xlsx", DateFrom.ToString("dd-MM-yyyy"), DateTo.ToString("dd-MM-yyyy"));
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new Utilities.ResultFormatter(apiVersion, Common.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(Common.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        #endregion
     }
 }

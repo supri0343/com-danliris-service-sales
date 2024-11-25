@@ -15,6 +15,8 @@ using Com.Moonlay.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
 using Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic;
+using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment.Cancel_Approval;
+using System.IO;
 
 namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGarments
 {
@@ -41,8 +43,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
 		public async Task<CostCalculationGarment> CustomCodeGenerator(CostCalculationGarment Model)
 		{
-			List<string> convectionOption = new List<string> { "C2A", "C2B", "C2C", "C1A", "C1B" };
-			int convectionCode = convectionOption.IndexOf(Model.UnitCode) + 1;
+			List<string> convectionOption = new List<string> {"GMT", "C2A", "C2B", "C2C", "C1A", "C1B" };
+			int convectionCode = convectionOption.IndexOf(Model.UnitCode);
 
 			var lastData = await this.DbSet.Where(w => w.IsDeleted == false && w.UnitCode == Model.UnitCode).OrderByDescending(o => o.CreatedUtc).FirstOrDefaultAsync();
 
@@ -168,7 +170,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             {
                 try
                 {
-                    costCalculationGarmentLogic.UpdateAsync(id, model);
+                     costCalculationGarmentLogic.UpdateAsync(id, model);
 
                     if (!string.IsNullOrWhiteSpace(model.ImageFile))
                     {
@@ -447,5 +449,50 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             return read;
         }
+
+        public async Task<List<CostCalculationGarment>> ReadByROs(List<string> ros)
+        {
+            var read = await this.DbSet
+               .Where(d => ros.Contains(d.RO_Number) && d.IsDeleted.Equals(false))
+               .Include(d => d.CostCalculationGarment_Materials).ToListAsync();
+
+            return read;
+        }
+        #region Cancel Approval
+        public ReadResponse<CostCalculationGarment> ReadForCancelApproval(int page, int size, string order, List<string> select, string keyword, string filter)
+        {
+            return costCalculationGarmentLogic.ReadForCancelApproval(page, size, order, select, keyword, filter);
+        }
+
+        public async Task<int> CancelApproval(long id, string deletedRemark)
+        {
+            return await costCalculationGarmentLogic.CancelApproval(id, deletedRemark);
+        }
+
+
+        public Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadCancelApproval(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset)
+        {
+            return costCalculationGarmentLogic.ReadCancelApproval(dateFrom, dateTo, page, size, offset);
+        }
+
+        public MemoryStream GenerateExcelCancelApproval(DateTime? dateFrom, DateTime? dateTo, int offset)
+        {
+            return costCalculationGarmentLogic.GenerateExcelCancelApproval(dateFrom, dateTo, offset);
+        }
+
+        #region Report Reject RO
+        public Tuple<List<CancelApprovalCostCalculationReportViewModel>, int> ReadRejectRO(DateTime? dateFrom, DateTime? dateTo, int page, int size, int offset)
+        {
+            return costCalculationGarmentLogic.ReadRejectRO(dateFrom, dateTo, page, size, offset);
+        }
+
+        public MemoryStream GenerateExcelReadRejectRO(DateTime? dateFrom, DateTime? dateTo, int offset)
+        {
+            return costCalculationGarmentLogic.GenerateExcelReadRejectRO(dateFrom, dateTo, offset);
+        }
+        #endregion
+
+        #endregion
+
     }
 }

@@ -291,11 +291,13 @@ namespace Com.Danliris.Service.Sales.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
+            string connectionStringPurchasing = Configuration.GetConnectionString("PurchasingConnection") ?? Configuration["PurchasingConnection"];
             string connectionStringLocalMerchandiser = Configuration.GetConnectionString("LocalMerchandiserConnection") ?? Configuration["LocalMerchandiserConnection"];
 
             Com.Danliris.Service.Sales.Lib.Helpers.APIEndpoint.ConnectionString = connectionString;
             /* Register */
             services.AddDbContext<SalesDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<PurchasingDbContext>(options => SqlServerDbContextOptionsExtensions.UseSqlServer(options,connectionStringPurchasing));
             services.AddTransient<ILocalMerchandiserDbContext>(s => new LocalMerchandiserDbContext(connectionStringLocalMerchandiser));
             RegisterFacades(services);
             RegisterLogic(services);

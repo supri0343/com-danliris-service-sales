@@ -18,5 +18,7 @@ namespace Com.Danliris.Service.Sales.Lib.Models.LogHistoryModel
         public DateTime CreatedDate { get; set; }
         [MaxLength(255)]
         public string CreatedBy { get; set; }
+        [MaxLength(1000)]
+        public string Remark { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
+﻿using Com.Danliris.Service.Sales.Lib.Helpers;
+using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
@@ -16,12 +17,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
         private IIdentityService identityService;
         private SalesDbContext dbContext;
         private DbSet<CostCalculationGarment> dbSet;
-
+        private ProductCategoryHelper productCategoryHelper;
         public ProfitGarmentBySectionReportLogic(IIdentityService identityService, SalesDbContext dbContext)
         {
             this.identityService = identityService;
             this.dbContext = dbContext;
             dbSet = dbContext.Set<CostCalculationGarment>();
+            productCategoryHelper = new ProductCategoryHelper();
         }
 
         public override IQueryable<ProfitGarmentBySectionReportViewModel> GetQuery(string filter)
@@ -76,7 +78,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             a.CommissionRate,
                             a.CommissionPortion,
                             a.Insurance,
-                            a.Freight
+                            a.Freight,
                         } into G
 
                         select new ProfitGarmentBySectionReportViewModel
@@ -106,6 +108,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             ProfitIDR = ((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2),
                             ProfitUSD = Math.Round(((((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2)) / G.Key.RateValue), 2),
                             ProfitFOB = Math.Round(((((((G.Key.ConfirmPrice - G.Key.Insurance - G.Key.Freight) * G.Key.RateValue) - G.Key.CommissionRate - Math.Round(G.Sum(m => m.GmtCost), 2) - G.Key.OTL1CalculatedRate - G.Key.OTL2CalculatedRate - ((G.Key.Risk / 100) * (Math.Round(G.Sum(m => m.GmtCost), 2) + G.Key.OTL1CalculatedRate + G.Key.OTL2CalculatedRate)) - Math.Round(G.Sum(m => m.Shipfee), 2)) / G.Key.RateValue) * 100) / (((Math.Round(G.Sum(m => m.CMP), 2) / G.Key.RateValue) * 1.05) + G.Key.ConfirmPrice)), 2),
+                            ProductCategory = productCategoryHelper.GetProductCategory(G.Key.Commodity.Trim())
                         });
             return newQ;
         }

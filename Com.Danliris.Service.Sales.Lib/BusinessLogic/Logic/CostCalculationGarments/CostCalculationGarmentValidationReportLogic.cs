@@ -1,4 +1,5 @@
-﻿using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
+﻿using Com.Danliris.Service.Sales.Lib.Helpers;
+using Com.Danliris.Service.Sales.Lib.Models.CostCalculationGarments;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
 using Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment;
@@ -16,12 +17,13 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
         private IIdentityService identityService;
         private SalesDbContext dbContext;
         private DbSet<CostCalculationGarment> dbSet;
-
+        private ProductCategoryHelper productCategoryHelper;
         public CostCalculationGarmentValidationReportLogic(IIdentityService identityService, SalesDbContext dbContext)
         {
             this.identityService = identityService;
             this.dbContext = dbContext;
             dbSet = dbContext.Set<CostCalculationGarment>();
+            productCategoryHelper = new ProductCategoryHelper();
         }
 
         public override IQueryable<CostCalculationGarmentValidationReportViewModel> GetQuery(string filter)
@@ -73,6 +75,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         ValidatedPurch = a.IsApprovedPurchasing.Equals(true) ? "SUDAH" : "BELUM",
                         ValidatedKadiv = a.IsApprovedKadivMD.Equals(true) ? "SUDAH" : "BELUM",
                         ValidatedDate = a.ApprovedKadivMDDate,
+                        ProductCategory = productCategoryHelper.GetProductCategory(a.Commodity.Trim())
                     });
 
             return newQ;

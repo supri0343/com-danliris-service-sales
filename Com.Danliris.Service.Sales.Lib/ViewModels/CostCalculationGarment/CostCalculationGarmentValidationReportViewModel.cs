@@ -26,5 +26,6 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string ValidatedPurch { get; set; }
         public string ValidatedKadiv { get; set; }
         public DateTimeOffset ValidatedDate { get; set; }
+        public string ProductCategory { get; set; }
     }
 }

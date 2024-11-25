@@ -50,20 +50,23 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
             //while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             int Created = 0;
-
-            CostCalculationGarment costCal = await costCalGarmentLogic.ReadByIdAsync(model.CostCalculationId); //await DbContext.CostCalculationGarments.FirstOrDefaultAsync(a => a.Id.Equals(model.CostCalculationId));
-                                                                                                               //costCal.SCGarmentId=
+           
             using (var transaction = DbContext.Database.BeginTransaction())
             {
                 try
                 {
+                    CostCalculationGarment costCal = await costCalGarmentLogic.ReadByIdAsync(model.CostCalculationId); //await DbContext.CostCalculationGarments.FirstOrDefaultAsync(a => a.Id.Equals(model.CostCalculationId));
+                                                                                                                       //costCal.SCGarmentId=
                     garmentSalesContractLogic.Create(model);
 
                     //Create Log History
                     logHistoryLogic.Create("PENJUALAN", "Create Sales Contract - " + model.SalesContractNo);
+                    await DbContext.SaveChangesAsync();
+                    //Update CC
+                    costCal.SCGarmentId = (long)model.Id;
 
                     Created = await DbContext.SaveChangesAsync();
-                
+
                     transaction.Commit();
                 }
                 catch (Exception e)
@@ -73,7 +76,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
                 }
             }
 
-            return Created += await UpdateCostCalAsync(costCal, (int)model.Id);
+            return Created;
+            //return Created += await UpdateCostCalAsync(costCal, (int)model.Id);
 
         }
 
@@ -89,14 +93,14 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
         {
             int Deleted = 0;
 
-            GarmentSalesContract sc = await ReadByIdAsync(id);
-            CostCalculationGarment costCal = await DbContext.CostCalculationGarments.Include(cc => cc.CostCalculationGarment_Materials).FirstOrDefaultAsync(a => a.Id.Equals(sc.CostCalculationId));
-            costCal.SCGarmentId = null;
-
             using (var transaction = DbContext.Database.BeginTransaction())
             {
                 try
                 {
+                    GarmentSalesContract sc = await ReadByIdAsync(id);
+                    CostCalculationGarment costCal = await DbContext.CostCalculationGarments.Include(cc => cc.CostCalculationGarment_Materials).FirstOrDefaultAsync(a => a.Id.Equals(sc.CostCalculationId));
+                    costCal.SCGarmentId = null;
+
                     await garmentSalesContractLogic.DeleteAsync(id);
 
                     //Create Log History
@@ -113,8 +117,9 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.GarmentSalesContr
                     throw new Exception(e.Message);
                 }
             }
-            
-            return Deleted += await costCalGarmentLogic.UpdateAsync((int)sc.CostCalculationId, costCal);
+
+            return Deleted;
+            //return Deleted += await costCalGarmentLogic.UpdateAsync((int)sc.CostCalculationId, costCal);
         }
 
         public ReadResponse<GarmentSalesContract> Read(int page, int size, string order, List<string> select, string keyword, string filter)

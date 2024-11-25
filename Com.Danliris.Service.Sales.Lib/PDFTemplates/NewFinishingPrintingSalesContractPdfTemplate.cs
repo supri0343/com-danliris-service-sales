@@ -124,7 +124,7 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("Jabatan", normal_font);
             tableBody.AddCell(bodyContentLeft);
-            bodyContentLeft.Phrase = new Phrase(": Manager Penjualan", normal_font);
+            bodyContentLeft.Phrase = new Phrase(": General Manager Penjualan", normal_font);
             tableBody.AddCell(bodyContentLeft);
             bodyContentLeft.Phrase = new Phrase("", normal_font);
             tableBody.AddCell(bodyContentLeft);
@@ -157,12 +157,12 @@ namespace Com.Danliris.Service.Sales.Lib.PDFTemplates
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase(": " + " " +  viewModel.Buyer.NIK, normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("", normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase("NPWP ", normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
-            bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NPWP, normal_font);
-            tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase("", normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase("NPWP ", normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
+            //bodyContentLefts.Phrase = new Phrase(": " + " " + viewModel.Buyer.NPWP, normal_font);
+            //tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("", normal_font);
             tableBodyBuyer.AddCell(bodyContentLefts);
             bodyContentLefts.Phrase = new Phrase("Jabatan " , normal_font);

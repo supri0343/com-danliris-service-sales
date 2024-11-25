@@ -56,7 +56,8 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Agent", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Brand", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Komoditi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Kategori Produk", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Produk", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jumlah", DataType = typeof(String) });
@@ -70,7 +71,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "","","", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -83,7 +84,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                             string QtyOrder = string.Format("{0:N2}", item.Quantity);
                     
                     result.Rows.Add(index, item.RO_Number, item.StaffName, item.UnitName, CfrmDate, item.Section, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName,
-                                    item.Comodity, item.Article, ShipDate, QtyOrder, item.UOMUnit, item.ValidatedMD, item.ValidatedIE, item.ValidatedPurch, item.ValidatedKadiv, ValidDate);
+                                    item.ProductCategory,item.Comodity, item.Article, ShipDate, QtyOrder, item.UOMUnit, item.ValidatedMD, item.ValidatedIE, item.ValidatedPurch, item.ValidatedKadiv, ValidDate);
                 }
             }
             ExcelPackage package = new ExcelPackage();

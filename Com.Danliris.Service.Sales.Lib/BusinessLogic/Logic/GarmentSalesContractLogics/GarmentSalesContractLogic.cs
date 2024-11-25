@@ -40,7 +40,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentSalesContrac
 
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "BuyerBrandName", "BuyerBrandCode", "SalesContractNo", "LastModifiedUtc", "CreatedUtc", "ComodityCode", "ComodityName", "Article", "RONumber"
+                "Id","BuyerBrandId", "BuyerBrandName", "BuyerBrandCode", "SalesContractNo", "LastModifiedUtc", "CreatedUtc", "ComodityCode", "ComodityName", "Article", "RONumber"
             };
 
             Query = Query
