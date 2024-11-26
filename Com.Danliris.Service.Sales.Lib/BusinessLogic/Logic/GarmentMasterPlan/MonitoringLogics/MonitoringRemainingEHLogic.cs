@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Com.Danliris.Service.Sales.Lib.Models.GarmentMasterPlan.WeeklyPlanModels;
 using Com.Danliris.Service.Sales.Lib.Services;
 using Com.Danliris.Service.Sales.Lib.Utilities.BaseClass;
 using Com.Danliris.Service.Sales.Lib.ViewModels.GarmentMasterPlan.MonitoringViewModels;
-using Com.Danliris.Service.Sales.Lib.ViewModels.IntegrationViewModel;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -29,7 +27,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.M
         {
             Dictionary<string, string> FilterDictionary = new Dictionary<string, string>(JsonConvert.DeserializeObject<Dictionary<string, string>>(filter), StringComparer.OrdinalIgnoreCase);
 
-            IQueryable<GarmentWeeklyPlan> Query = dbSet.Include(i => i.Items);
+            IQueryable<GarmentWeeklyPlan> Query = dbSet;//.Include(i => i.Items);
 
             try
             {
@@ -46,62 +44,33 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.GarmentMasterPlan.M
                 Query = Query.Where(d => d.UnitCode == unit);
             }
 
-            Query = Query.OrderBy(o => o.UnitCode);
+            var result = (from a in Query
+                          join b in dbContext.GarmentWeeklyPlanItems on a.Id equals b.WeeklyPlanId
+                          group new { b.Operator, b.RemainingEH } by new { a.UnitCode, b.WeekNumber } into data
+                          select new
+                          {
+                              UnitCode=data.Key.UnitCode,
+                              weeknumber= data.Key.WeekNumber,
+                              op=data.Sum(x=>x.Operator),
+                              eh= data.Sum(x=>x.RemainingEH),
+                          });
 
-            //foreach (var q in Query)
-            //{
-            //    var entry = dbContext.Entry(q);
-            //    entry.Collection(e => e.Items)
-            //        .Query()
-            //        .Select(i => new WeeklyPlanItem
-            //        {
-            //            WeekNumber = i.WeekNumber,
-            //            EHTotal = i.EHTotal,
-            //            RemainingEH = i.RemainingEH,
-            //            UsedEH = i.UsedEH
-            //        })
-            //        .OrderBy(i => i.WeekNumber.ToString())
-            //        .Load();
-            //}
+            var groupedData = Query.GroupBy(d => d.UnitCode).Select( s => s.FirstOrDefault().UnitCode).ToList();
 
-            //var asd = from wp in Query
-            //          join wpi in dbContext.WeeklyPlanItems on wp.Id equals wpi.WeeklyPlanId
-            //          //group new { wp, wpi } by wp.Id into grp
-            //          select new
-            //          {
-            //              wp.Year,
-            //              wp.UnitCode,
-            //              wpi.WeeklyPlanId,
-            //              wpi.WeekNumber,
-            //              wpi.EHTotal,
-            //              wpi.UsedEH,
-            //              wpi.RemainingEH
-            //          };
-
-            //var ok = from a in asd
-            //         group a by a.UnitCode into grp
-            //         select new MonitoringRemainingEHViewModel
-            //         {
-            //             Unit = grp.Key,
-            //             Items = grp.Select(s => new MonitoringRemainingEHItemViewModel
-            //             {
-            //                 WeekNumber = s.WeekNumber,
-            //                 EHTotal = s.EHTotal,
-            //                 UsedEH = s.UsedEH,
-            //                 RemainingEH = s.RemainingEH
-            //             }).ToList()
-            //         };
-
-            return Query.Select(d => new MonitoringRemainingEHViewModel
+            var datas = groupedData.Select(group => new MonitoringRemainingEHViewModel
             {
-                Unit = d.UnitCode,
-                Items = d.Items.OrderBy(i => i.WeekNumber).Select(i => new MonitoringRemainingEHItemViewModel
+                Unit = group,
+                Items = result
+                .Where(r => r.UnitCode == group) // Filter berdasarkan UnitCode grup
+                .Select(r => new MonitoringRemainingEHItemViewModel
                 {
-                    WeekNumber = i.WeekNumber,
-                    Operator = i.Operator,
-                    RemainingEH = i.RemainingEH,
-                }).ToList()
-            });
+                    WeekNumber = r.weeknumber,
+                    Operator = r.op,
+                    RemainingEH = r.eh
+                })
+                .ToList()
+            }).AsQueryable();
+            return datas;
         }
     }
 }
