@@ -11,13 +11,14 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
         public string Ro_Number { get; set; }
         public string Article { get; set; }
         public List<Colors> Colors { get; set; }
+        public int AllTotalQuantity { get; set; } // Menambahkan properti AllTotalQuantity
 
         public RO_ComponentAppsViewModel(RO_Garment data)
         {
             Ro_Number = data.CostCalculationGarment.RO_Number;
             Article = data.CostCalculationGarment.Article;
             Colors = data.RO_Garment_SizeBreakdowns.Select(x => new Colors(x)).ToList();
-
+            AllTotalQuantity = Colors.Sum(c => c.TotalQuantity);
         }
 
     }
@@ -27,24 +28,26 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.GarmentROViewModels
     {
         public string Color { get; set; }
         public List<Sizes> Sizes { get; set; }
+        public int TotalQuantity { get; set; } // Deklarasi properti TotalQuantity
 
         public Colors(RO_Garment_SizeBreakdown data)
         {
             Color = data.ColorName;
             Sizes = data.RO_Garment_SizeBreakdown_Details.Select(x => new Sizes(x)).ToList();
-
+            TotalQuantity = Sizes.Sum(s => s.Quantity);
         }
     }
 
     public class Sizes
     {
         public string Size { get; set; }
-
+        public int Quantity { get; set; }
         public Sizes(RO_Garment_SizeBreakdown_Detail data)
         {
             Size = data.Size;
+            Quantity = data.Quantity;
         }
     }
 
-
+    
 }
