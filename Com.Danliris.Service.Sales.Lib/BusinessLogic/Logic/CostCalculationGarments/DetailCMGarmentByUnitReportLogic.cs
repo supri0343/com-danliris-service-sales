@@ -62,6 +62,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             BuyerName = a.BuyerName,
                             BuyerBrandCode = a.BuyerBrandCode,
                             BuyerBrandName = a.BuyerBrandName,
+                            Comodity = a.ComodityCode + " - " + a.Commodity,
                             RO_Number = a.RO_Number,
                             Article = a.Article,
                             Quantity = a.Quantity,
@@ -88,7 +89,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                         // GROUPING DATA
 
                         var newQ1 = (from c in newQ
-                                     group new { BgtAmt = c.BudgetAmount, CMP = c.CMPrice } by new { c.UnitName, c.BuyerCode, c.BuyerName, c.BuyerBrandCode, c.BuyerBrandName,
+                                     group new { BgtAmt = c.BudgetAmount, CMP = c.CMPrice } by new { c.UnitName, c.BuyerCode, c.BuyerName, c.BuyerBrandCode, c.BuyerBrandName, c.Comodity,
                                      c.RO_Number, c.Article, c.Quantity, c.UOMUnit, c.DeliveryDate, c.OTL1CalculatedRate, c.OTL2CalculatedRate, c.SMV_Cutting, c.SMV_Sewing,
                                      c.SMV_Finishing, c.SMV_Total, c.CommissionRate, c.Insurance, c.Freight, c.ConfirmPrice, c.RateValue} into G
 
@@ -99,6 +100,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Logic.CostCalculationGarm
                             BuyerName = G.Key.BuyerName,
                             BrandCode = G.Key.BuyerBrandCode,
                             BrandName = G.Key.BuyerBrandName,
+                            Comodity = G.Key.Comodity,
                             RO_Number = G.Key.RO_Number,
                             Article = G.Key.Article,
                             Quantity = G.Key.Quantity,

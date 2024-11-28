@@ -52,6 +52,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Agent", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Brand", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Brand", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Nama Komoditi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "No RO", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Article", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shipment", DataType = typeof(String) });
@@ -69,7 +70,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
 
             Dictionary<string, string> Rowcount = new Dictionary<string, string>();
             if (Query.ToArray().Count() == 0)
-                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                     result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                     int index = 0;
@@ -91,7 +92,7 @@ namespace Com.Danliris.Service.Sales.Lib.BusinessLogic.Facades.CostCalculationGa
                         string CM_USD = string.Format("{0:N4}", item.CM);
 
 
-                    result.Rows.Add(index, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.RO_Number, item.Article,
+                    result.Rows.Add(index, item.UnitName, item.BuyerCode, item.BuyerName, item.BrandCode, item.BrandName, item.Comodity, item.RO_Number, item.Article,
                                         ShipDate, QtyOrder, item.UOMUnit, FOBPrc, CM_IDR, CM_USD, OTL_1, OTL_2, SMVC, SMVS, SMVF, SMVT);
                 }
             }
