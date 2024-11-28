@@ -14,6 +14,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string BuyerName { get; set; }
         public string BrandCode { get; set; }
         public string BrandName { get; set; }
+        public string Comodity { get; set; }
         public string UnitName { get; set; }        
         public double Quantity { get; set; }
         public string UOMUnit { get; set; }
@@ -44,6 +45,7 @@ namespace Com.Danliris.Service.Sales.Lib.ViewModels.CostCalculationGarment
         public string BuyerName { get; set; }
         public string BuyerBrandCode { get; set; }
         public string BuyerBrandName { get; set; }
+        public string Comodity { get; set; }
         public string UnitName { get; set; }
         public double Quantity { get; set; }
         public string UOMUnit { get; set; }
